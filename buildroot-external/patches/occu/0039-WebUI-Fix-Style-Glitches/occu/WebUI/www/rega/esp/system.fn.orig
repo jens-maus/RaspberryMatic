@@ -292,7 +292,10 @@ function ::saveDesc() {
 function ::UpdateUI()
 {
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
-  if( (oUser.UserLevel() != iulGuest) && (oUser.UserLevel() != iulNone) )
+
+  ! See SPHM-829
+  ! if( (oUser.UserLevel() != iulGuest) && (oUser.UserLevel() != iulNone) )
+  if( oUser.UserLevel() != iulNone )
   {
   Write( '<script type="text/javascript">' );
 
@@ -1345,7 +1348,7 @@ function ::BuildUserSvTable() {
       string trid = "u" # system.GetVar("userId") # "s" # tmp;
       WriteLine("<tr id='"#trid#"'>");
         WriteLine("<td class='GrayBkg CLASS02109'>"#sysvar.Name()#"</td>");
-        WriteLine("<td class='GrayBkg'>"#sysvar.DPInfo()#"</td>");
+        WriteLine("<td class='GrayBkg'>"#sysvar.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>')#"</td>");
         
         WriteLine("<td class='GrayBkg'>");
         string s = "Unbekannt: " # sysvar.ValueSubType();

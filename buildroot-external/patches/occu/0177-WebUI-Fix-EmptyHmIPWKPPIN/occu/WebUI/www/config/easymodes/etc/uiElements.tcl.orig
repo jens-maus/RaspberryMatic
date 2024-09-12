@@ -5,7 +5,12 @@ proc getMinValue {param} {
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
-  set min [format {%1.1f} $param_descr(MIN)]
+  set min $param_descr(MIN)
+
+  # Limit float to 1 decimal places
+  if {[llength [split $min "."]] == 2} {
+    set min [format {%1.1f} $min]
+  }
   return "$min"
 }
 
@@ -14,30 +19,39 @@ proc getMaxValue {param} {
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
-  set max [format {%1.1f} $param_descr(MAX)]
+  set max $param_descr(MAX)
+
+  # Limit float to 1 decimal places
+  if {[llength [split $max "."]] == 2} {
+    set max [format {%1.1f} $max]
+  }
   return "$max"
 }
 
 proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {[string equal $extraparam "TX_THRESHOLD_POWER"] == 1} {
     switch [string tolower $devType] {
-        hmip-psm -
-        hmip-fsm16 {return 3680.0}
-        hmip-bsm -
-        hmip-fsm  {return 1150.0}
-        hmip-usbsm  {return 60.0}
-       default {return "<span class=\"attention\">max value not available</span>"}
+      hmip-psm -
+      hmip-fsm16 {return 3680.00}
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" {return 3000.00}
+      hmip-bsm -
+      hmip-fsm  {return 1150.00}
+      hmip-usbsm  {return 60.00}
+     default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
 
   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
     switch [string tolower $devType] {
-        hmip-psm -
-        hmip-fsm16 {return "3680.0"}
-        hmip-bsm -
-        hmip-fsm  {return "1150.0"}
-        hmip-usbsm  {return "60.0"}
-       default {return "<span class=\"attention\">max value not available</span>"}
+      hmip-psm -
+      hmip-fsm16 {return "3680.00"}
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" {return "3000.00"}
+      hmip-bsm -
+      hmip-fsm  {return "1150.00"}
+      hmip-usbsm  {return "60.00"}
+     default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
 
@@ -82,8 +96,13 @@ proc getMinMaxValueDescr {param} {
 
   # Limit float to 1 decimal places
   if {([llength [split $min "."]] == 2) || ([llength [split $max "."]] == 2)} {
-    set min [format {%1.1f} $min]
-    set max [format {%1.1f} $max]
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+      set min [format {%1.1f} $min]
+      set max [format {%1.1f} $max]
+    } else {
+      set min [format {%1.2f} $min]
+      set max [format {%1.2f} $max]
+    }
   }
 
   if {[string equal $dev_descr(TYPE) "HmIP-MIO16-PCB"] == 1} {
@@ -136,12 +155,22 @@ proc getUnit {param} {
     set unit "s (0.0 - 6.0)"
   }
 
+  if {[string equal $param "METER_CONSTANT_VOLUME"] == 1} {
+     set unit "m<sup>3</sup>/Imp"
+  }
+
+  if {[string equal $param "METER_CONSTANT_ENERGY"] == 1} {
+     set unit "Imp/kWh"
+  }
+
   return "$unit"
 }
 
 proc getCondTXThresholdUnit {devType chn} {
    switch [string tolower $devType] {
-        hmip-stho  {
+        hmip-stho -
+        hmip-stho-a -
+        elv-sh-cth {
           if {$chn == "2"} {return "°C"}
           if {$chn == "3"} {return "%"}
         }
@@ -155,23 +184,24 @@ proc getCondTXThresholdUnit {devType chn} {
     }
 }
 
-
 proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
    switch [string tolower $devType] {
       hmip-psm -
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" -
       hmip-fsm16 -
       hmip-bsm -
       hmip-fsm -
       hmip-usbsm
        {
         if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
-        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0 - [getUserDefinedMaxValue $devType $param])"}
+        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0.00 - [getUserDefinedMaxValue $devType $param])"}
       }
       default {return "<span class=\"attention\">missing description</span>"}
    }
 }
 
-proc getTextField {param value chn prn {extraparam ""}} {
+proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
 
   # exec echo "getTextField: $extraparam" >> /tmp/textField.log
 
@@ -184,6 +214,7 @@ proc getTextField {param value chn prn {extraparam ""}} {
   set minValue $param_descr(MIN)
   set maxValue $param_descr(MAX)
   set maxLength ""
+  set sizeTextfield 5
 
   if {[string first "." $param_descr(MIN)] != -1} {
     set minValue [format {%1.1f} $minValue]
@@ -214,16 +245,42 @@ proc getTextField {param value chn prn {extraparam ""}} {
     }
   }
 
+  if {([string equal $dev_descr(TYPE) "HmIP-ESI"] == 1)} {
+    if {$param == "METER_OBIS_SEARCH_STRING"} {
+      set minValue "stringUTF8"
+      set maxValue "stringUTF8"
+      set maxLength "maxLength=16"
+      set sizeTextfield 16
+    } elseif {($param == "METER_CONSTANT_VOLUME") || ($param == "METER_CONSTANT_ENERGY")} {
+      set minValue [format {%1.2f} $param_descr(MIN)]
+      set maxValue [format {%1.2f} $param_descr(MAX)]
+    }
+  }
+
   if {[string equal $dev_descr(TYPE) "HmIP-SCTH230"] == 1} {
     if {$param == "INTERVAL_VALUE"} {set minValue 1}
     if {$param == "CALIBRATION_PPM_VAL"} {set maxValue 10000}
   }
 
+set comment {
+  if {$param == "DIM_LEVEL_LOWEST"} {
+    set onMinLevel [expr $extraparam * 1.0]
+    if {($onMinLevel < 0.5)} {
+      set minValue $minValue
+    } else {
+      set minValue $onMinLevel
+    }
+  }
+}
   set elemId 'separate_CHANNEL\_$chn\_$prn'
 
   # Limit float to 2 decimal places
   if {[llength [split $value "."]] == 2} {
-    set value [format {%1.1f} $value]
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+      catch {set value [format {%1.1f} $value]}
+    } else {
+      catch {set value [format {%1.2f} $value]}
+    }
   }
 
   # Convert float to int - sometimes the parameter UTC_* comes as float instead of int (for whatever reason). This will cause an error.
@@ -238,7 +295,7 @@ proc getTextField {param value chn prn {extraparam ""}} {
 
   if {$param == "TRIGGER_ANGLE" && [info exists descr(TRIGGER_ANGLE_2)] == 1} {
     upvar valTriggerAngle2 triggerAngle2
-    set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"SetTriggerAngle2(this.value, $triggerAngle2);ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1)\" $extraparam>"
+    set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"SetTriggerAngle2(this.value, $triggerAngle2);ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1)\" $extraparam>"
     cgi_javascript {
       puts "var maxTriggerAngle = parseInt($maxValue), minTriggerAngle = parseInt($minValue);"
       puts {
@@ -269,13 +326,13 @@ proc getTextField {param value chn prn {extraparam ""}} {
     }
   } else {
     if {$param == "NUMERIC_PIN_CODE"} {
-       set s "<input id=$elemId type=\"text\" size=\"5\" maxlength=\"8\" value=\"$value\" name=$param onblur=\"if (! isNumber(this.value)) \{this.value = '';\}\" $extraparam>"
+       set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" maxlength=\"8\" value=\"$value\" name=$param onblur=\"if (! isNumber(this.value)) \{this.value = '';\}\" $extraparam>"
     } elseif {($param == "VOLTAGE_0") || ($param == "VOLTAGE_100")} {
-        set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);$extraparam\">"
+        set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);$extraparam\">"
     } elseif {$minValue == "stringUTF8"} {
-        set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" $maxLength name=$param>"
+        set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=\"$value\" $maxLength name=$param>"
     } else {
-      set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);\" $extraparam>"
+      set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);\" $extraparam $superExtra>"
     }
   }
 
@@ -302,7 +359,7 @@ proc getTextField100Percent {param value chn prn {extraparam ""}} {
   }
 
   set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
-  append s "\"ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1);"
+  append s "\"ProofAndSetValue(this.id, this.id, parseInt($minValue), parseInt($maxValue), 1);"
   append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
 
   append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
@@ -479,8 +536,12 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "DELAY_COMPENSATION" {set x 450; set y 100}
    "DEVICE_OPERATION_MODE_RGBW" {set x 650; set y 200}
    "DEVICE_SENSOR_SENSITIVITY" {set x 450; set y 180}
+   "DIM_LEVEL_HIGHEST" {set x 450; set y 55}
+   "DIM_LEVEL_LOWEST" {set x 450; set y 125}
    "DIM_STEP" {set x 500; set y 150}
    "DISABLE_DEVICE_ALIVE_SIGNAL" {set x 500; set y 75 }
+   "DISPLAY_MODE" {set x 500; set y 200 }
+   "DISPLAY_INVERTED_COLORS" {set x 550; set y 60 }
    "DURATION_5MIN" {set x 500; set y 160}
    "ENABLE_ROUTING" {set x 500; set y 120}
    "EVENT_FILTER_NUMBER_motionDetect" {set x 400; set y 60}
@@ -489,12 +550,14 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "HEATING_COOLING" {set x 450; set y 160}
    "HUMIDITY_LIMIT_DISABLE" {set x 500; set y 200}
    "HUMIDITY_LIMIT_VALUE" {set x 450; set y 85}
+   "INPUT_COPRO_ENABLED" {set x 500; set y 250}
    "LOCAL_RESET_DISABLED" {set x 500; set y 130}
    "MOUNTING_ORIENTATION" {set x 450; set y 75}
    "MOUNTING_ORIENTATION_A" {set x 450; set y 75}
    "ON_MIN_LEVEL" {set x 400; set y 80}
    "OPTIMUM_START_STOP" {set x 450; set y 80}
    "PSM_CHANNEL_OPERATION_MODE" {set x 450; set y 100}
+   "PYRO_CHANNEL_OPERATION_MODE" {set x 500; set y 375}
    "OUTPUT_SWAP" {set x 450; set y 100}
    "OUTPUT_SWAP_SERVO" {set x 450; set y 50}
    "PERMANENT_FULL_RX" {set x 500; set y 160}
@@ -1731,7 +1794,8 @@ proc getPowerUpSelectorUniversalLightReceiver {chn p special_input_id mode {isDA
     set param POWERUP_ON_COLOR_TEMPERATURE
     # mode 2 = DIMMER_TUNABLE_WHITE
     # The RGB mode (mode 3) of the DALI device is capable of TUNABLE_WHITE - the HmIP-RGBW is not.
-    if { ([info exists ps($param)] == 1)  && (($mode == 2) || (($isDALI == 1) && ($mode == 3))) } {
+    # mode 5 = HmIP-LSC
+    if { ([info exists ps($param)] == 1)  && (($mode == 2) || ($mode == 5) || (($isDALI == 1) && ($mode == 3))) } {
       incr prn
       append html "<tr>"
         append html "<td>\${lblPowerUpOnColorTemperature}</td>"
@@ -1740,8 +1804,8 @@ proc getPowerUpSelectorUniversalLightReceiver {chn p special_input_id mode {isDA
     }
 
     set param POWERUP_ON_HUE
-    # mode 3 = DIMMER_RGB - mode 4 = DIMMER_RGBW
-    if { ([info exists ps($param)] == 1) && (($mode == 3)  || ($mode == 4)) } {
+    # mode 3 = DIMMER_RGB - mode 4 = DIMMER_RGBW mode5 = HmIP-LSC
+    if { ([info exists ps($param)] == 1) && (($mode == 3) || ($mode == 4) || ($mode == 5)) } {
       incr prn
       append html "<tr>"
         append html "<td>\${lblPowerUpOnHue}</td>"
@@ -1751,7 +1815,7 @@ proc getPowerUpSelectorUniversalLightReceiver {chn p special_input_id mode {isDA
 
     # The device documentations describes this parameter as POWERUP_ON_LEVEL_2
     set param POWERUP_ON_SATURATION
-    if { ([info exists ps($param)] == 1) && (($mode == 3)  || ($mode == 4)) } {
+    if { ([info exists ps($param)] == 1) && (($mode == 3)  || ($mode == 4) || ($mode == 5)) } {
       incr prn
       append html "<tr>"
         append html "<td>\${lblPowerUpOnSaturation}</td>"

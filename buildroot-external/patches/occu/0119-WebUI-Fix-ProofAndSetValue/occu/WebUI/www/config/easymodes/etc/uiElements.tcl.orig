@@ -158,10 +158,9 @@ proc getUnit {param} {
 
 proc getCondTXThresholdUnit {devType chn} {
    switch [string tolower $devType] {
-        hmip-stho
-        hmip-stho-a
-        elv-sh-cth
-        {
+        hmip-stho -
+        hmip-stho-a -
+        elv-sh-cth {
           if {$chn == "2"} {return "°C"}
           if {$chn == "3"} {return "%"}
         }
@@ -174,7 +173,6 @@ proc getCondTXThresholdUnit {devType chn} {
       default {return ""}
     }
 }
-
 
 proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
    switch [string tolower $devType] {

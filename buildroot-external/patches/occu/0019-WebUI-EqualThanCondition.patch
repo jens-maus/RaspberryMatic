@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/programs.fn.orig
 +++ occu/WebUI/www/rega/esp/programs.fn
-@@ -274,7 +274,7 @@
+@@ -291,7 +291,7 @@
                        sValueUnit = "";
                      }
                      
@@ -9,7 +9,7 @@
                      {
                        oSC.ConditionType(6);
                        iCT1 = 6;
-@@ -291,6 +291,11 @@
+@@ -308,6 +308,11 @@
                      if( iCT1 == 9 ) { sCT = "${ruleConditionLblGreaterOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
                      !if( iCT1 == 11 ) { sCT = "kleiner oder gleich "#iRV1.ToString(2)#sValueUnit; }
                      if( iCT1 == 11 ) { sCT = "${ruleConditionLblLessOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
@@ -111,7 +111,7 @@
          break;
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -774,13 +774,15 @@
+@@ -780,13 +780,15 @@
      "ruleConditionSelectDeviceList" : "Ger%E4teauswahl",
      "ruleConditionLblWhen" : "bei",
      "ruleConditionSelectSystemState" : "Systemzustand",
@@ -130,7 +130,7 @@
      "ruleConditionLblTimePeriodically" : "Periodisch",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -213,7 +213,7 @@
+@@ -218,7 +218,7 @@
      "lblChannelMappingYes" : "with",
      "lblChannelMappingNo" : "without",
      "lblValueDescription" : "Value description",
@@ -138,8 +138,8 @@
 +    "lblValueRange" : "Value range / with value",
      "lblSystemVariable" : "System variable",
      "lblLeft" : "Left",
-     "lblCenter" : "Centre",
-@@ -807,13 +807,15 @@
+     "lblRight" : "Right",
+@@ -813,13 +813,15 @@
      "ruleConditionLblWhen" : "when",
  
      "ruleConditionSelectSystemState" : "System state",

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/functions.fn.orig
 +++ occu/WebUI/www/rega/esp/functions.fn
-@@ -388,39 +388,14 @@
+@@ -391,39 +391,14 @@
    if (bShowChannel == true) {
  
      ! Interface HmIP-RF and HmIP-Wired
@@ -45,7 +45,7 @@
        ! Necessary to be able to learn the codes of keypads and finger print sensors
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -198,6 +198,38 @@
+@@ -188,6 +188,38 @@
  </script>
  
  <script type="text/javascript">
@@ -84,7 +84,7 @@
    var s = "";
  
    var mouseOpts =
-@@ -218,6 +250,7 @@
+@@ -208,6 +240,7 @@
    s += "<tr>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltDL.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
@@ -94,7 +94,7 @@
    
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -132,8 +132,22 @@
+@@ -135,8 +135,22 @@
      object device = dom.GetObject(system.GetVar("id"));
      if (device) {
        if (device.Visible()) {
@@ -118,7 +118,7 @@
            object chn = dom.GetObject(tmp);
            object oDev = dom.GetObject(chn.Device());
            string oDevHssType = oDev.HssType();
-@@ -171,7 +185,7 @@
+@@ -174,7 +188,7 @@
            } else {
              Call("/esp/functions.fn::showHideHmIPChannel()");
            }
@@ -129,7 +129,7 @@
              boolean showExtDesc = false;
 --- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
-@@ -120,8 +120,17 @@
+@@ -116,8 +116,17 @@
      object func = dom.GetObject(system.GetVar("id"));
      if (func) {
        if (func.Visible()) {
@@ -150,7 +150,7 @@
            object chn = dom.GetObject(tmp);
 --- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
-@@ -124,8 +124,17 @@
+@@ -120,8 +120,17 @@
      {
        if (room.Visible())
        {

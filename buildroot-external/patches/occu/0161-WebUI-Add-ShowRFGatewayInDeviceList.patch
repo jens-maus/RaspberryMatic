@@ -105,7 +105,7 @@
        if {$redirect_url == "IC_SETPROFILES" || $redirect_url == "IC_LINKPEERLIST"} then { 
          #puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>Programme &amp; Verkn&uuml;pfungen</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>Direkte Verkn&uuml;pfungen</span> &gt; Ger&auml;te- / Kanalparameter einstellen\");"
          puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>\"+translateKey('menuProgramsLinksPage')+\"</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>\"+translateKey('submenuDirectLinks')+\"</span> &gt; \" + translateKey('setDeviceAndChannelParams'));"
-@@ -1176,13 +1263,17 @@
+@@ -1217,13 +1304,17 @@
    set SENTRY(IMAGE)       "&nbsp;"
    set SENTRY(DESCRIPTION) $dev_descr(TYPE)
    set SENTRY(ADDRESS)     $address
@@ -124,7 +124,7 @@
    set EASYLINKMODE [get_user_easylinkmode]
    set SENTRY(IMAGE) "<div id=\"picDiv_thumb\" class=\"CLASS22005\" onmouseover=\"picDivShow(jg_250, '$dev_descr(TYPE)', 250, '-1', this);\" onmouseout=\"picDivHide(jg_250);\"></div>"
    append SENTRY(IMAGE) "<script type=\"text/javascript\">"
-@@ -1328,12 +1419,12 @@
+@@ -1369,12 +1460,12 @@
    puts "<TBODY>"
        
    puts "<tr>"
@@ -144,7 +144,7 @@
      puts "<td>$SENTRY(RESTOREDEVPARAMS)</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -491,7 +491,7 @@
+@@ -515,7 +515,7 @@
            <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n
            <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n
            <td class=\"DeviceListCell\" >${device.address}${device.rfAddress}<\/td>\n
@@ -153,7 +153,7 @@
            <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
-@@ -11017,6 +11017,7 @@
+@@ -11725,6 +11725,7 @@
        // End debugging
  
        this.interfaceName = data["interface"];
@@ -161,7 +161,7 @@
        this.isReadyConfig = data["isReady"];
        this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
        this.thumbnailHTML = deviceType.getThumbnailHTML();
-@@ -11232,6 +11233,13 @@
+@@ -11940,6 +11941,13 @@
      this.rssiPeerColor = getColorCode(this.RSSI_PEER);
    },
  
@@ -175,7 +175,7 @@
    /**
     * Legt den Namen des Geräts fest.
     **/
-@@ -11444,6 +11452,7 @@
+@@ -12152,6 +12160,7 @@
      {
        var id = data["id"];
        device = this.devices[id];
@@ -183,7 +183,7 @@
  
        if (typeof(device) != "undefined") 
        {
-@@ -11556,6 +11565,49 @@
+@@ -12264,6 +12273,49 @@
      return singles;
    },
    
@@ -233,7 +233,7 @@
    /**
     * Lädt die Geräteliste erneut
     **/
-@@ -11606,6 +11658,7 @@
+@@ -12314,6 +12366,7 @@
          {
            var id = data["id"];
            var device = self.devices[id];
@@ -241,7 +241,7 @@
  
            if (typeof(device) != "undefined")
            {
-@@ -11665,6 +11718,16 @@
+@@ -12373,6 +12426,16 @@
        }
      });
    },
@@ -258,7 +258,7 @@
  
    /**
     * Startet die Akualisierung eines Geräts.
-@@ -22178,7 +22241,7 @@
+@@ -25280,7 +25343,7 @@
              (this.TypeNameFilter.match(device.typeName))                 &&
              (this.DescriptionFilter.match(translateKey(device.typeDescription)))       &&
              (this.AddressFilter.match(device.address))                   &&
@@ -267,7 +267,7 @@
              (this.ModeFilter.matchStringArray(device.modes)) &&
              (this.RoomFilter.matchArray(device.rooms))                   &&
              (this.FuncFilter.matchArray(device.subsections)));
-@@ -24410,6 +24473,7 @@
+@@ -27512,6 +27575,7 @@
        //jQuery("."+gateway.getAddress()).attr("class","bidcosrf_tablecell " + gateway.getAddress().replace(/\s+/g,""));
        this.setGateway(gateway.getAddress());
        this.setRoaming(roaming);

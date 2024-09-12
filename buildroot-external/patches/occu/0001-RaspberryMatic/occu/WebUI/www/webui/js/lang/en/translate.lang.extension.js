@@ -6,6 +6,8 @@ jQuery.extend(true, langJSON, {
     "thTypeDescriptorWOLineBreak": "Type description",
     "ruleConditionSelectValue": "Value",
     "ruleConditionSelectText": "Text",
+    "ruleConditionLblIsEqual" : "equal to ",
+    "ruleDescrHexString" : "parameter string",
     "btnChoice": "Selection",
     "btnAutoDetect": "Auto discover",
     "btnSelectRoomOrFunctionNew": "New...",
@@ -534,12 +536,7 @@ jQuery.extend(true, langJSON, {
     "delDevFirmwareSuccessB" : " deleted",
     "delDevFirmwareMsgTitle" : "Confirmation!",
     "delDevFirmwareMsgBody" : "Do you really want to remove the firmware?",
-    "fwUpdatePressConfigKey" :
-      "Please place the device in radio range of the "+HMIdentifier.en.CCUShortName+" and press the configuration key! "+
-      "Afterwards, the firmware update will be performed.",
-    "fwUpdatePressSystemKey" :
-      "Please place the device in radio range of the "+HMIdentifier.en.CCUShortName+" and press the system key! "+
-      "Afterwards, the firmware update will be performed.",
+
     "partyModeDialogTitle" : "Please set the party/holiday mode here.",
     "partyStart" : "Start",
     "partyEnd" : "End",
@@ -561,6 +558,11 @@ jQuery.extend(true, langJSON, {
     "temperatureMeasurement" : "Temperature measurement",
     "energyMeasurement" : "Energy measurement",
     "powerMeasurement" : "Consumption",
+    "powerMeasurementA" : "Flow",
+    "powerMeasurementB" : "Peak incoming energy supply",
+    "powerMeasurementC" : "Off-peak incoming energy supply",
+    "powerMeasurementD" : "Outgoing energy supply",
+    "powerMeasurementFeedIn" : "Feed in",
     "userSpecific" : "User specific",
     "diagramPeriodToday" : "Today",
     "diagramPeriodThisWeek" : "This week",
@@ -609,7 +611,6 @@ jQuery.extend(true, langJSON, {
     "iconBell" : "Notification",
     "iconClock" : "Clock",
     "statusDisplayDialogTitle" : "Display configuration",
-    "ruleDescrHexString" : "parameter string",
     "dialogChangeLogTitle" : "Changelog",
     "btnChangelog" : "Changelog",
     "errorReadChangelog": "Error, can%60t read the changelog...",
@@ -711,7 +712,6 @@ jQuery.extend(true, langJSON, {
     "msgNoGatewayFound" : "No Gateway found",
     "dialogDeleteCertificateTitle" : "Delete certificate",
     "dialogSettingsNetworkLblDeleteCertificate" : "Remove certificate from CCU",
-    "confirmCertificationPurgeA" : "If the certificate is deleted, you can no longer establish a secured connection to your "+HMIdentifier.en.CCUShortName+".",
     "confirmCertificationPurgeB" : "Do you really want to delete the certificate from the "+HMIdentifier.en.CCUShortName +"?",
     "dialogRestartWebserverTitle" : "Lighttpd Restart",
     "dialogRestartWebserverContent" : "The web server will now be restarted.",
@@ -956,15 +956,11 @@ jQuery.extend(true, langJSON, {
     "rotationDirLeftSlow" : "Slow anti-clockwise rotation",
     "rotationDirRightSlow" : "Slow clockwise rotation",
     "rainDetectorSampleInterval" : "Time between the single measurements<br/>(rain detection interval)",
+    "genericSampleInterval" : "Time between the single measurements",
     "cpSecurityHttpsRedirectTitle" : "Automatic forwarding to HTTPS",
     "cpSecurityHttpsRedirectLabel" : "Forwarding to HTTPS active:",
     "cpSecurityHttpsRedirectDescription" : "If this function is activated, automatic forwarding to HTTPS takes place when accessing the WebUI via HTTP.",
     "stringTableOperationPowerConsumptionState": "Status current consumption",
-    "headerDrapUpdateNecessary":
-    "This update uses Advanced Routing to establish improved communication between the Homematic IP wireless and wired components. " +
-      "This requires a firmware update of the Homematic IP Wired Access Point.<br><br>After the update, the Homematic IP Wired Access Point is moved into the inbox and must be configured there.<br>" +
-      "All wired devices in the installation that have already been connected and configured will continue to work as usual after the update.",
-    "drapUpdateNecessary": "The following Wired Access Points with an incompatible firmware were found and must be updated:<br/><br/>",
     "thAvailableVersion": "Available version",
     "thInstalledVersion": "Installed version",
     "btnReload": "Reload",
@@ -1033,6 +1029,45 @@ jQuery.extend(true, langJSON, {
     "dialogAskCreateBakupText" : "The backup is created and downloaded directly before the installation. This process may take a few minutes",
     "unitNumericPinCode" : "(max. 8 digits from 0 to 9)",
     "hintSetReadyNotComplete" : "Click on 'Done' to complete the channel configuration then access the device in the device list.",
+
+    "btnHCL" : "HCL",
+    "btnDim2Warm" : "Dim2Warm",
+    "fwUpdatePressConfigKey" :
+      "Make sure that the device is within radio range of the "+HMIdentifier.de.CCUShortName+".  If necessary, press the system button on the device.<br/><br/>"+
+      "For all Homematic IP sensors, such as the weather sensors, pressing the button is not mandatory. " +
+      "The devices automatically report in the course of a day and then start the update on their own.",
+    "fwUpdatePressSystemKey" :
+      "Make sure that the device is within radio range of the "+HMIdentifier.de.CCUShortName+".  If necessary, press the system button on the device.<br/><br/>"+
+      "For all Homematic IP sensors, such as the weather sensors, pressing the button is not mandatory. " +
+      "The devices automatically report in the course of a day and then start the update on their own.",
+    "minTemp" : "min.<br/>Temp",
+    "maxTemp" : "max.<br/>Temp",
+    "errorStateCoProcessor" : "State co-processor",
+    "errorCoProcessorFalse" : "<br/>OK",
+    "errorCoProcessorTrue" : "<br/>Error",
+    "stateDaliBus" : "DALI bus status",
+    "stateDaliBus_0" : "<br/>OK",
+    "stateDaliBus_1" : "<br/>Short circuit",
+    "stateDaliBus_2" : "<br/>Overload",
+    "btnSearchDaliDevices" : "Check",
+    "titleSearchDaliDevices" : "Check channels",
+    "showDeviceBetaFw" : "Show unpublished device firmware.",
+    "hintDeviceBetaFw" :
+      "When the parameter is activated, a closed user group is offered advance versions of planned "+
+      "device firmware updates on the start page under the heading 'Device Update'.",
+    "btnSensorDetection" : "Sensor detection",
+    "hintPressSysKeyTryAgain" : "Press the system button and try again.",
+    "hintProblemSensorIdent" : "An error has occurred when detecting the sensor.",
+    "msgStartValueInvalid_A" : "The start value assigned for the channel",
+    "msgStartValueInvalid_B" : " is invalid!\n\n0.000 will be used.",
+    "dialogEsiSearchButtonContent" :
+      "Start detection of sensor here.<br/><br/>" +
+      "<b>Once</b> you have started sensor detection, press the system button of the device. " +
+      "The sensor is detected now. If you do not close this window, it will be opened again and the sensor found will be displayed.<br/><br/>" +
+      "<u>Note:</u><br/>" +
+      "If you change the sensor, the previously recorded consumption values (today, yesterday, etc.) will be reset to 0.<br/><br/>" +
+      "If you have started the sensor detection without a sensor connected, connect a sensor and carry out a factory reset of the energy meter.<br/><br/>",
+
     "theEnd" : ""
   }
 });

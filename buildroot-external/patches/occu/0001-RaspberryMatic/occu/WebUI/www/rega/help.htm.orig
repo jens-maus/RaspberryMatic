@@ -1,9 +1,9 @@
 <table width="100%" style="height:56%;" cellspacing="20">
 <colgroup>
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
+<col style="width:25%;" />
+<col style="width:25%;" />
+<col style="width:25%;" />
+<col style="width:25%;" />
 </colgroup>
   <tr>
     <td style="background-color:#E0E0E0;vertical-align:top;">

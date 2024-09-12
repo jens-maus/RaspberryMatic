@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -235,6 +235,8 @@
+@@ -1101,6 +1101,8 @@
  DEV_PATHS["HmIPW-DRAP"]["50"] = "/config/img/devices/50/162_hmipw-drap_thumb.png";
  DEV_PATHS["HmIPW-DRAP"]["250"] = "/config/img/devices/250/162_hmipw-drap.png";
  DEV_HIGHLIGHT["HmIPW-DRAP"] = new Object();
@@ -9,7 +9,7 @@
  DEV_LIST.push('HM-LC-Dim1T-FM-644');
  DEV_DESCRIPTION["HM-LC-Dim1T-FM-644"] = "HM-LC-Dim1T-FM";
  DEV_PATHS["HM-LC-Dim1T-FM-644"] = new Object();
-@@ -1555,12 +1557,12 @@
+@@ -2486,12 +2488,12 @@
  DEV_PATHS["HmIP-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
  DEV_PATHS["HmIP-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
  DEV_HIGHLIGHT["HmIP-WRC6"] = new Object();
@@ -28,7 +28,7 @@
  DEV_HIGHLIGHT["HmIP-WRC6"]["1+2"] = [5, '1', '2'];
  DEV_HIGHLIGHT["HmIP-WRC6"]["3+4"] = [5, '3', '4'];
  DEV_HIGHLIGHT["HmIP-WRC6"]["5+6"] = [5, '5', '6'];
-@@ -1978,6 +1980,22 @@
+@@ -3018,6 +3020,22 @@
  DEV_PATHS["HmIPW-DRS4"]["50"] = "/config/img/devices/50/160_hmipw-drs4_thumb.png";
  DEV_PATHS["HmIPW-DRS4"]["250"] = "/config/img/devices/250/160_hmipw-drs4.png";
  DEV_HIGHLIGHT["HmIPW-DRS4"] = new Object();
@@ -51,7 +51,7 @@
  DEV_LIST.push('HM-LC-Sw1-SM-2');
  DEV_DESCRIPTION["HM-LC-Sw1-SM-2"] = "HM-LC-Sw1-SM";
  DEV_PATHS["HM-LC-Sw1-SM-2"] = new Object();
-@@ -2503,18 +2521,18 @@
+@@ -3561,18 +3579,18 @@
  DEV_PATHS["HmIPW-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
  DEV_PATHS["HmIPW-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
  DEV_HIGHLIGHT["HmIPW-WRC6"] = new Object();
@@ -82,7 +82,7 @@
  DEV_HIGHLIGHT["HmIPW-WRC6"]["13"] = [5, '1', '2', '3', '4', '5', '6'];
  DEV_HIGHLIGHT["HmIPW-WRC6"]["1+2"] = [5, '1', '2'];
  DEV_HIGHLIGHT["HmIPW-WRC6"]["3+4"] = [5, '3', '4'];
-@@ -2734,14 +2752,14 @@
+@@ -3792,14 +3810,14 @@
  DEV_PATHS["HmIP-BSL"]["50"] = "/config/img/devices/50/173_hmip-bsl_thumb.png";
  DEV_PATHS["HmIP-BSL"]["250"] = "/config/img/devices/250/173_hmip-bsl.png";
  DEV_HIGHLIGHT["HmIP-BSL"] = new Object();
@@ -105,7 +105,7 @@
  DEV_LIST.push('HmIP-PDT-CH');
  DEV_DESCRIPTION["HmIP-PDT-CH"] = "PDT-CH";
  DEV_PATHS["HmIP-PDT-CH"] = new Object();
-@@ -2796,6 +2814,38 @@
+@@ -3866,6 +3884,38 @@
  DEV_PATHS["HmIPW-DRS8"]["50"] = "/config/img/devices/50/161_hmipw-drs8_thumb.png";
  DEV_PATHS["HmIPW-DRS8"]["250"] = "/config/img/devices/250/161_hmipw-drs8.png";
  DEV_HIGHLIGHT["HmIPW-DRS8"] = new Object();

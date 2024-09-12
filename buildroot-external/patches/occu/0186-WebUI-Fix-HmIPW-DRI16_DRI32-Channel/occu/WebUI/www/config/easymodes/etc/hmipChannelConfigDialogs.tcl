@@ -781,7 +781,7 @@ proc getGenericInputTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -792,7 +792,7 @@ proc getGenericInputTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param DBL_PRESS_TIME
@@ -937,7 +937,7 @@ proc getMultiModeInputTransmitter {chn p descr address} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -948,7 +948,7 @@ proc getMultiModeInputTransmitter {chn p descr address} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
 # ** KEY **
@@ -1208,7 +1208,7 @@ proc getSwitchTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -1219,7 +1219,7 @@ proc getSwitchTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -1282,7 +1282,7 @@ proc getSwitchTransceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -1293,7 +1293,7 @@ proc getSwitchTransceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -1391,7 +1391,7 @@ proc getBlindTransmitter {chn p descr address} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -1402,7 +1402,7 @@ proc getBlindTransmitter {chn p descr address} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -1687,7 +1687,7 @@ proc getShutterTransmitter {chn p descr address} {
     append html "<td>\${stringTableEventDelay}</td>"
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
     incr prn
     set param EVENT_DELAY_VALUE
     append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
@@ -1697,7 +1697,7 @@ proc getShutterTransmitter {chn p descr address} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -1974,7 +1974,7 @@ proc getDimmerTransmitter {chn p descr} {
     }
 
     append html "<tr><td>$lblActivInactiv</td><td>"
-    append html [get_ComboBox options $param separate_$CHANNEL\_$prn ps $param onchange=\"showAdjustDimmingRange(this.value,$chn)\"]
+    append html "[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param onchange=\"showAdjustDimmingRange(this.value,$chn)\"]&nbsp;[getHelpIcon DIM_$param 600 100]"
     append html "</td></tr>"
   }
 
@@ -1996,8 +1996,6 @@ proc getDimmerTransmitter {chn p descr} {
     append html "</tr>"
     append html "<tr name='adjustDimLevel_$chn'><td colspan='2'><hr></td></tr>"
   }
-
-
 
   set param VOLTAGE_0
   if { [info exists ps($param)] == 1 } {
@@ -2030,7 +2028,7 @@ proc getDimmerTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -2041,7 +2039,7 @@ proc getDimmerTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -2146,7 +2144,7 @@ proc getAlarmSwitchVirtualReceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
     incr prn
     set param EVENT_DELAY_VALUE
     append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
@@ -2156,7 +2154,7 @@ proc getAlarmSwitchVirtualReceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -3167,7 +3165,7 @@ proc getEnergieMeterTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -3178,7 +3176,7 @@ proc getEnergieMeterTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -3823,7 +3821,7 @@ proc getCondSwitchTransmitter {chn p descr} {
   append html [getComboBox $chn $prn "$specialID" "eventDelay"]
   append html "</tr>"
 
-  append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+  append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
   incr prn
   set param EVENT_DELAY_VALUE
@@ -3834,7 +3832,7 @@ proc getCondSwitchTransmitter {chn p descr} {
 
   append html "</tr>"
   append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-  append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+  append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
 
   incr prn
   append html "<tr>"
@@ -4037,7 +4035,7 @@ proc getLevelCommandTransmitter_CO2 {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -4048,7 +4046,7 @@ proc getLevelCommandTransmitter_CO2 {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -4115,7 +4113,7 @@ proc getAccelerationTransceiver {chn p descr address} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -4126,7 +4124,7 @@ proc getAccelerationTransceiver {chn p descr address} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param CHANNEL_OPERATION_MODE
@@ -4652,7 +4650,7 @@ proc getShutterContact {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -4663,7 +4661,7 @@ proc getShutterContact {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_FILTER_NUMBER
@@ -5166,7 +5164,7 @@ proc getWaterDetectionTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5177,7 +5175,7 @@ proc getWaterDetectionTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_FILTER_NUMBER
@@ -5339,7 +5337,7 @@ proc getDoorReceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5350,7 +5348,7 @@ proc getDoorReceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -5395,7 +5393,7 @@ proc getSimpleSwitchReceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5406,7 +5404,7 @@ proc getSimpleSwitchReceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -5451,7 +5449,7 @@ proc getAcousticSignalTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5462,7 +5460,7 @@ proc getAcousticSignalTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -5608,7 +5606,7 @@ proc getDoorLockStateTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5619,7 +5617,7 @@ proc getDoorLockStateTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -5804,7 +5802,7 @@ proc getDoorLockStateTranseiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5815,7 +5813,7 @@ proc getDoorLockStateTranseiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -5934,7 +5932,7 @@ proc getOpticalSignalReceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -5945,7 +5943,7 @@ proc getOpticalSignalReceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -6128,7 +6126,7 @@ proc getServoTransmitter {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -6139,7 +6137,7 @@ proc getServoTransmitter {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT
@@ -6430,7 +6428,7 @@ proc getWindowDriveReceiver {chn p descr} {
     append html [getComboBox $chn $prn "$specialID" "eventDelay"]
     append html "</tr>"
 
-    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
     incr prn
     set param EVENT_DELAY_VALUE
@@ -6441,7 +6439,7 @@ proc getWindowDriveReceiver {chn p descr} {
 
     append html "</tr>"
     append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
   }
 
   set param EVENT_RANDOMTIME_UNIT

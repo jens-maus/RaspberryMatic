@@ -36,7 +36,7 @@
      # Mapping of channel type to default function for the channel
      array set CHANNEL_FUNCTIONS {
          BLIND                   LIGHT
-@@ -118,6 +103,21 @@
+@@ -123,6 +108,21 @@
          rega "dom.GetObject($dev_id).ReadyConfig(true);"
          puts "ReadyConfig($dev_id)"
      }
@@ -58,7 +58,7 @@
      
      proc conf_device_HM-CCU-1 { url dev_id desc_var } {
          rega "dom.GetObject($dev_id).ReadyConfig(true);"
-@@ -136,101 +136,16 @@
+@@ -141,101 +141,16 @@
      
      proc conf_value_WEATHER.RAIN_COUNTER { url ch_id ch_desc_var value_desc_var} {
          create_rain_calculation $ch_id
@@ -72,9 +72,8 @@
      
      proc conf_value_DISPLAY.ALARM_COUNT { url ch_id ch_desc_var value_desc_var} {
 -        create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
-+        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
-     }
-     
+-    }
+-    
 -    proc create_objects {collection enum_type names} {
 -        set ids [rega "dom.GetObject($collection).EnumIDs()"]
 -        set i 0
@@ -156,13 +155,14 @@
 -            sv.Internal(0);
 -            
 -        }
--    }
--    
++        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
+     }
+     
 -    
      proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {
          set script "string ch_id=\"$ch_id\";\nstring value_name=\"$value\";\nstring sv_id=$sv_id;\nstring prg_name=\"$prg_name\";\n"
          append script {
-@@ -279,7 +194,7 @@
+@@ -284,7 +199,7 @@
      proc create_rain_calculation {ch_id} {
      
        ##
@@ -171,7 +171,7 @@
        ##
        proc _rega_exec_ { script } {
          set result {}
-@@ -308,7 +223,7 @@
+@@ -313,7 +228,7 @@
        }
      
        ##
@@ -180,7 +180,7 @@
        ##
        proc _create_sv_ {name info channelId} {
          set    script "var name = \"$name\";\n"
-@@ -336,7 +251,7 @@
+@@ -341,7 +256,7 @@
        }
      
        ##
@@ -189,7 +189,7 @@
        ##
        proc _create_reset_program_ { rainTodayId rainYesterdayId } {
    
-@@ -358,7 +273,7 @@
+@@ -363,7 +278,7 @@
  
            var programs = dom.GetObject(ID_PROGRAMS);
            var program  = dom.CreateObject(OT_PROGRAM);
@@ -198,7 +198,7 @@
            program.Internal(true);
            programs.Add(program.ID());
  
-@@ -499,7 +414,9 @@
+@@ -504,7 +419,9 @@
          string ifaces;
          foreach(if_id, dom.GetObject(ID_INTERFACES).EnumUsedIDs()){
              object o=dom.GetObject(if_id);
@@ -209,7 +209,7 @@
          }
          string dev_id;
          string devs;
-@@ -516,35 +433,22 @@
+@@ -521,35 +438,22 @@
                  }
              }
          }
@@ -257,7 +257,7 @@
      }
  
      # We need a catch because OSRAM Lightify causes an error (/tmp/hm_autoconf_xxx.log) because a list must have an even number of elements.
-@@ -577,13 +481,24 @@
+@@ -582,13 +486,24 @@
                array_clear ch_descr
                array set ch_descr [xmlrpc $url getDeviceDescription $ch_address]
                if [info exist DEVICE_FUNCTIONS($dev_descr(TYPE))] {
@@ -285,7 +285,7 @@
 +                      }
                    }
                }
-               set procname "conf_channel_$ch_descr(TYPE)"
+ 	          if { [string equal $ch_descr(PARENT_TYPE) "HmIP-RCV-50"] == 1 } {
 --- occu/WebUI/bin/hm_startup.orig
 +++ occu/WebUI/bin/hm_startup
 @@ -1,27 +1,7 @@

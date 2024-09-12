@@ -1,12 +1,846 @@
-CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n  {if id != sortId}\n    <th class=\"ChannelChooserHead clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"ChannelChooserHead_Active clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"ChannelChooserDialog\">\n<div id=\"ChannelChooserTitle\" name=\"dialogChooseChannel\" onmousedown=\"new Drag($(\'ChannelChooserDialog\'), event);\">Kanalauswahl<\/div>\n<div id=\"ChannelChooserContent\">\n  <table id=\"ChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col style=\"width:20%;\" \/>\n      <col style=\"width:55px;\"\/>\n      <col style=\"width:30%;\"\/>\n      <col style=\"width:12%;\"\/>\n      <col style=\"width:17%;\"\/>\n      <col style=\"width:17%;\"\/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- Überschriften -->\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"ChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFuncs\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        <th class=\"Filter\">&nbsp;<\/th>\n        <!-- ${descriptionFilter.getHTML()} -->\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {eval}actualDeviceAddress = \"\";{\/eval}\n\n      {for channel in channels}\n        {if channel.device.inInbox != true}\n          {var virtualChannel = \"\"}\n          {var classExpertOnly = \"hidden j_expertChannel\"}\n          {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n          {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n          {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n\n          {if (channelTypeID != \"HMIP-MIOB\") && (channelTypeID != \"HMIP-WHS2\")}\n            {if (channel.channelType == \"DIMMER_TRANSMITTER\")\n              || (channel.channelType == \"SWITCH_TRANSMITTER\")\n              || (channel.channelType == \"BLIND_TRANSMITTER\")\n              || (channel.channelType == \"SHUTTER_TRANSMITTER\")\n              || (channel.channelType == \"ACOUSTIC_SIGNAL_TRANSMITTER\")}\n              {var virtualChannel = classExpertOnly;}\n            {\/if}\n            {if (channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"BLIND_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SERVO_VIRTUAL_RECEIVER\")}\n              {if actualDeviceAddress != channel.device.address}\n                {eval}\n                  actualDeviceAddress = channel.device.address;\n                  if (userIsNoExpert) {\n                    if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {\n                      virtualChannel = classExpertOnly;\n                    }\n                  }\n                {\/eval}\n              {\/if}\n              {eval}if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {virtualChannel = classExpertOnly;}{\/eval}\n            {\/if}\n          {\/if}\n\n          {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n\n          {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n            ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n          )))} {var virtualChannel = classExpertOnly} {\/if}\n\n          {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n          {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n          {if channel.channelType != \"_MAINTENANCE\"}\n              <tr class=\"ChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onclick=\"ChannelChooser.select(this.id);\" onmouseover=\"this.className=\'ChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'ChannelChooserRow\';\">\n                <td class=\"ChannelChooserCell\">${channel.name}<br\/><br\/><span class=\"j_extChnDescr\">${channel.typeDescription}_${channel.address}<\/span><\/td>\n                <td class=\"ChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n                <td class=\"ChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n                <td class=\"ChannelChooserCell\">${channel.address}<\/td>\n                <td class=\"ChannelChooserCell j_functions\">\n                  {for subsection in channel.subsections}\n                    ${subsection.name}<br \/>\n                  {forelse}\n                    &#160;\n                  {\/for}\n                <\/td>\n                <td class=\"ChannelChooserCell j_rooms\">\n                  {for room in channel.rooms}\n                    ${room.name}<br \/>\n                  {forelse}\n                    &#160;\n                  {\/for}\n                <\/td>\n              <\/tr>\n             {forelse}\n              <tr class=\"ChannelChooserRow\">\n                <td colspan=\"10\" class=\"ChannelChooserCell\" name=\"\"lblNoChannelsAvailable>Keine Kan&auml;le verf&uuml;gbar<\/td>\n              <\/tr>\n          {\/if}\n        {\/if}\n      {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"ChannelChooserFooter\">\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"ChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"ChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>\n";
-CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n<div id=\"ChannelConfigDialogTitle\" onmousedown=\"new Drag($(\'ChannelConfigDialog\'), event);\"><span name=\"generalChannelConfigTitle\">Allgemeine Kanaleinstellungen:<\/span> ${channel.address}<\/div>\n<div id=\"ChannelConfigDialogContent\">\n\n  <div id=\"ChannelConfigDialogContentLeft\">\n    <div  class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11000\">\n        <div class=\"CLASS11001\">${channel.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS11002\">${channel.typeName}<\/div>\n    <\/div>\n    \n    {if channel.supportsComTest()}\n    <div id=\"channelFunctionTestPanel\" class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"ChannelConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS11004\">\n          <p name=\"generalChannelConfigHint\">\n            Im Rahmen des Funktionstests wird gepr&uuml;ft, ob die Kommunikation mit dem Kanal fehlerfrei funktioniert.\n          <\/p>\n          {if channel.category == Channel.CATEGORY.SENDER}<p name=\"generalChannelConfigHintSender\">Bei Sensoren wartet die HomeMatic Zentrale, bis diese sich melden. Eine Fernbedienung meldet sich z.B. erst dann, wenn sie manuell betätigt wird.<\/p>{\/if}\n          {if channel.category == Channel.CATEGORY.RECEIVER}<p name=\"generalChannelConfigHintReceiver\">Bei Aktoren wird dazu in der Regel ein Schaltbefehl ausgelöst.<\/p>{\/if}\n          <\/div>\n      <\/div>\n    <\/div>\n    {\/if}\n  <\/div>\n\n  <div id=\"ChannelConfigDialogContentMain\">\n    <div class=\"ChannelConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"ChannelConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"ChannelConfigDialog_ChannelName\" class=\"CLASS11005\" type=\"text\" value=\"${channel.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblCategory\">Kategorie:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" \n            {if channel.category == Channel.CATEGORY.SENDER} value=\"Sender (Sensor)\" id=\"generalChannelConfigLblSender\" {\/if}\n            {if channel.category == Channel.CATEGORY.RECEIVER} value=\"Empf&auml;nger (Aktor)\" id=\"generalChannelConfigLblReceiver\" {\/if}\n            {if channel.category == Channel.CATEGORY.NONE} value=\"nicht verkn&uuml;pfbar\" id=\"generalChannelConfigLblNone\"{\/if}\n            \/>\n        <\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTransmitMode\">&Uuml;bertragungsmodus:<\/td>\n          <td>\n            <select id=\"ChannelConfigDialog_Mode\" class=\"CLASS11005\" {if !channel.isAesAvailable} disabled=\"disabled\" readonly=\"readonly\" {\/if}>\n              <option value=\"Standard\" name=\"lblStandard\" {if channel.mode == translateKey(Channel.MODE.DEFAULT)} selected=\"selected\" {\/if} >Standard<\/option>\n              <option value=\"Gesichert\" name=\"lblSecured\" {if channel.mode == translateKey(Channel.MODE.AES)} selected=\"selected\" {\/if} >Gesichert<\/option>\n            <\/select>\n          <\/td>\n        <\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"ChannelConfigDialog_isUsable\" type=\"checkbox\" {if channel.isUsable} checked=\"checked\" {\/if} {if !channel.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"ChannelConfigDialog_isVisible\" type=\"checkbox\" {if channel.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n        <tr id=\"btnEnableChannelLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"ChannelConfigDialog_isLogged\" type=\"checkbox\" {if channel.isLogged} checked=\"checked\" {\/if} {if !channel.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div  id=\"ChannelConfigDialogSectionRoom\" class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isRoomListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleRooms(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblRooms\">R&auml;ume<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogRooms\" {if !isRoomListVisible} style=\"display:none\" {\/if} >\n        <table class=\"ChannelConfigDialogTable\">\n          {for room in rooms}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${room.id}\" {if room.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${room.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n    <div id=\"ChannelConfigDialogSectionFunc\" class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isSubsectionListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleFuncs(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblFunctions\">Gewerke<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogFuncs\" {if !isSubsectionListVisible} style=\"display:none\" {\/if}>\n        <table class=\"ChannelConfigDialogTable\">\n          {for func in funcs}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${func.id}\" {if func.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${func.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n  <\/div>\n<\/div>\n<div id=\"ChannelConfigDialogFooter\">\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"ChannelConfigDialogAbortButton\" onclick=\"ChannelConfigDialog.abort();\">Abbrechen<\/div>\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnOk\" id=\"ChannelConfigDialogOkButton\" onclick=\"ChannelConfigDialog.ok();\">OK<\/div>\n<\/div>\n<\/div>\n";
-DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n<div id=\"DeviceConfigDialogTitle\" onmousedown=\"new Drag($(\'DeviceConfigDialog\'), event);\"><span name=\"generalDeviceConfigTitle\">Allgemeine Geräteeinstellungen:<\/span> ${device.address}<\/div>\n<div id=\"DeviceConfigDialogContent\">\n\n  <div id=\"DeviceConfigDialogContentLeft\">\n    <div  class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10800\">\n        <div class=\"CLASS10801\">${device.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS10802\">${device.typeName}<\/div>\n    <\/div>\n  <\/div>\n\n  <div id=\"DeviceConfigDialogContentMain\">\n    <div class=\"DeviceConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"DeviceConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"DeviceConfigDialog_DeviceName\" class=\"CLASS10803\" type=\"text\" value=\"${device.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"DeviceConfigDialog_isUsable\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isUsabilityChanged=true;\" {if device.isUsable} checked=\"checked\" {\/if} {if !device.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <!-- <tr id=\"trAllChnVisible\" class=\"hidden\"><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\" {if device.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr> -->\n        <tr id=\"btnEnableDeviceLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"DeviceConfigDialog_isLogged\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isLoggingChanged=true;\" {if device.isLogged} checked=\"checked\" {\/if} {if !device.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n\n        <tr id=\"trAllChnVisible\" class=\"hidden\"><td name=\"lblAllChannelsVisible\">Alle Kan%E4le sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\"\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"DeviceConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n        <\/div>\n      <\/div>\n    <\/div>\n\n  <\/div>\n<\/div>\n<div id=\"DeviceConfigDialogFooter\">\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"DeviceConfigDialogAbortButton\" onclick=\"DeviceConfigDialog.abort();\">Abbrechen<\/div>\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnOk\" id=\"DeviceConfigDialogOkButton\" onclick=\"DeviceConfigDialog.ok();\">Ok<\/div>\n<\/div>\n<\/div>\n";
-DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n  {if id != sortId}\n    <th class=\"DeviceListHead clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"DeviceListHead_Active clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<table id=\"DeviceListTable\" width=\"97%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n  <colgroup>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:55px;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:11%;\"\"\/>\n  <\/colgroup>\n  <thead>\n    <tr>\n      ${printHead(\"thName\", \"NAME\")}\n      ${printHead(\"thTypeDescriptor\", \"TYPE_NAME\")}\n      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n      ${printHead(\"thDescriptor\", \"DESCRIPTION\")}\n      ${printHead(\"thSerialNumber\", \"ADDRESS\")}\n      ${printHead(\"thInterfaceCategory\", \"CATEGORY\")}\n      ${printHead(\"thTransmitMode\", \"MODE\")}\n      ${printHead(\"thFuncs\", \"FUNC_NAMES\")}\n      ${printHead(\"thRooms\", \"ROOM_NAMES\")}\n      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n      <th class=\"DeviceListHead\" name=\"thActions\">Flat Aktionen<\/th>\n    <\/tr>\n    <tr>\n      ${nameFilter.getHTML()}\n      ${typeNameFilter.getHTML()}\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      ${descriptionFilter.getHTML()}\n      ${addressFilter.getHTML()}\n      ${categoryFilter.getHTML()}\n      ${modeFilter.getHTML()}\n      ${funcFilter.getHTML()}\n      ${roomFilter.getHTML()}\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n    <\/tr>\n  <\/thead>\n  <tbody>\n    {for channel in channels}\n      <tr class=\"DeviceListRow\" id=\"${PREFIX}${channel.Id}\"  onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" onmouseover=\"this.className = \'DeviceListRow_Highlight\';\" onmouseout=\"this.className = \'DeviceListRow\';\">\n        <td class=\"DeviceListCell\">${channel.name}<\/td>\n        <td class=\"DeviceListCell\">${channel.typeName}<\/td>\n        <td class=\"DeviceListThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n        <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n        <td class=\"DeviceListCell\">${channel.address}<\/td>\n        <td class=\"DeviceListCell\">${channel.category}<\/td>\n        <td class=\"DeviceListCell j_chMode\">${channel.mode}<\/td>\n        <td class=\"DeviceListCell j_function\">\n          {for subsection in channel.subsections}\n            ${subsection.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"DeviceListCell j_rooms\">\n          {for room in channel.rooms}\n            ${room.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\">\n          <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n          <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n          <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n        <\/td>\n      <\/tr>\n    {forelse}\n      <tr class=\"DeviceListRow\">\n        <td class=\"DeviceListCell\" name=\"noChannelsAvailable\" colspan=\"13\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n      <\/tr>\n    {\/for}\n  <\/tbody>\n<\/table>\n\n";
-DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n  <colgroup>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:55px;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:11%;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:25px;\"\/>\n    <col style=\"width:11%;\"\/>\n  <\/colgroup>\n  <thead>\n    <tr>\n      <!-- Alle Elemente mit Name-Attribut werden übersetzt. Der Wert des Name-Attributs ist der Key f. die Übersetzungsdatei -->\n      <th class=\"DeviceListCell_Invisible\"><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thName\" colspan=\"3\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Name<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTypeDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Typen- Bezeichnung<\/th>\n      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Bezeichnung<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thSerialNumber\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Serien- Nummer<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thInterfaceCategory\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Interface \/ Kategorie<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n      <th class=\"DeviceListHead\" name=\"thActions\" >Aktionen<\/th>\n    <\/tr>\n    <tr>\n      <th class=\"DeviceListCell_Invisible CLASS10901\" ><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      ${nameFilter.getHTML(3)}\n      ${typeNameFilter.getHTML()}\n      <th class=\"Filter CLASS10901\" >&nbsp;<\/th>\n      ${descriptionFilter.getHTML()}\n      ${addressFilter.getHTML()}\n      ${interfaceFilter.getHTML()}\n      ${modeFilter.getHTML()}\n      ${funcFilter.getHTML()}\n      ${roomFilter.getHTML()}\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n    <\/tr>\n  <\/thead>\n  <tbody>\n    {for device in devices}\n      {if !device.inInbox}\n        <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n          {if (device.typeName != \"HmIP-CCU3\") && (device.typeName != \"RPI-RF-MOD\")  && (device.typeName != \"HmIP-HAP\")  && (device.typeName != \"HmIP-HAP-B1\") && (device.typeName != \"HmIP-HAP JS1\")}\n            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n              <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n              <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n            <\/td>\n            {else}\n             <td class=\"DeviceListCell_Invisible\" \/>\n          {\/if}\n          <td class=\"DeviceListCell\" colspan=\"3\">${device.name}<\/td>\n          <td class=\"DeviceListCell\" >${device.typeName}<\/td>\n          <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n          <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n          <td class=\"DeviceListCell\" >${device.address}${device.rfAddress}<\/td>\n          <td class=\"DeviceListCell\" >${device.interfaceName}<\/td>\n          <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\" >\n            <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'DEVICE\', \'${device.id}\');\">Einstellen<\/div>\n            {if device.isDeletable}\n              <div class=\"DeviceListButton\" name=\"btnRemove\" onclick=\"DeviceListPage.deleteDevice(event, \'${device.id}\');\">L&ouml;schen<\/div>\n            {else}\n              <div class=\"DeviceListButton CLASS10902\" name=\"btnRemove\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\" >L&ouml;schen<\/div>\n            {\/if}\n            <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'DEVICE\', \'${device.id}\');\">Direkte<\/div>\n            <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'DEVICE\', \'${device.id}\');\">Programme<\/div>\n          <\/td>\n        <\/tr>\n        {for group in device.groups}\n          <tr id=\"${PREFIX}${group.id}\"class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if}>\n            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n              <img id=\"${PREFIX}${group.id}PLUS\" onclick=\"DeviceListPage.expandGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if group._expanded} style=\"display:none;\"{\/if}\/>\n              <img id=\"${PREFIX}${group.id}MINUS\" onclick=\"DeviceListPage.collapseGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !group._expanded} style=\"display:none;\"{\/if}\/>\n            <\/td>\n            <td class=\"DeviceListCell\" colspan=\"2\">${group.name}<\/td>\n            <td class=\"DeviceListCell\" >${group.typeName}<\/td>\n            <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${group.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${group.device.deviceType.id}\', 250, \'${group.formName}\', this);\" onmouseout=\"picDivHide(jg_250);\">${group.thumbnailHTML}<\/div><\/td>\n            <td class=\"DeviceListCell\" name=\"${group.typeDescription}\" >${group.typeDescription}<\/td>\n            <td class=\"DeviceListCell\" >${group.address}<\/td>\n            <td class=\"DeviceListCell\" >{for name in group.categories}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n            <td class=\"DeviceListCell\" >\n              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'GROUP\', \'${group.id}\');\">Einstellen<\/div>\n              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'GROUP\', \'${group.id}\');\">Direkte<\/div>\n              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'GROUP\', \'${group.id}\');\">Programme<\/div>\n            <\/td>\n          <\/tr>\n          {for channel in group.channels}\n            <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if (!group._expanded) | (!device._expanded)}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n              <td class=\"DeviceListCell_Invisible\" colspan=\"3\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n              <td class=\"DeviceListCell\" >${channel.name}<br\/>${channel.nameExtention}<\/td>\n              <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n              <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n              <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n              <td class=\"DeviceListCell\" >${channel.address}<\/td>\n              <td class=\"DeviceListCell\" >${channel.category}<\/td>\n              <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n              <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n              <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\" >\n                <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n                <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n                <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n              <\/td>\n            <\/tr>\n          {\/for}\n        {\/for}\n        {for channel in device.singles}\n\n        {if channel._isVisible}\n            {if channel.highlightChannel}\n              <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow virtualChannelBckGndA\" {if !device._expanded} style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow virtualChannelBckGndA\';\">\n            {else}\n              <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if !device._expanded} style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n            {\/if}\n\n              <td class=\"DeviceListCell_Invisible\" colspan=\"2\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n              <td class=\"DeviceListCell\" colspan=\"2\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n              <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n              <td class=\"DeviceListThumbnail\" ><div  id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n              <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n              <td class=\"DeviceListCell\" >${channel.address}<\/td>\n              <td class=\"DeviceListCell\" >${channel.category}<\/td>\n              <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n              <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n              <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n              <td class=\"DeviceListCell\" >\n                <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n                <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n                <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n              <\/td>\n            <\/tr>\n         {\/if}\n        {\/if}\n      {\/for}\n    {forelse}\n      <tr class=\"DeviceListRow\">\n        <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"15\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n      <\/tr>\n    {\/for}\n  <\/tbody>\n  <tfoot>\n    <tr class=\"CLASS10903\">\n      <td class=\"DeviceListCell_Invisible CLASS10903\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10906\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10907\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10908\" ><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10909\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n    <\/tr>  \n  <\/tfoot>\n<\/table>\n";
-LISTFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\">\n  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"Element.show(\'${id}\');\">Filter<\/div>\n  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none\">\n    <form class=\"FilterBody\" id=\"${formId}\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n        <tbody>\n          {for item in list}\n          <tr>\n            <td class=\"FilterBodyCell\"><input type=\"checkbox\" name=\"values\" value=\"${item.id}\" {if true === item._selected}checked=\"\"{\/if}\/><td>\n            <td class=\"FilterBodyCell j_Filter_${item.id}\">${item.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/tbody>\n      <\/table>\n      <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n      <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n    <\/form>\n  <\/div>\n<\/th>\n";
-MULTI_CHANNELCHOOSER_JST = "{macro printHead(name, id, langKey)}\n  {if id != sortId}\n    <th class=\"MultiChannelChooserHead clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"MultiChannelChooserHead_Active clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"MultiChannelChooserDialog\">\n<div id=\"MultiChannelChooserTitle\" onmousedown=\"new Drag($(\'MultiChannelChooserDialog\'), event);\"><span name=\"dialogChooseChannel\">Kanalauswahl<\/span>: ${title}<\/div>\n<div id=\"MultiChannelChooserContent\">\n  <table id=\"MultiChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col style=\"width:5%;\"\/>\n      <col style=\"width:19%;\"\/>\n      <col style=\"width:55px;\"\/>\n      <col style=\"width:30%;\"\/>\n      <col style=\"width:12%;\"\/>\n      <col style=\"width:17%;\"\/>\n      <col style=\"width:17%;\"\/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- Überschriften -->\n        <th class=\"MultiChannelChooserHead\">&nbsp;<\/th>\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"MultiChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFunc\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        <th class=\"Filter\">&nbsp;<\/th>\n        <!-- ${descriptionFilter.getHTML()} -->\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {eval}actualDeviceAddress = \"\";{\/eval}\n      {for channel in channels}\n        {if channel.device.inInbox != true}\n          {var virtualChannel = \"\"}\n          {var classExpertOnly = \"hidden j_expertChannel\"}\n          {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n          {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n          {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n\n          {if (channelTypeID != \"HMIP-MIOB\") && (channelTypeID != \"HMIP-WHS2\")}\n            {if (channel.channelType == \"DIMMER_TRANSMITTER\")\n              || (channel.channelType == \"SWITCH_TRANSMITTER\")\n              || (channel.channelType == \"BLIND_TRANSMITTER\")\n              || (channel.channelType == \"SHUTTER_TRANSMITTER\")\n              || (channel.channelType == \"ACOUSTIC_SIGNAL_TRANSMITTER\")}\n              {var virtualChannel = classExpertOnly;}\n            {\/if}\n            {if (channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"BLIND_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER\")\n              || (channel.channelType == \"SERVO_VIRTUAL_RECEIVER\")}\n              {if actualDeviceAddress != channel.device.address}\n                {eval}\n                  actualDeviceAddress = channel.device.address;\n                  if (userIsNoExpert) {\n                    if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {\n                      virtualChannel = classExpertOnly;\n                    }\n                  }\n                {\/eval}\n              {\/if}\n              {eval}if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {virtualChannel = classExpertOnly;}{\/eval}\n            {\/if}\n          {\/if}\n\n          {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n\n          {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n            ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n          )))} {var virtualChannel = classExpertOnly} {\/if}\n\n          {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n          {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n          {if channel._selected == true} {var virtualChannel = \"\"} {\/if}\n\n        <tr class=\"MultiChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onmouseover=\"this.className=\'MultiChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'MultiChannelChooserRow\';\">\n          <td class=\"MultiChannelChooserCell_Active\"><input type=\"checkbox\" onclick=\"MultiChannelChooser.select(\'${channel.id}\', this);\" {if true === channel._selected}checked=\"\"{\/if}\/><\/td>\n          <td class=\"MultiChannelChooserCell\">${channel.name}<br\/><span class=\"j_extChnDescr\">${channel.nameExtention}<\/span><\/td>\n          <td class=\"MultiChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n          <td class=\"MultiChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n          <td class=\"MultiChannelChooserCell\">${channel.address}<\/td>\n          <td class=\"MultiChannelChooserCell\">\n            {for subsection in channel.subsections}\n              ${subsection.name}<br \/>\n            {forelse}\n              &#160;\n            {\/for}\n          <\/td>\n          <td class=\"MultiChannelChooserCell\">\n            {for room in channel.rooms}\n              ${room.name}<br \/>\n            {forelse}\n              &#160;\n            {\/for}\n          <\/td>\n        <\/tr>\n        {forelse}\n        <tr class=\"MultiChannelChooserRow\">\n          <td colspan=\"10\" class=\"MultiChannelChooserCell\" name=\"hintMultiChannelChooserNoChannelsAvailable\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n        <\/tr>\n      {\/if}\n    {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"MultiChannelChooserFooter\">\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"MultiChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserOkButton\" name=\"footerBtnOk\" onclick=\"MultiChannelChooser.ok();\">OK<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"MultiChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>";
-RF_CONFIG_JST = "<div class=\"CLASS10500\">\n<form name=\"RFConfig_Interfaces\">\n<table class=\"RFConfig_InterfacesTable\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n  <colgroup>\n    <col style=\"width:10%;\"\/>\n    <col style=\"width:30%;\" colspan=\"3\" \/>\n  <\/colgroup>\n  <tr>\n    <th>Auswahl<\/th>\n    <th>Seriennummer<\/th>\n    <th>Zugriffscode<\/th>\n    <th>IP Adresse<\/td>\n  <\/tr>\n\t{for gateway in m_gateways}\n  <tr class=\"RFConfig_InterfacesTable_tr\" onmouseover=\"this.className=\'RFConfig_InterfacesTable_tr_hover\';\" onmouseout=\"this.className=\'RFConfig_InterfacesTable_tr\';\">\n    <td><input id=\"${gateway.id}\" name=\"${gateway.id}\" type=\"checkbox\" \/><\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.serial}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.key}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.ip}&nbsp;<\/td>\n  <\/tr>\n\t{forelse}\n\t<tr class=\"RFConfig_InterfacesTable_tr\">\n    <td colspan=\"4\" style=\"text-align:center; vertical-align:middle;\">Momentan sind keine Funk-LAN-Gateways verfügbar.<\/td>\n  <\/tr>\n\t{\/for}\n<\/table>\n<\/div>\n<\/form>";
-STRINGFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\" colspan=\"${colspan}\">\n  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"${name}.show();\">Filter<\/div>\n  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none;\">\n    <div class=\"FilterBody\">\n        <input class=\"FilterText\" id=\"${textId}\" onkeypress=\"${name}.checkEnterEsc(event.keyCode);\" type=\"text\" name=\"${textId}\" value=\"${value}\" \/>\n        <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n        <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n    <\/div>\n  <\/div>\n<\/th>";
+CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n
+
+
+
+
+  {if id != sortId}\n
+
+
+
+
+    <th class=\"ChannelChooserHead clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n
+
+
+
+
+  {else}\n
+
+
+
+    <th class=\"ChannelChooserHead_Active clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">\n
+
+
+      ${name}&#160;\n
+
+      {if sortDescend}\n
+
+        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n
+
+      {else}\n
+
+        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n
+
+      {\/if}\n
+    <\/th>\n
+  {\/if}\n
+{\/macro}\n
+<div id=\"ChannelChooserDialog\">\n
+<div id=\"ChannelChooserTitle\" name=\"dialogChooseChannel\" onmousedown=\"new Drag($(\'ChannelChooserDialog\'), event);\">Kanalauswahl<\/div>\n
+<div id=\"ChannelChooserContent\">\n
+  <table id=\"ChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+    <colgroup>\n
+      <col style=\"width:20%;\" \/>\n
+      <col style=\"width:55px;\"\/>\n
+      <col style=\"width:30%;\"\/>\n
+      <col style=\"width:12%;\"\/>\n
+      <col style=\"width:17%;\"\/>\n
+      <col style=\"width:17%;\"\/>\n
+    <\/colgroup>\n
+    <thead>\n
+      <tr> <!-- Überschriften -->\n
+        ${printHead(\"Name\", \"NAME\", \"thName\")}\n
+        <th class=\"ChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n
+        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n
+        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n
+        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFuncs\")}\n
+        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n
+      <\/tr>\n
+      <tr> <!-- Filter -->\n
+        ${nameFilter.getHTML()}\n
+        <th class=\"Filter\">&nbsp;<\/th>\n
+        <th class=\"Filter\">&nbsp;<\/th>\n
+        <!-- ${descriptionFilter.getHTML()} -->\n
+        ${addressFilter.getHTML()}\n
+        ${funcFilter.getHTML()}\n
+        ${roomFilter.getHTML()}\n
+      <\/tr>      \n
+    <\/thead>\n
+    <tbody>\n
+      {eval}actualDeviceAddress = \"\";{\/eval}\n
+\n
+      {for channel in channels}\n
+        {if ((channel.device.inInbox != true) && (channel.address != \"BidCoS-RF:0\")) }\n
+          {var virtualChannel = \"\"}\n
+          {var classExpertOnly = \"hidden j_expertChannel\"}\n
+          {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
+\n
+          {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n
+          {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n
+\n
+          {if (channelTypeID != \"HMIP-MIOB\") && (channelTypeID != \"HMIP-WHS2\")}\n
+            {if (channel.channelType == \"DIMMER_TRANSMITTER\")\n
+              || (channel.channelType == \"SWITCH_TRANSMITTER\")\n
+              || (channel.channelType == \"BLIND_TRANSMITTER\")\n
+              || (channel.channelType == \"SHUTTER_TRANSMITTER\")\n
+              || (channel.channelType == \"ACOUSTIC_SIGNAL_TRANSMITTER\")}\n
+              {var virtualChannel = classExpertOnly;}\n
+            {\/if}\n
+            {if (channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"BLIND_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SERVO_VIRTUAL_RECEIVER\")}\n
+              {if actualDeviceAddress != channel.device.address}\n
+                {eval}\n
+                  actualDeviceAddress = channel.device.address;\n
+                  if (userIsNoExpert) {\n
+                    if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {\n
+                      virtualChannel = classExpertOnly;\n
+                    }\n
+                  }\n
+                {\/eval}\n
+              {\/if}\n
+              {eval}if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {virtualChannel = classExpertOnly;}{\/eval}\n
+            {\/if}\n
+          {\/if}\n
+\n
+          {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n
+\n
+          {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n
+            ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n
+          )))} {var virtualChannel = classExpertOnly} {\/if}\n
+\n
+          {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
+          {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
+\n
+          {if (channel.index == 0)} {var virtualChannel = classExpertOnly} {\/if}\n
+          \n
+          {if channel.channelType != \"_MAINTENANCE\"}\n
+              <tr class=\"ChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onclick=\"ChannelChooser.select(this.id);\" onmouseover=\"this.className=\'ChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'ChannelChooserRow\';\">\n
+                <td class=\"ChannelChooserCell\">${channel.name}<br\/><br\/><span class=\"j_extChnDescr\">${channel.typeDescription}_${channel.address}<\/span><\/td>\n
+                <td class=\"ChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n
+                <td class=\"ChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n
+                <td class=\"ChannelChooserCell\">${channel.address}<\/td>\n
+                <td class=\"ChannelChooserCell j_functions\">\n
+                  {for subsection in channel.subsections}\n
+                    ${subsection.name}<br \/>\n
+                  {forelse}\n
+                    &#160;\n
+                  {\/for}\n
+                <\/td>\n
+                <td class=\"ChannelChooserCell j_rooms\">\n
+                  {for room in channel.rooms}\n
+                    ${room.name}<br \/>\n
+                  {forelse}\n
+                    &#160;\n
+                  {\/for}\n
+                <\/td>\n
+              <\/tr>\n
+             {forelse}\n
+              <tr class=\"ChannelChooserRow\">\n
+                <td colspan=\"10\" class=\"ChannelChooserCell\" name=\"\"lblNoChannelsAvailable>Keine Kan&auml;le verf&uuml;gbar<\/td>\n
+              <\/tr>\n
+          {\/if}\n
+        {\/if}\n
+      {\/for}\n
+    <\/tbody>\n
+  <\/table>\n
+<\/div>\n
+<div id=\"ChannelChooserFooter\">\n
+  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"ChannelChooser.abort();\">Abbrechen<\/div>\n
+  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"ChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n
+  {if false === showVirtual}\n
+    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n
+  {else}\n
+    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n
+  {\/if}\n
+<\/div>\n
+<\/div>\n
+";
+CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
+<div id=\"ChannelConfigDialogTitle\" onmousedown=\"new Drag($(\'ChannelConfigDialog\'), event);\"><span name=\"generalChannelConfigTitle\">Allgemeine Kanaleinstellungen:<\/span> ${channel.address}<\/div>\n
+<div id=\"ChannelConfigDialogContent\">\n
+\n
+  <div id=\"ChannelConfigDialogContentLeft\">\n
+    <div  class=\"ChannelConfigDialogSection\">\n
+      <div class=\"CLASS11000\">\n
+        <div class=\"CLASS11001\">${channel.imageHTML}<\/div>\n
+      <\/div>\n
+      <div class=\"CLASS11002\">${channel.typeName}<\/div>\n
+    <\/div>\n
+    \n
+    {if channel.supportsComTest()}\n
+    <div id=\"channelFunctionTestPanel\" class=\"ChannelConfigDialogSection\">\n
+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n
+      <hr \/>\n
+      <div>\n
+        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n
+          <tr>\n
+            <td width=\"50%\"><div id=\"ChannelConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"ChannelConfigDialog.startTest();\">Test starten<\/div><\/td>\n
+            <td width=\"50%\"><div id=\"ChannelConfigDialogTestResult\">--:--:--<\/div><\/td>\n
+          <\/tr>\n
+        <\/table>\n
+        <div class=\"CLASS11004\">\n
+          <p name=\"generalChannelConfigHint\">\n
+            Im Rahmen des Funktionstests wird gepr&uuml;ft, ob die Kommunikation mit dem Kanal fehlerfrei funktioniert.\n
+          <\/p>\n
+          {if channel.category == Channel.CATEGORY.SENDER}<p name=\"generalChannelConfigHintSender\">Bei Sensoren wartet die HomeMatic Zentrale, bis diese sich melden. Eine Fernbedienung meldet sich z.B. erst dann, wenn sie manuell betätigt wird.<\/p>{\/if}\n
+          {if channel.category == Channel.CATEGORY.RECEIVER}<p name=\"generalChannelConfigHintReceiver\">Bei Aktoren wird dazu in der Regel ein Schaltbefehl ausgelöst.<\/p>{\/if}\n
+          <\/div>\n
+      <\/div>\n
+    <\/div>\n
+    {\/if}\n
+  <\/div>\n
+\n
+  <div id=\"ChannelConfigDialogContentMain\">\n
+    <div class=\"ChannelConfigDialogSection\">\n
+      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"ChannelConfigDialogTable\">\n
+        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"ChannelConfigDialog_ChannelName\" class=\"CLASS11005\" type=\"text\" value=\"${channel.name}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.typeName}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.address}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblCategory\">Kategorie:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" \n
+            {if channel.category == Channel.CATEGORY.SENDER} value=\"Sender (Sensor)\" id=\"generalChannelConfigLblSender\" {\/if}\n
+            {if channel.category == Channel.CATEGORY.RECEIVER} value=\"Empf&auml;nger (Aktor)\" id=\"generalChannelConfigLblReceiver\" {\/if}\n
+            {if channel.category == Channel.CATEGORY.NONE} value=\"nicht verkn&uuml;pfbar\" id=\"generalChannelConfigLblNone\"{\/if}\n
+            \/>\n
+        <\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblTransmitMode\">&Uuml;bertragungsmodus:<\/td>\n
+          <td>\n
+            <select id=\"ChannelConfigDialog_Mode\" class=\"CLASS11005\" {if !channel.isAesAvailable} disabled=\"disabled\" readonly=\"readonly\" {\/if}>\n
+              <option value=\"Standard\" name=\"lblStandard\" {if channel.mode == translateKey(Channel.MODE.DEFAULT)} selected=\"selected\" {\/if} >Standard<\/option>\n
+              <option value=\"Gesichert\" name=\"lblSecured\" {if channel.mode == translateKey(Channel.MODE.AES)} selected=\"selected\" {\/if} >Gesichert<\/option>\n
+            <\/select>\n
+          <\/td>\n
+        <\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"ChannelConfigDialog_isUsable\" type=\"checkbox\" {if channel.isUsable} checked=\"checked\" {\/if} {if !channel.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"ChannelConfigDialog_isVisible\" type=\"checkbox\" {if channel.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n
+        <tr id=\"btnEnableChannelLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"ChannelConfigDialog_isLogged\" type=\"checkbox\" {if channel.isLogged} checked=\"checked\" {\/if} {if !channel.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n
+      <\/table>\n
+    <\/div>\n
+    \n
+    <div  id=\"ChannelConfigDialogSectionRoom\" class=\"ChannelConfigDialogSection\">\n
+      <img src=\"{if !isRoomListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleRooms(this);\">\n
+      <div class=\"CLASS11007\" name=\"generalChannelConfigLblRooms\">R&auml;ume<\/div>\n
+      <hr \/>\n
+      <form id=\"ChannelConfigDialogRooms\" {if !isRoomListVisible} style=\"display:none\" {\/if} >\n
+        <table class=\"ChannelConfigDialogTable\">\n
+          {for room in rooms}\n
+          <tr>\n
+            <td><input type=\"checkbox\" name=\"values\" value=\"${room.id}\" {if room.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${room.name}<\/td>\n
+          <\/tr>\n
+          {\/for}\n
+        <\/table>\n
+      <\/form>\n
+    <\/div>\n
+    \n
+    <div id=\"ChannelConfigDialogSectionFunc\" class=\"ChannelConfigDialogSection\">\n
+      <img src=\"{if !isSubsectionListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleFuncs(this);\">\n
+      <div class=\"CLASS11007\" name=\"generalChannelConfigLblFunctions\">Gewerke<\/div>\n
+      <hr \/>\n
+      <form id=\"ChannelConfigDialogFuncs\" {if !isSubsectionListVisible} style=\"display:none\" {\/if}>\n
+        <table class=\"ChannelConfigDialogTable\">\n
+          {for func in funcs}\n
+          <tr>\n
+            <td><input type=\"checkbox\" name=\"values\" value=\"${func.id}\" {if func.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${func.name}<\/td>\n
+          <\/tr>\n
+          {\/for}\n
+        <\/table>\n
+      <\/form>\n
+    <\/div>\n
+    \n
+  <\/div>\n
+<\/div>\n
+<div id=\"ChannelConfigDialogFooter\">\n
+  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"ChannelConfigDialogAbortButton\" onclick=\"ChannelConfigDialog.abort();\">Abbrechen<\/div>\n
+  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnOk\" id=\"ChannelConfigDialogOkButton\" onclick=\"ChannelConfigDialog.ok();\">OK<\/div>\n
+<\/div>\n
+<\/div>\n
+";
+DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n
+<div id=\"DeviceConfigDialogTitle\" onmousedown=\"new Drag($(\'DeviceConfigDialog\'), event);\"><span name=\"generalDeviceConfigTitle\">Allgemeine Geräteeinstellungen:<\/span> ${device.address}<\/div>\n
+<div id=\"DeviceConfigDialogContent\">\n
+\n
+  <div id=\"DeviceConfigDialogContentLeft\">\n
+    <div  class=\"DeviceConfigDialogSection\">\n
+      <div class=\"CLASS10800\">\n
+        <div class=\"CLASS10801\">${device.imageHTML}<\/div>\n
+      <\/div>\n
+      <div class=\"CLASS10802\">${device.typeName}<\/div>\n
+    <\/div>\n
+  <\/div>\n
+\n
+  <div id=\"DeviceConfigDialogContentMain\">\n
+    <div class=\"DeviceConfigDialogSection\">\n
+      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"DeviceConfigDialogTable\">\n
+        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"DeviceConfigDialog_DeviceName\" class=\"CLASS10803\" type=\"text\" value=\"${device.name}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.typeName}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.address}\"\/><\/td><\/tr>\n
+        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"DeviceConfigDialog_isUsable\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isUsabilityChanged=true;\" {if device.isUsable} checked=\"checked\" {\/if} {if !device.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n
+        <!-- <tr id=\"trAllChnVisible\" class=\"hidden\"><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\" {if device.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr> -->\n
+        <tr id=\"btnEnableDeviceLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"DeviceConfigDialog_isLogged\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isLoggingChanged=true;\" {if device.isLogged} checked=\"checked\" {\/if} {if !device.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n
+\n
+        <tr id=\"trAllChnVisible\" class=\"hidden\"><td name=\"lblAllChannelsVisible\">Alle Kan%E4le sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\"\/><\/td><\/tr>\n
+        <tr id=\"btnEnableDeviceServiceMsg\"><td name=\"generalDeviceChannelConfigLblServiceMsg\">Servicemeldungen:<\/td><td><input id=\"DeviceConfigDialog_enabledServiceMsg\" type=\"checkbox\" onclick=\"DeviceConfigDialog.enabledServiceMsgChanged=true;\" {if device.enabledServiceMsg} checked=\"checked\" {\/if} \/><\/td><\/tr>\n
+      <\/table>\n
+    <\/div>\n
+    \n
+    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n
+      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n
+      <hr \/>\n
+      <div>\n
+        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n
+          <tr>\n
+            <td width=\"50%\"><div id=\"DeviceConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"DeviceConfigDialog.startTest();\">Test starten<\/div><\/td>\n
+            <td width=\"40%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n
+\n
+			<td width=\"40%\"><div id=\"DeviceConfigDialogTestHint\"><img id=\"DeviceConfigDialogTestHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceConfigHint', '400', '200')\"><\/div><\/td>\n
+\n
+          <\/tr>\n
+        <\/table>\n
+      <\/div>\n
+    <\/div>\n
+	\n
+    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n
+      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblRenameChannel\">Funktionstest<\/div>\n
+      <hr \/>\n
+      <div>\n
+        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n
+          <tr>\n
+		    <td width=\"50%\"><div id=\"DeviceConfigDialogRenameChannelButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnRenameChannels\" onclick=\"DeviceConfigDialog.renameChannels();\">Kanäle umbenennen<\/div><\/td>\n
+\n
+			<td width=\"40%\"><\/td>\n
+\n
+			<td width=\"40%\"><div id=\"DeviceConfigDialogRenameChannelButtonHint\"><img id=\"DeviceConfigDialogRenameChannelButtonHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceRenameChannelHint', '400', '100')\"><\/div><\/td>\n
+\n
+          <\/tr>\n
+\n
+		  <tr>			\n
+		    <td width=\"80%\" name=\"generalDeviceChannelConfigLblSeparator\">Trennzeichen:<\/td><td width=\"20%\"><input id=\"DeviceConfigDialog_DeviceChannelsRenameSeparator\" size=\"2\" type=\"text\" value=\":\"\/><\/td>\n
+          <\/tr>\n
+\n
+		  <tr>\n
+\n
+		    <td width=\"50%\" name=\"generalDeviceChannelConfigLblRenameChannelIncludingOwn\">inkl. eigener Namen:<\/td><td><input id=\"DeviceConfigDialog_renameChannelIncludingOwn\" type=\"checkbox\" \/><\/td>\n
+\n
+			<td width=\"50%\"><div id=\"DeviceConfigDialogRenameIncludingOwnHint\"><img id=\"DeviceConfigDialogRenameIncludingOwnHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceRenameChannelIncludingOwnHint', '400', '100')\"><\/div><\/td>\n
+\n
+		  <\/tr>\n
+\n
+        <\/table>\n
+      <\/div>\n
+    <\/div>\n
+\n
+  <\/div>\n
+<\/div>\n
+<div id=\"DeviceConfigDialogFooter\">\n
+  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"DeviceConfigDialogAbortButton\" onclick=\"DeviceConfigDialog.abort();\">Abbrechen<\/div>\n
+  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnOk\" id=\"DeviceConfigDialogOkButton\" onclick=\"DeviceConfigDialog.ok();\">Ok<\/div>\n
+<\/div>\n
+<\/div>\n
+";
+DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n
+  {if id != sortId}\n
+    <th class=\"DeviceListHead clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">${name}<\/th>\n
+  {else}\n
+    <th class=\"DeviceListHead_Active clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">\n
+      ${name}&#160;\n
+      {if sortDescend}\n
+        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n
+      {else}\n
+        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n
+      {\/if}\n
+    <\/th>\n
+  {\/if}\n
+{\/macro}\n
+<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+  <colgroup>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:55px;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:25px;\"\/>\n
+    <col style=\"width:25px;\"\/>\n
+    <col style=\"width:25px;\"\/>\n
+    <col style=\"width:11%;\"\"\/>\n
+  <\/colgroup>\n
+  <thead>\n
+    <tr>\n
+      ${printHead(\"thName\", \"NAME\")}\n
+      ${printHead(\"thTypeDescriptor\", \"TYPE_NAME\")}\n
+      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n
+      ${printHead(\"thDescriptor\", \"DESCRIPTION\")}\n
+      ${printHead(\"thSerialNumber\", \"ADDRESS\")}\n
+      ${printHead(\"thInterfaceCategory\", \"CATEGORY\")}\n
+      ${printHead(\"thTransmitMode\", \"MODE\")}\n
+      ${printHead(\"thFuncs\", \"FUNC_NAMES\")}\n
+      ${printHead(\"thRooms\", \"ROOM_NAMES\")}\n
+      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n
+      <th class=\"DeviceListHead\" name=\"thActions\">Flat Aktionen<\/th>\n
+    <\/tr>\n
+    <tr>\n
+      ${nameFilter.getHTML()}\n
+      ${typeNameFilter.getHTML()}\n
+      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n
+      ${descriptionFilter.getHTML()}\n
+      ${addressFilter.getHTML()}\n
+      ${categoryFilter.getHTML()}\n
+      ${modeFilter.getHTML()}\n
+      ${funcFilter.getHTML()}\n
+      ${roomFilter.getHTML()}\n
+      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n
+    <\/tr>\n
+  <\/thead>\n
+  <tbody>\n
+    {for channel in channels}\n
+      <tr class=\"DeviceListRow\" id=\"${PREFIX}${channel.Id}\"  onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" onmouseover=\"this.className = \'DeviceListRow_Highlight\';\" onmouseout=\"this.className = \'DeviceListRow\';\">\n
+        <td class=\"DeviceListCell\">${channel.name}<\/td>\n
+        <td class=\"DeviceListCell\">${channel.typeName}<\/td>\n
+        <td class=\"DeviceListThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n
+        <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n
+        <td class=\"DeviceListCell\">${channel.address}<\/td>\n
+        <td class=\"DeviceListCell\">${channel.category}<\/td>\n
+        <td class=\"DeviceListCell j_chMode\">${channel.mode}<\/td>\n
+        <td class=\"DeviceListCell j_function\">\n
+          {for subsection in channel.subsections}\n
+            ${subsection.name}<br \/>\n
+          {forelse}\n
+            &#160;\n
+          {\/for}\n
+        <\/td>\n
+        <td class=\"DeviceListCell j_rooms\">\n
+          {for room in channel.rooms}\n
+            ${room.name}<br \/>\n
+          {forelse}\n
+            &#160;\n
+          {\/for}\n
+        <\/td>\n
+        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
+        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
+        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
+        <td class=\"DeviceListCell\">\n
+          <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n
+          <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n
+          <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n
+        <\/td>\n
+      <\/tr>\n
+    {forelse}\n
+      <tr class=\"DeviceListRow\">\n
+        <td class=\"DeviceListCell\" name=\"noChannelsAvailable\" colspan=\"13\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n
+      <\/tr>\n
+    {\/for}\n
+  <\/tbody>\n
+<\/table>\n
+\n
+";
+DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+  <colgroup>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:55px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:100px;\" \/>\n
+  <\/colgroup>\n
+  <thead>\n
+    <tr>\n
+      <!-- Alle Elemente mit Name-Attribut werden übersetzt. Der Wert des Name-Attributs ist der Key f. die Übersetzungsdatei -->\n
+      <th class=\"DeviceListCell_Invisible\"><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thName\" colspan=\"3\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Name<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thTypeDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Typen- Bezeichnung<\/th>\n
+      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Bezeichnung<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thSerialNumber\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Serien- Nummer<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thInterfaceCategory\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Interface \/ Kategorie<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n
+      <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblRSSI\" src=\"\/ise\/img\/rssi-icon.png\" width=\"24px\" height=\"24px\" alt=\"RSSI\" title=\"RSSI\"\/><\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n
+      <th class=\"DeviceListHead\" name=\"thActions\" >Aktionen<\/th>\n
+    <\/tr>\n
+    <tr>\n
+      <th class=\"DeviceListCell_Invisible CLASS10901\" ><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n
+      ${nameFilter.getHTML(3)}\n
+      ${typeNameFilter.getHTML()}\n
+      <th class=\"Filter CLASS10901\" >&nbsp;<\/th>\n
+      ${descriptionFilter.getHTML()}\n
+      ${addressFilter.getHTML()}\n
+      ${interfaceFilter.getHTML()}\n
+      ${modeFilter.getHTML()}\n
+      ${funcFilter.getHTML()}\n
+      ${roomFilter.getHTML()}\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+    <\/tr>\n
+  <\/thead>\n
+  <tbody>\n
+    {for device in devices}\n
+      {if !device.inInbox}\n
+        <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n
+          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n
+            <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n
+            <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n
+          <\/td>\n
+          <td class=\"DeviceListCell\" colspan=\"3\">${device.name}<\/td>\n
+          <td class=\"DeviceListCell\" >${device.typeName}<\/td>\n
+          <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n
+          <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n
+          <td class=\"DeviceListCell\" >${device.address}${device.rfAddress}<\/td>\n
+          <td class=\"DeviceListCell\" >${device.interfaceName}<\/td>\n
+          <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+          <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+          <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+          <td class=\"DeviceListCell\" id=\"DeviceStatus${device.id}\" ><\/td>\n
+          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
+          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
+          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
+          <td class=\"DeviceListCell\" >\n
+            <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'DEVICE\', \'${device.id}\');\">Einstellen<\/div>\n
+            {if device.isDeletable}\n
+              <div class=\"DeviceListButton\" name=\"btnRemove\" onclick=\"DeviceListPage.deleteDevice(event, \'${device.id}\');\">L&ouml;schen<\/div>\n
+            {else}\n
+              <div class=\"DeviceListButton CLASS10902\" name=\"btnRemove\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\" >L&ouml;schen<\/div>\n
+            {\/if}\n
+            <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'DEVICE\', \'${device.id}\');\">Direkte<\/div>\n
+            <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'DEVICE\', \'${device.id}\');\">Programme<\/div>\n
+          <\/td>\n
+        <\/tr>\n
+        {for group in device.groups}\n
+          <tr id=\"${PREFIX}${group.id}\"class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if}>\n
+            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n
+            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n
+              <img id=\"${PREFIX}${group.id}PLUS\" onclick=\"DeviceListPage.expandGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if group._expanded} style=\"display:none;\"{\/if}\/>\n
+              <img id=\"${PREFIX}${group.id}MINUS\" onclick=\"DeviceListPage.collapseGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !group._expanded} style=\"display:none;\"{\/if}\/>\n
+            <\/td>\n
+            <td class=\"DeviceListCell\" colspan=\"2\">${group.name}<\/td>\n
+            <td class=\"DeviceListCell\" >${group.typeName}<\/td>\n
+            <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${group.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${group.device.deviceType.id}\', 250, \'${group.formName}\', this);\" onmouseout=\"picDivHide(jg_250);\">${group.thumbnailHTML}<\/div><\/td>\n
+            <td class=\"DeviceListCell\" name=\"${group.typeDescription}\" >${group.typeDescription}<\/td>\n
+            <td class=\"DeviceListCell\" >${group.address}<\/td>\n
+            <td class=\"DeviceListCell\" >{for name in group.categories}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+            <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+            <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+            <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+            <td class=\"DeviceListCell\" ><\/td>\n
+            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
+            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
+            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
+            <td class=\"DeviceListCell\" >\n
+              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'GROUP\', \'${group.id}\');\">Einstellen<\/div>\n
+              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'GROUP\', \'${group.id}\');\">Direkte<\/div>\n
+              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'GROUP\', \'${group.id}\');\">Programme<\/div>\n
+            <\/td>\n
+          <\/tr>\n
+          {for channel in group.channels}\n
+            <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if (!group._expanded) | (!device._expanded)}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n
+              <td class=\"DeviceListCell_Invisible\" colspan=\"3\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.name}<br\/>${channel.nameExtention}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n
+              <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n
+              <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.address}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.category}<\/td>\n
+              <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
+              <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" ><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\" >\n
+                <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n
+                <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n
+                <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n
+              <\/td>\n
+            <\/tr>\n
+          {\/for}\n
+        {\/for}\n
+        {for channel in device.singles}\n
+\n
+        {if channel._isVisible}\n
+            {if channel.highlightChannel}\n
+              <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow virtualChannelBckGndA\" {if !device._expanded} style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow virtualChannelBckGndA\';\">\n
+            {else}\n
+              <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if !device._expanded} style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n
+            {\/if}\n
+\n
+              <td class=\"DeviceListCell_Invisible\" colspan=\"2\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n
+              <td class=\"DeviceListCell\" colspan=\"2\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n
+              <td class=\"DeviceListThumbnail\" ><div  id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n
+              <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.address}<\/td>\n
+              <td class=\"DeviceListCell\" >${channel.category}<\/td>\n
+              <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
+              <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" ><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
+              <td class=\"DeviceListCell\" >\n
+                <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n
+                <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n
+                <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n
+              <\/td>\n
+            <\/tr>\n
+         {\/if}\n
+        {\/if}\n
+      {\/for}\n
+    {forelse}\n
+      <tr class=\"DeviceListRow\">\n
+        <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n
+        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"16\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n
+      <\/tr>\n
+    {\/for}\n
+  <\/tbody>\n
+  <tfoot>\n
+    <tr class=\"CLASS10903\">\n
+      <td class=\"DeviceListCell_Invisible CLASS10903\" ><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot CLASS10906\" ><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot CLASS10907\" ><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot CLASS10908\" ><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10909\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+    <\/tr>  \n
+  <\/tfoot>\n
+<\/table>\n
+";
+LISTFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\">\n
+  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"Element.show(\'${id}\');\">Filter<\/div>\n
+  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none\">\n
+    <form class=\"FilterBody\" id=\"${formId}\">\n
+      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+        <tbody>\n
+          {for item in list}\n
+          <tr>\n
+            <td class=\"FilterBodyCell\"><input type=\"checkbox\" name=\"values\" value=\"${item.id}\" {if true === item._selected}checked=\"\"{\/if}\/><td>\n
+            <td class=\"FilterBodyCell j_Filter_${item.id}\">${item.name}<\/td>\n
+          <\/tr>\n
+          {\/for}\n
+        <\/tbody>\n
+      <\/table>\n
+      <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n
+      <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n
+    <\/form>\n
+  <\/div>\n
+<\/th>\n
+";
+MULTI_CHANNELCHOOSER_JST = "{macro printHead(name, id, langKey)}\n
+  {if id != sortId}\n
+    <th class=\"MultiChannelChooserHead clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n
+  {else}\n
+    <th class=\"MultiChannelChooserHead_Active clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">\n
+      ${name}&#160;\n
+      {if sortDescend}\n
+        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n
+      {else}\n
+        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n
+      {\/if}\n
+    <\/th>\n
+  {\/if}\n
+{\/macro}\n
+<div id=\"MultiChannelChooserDialog\">\n
+<div id=\"MultiChannelChooserTitle\" onmousedown=\"new Drag($(\'MultiChannelChooserDialog\'), event);\"><span name=\"dialogChooseChannel\">Kanalauswahl<\/span>: ${title}<\/div>\n
+<div id=\"MultiChannelChooserContent\">\n
+  <table id=\"MultiChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+    <colgroup>\n
+      <col style=\"width:5%;\"\/>\n
+      <col style=\"width:19%;\"\/>\n
+      <col style=\"width:55px;\"\/>\n
+      <col style=\"width:30%;\"\/>\n
+      <col style=\"width:12%;\"\/>\n
+      <col style=\"width:17%;\"\/>\n
+      <col style=\"width:17%;\"\/>\n
+    <\/colgroup>\n
+    <thead>\n
+      <tr> <!-- Überschriften -->\n
+        <th class=\"MultiChannelChooserHead\">&nbsp;<\/th>\n
+        ${printHead(\"Name\", \"NAME\", \"thName\")}\n
+        <th class=\"MultiChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n
+        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n
+        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n
+        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFunc\")}\n
+        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n
+      <\/tr>\n
+      <tr> <!-- Filter -->\n
+        <th class=\"Filter\">&nbsp;<\/th>\n
+        ${nameFilter.getHTML()}\n
+        <th class=\"Filter\">&nbsp;<\/th>\n
+        <th class=\"Filter\">&nbsp;<\/th>\n
+        <!-- ${descriptionFilter.getHTML()} -->\n
+        ${addressFilter.getHTML()}\n
+        ${funcFilter.getHTML()}\n
+        ${roomFilter.getHTML()}\n
+      <\/tr>      \n
+    <\/thead>\n
+    <tbody>\n
+      {eval}actualDeviceAddress = \"\";{\/eval}\n
+      {for channel in channels}\n
+        {if ((channel.device.inInbox != true) && (channel.address != \"BidCoS-RF:0\"))}\n
+          {var virtualChannel = \"\"}\n
+          {var classExpertOnly = \"hidden j_expertChannel\"}\n
+          {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
+\n
+          {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n
+          {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n
+\n
+          {if (channelTypeID != \"HMIP-MIOB\") && (channelTypeID != \"HMIP-WHS2\")}\n
+            {if (channel.channelType == \"DIMMER_TRANSMITTER\")\n
+              || (channel.channelType == \"SWITCH_TRANSMITTER\")\n
+              || (channel.channelType == \"BLIND_TRANSMITTER\")\n
+              || (channel.channelType == \"SHUTTER_TRANSMITTER\")\n
+              || (channel.channelType == \"ACOUSTIC_SIGNAL_TRANSMITTER\")}\n
+              {var virtualChannel = classExpertOnly;}\n
+            {\/if}\n
+            {if (channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"BLIND_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER\")\n
+              || (channel.channelType == \"SERVO_VIRTUAL_RECEIVER\")}\n
+              {if actualDeviceAddress != channel.device.address}\n
+                {eval}\n
+                  actualDeviceAddress = channel.device.address;\n
+                  if (userIsNoExpert) {\n
+                    if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {\n
+                      virtualChannel = classExpertOnly;\n
+                    }\n
+                  }\n
+                {\/eval}\n
+              {\/if}\n
+              {eval}if ((typeof channel.virtChCounter != \"undefined\") && (channel.virtChCounter != 1)) {virtualChannel = classExpertOnly;}{\/eval}\n
+            {\/if}\n
+          {\/if}\n
+\n
+          {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n
+\n
+          {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n
+            ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n
+          )))} {var virtualChannel = classExpertOnly} {\/if}\n
+\n
+          {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
+          {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
+\n
+          {if channel._selected == true} {var virtualChannel = \"\"} {\/if}\n
+\n
+        <tr class=\"MultiChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onmouseover=\"this.className=\'MultiChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'MultiChannelChooserRow\';\">\n
+          <td class=\"MultiChannelChooserCell_Active\"><input type=\"checkbox\" onclick=\"MultiChannelChooser.select(\'${channel.id}\', this);\" {if true === channel._selected}checked=\"\"{\/if}\/><\/td>\n
+          <td class=\"MultiChannelChooserCell\">${channel.name}<br\/><span class=\"j_extChnDescr\">${channel.nameExtention}<\/span><\/td>\n
+          <td class=\"MultiChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n
+          <td class=\"MultiChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n
+          <td class=\"MultiChannelChooserCell\">${channel.address}<\/td>\n
+          <td class=\"MultiChannelChooserCell\">\n
+            {for subsection in channel.subsections}\n
+              ${subsection.name}<br \/>\n
+            {forelse}\n
+              &#160;\n
+            {\/for}\n
+          <\/td>\n
+          <td class=\"MultiChannelChooserCell\">\n
+            {for room in channel.rooms}\n
+              ${room.name}<br \/>\n
+            {forelse}\n
+              &#160;\n
+            {\/for}\n
+          <\/td>\n
+        <\/tr>\n
+        {forelse}\n
+        <tr class=\"MultiChannelChooserRow\">\n
+          <td colspan=\"10\" class=\"MultiChannelChooserCell\" name=\"hintMultiChannelChooserNoChannelsAvailable\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n
+        <\/tr>\n
+      {\/if}\n
+    {\/for}\n
+    <\/tbody>\n
+  <\/table>\n
+<\/div>\n
+<div id=\"MultiChannelChooserFooter\">\n
+  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"MultiChannelChooser.abort();\">Abbrechen<\/div>\n
+  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserOkButton\" name=\"footerBtnOk\" onclick=\"MultiChannelChooser.ok();\">OK<\/div>\n
+  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"MultiChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n
+  {if false === showVirtual}\n
+    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n
+  {else}\n
+    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n
+  {\/if}\n
+<\/div>\n
+<\/div>";
+RF_CONFIG_JST = "<div class=\"CLASS10500\">\n
+<form name=\"RFConfig_Interfaces\">\n
+<table class=\"RFConfig_InterfacesTable\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n
+  <colgroup>\n
+    <col style=\"width:10%;\"\/>\n
+    <col style=\"width:30%;\" colspan=\"3\" \/>\n
+  <\/colgroup>\n
+  <tr>\n
+    <th>Auswahl<\/th>\n
+    <th>Seriennummer<\/th>\n
+    <th>Zugriffscode<\/th>\n
+    <th>IP Adresse<\/td>\n
+  <\/tr>\n
+\t{for gateway in m_gateways}\n
+  <tr class=\"RFConfig_InterfacesTable_tr\" onmouseover=\"this.className=\'RFConfig_InterfacesTable_tr_hover\';\" onmouseout=\"this.className=\'RFConfig_InterfacesTable_tr\';\">\n
+    <td><input id=\"${gateway.id}\" name=\"${gateway.id}\" type=\"checkbox\" \/><\/td>\n
+    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.serial}&nbsp;<\/td>\n
+    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.key}&nbsp;<\/td>\n
+    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.ip}&nbsp;<\/td>\n
+  <\/tr>\n
+\t{forelse}\n
+\t<tr class=\"RFConfig_InterfacesTable_tr\">\n
+    <td colspan=\"4\" style=\"text-align:center; vertical-align:middle;\">Momentan sind keine Funk-LAN-Gateways verfügbar.<\/td>\n
+  <\/tr>\n
+\t{\/for}\n
+<\/table>\n
+<\/div>\n
+<\/form>";
+STRINGFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\" colspan=\"${colspan}\">\n
+  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"${name}.show();\">Filter<\/div>\n
+  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none;\">\n
+    <div class=\"FilterBody\">\n
+        <input class=\"FilterText\" id=\"${textId}\" onkeypress=\"${name}.checkEnterEsc(event.keyCode);\" type=\"text\" name=\"${textId}\" value=\"${value}\" \/>\n
+        <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n
+        <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n
+    <\/div>\n
+  <\/div>\n
+<\/th>";
 DEV_LIST        = new Array();
 DEV_DESCRIPTION = new Array();
 DEV_PATHS       = new Array();
@@ -128,12 +962,38 @@ DEV_HIGHLIGHT["HmIP-KRC4"]["3"] = [5, '4_Arrow'];
 DEV_HIGHLIGHT["HmIP-KRC4"]["4"] = [5, '3_Arrow'];
 DEV_HIGHLIGHT["HmIP-KRC4"]["1+2"] = [5, '1_Arrow', '2_Arrow'];
 DEV_HIGHLIGHT["HmIP-KRC4"]["3+4"] = [5, '3_Arrow', '4_Arrow'];
+DEV_LIST.push('HmIP-FLC');
+DEV_DESCRIPTION["HmIP-FLC"] = "HmIP-FLC";
+DEV_PATHS["HmIP-FLC"] = new Object();
+DEV_PATHS["HmIP-FLC"]["50"] = "/config/img/devices/50/233_hmip-flc_thumb.png";
+DEV_PATHS["HmIP-FLC"]["250"] = "/config/img/devices/250/233_hmip-flc.png";
+DEV_HIGHLIGHT["HmIP-FLC"] = new Object();
 DEV_LIST.push('HmIP-MOD-OC8');
 DEV_DESCRIPTION["HmIP-MOD-OC8"] = "HmIP-MOD-OC8";
 DEV_PATHS["HmIP-MOD-OC8"] = new Object();
 DEV_PATHS["HmIP-MOD-OC8"]["50"] = "/config/img/devices/50/156_hmip-mod-oc8_thumb.png";
 DEV_PATHS["HmIP-MOD-OC8"]["250"] = "/config/img/devices/250/156_hmip-mod-oc8.png";
 DEV_HIGHLIGHT["HmIP-MOD-OC8"] = new Object();
+DEV_LIST.push('HmIP-KRC4-2');
+DEV_DESCRIPTION["HmIP-KRC4-2"] = "KRC4";
+DEV_PATHS["HmIP-KRC4-2"] = new Object();
+DEV_PATHS["HmIP-KRC4-2"]["50"] = "/config/img/devices/50/84_hm-rc-4-x_thumb.png";
+DEV_PATHS["HmIP-KRC4-2"]["250"] = "/config/img/devices/250/84_hm-rc-4-3.png";
+DEV_HIGHLIGHT["HmIP-KRC4-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["arrow_part1"] = [6, 0.312, 0.288, 0.416, 0.288, 0.012];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["arrow_part2"] = [6, 0.312, 0.288, 0.352, 0.248, 0.012];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["arrow_part3"] = [6, 0.312, 0.288, 0.352, 0.328, 0.012];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["Arrow"] = [5, 'arrow_part1', 'arrow_part2', 'arrow_part3'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["1_Arrow"] = [7, 'Arrow', 0.25, 0.0];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["2_Arrow"] = [7, 'Arrow', 0.238, 0.156];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["3_Arrow"] = [7, 'Arrow', 0.228, 0.312];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["4_Arrow"] = [7, 'Arrow', 0.212, 0.468];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["1"] = [5, '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["2"] = [5, '1_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["3"] = [5, '4_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["4"] = [5, '3_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["1+2"] = [5, '1_Arrow', '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRC4-2"]["3+4"] = [5, '3_Arrow', '4_Arrow'];
 DEV_LIST.push('HmIP-eTRV-B');
 DEV_DESCRIPTION["HmIP-eTRV-B"] = "TRV-B";
 DEV_PATHS["HmIP-eTRV-B"] = new Object();
@@ -164,6 +1024,12 @@ DEV_PATHS["HmIP-STHO"] = new Object();
 DEV_PATHS["HmIP-STHO"]["50"] = "/config/img/devices/50/148_hmip-stho_thumb.png";
 DEV_PATHS["HmIP-STHO"]["250"] = "/config/img/devices/250/148_hmip-stho.png";
 DEV_HIGHLIGHT["HmIP-STHO"] = new Object();
+DEV_LIST.push('ELV-SH-BM-S');
+DEV_DESCRIPTION["ELV-SH-BM-S"] = "ELV-SH-BM-S";
+DEV_PATHS["ELV-SH-BM-S"] = new Object();
+DEV_PATHS["ELV-SH-BM-S"]["50"] = "/config/img/devices/50/229_elv-sh-bm-s_thumb.png";
+DEV_PATHS["ELV-SH-BM-S"]["250"] = "/config/img/devices/250/229_elv-sh-bm-s.png";
+DEV_HIGHLIGHT["ELV-SH-BM-S"] = new Object();
 DEV_LIST.push('HM-Sec-SC-2');
 DEV_DESCRIPTION["HM-Sec-SC-2"] = "HM-Sec-SC-2";
 DEV_PATHS["HM-Sec-SC-2"] = new Object();
@@ -404,12 +1270,24 @@ DEV_PATHS["HmIP-WTH"] = new Object();
 DEV_PATHS["HmIP-WTH"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
 DEV_PATHS["HmIP-WTH"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
 DEV_HIGHLIGHT["HmIP-WTH"] = new Object();
+DEV_LIST.push('HmIP-eTRV-F');
+DEV_DESCRIPTION["HmIP-eTRV-F"] = "TRV";
+DEV_PATHS["HmIP-eTRV-F"] = new Object();
+DEV_PATHS["HmIP-eTRV-F"]["50"] = "/config/img/devices/50/230_hmip-etrv-f_thumb.png";
+DEV_PATHS["HmIP-eTRV-F"]["250"] = "/config/img/devices/250/230_hmip-etrv-f.png";
+DEV_HIGHLIGHT["HmIP-eTRV-F"] = new Object();
 DEV_LIST.push('ZEL STG RM FSA');
 DEV_DESCRIPTION["ZEL STG RM FSA"] = "ZEL_STG_RM_FSA";
 DEV_PATHS["ZEL STG RM FSA"] = new Object();
 DEV_PATHS["ZEL STG RM FSA"]["50"] = "/config/img/devices/50/43_hm-cc-vd_thumb.png";
 DEV_PATHS["ZEL STG RM FSA"]["250"] = "/config/img/devices/250/43_hm-cc-vd.png";
 DEV_HIGHLIGHT["ZEL STG RM FSA"] = new Object();
+DEV_LIST.push('HmIP-SWD-2');
+DEV_DESCRIPTION["HmIP-SWD-2"] = "HmIP-SWD";
+DEV_PATHS["HmIP-SWD-2"] = new Object();
+DEV_PATHS["HmIP-SWD-2"]["50"] = "/config/img/devices/50/172_hmip-swd_thumb.png";
+DEV_PATHS["HmIP-SWD-2"]["250"] = "/config/img/devices/250/172_hmip-swd.png";
+DEV_HIGHLIGHT["HmIP-SWD-2"] = new Object();
 DEV_LIST.push('HM-LC-Dim1T-FM-LF');
 DEV_DESCRIPTION["HM-LC-Dim1T-FM-LF"] = "HM-LC-Dim1T-FM";
 DEV_PATHS["HM-LC-Dim1T-FM-LF"] = new Object();
@@ -708,6 +1586,14 @@ DEV_PATHS["HM-WDS100-C6-O"] = new Object();
 DEV_PATHS["HM-WDS100-C6-O"]["50"] = "/config/img/devices/50/WeatherCombiSensor_thumb.png";
 DEV_PATHS["HM-WDS100-C6-O"]["250"] = "/config/img/devices/250/WeatherCombiSensor.png";
 DEV_HIGHLIGHT["HM-WDS100-C6-O"] = new Object();
+DEV_LIST.push('HmIPW-WRC2-A');
+DEV_DESCRIPTION["HmIPW-WRC2-A"] = "HmIPW-WRC2";
+DEV_PATHS["HmIPW-WRC2-A"] = new Object();
+DEV_PATHS["HmIPW-WRC2-A"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIPW-WRC2-A"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIPW-WRC2-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-WRC2-A"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIPW-WRC2-A"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HMW-IO-12-Sw7-DR');
 DEV_DESCRIPTION["HMW-IO-12-Sw7-DR"] = "HMW-IO-12-Sw7-DR";
 DEV_PATHS["HMW-IO-12-Sw7-DR"] = new Object();
@@ -867,6 +1753,12 @@ DEV_HIGHLIGHT["HM-LC-Dim2T-SM-2"]["1_Key"] = [4, 0.25, 0.26, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2T-SM-2"]["2_Key"] = [4, 0.328, 0.26, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2T-SM-2"]["1"] = [5, '1_Arrow', '1_Key'];
 DEV_HIGHLIGHT["HM-LC-Dim2T-SM-2"]["2"] = [5, '2_Arrow', '2_Key'];
+DEV_LIST.push('HmIP-STHD L9D');
+DEV_DESCRIPTION["HmIP-STHD L9D"] = "HmIP-STHD";
+DEV_PATHS["HmIP-STHD L9D"] = new Object();
+DEV_PATHS["HmIP-STHD L9D"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIP-STHD L9D"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIP-STHD L9D"] = new Object();
 DEV_LIST.push('HmIP-PSM-IT');
 DEV_DESCRIPTION["HmIP-PSM-IT"] = "PSM-IT";
 DEV_PATHS["HmIP-PSM-IT"] = new Object();
@@ -1004,6 +1896,12 @@ DEV_PATHS["HmIP-PSM-PE"] = new Object();
 DEV_PATHS["HmIP-PSM-PE"]["50"] = "/config/img/devices/50/113_hmip-psm-pe_thumb.png";
 DEV_PATHS["HmIP-PSM-PE"]["250"] = "/config/img/devices/250/113_hmip-psm-pe.png";
 DEV_HIGHLIGHT["HmIP-PSM-PE"] = new Object();
+DEV_LIST.push('HmIP-eTRV-F-A');
+DEV_DESCRIPTION["HmIP-eTRV-F-A"] = "TRV";
+DEV_PATHS["HmIP-eTRV-F-A"] = new Object();
+DEV_PATHS["HmIP-eTRV-F-A"]["50"] = "/config/img/devices/50/230_hmip-etrv-f_thumb.png";
+DEV_PATHS["HmIP-eTRV-F-A"]["250"] = "/config/img/devices/250/230_hmip-etrv-f.png";
+DEV_HIGHLIGHT["HmIP-eTRV-F-A"] = new Object();
 DEV_LIST.push('HM-OU-CFM-Pl');
 DEV_DESCRIPTION["HM-OU-CFM-Pl"] = "HM-OU-CFM-Pl";
 DEV_PATHS["HM-OU-CFM-Pl"] = new Object();
@@ -1055,8 +1953,8 @@ DEV_HIGHLIGHT["HM-WS550STH-I"] = new Object();
 DEV_LIST.push('HmIP-eTRV-E-S');
 DEV_DESCRIPTION["HmIP-eTRV-E-S"] = "TRV-E";
 DEV_PATHS["HmIP-eTRV-E-S"] = new Object();
-DEV_PATHS["HmIP-eTRV-E-S"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
-DEV_PATHS["HmIP-eTRV-E-S"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_PATHS["HmIP-eTRV-E-S"]["50"] = "/config/img/devices/50/216_hmip-etrv-e_thumb.png";
+DEV_PATHS["HmIP-eTRV-E-S"]["250"] = "/config/img/devices/250/216_hmip-etrv-e.png";
 DEV_HIGHLIGHT["HmIP-eTRV-E-S"] = new Object();
 DEV_LIST.push('HMIP-SWDO');
 DEV_DESCRIPTION["HMIP-SWDO"] = "HmIP-SWDO";
@@ -1230,6 +2128,12 @@ DEV_PATHS["HM-WS550ST-IO"] = new Object();
 DEV_PATHS["HM-WS550ST-IO"]["50"] = "/config/img/devices/50/IP65_G201_thumb.png";
 DEV_PATHS["HM-WS550ST-IO"]["250"] = "/config/img/devices/250/IP65_G201.png";
 DEV_HIGHLIGHT["HM-WS550ST-IO"] = new Object();
+DEV_LIST.push('HmIP-FDC');
+DEV_DESCRIPTION["HmIP-FDC"] = "HmIP-FLC";
+DEV_PATHS["HmIP-FDC"] = new Object();
+DEV_PATHS["HmIP-FDC"]["50"] = "/config/img/devices/50/233_hmip-flc_thumb.png";
+DEV_PATHS["HmIP-FDC"]["250"] = "/config/img/devices/250/233_hmip-flc.png";
+DEV_HIGHLIGHT["HmIP-FDC"] = new Object();
 DEV_LIST.push('HmIP-eTRV-C-2');
 DEV_DESCRIPTION["HmIP-eTRV-C-2"] = "TRV-C";
 DEV_PATHS["HmIP-eTRV-C-2"] = new Object();
@@ -1413,6 +2317,15 @@ DEV_PATHS["HM-CC-TC"] = new Object();
 DEV_PATHS["HM-CC-TC"]["50"] = "/config/img/devices/50/42_hm-cc-tc_thumb.png";
 DEV_PATHS["HM-CC-TC"]["250"] = "/config/img/devices/250/42_hm-cc-tc.png";
 DEV_HIGHLIGHT["HM-CC-TC"] = new Object();
+DEV_LIST.push('HmIP-BDT-I');
+DEV_DESCRIPTION["HmIP-BDT-I"] = "BDT";
+DEV_PATHS["HmIP-BDT-I"] = new Object();
+DEV_PATHS["HmIP-BDT-I"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
+DEV_PATHS["HmIP-BDT-I"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
+DEV_HIGHLIGHT["HmIP-BDT-I"] = new Object();
+DEV_HIGHLIGHT["HmIP-BDT-I"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BDT-I"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BDT-I"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('263 160');
 DEV_DESCRIPTION["263 160"] = "263_160";
 DEV_PATHS["263 160"] = new Object();
@@ -1468,6 +2381,12 @@ DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["1"] = [4, 0.088, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["2"] = [4, 0.280, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["3"] = [4, 0.472, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["4"] = [4, 0.656, 0.556, 0.048, 0.04];
+DEV_LIST.push('HmIP-SWDO-A');
+DEV_DESCRIPTION["HmIP-SWDO-A"] = "HmIP-SWDO";
+DEV_PATHS["HmIP-SWDO-A"] = new Object();
+DEV_PATHS["HmIP-SWDO-A"]["50"] = "/config/img/devices/50/118_hmip-swdo_thumb.png";
+DEV_PATHS["HmIP-SWDO-A"]["250"] = "/config/img/devices/250/118_hmip-swdo.png";
+DEV_HIGHLIGHT["HmIP-SWDO-A"] = new Object();
 DEV_LIST.push('HM-LC-Sw1-Pl-OM54');
 DEV_DESCRIPTION["HM-LC-Sw1-Pl-OM54"] = "HM-LC-Sw1-Pl-OM54";
 DEV_PATHS["HM-LC-Sw1-Pl-OM54"] = new Object();
@@ -1551,6 +2470,18 @@ DEV_PATHS["HmIP-WKP"] = new Object();
 DEV_PATHS["HmIP-WKP"]["50"] = "/config/img/devices/50/221_hmip-wkp_thumb.png";
 DEV_PATHS["HmIP-WKP"]["250"] = "/config/img/devices/250/221_hmip-wkp.png";
 DEV_HIGHLIGHT["HmIP-WKP"] = new Object();
+DEV_LIST.push('ELV-SH-CTV');
+DEV_DESCRIPTION["ELV-SH-CTV"] = "ELV-SH-CTV";
+DEV_PATHS["ELV-SH-CTV"] = new Object();
+DEV_PATHS["ELV-SH-CTV"]["50"] = "/config/img/devices/50/237_elv-sh-ctv_thumb.png";
+DEV_PATHS["ELV-SH-CTV"]["250"] = "/config/img/devices/250/237_elv-sh-ctv.png";
+DEV_HIGHLIGHT["ELV-SH-CTV"] = new Object();
+DEV_LIST.push('HmIP-DLD-A');
+DEV_DESCRIPTION["HmIP-DLD-A"] = "HmIP-DLD";
+DEV_PATHS["HmIP-DLD-A"] = new Object();
+DEV_PATHS["HmIP-DLD-A"]["50"] = "/config/img/devices/50/214_hmip-dld_thumb.png";
+DEV_PATHS["HmIP-DLD-A"]["250"] = "/config/img/devices/250/214_hmip-dld.png";
+DEV_HIGHLIGHT["HmIP-DLD-A"] = new Object();
 DEV_LIST.push('HmIP-WRC6');
 DEV_DESCRIPTION["HmIP-WRC6"] = "WRC6";
 DEV_PATHS["HmIP-WRC6"] = new Object();
@@ -1605,6 +2536,26 @@ DEV_PATHS["ALPHA-IP-RBGa"] = new Object();
 DEV_PATHS["ALPHA-IP-RBGa"]["50"] = "/config/img/devices/50/141_alpha-ip-rgba_thumb.png";
 DEV_PATHS["ALPHA-IP-RBGa"]["250"] = "/config/img/devices/250/141_alpha-ip-rgba.png";
 DEV_HIGHLIGHT["ALPHA-IP-RBGa"] = new Object();
+DEV_LIST.push('HmIP-KRCK-2');
+DEV_DESCRIPTION["HmIP-KRCK-2"] = "HmIP-KRCK";
+DEV_PATHS["HmIP-KRCK-2"] = new Object();
+DEV_PATHS["HmIP-KRCK-2"]["50"] = "/config/img/devices/50/84_hm-rc-4-x_thumb.png";
+DEV_PATHS["HmIP-KRCK-2"]["250"] = "/config/img/devices/250/86_hm-rc-key4-3.png";
+DEV_HIGHLIGHT["HmIP-KRCK-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["arrow_part1"] = [6, 0.312, 0.288, 0.416, 0.288, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["arrow_part2"] = [6, 0.312, 0.288, 0.352, 0.248, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["arrow_part3"] = [6, 0.312, 0.288, 0.352, 0.328, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["Arrow"] = [5, 'arrow_part1', 'arrow_part2', 'arrow_part3'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["1_Arrow"] = [7, 'Arrow', 0.25, 0.0];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["2_Arrow"] = [7, 'Arrow', 0.238, 0.156];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["3_Arrow"] = [7, 'Arrow', 0.228, 0.312];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["4_Arrow"] = [7, 'Arrow', 0.212, 0.468];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["1"] = [5, '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["2"] = [5, '1_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["3"] = [5, '4_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["4"] = [5, '3_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["1+2"] = [5, '1_Arrow', '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCK-2"]["3+4"] = [5, '3_Arrow', '4_Arrow'];
 DEV_LIST.push('ALPHA-IP-RBG');
 DEV_DESCRIPTION["ALPHA-IP-RBG"] = "ALPHA-IP-RBG";
 DEV_PATHS["ALPHA-IP-RBG"] = new Object();
@@ -1644,6 +2595,21 @@ DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["1_Key"] = [4, 0.25, 0.33, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["2_Key"] = [4, 0.328, 0.33, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["1"] = [5, '1_Arrow', '1_Key'];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["2"] = [5, '2_Arrow', '2_Key'];
+DEV_LIST.push('HmIP-WRC6-A');
+DEV_DESCRIPTION["HmIP-WRC6-A"] = "WRC6";
+DEV_PATHS["HmIP-WRC6-A"] = new Object();
+DEV_PATHS["HmIP-WRC6-A"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIP-WRC6-A"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIP-WRC6-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["5+6"] = [5, '5', '6'];
 DEV_LIST.push('HmIP-eTRV-2');
 DEV_DESCRIPTION["HmIP-eTRV-2"] = "TRV";
 DEV_PATHS["HmIP-eTRV-2"] = new Object();
@@ -1656,6 +2622,18 @@ DEV_PATHS["HmIP-STI"] = new Object();
 DEV_PATHS["HmIP-STI"]["50"] = "/config/img/devices/50/221_hmip-sti_thumb.png";
 DEV_PATHS["HmIP-STI"]["250"] = "/config/img/devices/250/221_hmip-sti.png";
 DEV_HIGHLIGHT["HmIP-STI"] = new Object();
+DEV_LIST.push('HmIP-SMO230-A');
+DEV_DESCRIPTION["HmIP-SMO230-A"] = "SMO";
+DEV_PATHS["HmIP-SMO230-A"] = new Object();
+DEV_PATHS["HmIP-SMO230-A"]["50"] = "/config/img/devices/50/213_hmip-smo230_thumb.png";
+DEV_PATHS["HmIP-SMO230-A"]["250"] = "/config/img/devices/250/213_hmip-smo230.png";
+DEV_HIGHLIGHT["HmIP-SMO230-A"] = new Object();
+DEV_LIST.push('ELV-SH-CTH');
+DEV_DESCRIPTION["ELV-SH-CTH"] = "HmIP-STHO";
+DEV_PATHS["ELV-SH-CTH"] = new Object();
+DEV_PATHS["ELV-SH-CTH"]["50"] = "/config/img/devices/50/231_elv-sh-cth_thumb.png";
+DEV_PATHS["ELV-SH-CTH"]["250"] = "/config/img/devices/250/231_elv-sh-cth.png";
+DEV_HIGHLIGHT["ELV-SH-CTH"] = new Object();
 DEV_LIST.push('HMW-IO-12-FM');
 DEV_DESCRIPTION["HMW-IO-12-FM"] = "HMW-IO-12-FM";
 DEV_PATHS["HMW-IO-12-FM"] = new Object();
@@ -1749,6 +2727,40 @@ DEV_HIGHLIGHT["HM-PB-2-WM"] = new Object();
 DEV_HIGHLIGHT["HM-PB-2-WM"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
 DEV_HIGHLIGHT["HM-PB-2-WM"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["HM-PB-2-WM"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
+DEV_LIST.push('HmIP-BBL-I');
+DEV_DESCRIPTION["HmIP-BBL-I"] = "HmIP-BBL";
+DEV_PATHS["HmIP-BBL-I"] = new Object();
+DEV_PATHS["HmIP-BBL-I"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
+DEV_PATHS["HmIP-BBL-I"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
+DEV_HIGHLIGHT["HmIP-BBL-I"] = new Object();
+DEV_HIGHLIGHT["HmIP-BBL-I"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BBL-I"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BBL-I"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
+DEV_LIST.push('HmIPW-WRC6-A');
+DEV_DESCRIPTION["HmIPW-WRC6-A"] = "HmIPW-WRC6";
+DEV_PATHS["HmIPW-WRC6-A"] = new Object();
+DEV_PATHS["HmIPW-WRC6-A"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIPW-WRC6-A"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIPW-WRC6-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["7"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["8"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["9"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["10"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["11"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["12"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["13"] = [5, '1', '2', '3', '4', '5', '6'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["5+6"] = [5, '5', '6'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["7+8"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["9+10"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["11+12"] = [5, '5', '6'];
 DEV_LIST.push('VIR-LG-WHITE-DIM');
 DEV_DESCRIPTION["VIR-LG-WHITE-DIM"] = "VIR-LG-WHITE-DIM";
 DEV_PATHS["VIR-LG-WHITE-DIM"] = new Object();
@@ -1782,6 +2794,14 @@ DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"] = new Object();
 DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"]["50"] = "/config/img/devices/50/93_hm-es-pmsw1-pl_thumb.png";
 DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"]["250"] = "/config/img/devices/250/93_hm-es-pmsw1-pl.png";
 DEV_HIGHLIGHT["HM-LC-Sw1-Pl-DN-R1"] = new Object();
+DEV_LIST.push('HmIP-WRC2-A');
+DEV_DESCRIPTION["HmIP-WRC2-A"] = "HmIP-WRC2";
+DEV_PATHS["HmIP-WRC2-A"] = new Object();
+DEV_PATHS["HmIP-WRC2-A"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIP-WRC2-A"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIP-WRC2-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC2-A"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-WRC2-A"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HmIP-KRCA');
 DEV_DESCRIPTION["HmIP-KRCA"] = "KRCA";
 DEV_PATHS["HmIP-KRCA"] = new Object();
@@ -1810,6 +2830,12 @@ DEV_PATHS["HmIP-WRCC2"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
 DEV_HIGHLIGHT["HmIP-WRCC2"] = new Object();
 DEV_HIGHLIGHT["HmIP-WRCC2"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
 DEV_HIGHLIGHT["HmIP-WRCC2"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
+DEV_LIST.push('HmIPW-SMO230-A');
+DEV_DESCRIPTION["HmIPW-SMO230-A"] = "SMO";
+DEV_PATHS["HmIPW-SMO230-A"] = new Object();
+DEV_PATHS["HmIPW-SMO230-A"]["50"] = "/config/img/devices/50/213_hmip-smo230_thumb.png";
+DEV_PATHS["HmIPW-SMO230-A"]["250"] = "/config/img/devices/250/213_hmip-smo230.png";
+DEV_HIGHLIGHT["HmIPW-SMO230-A"] = new Object();
 DEV_LIST.push('HmIP-SMO-A-2');
 DEV_DESCRIPTION["HmIP-SMO-A-2"] = "SMO";
 DEV_PATHS["HmIP-SMO-A-2"] = new Object();
@@ -1899,9 +2925,17 @@ DEV_HIGHLIGHT["HmIP-PS"] = new Object();
 DEV_LIST.push('HmIP-eTRV-E-A');
 DEV_DESCRIPTION["HmIP-eTRV-E-A"] = "TRV-E";
 DEV_PATHS["HmIP-eTRV-E-A"] = new Object();
-DEV_PATHS["HmIP-eTRV-E-A"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
-DEV_PATHS["HmIP-eTRV-E-A"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_PATHS["HmIP-eTRV-E-A"]["50"] = "/config/img/devices/50/216_hmip-etrv-e_thumb.png";
+DEV_PATHS["HmIP-eTRV-E-A"]["250"] = "/config/img/devices/250/216_hmip-etrv-e.png";
 DEV_HIGHLIGHT["HmIP-eTRV-E-A"] = new Object();
+DEV_LIST.push('HmIPW-SMI55-A');
+DEV_DESCRIPTION["HmIPW-SMI55-A"] = "HmIPW-SMI55";
+DEV_PATHS["HmIPW-SMI55-A"] = new Object();
+DEV_PATHS["HmIPW-SMI55-A"]["50"] = "/config/img/devices/50/195_hmipw-smi55_thumb.png";
+DEV_PATHS["HmIPW-SMI55-A"]["250"] = "/config/img/devices/250/195_hmipw-smi55.png";
+DEV_HIGHLIGHT["HmIPW-SMI55-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-SMI55-A"]["1"] = [1, 0.530, 0.820, 0.025];
+DEV_HIGHLIGHT["HmIPW-SMI55-A"]["2"] = [1, 0.505, 0.210, 0.025];
 DEV_LIST.push('HmIP-PCBS2');
 DEV_DESCRIPTION["HmIP-PCBS2"] = "HmIP-PCBS2";
 DEV_PATHS["HmIP-PCBS2"] = new Object();
@@ -1935,6 +2969,12 @@ DEV_PATHS["HmIP-SWDM"] = new Object();
 DEV_PATHS["HmIP-SWDM"]["50"] = "/config/img/devices/50/181_hmip-swdm_thumb.png";
 DEV_PATHS["HmIP-SWDM"]["250"] = "/config/img/devices/250/181_hmip-swdm.png";
 DEV_HIGHLIGHT["HmIP-SWDM"] = new Object();
+DEV_LIST.push('HmIP-WTH-B-A');
+DEV_DESCRIPTION["HmIP-WTH-B-A"] = "HmIP-WTH-B";
+DEV_PATHS["HmIP-WTH-B-A"] = new Object();
+DEV_PATHS["HmIP-WTH-B-A"]["50"] = "/config/img/devices/50/200_hmip-wth-b_thumb.png";
+DEV_PATHS["HmIP-WTH-B-A"]["250"] = "/config/img/devices/250/200_hmip-wth-b.png";
+DEV_HIGHLIGHT["HmIP-WTH-B-A"] = new Object();
 DEV_LIST.push('HmIP-SPI');
 DEV_DESCRIPTION["HmIP-SPI"] = "HmIP-SPI";
 DEV_PATHS["HmIP-SPI"] = new Object();
@@ -2017,6 +3057,12 @@ DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1_part1"] = [2, 0.548, 0.468, 0.072, 0.052];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1_part2"] = [2, 0.612, 0.452, 0.028, 0.056];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1"] = [5, '1_part1', '1_part2'];
+DEV_LIST.push('HmIP-LSC');
+DEV_DESCRIPTION["HmIP-LSC"] = "HmIP-LSC";
+DEV_PATHS["HmIP-LSC"] = new Object();
+DEV_PATHS["HmIP-LSC"]["50"] = "/config/img/devices/50/227_hmip-lsc_thump.png";
+DEV_PATHS["HmIP-LSC"]["250"] = "/config/img/devices/250/227_hmip-lsc.png";
+DEV_HIGHLIGHT["HmIP-LSC"] = new Object();
 DEV_LIST.push('HmIP-MOD-TM');
 DEV_DESCRIPTION["HmIP-MOD-TM"] = "HmIP-MOD-TM";
 DEV_PATHS["HmIP-MOD-TM"] = new Object();
@@ -2135,6 +3181,12 @@ DEV_PATHS["ZEL STG RM FWT"] = new Object();
 DEV_PATHS["ZEL STG RM FWT"]["50"] = "/config/img/devices/50/42_hm-cc-tc_thumb.png";
 DEV_PATHS["ZEL STG RM FWT"]["250"] = "/config/img/devices/250/42_hm-cc-tc.png";
 DEV_HIGHLIGHT["ZEL STG RM FWT"] = new Object();
+DEV_LIST.push('ELV-SH-TACO');
+DEV_DESCRIPTION["ELV-SH-TACO"] = "ELV-SH-TACO";
+DEV_PATHS["ELV-SH-TACO"] = new Object();
+DEV_PATHS["ELV-SH-TACO"]["50"] = "/config/img/devices/50/232_elv-sh-taco_thumb.png";
+DEV_PATHS["ELV-SH-TACO"]["250"] = "/config/img/devices/250/232_elv-sh-taco.png";
+DEV_HIGHLIGHT["ELV-SH-TACO"] = new Object();
 DEV_LIST.push('VIR-OL-GTW');
 DEV_DESCRIPTION["VIR-OL-GTW"] = "VIR-OL-GTW";
 DEV_PATHS["VIR-OL-GTW"] = new Object();
@@ -2387,6 +3439,12 @@ DEV_PATHS["HmIP-FROLL"] = new Object();
 DEV_PATHS["HmIP-FROLL"]["50"] = "/config/img/devices/50/145_hmip-froll_hmip-fbl_thumb.png";
 DEV_PATHS["HmIP-FROLL"]["250"] = "/config/img/devices/250/145_hmip-froll_hmip-fbl.png";
 DEV_HIGHLIGHT["HmIP-FROLL"] = new Object();
+DEV_LIST.push('HmIP-PSMCO');
+DEV_DESCRIPTION["HmIP-PSMCO"] = "PSMCO";
+DEV_PATHS["HmIP-PSMCO"] = new Object();
+DEV_PATHS["HmIP-PSMCO"]["50"] = "/config/img/devices/50/235_hmip-psmco_thumb.png";
+DEV_PATHS["HmIP-PSMCO"]["250"] = "/config/img/devices/250/235_hmip-psmco.png";
+DEV_HIGHLIGHT["HmIP-PSMCO"] = new Object();
 DEV_LIST.push('HM-ES-PMSw1-Pl');
 DEV_DESCRIPTION["HM-ES-PMSw1-Pl"] = "HM-ES-PMSw1-Pl";
 DEV_PATHS["HM-ES-PMSw1-Pl"] = new Object();
@@ -2784,6 +3842,18 @@ DEV_PATHS["HmIP-PSM-CH-2"] = new Object();
 DEV_PATHS["HmIP-PSM-CH-2"]["50"] = "/config/img/devices/50/216_hmip-psm-ch-2_thumb.png";
 DEV_PATHS["HmIP-PSM-CH-2"]["250"] = "/config/img/devices/250/216_hmip-psm-ch-2.png";
 DEV_HIGHLIGHT["HmIP-PSM-CH-2"] = new Object();
+DEV_LIST.push('HmIP-BWTH-A');
+DEV_DESCRIPTION["HmIP-BWTH-A"] = "HmIP-WTH";
+DEV_PATHS["HmIP-BWTH-A"] = new Object();
+DEV_PATHS["HmIP-BWTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIP-BWTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIP-BWTH-A"] = new Object();
+DEV_LIST.push('HmIP-ESI');
+DEV_DESCRIPTION["HmIP-ESI"] = "HmIP-ESI";
+DEV_PATHS["HmIP-ESI"] = new Object();
+DEV_PATHS["HmIP-ESI"]["50"] = "/config/img/devices/50/226_hmip-esi_thumb.png";
+DEV_PATHS["HmIP-ESI"]["250"] = "/config/img/devices/250/226_hmip-esi.png";
+DEV_HIGHLIGHT["HmIP-ESI"] = new Object();
 DEV_LIST.push('HmIP-STV');
 DEV_DESCRIPTION["HmIP-STV"] = "HmIP-STV";
 DEV_PATHS["HmIP-STV"] = new Object();
@@ -3047,11 +4117,19 @@ DEV_HIGHLIGHT["HmIP-RCV-50"]["47"] = [5, 'S47'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["48"] = [5, 'S48'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["49"] = [5, 'S49'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["50"] = [5, 'S50'];
+DEV_LIST.push('HmIP-SMI55-A');
+DEV_DESCRIPTION["HmIP-SMI55-A"] = "HmIP-SMI55";
+DEV_PATHS["HmIP-SMI55-A"] = new Object();
+DEV_PATHS["HmIP-SMI55-A"]["50"] = "/config/img/devices/50/168_hmip-smi55_thumb.png";
+DEV_PATHS["HmIP-SMI55-A"]["250"] = "/config/img/devices/250/168_hmip-smi55.png";
+DEV_HIGHLIGHT["HmIP-SMI55-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-SMI55-A"]["2"] = [4, 0.540, 0.188, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-SMI55-A"]["1"] = [4, 0.540, 0.820, 0.04, 0.044];
 DEV_LIST.push('ELV-SH-SW1-BAT');
 DEV_DESCRIPTION["ELV-SH-SW1-BAT"] = "HmIP-PCBS-BAT";
 DEV_PATHS["ELV-SH-SW1-BAT"] = new Object();
-DEV_PATHS["ELV-SH-SW1-BAT"]["50"] = "/config/img/devices/50/151_hmip-pcbs-bat_thumb.png";
-DEV_PATHS["ELV-SH-SW1-BAT"]["250"] = "/config/img/devices/250/151_hmip-pcbs-bat.png";
+DEV_PATHS["ELV-SH-SW1-BAT"]["50"] = "/config/img/devices/50/228_elv-sh-sw1-bat_thumb.png";
+DEV_PATHS["ELV-SH-SW1-BAT"]["250"] = "/config/img/devices/250/228_elv-sh-sw1-bat.png";
 DEV_HIGHLIGHT["ELV-SH-SW1-BAT"] = new Object();
 DEV_LIST.push('Wired-LAN-Sniffer');
 DEV_DESCRIPTION["Wired-LAN-Sniffer"] = "Wired-LAN-Sniffer";
@@ -3087,6 +4165,12 @@ DEV_PATHS["HM-LC-Bl1-SM"] = new Object();
 DEV_PATHS["HM-LC-Bl1-SM"]["50"] = "/config/img/devices/50/6_hm-lc-bl1-sm_thumb.png";
 DEV_PATHS["HM-LC-Bl1-SM"]["250"] = "/config/img/devices/250/6_hm-lc-bl1-sm.png";
 DEV_HIGHLIGHT["HM-LC-Bl1-SM"] = new Object();
+DEV_LIST.push('HmIP-HAP-A');
+DEV_DESCRIPTION["HmIP-HAP-A"] = "HmIP-HAP";
+DEV_PATHS["HmIP-HAP-A"] = new Object();
+DEV_PATHS["HmIP-HAP-A"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
+DEV_PATHS["HmIP-HAP-A"]["250"] = "/config/img/devices/250/CCU3.png";
+DEV_HIGHLIGHT["HmIP-HAP-A"] = new Object();
 DEV_LIST.push('HmIP-PSM-2');
 DEV_DESCRIPTION["HmIP-PSM-2"] = "PSM";
 DEV_PATHS["HmIP-PSM-2"] = new Object();
@@ -3158,15 +4242,6 @@ DEV_PATHS["HmIP-DRDI3"] = new Object();
 DEV_PATHS["HmIP-DRDI3"]["50"] = "/config/img/devices/50/204_hmip-drdi3_thumb.png";
 DEV_PATHS["HmIP-DRDI3"]["250"] = "/config/img/devices/250/204_hmip-drdi3.png";
 DEV_HIGHLIGHT["HmIP-DRDI3"] = new Object();
-DEV_LIST.push('HmIP-BBL-I');
-DEV_DESCRIPTION["HmIP-BBL-I"] = "BBL";
-DEV_PATHS["HmIP-BBL-I"] = new Object();
-DEV_PATHS["HmIP-BBL-I"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
-DEV_PATHS["HmIP-BBL-I"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
-DEV_HIGHLIGHT["HmIP-BBL-I"] = new Object();
-DEV_HIGHLIGHT["HmIP-BBL-I"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
-DEV_HIGHLIGHT["HmIP-BBL-I"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
-DEV_HIGHLIGHT["HmIP-BBL-I"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('HmIP-PDT');
 DEV_DESCRIPTION["HmIP-PDT"] = "PDT";
 DEV_PATHS["HmIP-PDT"] = new Object();
@@ -3191,8 +4266,8 @@ DEV_HIGHLIGHT["HM-Sec-WDS"] = new Object();
 DEV_LIST.push('HmIP-eTRV-3');
 DEV_DESCRIPTION["HmIP-eTRV-3"] = "TRV";
 DEV_PATHS["HmIP-eTRV-3"] = new Object();
-DEV_PATHS["HmIP-eTRV-3"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
-DEV_PATHS["HmIP-eTRV-3"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_PATHS["HmIP-eTRV-3"]["50"] = "/config/img/devices/50/234_hmip-etrv-3_thumb.png";
+DEV_PATHS["HmIP-eTRV-3"]["250"] = "/config/img/devices/250/234_hmip-etrv-3.png";
 DEV_HIGHLIGHT["HmIP-eTRV-3"] = new Object();
 DEV_LIST.push('HM-CC-SCD');
 DEV_DESCRIPTION["HM-CC-SCD"] = "HM-CC-SCD";
@@ -3434,6 +4509,18 @@ DEV_PATHS["HmIP-STE2-PCB"] = new Object();
 DEV_PATHS["HmIP-STE2-PCB"]["50"] = "/config/img/devices/50/210_hmip-ste2-pcb_thumb.png";
 DEV_PATHS["HmIP-STE2-PCB"]["250"] = "/config/img/devices/250/210_hmip-ste2-pcb.png";
 DEV_HIGHLIGHT["HmIP-STE2-PCB"] = new Object();
+DEV_LIST.push('HmIP-STH-A');
+DEV_DESCRIPTION["HmIP-STH-A"] = "STH";
+DEV_PATHS["HmIP-STH-A"] = new Object();
+DEV_PATHS["HmIP-STH-A"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIP-STH-A"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIP-STH-A"] = new Object();
+DEV_LIST.push('HmIPW-STHD-A');
+DEV_DESCRIPTION["HmIPW-STHD-A"] = "HmIPW-STHD";
+DEV_PATHS["HmIPW-STHD-A"] = new Object();
+DEV_PATHS["HmIPW-STHD-A"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIPW-STHD-A"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIPW-STHD-A"] = new Object();
 DEV_LIST.push('HM-Sec-Key-O');
 DEV_DESCRIPTION["HM-Sec-Key-O"] = "HM-Sec-Key-O";
 DEV_PATHS["HM-Sec-Key-O"] = new Object();
@@ -3478,6 +4565,12 @@ DEV_PATHS["HM-TC-IT-WM-W-EU"] = new Object();
 DEV_PATHS["HM-TC-IT-WM-W-EU"]["50"] = "/config/img/devices/50/96_hm-tc-it-wm-w-eu_thumb.png";
 DEV_PATHS["HM-TC-IT-WM-W-EU"]["250"] = "/config/img/devices/250/96_hm-tc-it-wm-w-eu.png";
 DEV_HIGHLIGHT["HM-TC-IT-WM-W-EU"] = new Object();
+DEV_LIST.push('HmIPW-STH-A');
+DEV_DESCRIPTION["HmIPW-STH-A"] = "HmIPW-STH";
+DEV_PATHS["HmIPW-STH-A"] = new Object();
+DEV_PATHS["HmIPW-STH-A"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIPW-STH-A"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIPW-STH-A"] = new Object();
 DEV_LIST.push('HM-Sec-Key-S');
 DEV_DESCRIPTION["HM-Sec-Key-S"] = "HM-Sec-Key-S";
 DEV_PATHS["HM-Sec-Key-S"] = new Object();
@@ -3653,6 +4746,18 @@ DEV_PATHS["263 135"]["250"] = "/config/img/devices/250/75_hm-pb-2-wm55.png";
 DEV_HIGHLIGHT["263 135"] = new Object();
 DEV_HIGHLIGHT["263 135"]["2"] = [2, 0.204, 0.23, 0.546, 0.128];
 DEV_HIGHLIGHT["263 135"]["1"] = [2, 0.204, 0.65, 0.546, 0.128];
+DEV_LIST.push('HmIP-SMO230');
+DEV_DESCRIPTION["HmIP-SMO230"] = "SMO";
+DEV_PATHS["HmIP-SMO230"] = new Object();
+DEV_PATHS["HmIP-SMO230"]["50"] = "/config/img/devices/50/213_hmip-smo230_thumb.png";
+DEV_PATHS["HmIP-SMO230"]["250"] = "/config/img/devices/250/213_hmip-smo230.png";
+DEV_HIGHLIGHT["HmIP-SMO230"] = new Object();
+DEV_LIST.push('HmIPW-SMO230');
+DEV_DESCRIPTION["HmIPW-SMO230"] = "SMO";
+DEV_PATHS["HmIPW-SMO230"] = new Object();
+DEV_PATHS["HmIPW-SMO230"]["50"] = "/config/img/devices/50/213_hmip-smo230_thumb.png";
+DEV_PATHS["HmIPW-SMO230"]["250"] = "/config/img/devices/250/213_hmip-smo230.png";
+DEV_HIGHLIGHT["HmIPW-SMO230"] = new Object();
 DEV_LIST.push('HM-CCU-1');
 DEV_DESCRIPTION["HM-CCU-1"] = "HM-CCU-1";
 DEV_PATHS["HM-CCU-1"] = new Object();
@@ -3671,6 +4776,26 @@ DEV_PATHS["HmIP-DRSI1"] = new Object();
 DEV_PATHS["HmIP-DRSI1"]["50"] = "/config/img/devices/50/211_hmip-drsi1_thumb.png";
 DEV_PATHS["HmIP-DRSI1"]["250"] = "/config/img/devices/250/211_hmip-drsi1.png";
 DEV_HIGHLIGHT["HmIP-DRSI1"] = new Object();
+DEV_LIST.push('HmIP-KRCA-2');
+DEV_DESCRIPTION["HmIP-KRCA-2"] = "KRCA";
+DEV_PATHS["HmIP-KRCA-2"] = new Object();
+DEV_PATHS["HmIP-KRCA-2"]["50"] = "/config/img/devices/50/84_hm-rc-4-x_thumb.png";
+DEV_PATHS["HmIP-KRCA-2"]["250"] = "/config/img/devices/250/85_hm-rc-sec4-3.png";
+DEV_HIGHLIGHT["HmIP-KRCA-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["arrow_part1"] = [6, 0.312, 0.288, 0.416, 0.288, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["arrow_part2"] = [6, 0.312, 0.288, 0.352, 0.248, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["arrow_part3"] = [6, 0.312, 0.288, 0.352, 0.328, 0.012];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["Arrow"] = [5, 'arrow_part1', 'arrow_part2', 'arrow_part3'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["1_Arrow"] = [7, 'Arrow', 0.25, 0.0];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["2_Arrow"] = [7, 'Arrow', 0.238, 0.156];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["3_Arrow"] = [7, 'Arrow', 0.228, 0.312];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["4_Arrow"] = [7, 'Arrow', 0.212, 0.468];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["1"] = [5, '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["2"] = [5, '1_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["3"] = [5, '4_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["4"] = [5, '3_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["1+2"] = [5, '1_Arrow', '2_Arrow'];
+DEV_HIGHLIGHT["HmIP-KRCA-2"]["3+4"] = [5, '3_Arrow', '4_Arrow'];
 DEV_LIST.push('HM-Sen-RD-O');
 DEV_DESCRIPTION["HM-Sen-RD-O"] = "HM-Sen-RD-O";
 DEV_PATHS["HM-Sen-RD-O"] = new Object();
@@ -3765,9 +4890,15 @@ DEV_HIGHLIGHT["HM-LC-Sw4-WM"]["4"] = [5, 'Channel4', '4_val', 'Circle4'];
 DEV_LIST.push('HmIP-eTRV-E');
 DEV_DESCRIPTION["HmIP-eTRV-E"] = "TRV-E";
 DEV_PATHS["HmIP-eTRV-E"] = new Object();
-DEV_PATHS["HmIP-eTRV-E"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
-DEV_PATHS["HmIP-eTRV-E"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_PATHS["HmIP-eTRV-E"]["50"] = "/config/img/devices/50/216_hmip-etrv-e_thumb.png";
+DEV_PATHS["HmIP-eTRV-E"]["250"] = "/config/img/devices/250/216_hmip-etrv-e.png";
 DEV_HIGHLIGHT["HmIP-eTRV-E"] = new Object();
+DEV_LIST.push('ELV-SH-SB8');
+DEV_DESCRIPTION["ELV-SH-SB8"] = "ELV-SH-SB8";
+DEV_PATHS["ELV-SH-SB8"] = new Object();
+DEV_PATHS["ELV-SH-SB8"]["50"] = "/config/img/devices/50/236_elv-sh-sb8_thumb.png";
+DEV_PATHS["ELV-SH-SB8"]["250"] = "/config/img/devices/250/236_elv-sh-sb8.png";
+DEV_HIGHLIGHT["ELV-SH-SB8"] = new Object();
 DEV_LIST.push('HmIP-STHD');
 DEV_DESCRIPTION["HmIP-STHD"] = "HmIP-STHD";
 DEV_PATHS["HmIP-STHD"] = new Object();
@@ -3780,6 +4911,12 @@ DEV_PATHS["HM-ES-PMSw1-SM"] = new Object();
 DEV_PATHS["HM-ES-PMSw1-SM"]["50"] = "/config/img/devices/50/115_hm-es-pmsw1-sm_thumb.png";
 DEV_PATHS["HM-ES-PMSw1-SM"]["250"] = "/config/img/devices/250/115_hm-es-pmsw1-sm.png";
 DEV_HIGHLIGHT["HM-ES-PMSw1-SM"] = new Object();
+DEV_LIST.push('HmIP-STH 8DU');
+DEV_DESCRIPTION["HmIP-STH 8DU"] = "STH";
+DEV_PATHS["HmIP-STH 8DU"] = new Object();
+DEV_PATHS["HmIP-STH 8DU"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIP-STH 8DU"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIP-STH 8DU"] = new Object();
 DEV_LIST.push('HmIP-FAL24-C6');
 DEV_DESCRIPTION["HmIP-FAL24-C6"] = "HmIP-FAL24-C6";
 DEV_PATHS["HmIP-FAL24-C6"] = new Object();
@@ -3877,6 +5014,12 @@ DEV_PATHS["HmIP-SWDM-2"] = new Object();
 DEV_PATHS["HmIP-SWDM-2"]["50"] = "/config/img/devices/50/181_hmip-swdm_thumb.png";
 DEV_PATHS["HmIP-SWDM-2"]["250"] = "/config/img/devices/250/181_hmip-swdm.png";
 DEV_HIGHLIGHT["HmIP-SWDM-2"] = new Object();
+DEV_LIST.push('HmIPW-WTH-A');
+DEV_DESCRIPTION["HmIPW-WTH-A"] = "HmIPW-WTH";
+DEV_PATHS["HmIPW-WTH-A"] = new Object();
+DEV_PATHS["HmIPW-WTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIPW-WTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIPW-WTH-A"] = new Object();
 DEV_LIST.push('HM-Sen-DB-PCB');
 DEV_DESCRIPTION["HM-Sen-DB-PCB"] = "HM-Sen-DB-PCB";
 DEV_PATHS["HM-Sen-DB-PCB"] = new Object();
@@ -3911,12 +5054,30 @@ DEV_PATHS["HM-LC-Dim1L-CV-644"] = new Object();
 DEV_PATHS["HM-LC-Dim1L-CV-644"]["50"] = "/config/img/devices/50/2_hm-lc-dim1l-cv_thumb.png";
 DEV_PATHS["HM-LC-Dim1L-CV-644"]["250"] = "/config/img/devices/250/2_hm-lc-dim1l-cv.png";
 DEV_HIGHLIGHT["HM-LC-Dim1L-CV-644"] = new Object();
+DEV_LIST.push('HmIP-DLD-S');
+DEV_DESCRIPTION["HmIP-DLD-S"] = "HmIP-DLD";
+DEV_PATHS["HmIP-DLD-S"] = new Object();
+DEV_PATHS["HmIP-DLD-S"]["50"] = "/config/img/devices/50/214_hmip-dld_thumb.png";
+DEV_PATHS["HmIP-DLD-S"]["250"] = "/config/img/devices/250/214_hmip-dld.png";
+DEV_HIGHLIGHT["HmIP-DLD-S"] = new Object();
+DEV_LIST.push('HmIP-WTH-A');
+DEV_DESCRIPTION["HmIP-WTH-A"] = "HmIP-WTH-2";
+DEV_PATHS["HmIP-WTH-A"] = new Object();
+DEV_PATHS["HmIP-WTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIP-WTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIP-WTH-A"] = new Object();
 DEV_LIST.push('263 132');
 DEV_DESCRIPTION["263 132"] = "263_132";
 DEV_PATHS["263 132"] = new Object();
 DEV_PATHS["263 132"]["50"] = "/config/img/devices/50/2_hm-lc-dim1l-cv_thumb.png";
 DEV_PATHS["263 132"]["250"] = "/config/img/devices/250/2_hm-lc-dim1l-cv.png";
 DEV_HIGHLIGHT["263 132"] = new Object();
+DEV_LIST.push('HmIP-STHD-A');
+DEV_DESCRIPTION["HmIP-STHD-A"] = "HmIP-STHD";
+DEV_PATHS["HmIP-STHD-A"] = new Object();
+DEV_PATHS["HmIP-STHD-A"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIP-STHD-A"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIP-STHD-A"] = new Object();
 DEV_LIST.push('HM-Sec-RHS');
 DEV_DESCRIPTION["HM-Sec-RHS"] = "HM-Sec-RHS";
 DEV_PATHS["HM-Sec-RHS"] = new Object();
@@ -4258,7 +5419,7 @@ DEV_getImageHighlight = function(type, form)
   // The position of the channel number adapted to the housing of the CCU3
   var product = WEBUI_VERSION.split(".")[0];
   if (product >= 3 && (type == "HM-RCV-50" || type == "HMW-RCV-50")) {
-    if (form.length > 2) {
+    if (form && form.length > 2) {
       form[2] = 0.57; // y-position
     }
   }
@@ -4717,6 +5878,8 @@ elvST['COND_TX_THRESHOLD_LO'] = '${stringTableCondThresholdLo}';
 elvST['COND_TX_THRESHOLD_LO_POWER'] = '${stringTableCondThresholdLoPower}';
 elvST['CONFIG_PENDING=FALSE'] = '${stringTableConfigPendingFalse}';
 elvST['CONFIG_PENDING=TRUE'] = '${stringTableConfigPendingTrue}';
+elvST['STICKY_UNREACH=FALSE'] = '${stringTableStickyUnreachFalse}';
+elvST['STICKY_UNREACH=TRUE'] = '${stringTableStickyUnreachTrue}';
 elvST['CONF_BUTTON_TIME'] = '${stringTableConfButtonTime}';
 elvST['CONF_BUTTON_TIME=PERMANENT'] = '${stringTableConfButtonTimePermanent}';
 elvST['CONTROL_MODE=AUTO-MODE'] = '${stringTableClimateControlRTTransceiverAutoMode}';
@@ -4987,9 +6150,25 @@ elvST['EMERGENCY_OPERATION=TRUE'] = '${stringTableEmergencyOperationTrue}';
 elvST['ENABLE_ROUTING'] = '${stringTableEnableRouting}';
 elvST['ENERGIE_METER_TRANSMITTER|AVERAGING'] = '${stringTablePowerMeterAveraging}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER'] = '${stringTablePowerMeterEnergyCounter}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_FEED_IN'] = '${stringTablePowerMeterEnergyCounterFeedIn}';
+elvST['ENERGIE_METER_TRANSMITTER|POWER'] = '${stringTablePowerMeterPower}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=NORMAL'] = '${lblStatus} ${chType_POWERMETER}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=0'] = '${lblStatus} ${chType_POWERMETER}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=UNKNOWN'] = '${lblStatus} ${chType_POWERMETER}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=1'] = '${lblStatus} ${chType_POWERMETER}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=OVERFLOW'] = '${lblStatus} ${chType_POWERMETER}: ${lblOverflow}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=2'] = '${lblStatus} ${chType_POWERMETER}: ${lblOverflow}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=FALSE'] = '${stringTablePowerMeterOverflowFalse}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=TRUE'] = '${stringTablePowerMeterOverflowTrue}';
 elvST['ENERGIE_METER_TRANSMITTER|FREQUENCY'] = '${stringTablePowerMeterFrequency}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW'] = '${stringTablePowerMeterGasFlow}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=UNKNOWN'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=OVERFLOW'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblOverflow}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME'] = '${stringTablePowerMeterGasVolume}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=UNKNOWN'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=OVERFLOW'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblOverflow}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER'] = '${stringTablePowerMeterPower}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER_STATUS=0'] = '${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}';
@@ -5012,12 +6191,18 @@ elvST['ERROR_CODE'] = '${stringTableErrorCode}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR'] = '${stringTableErrorCommunicationParticulateMatterSensor}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR=FALSE'] = '${stringTableErrorCommunicationParticulateMatterSensorFalse}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR=TRUE'] = '${stringTableErrorCommunicationParticulateMatterSensorTrue}';
+elvST['ERROR_COMMUNICATION_SENSOR'] = '${stringTableErrorCommunicationSensor}';
+elvST['ERROR_COMMUNICATION_SENSOR=TRUE'] = '${stringTableErrorCommunicationSensorTrue}';
+elvST['ERROR_COMMUNICATION_SENSOR=FALSE'] = '${stringTableErrorCommunicationSensorFalse}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR'] = '${stringTableErrorCommunicationTempAndHumiditySensor}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR=FALSE'] = '${stringTableErrorCommunicationTempAndHumiditySensorFalse}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR=TRUE'] = '${stringTableErrorCommunicationTempAndHumiditySensorTrue}';
 elvST['ERROR_COPROCESSOR'] = '${stringTableErrorCoProcessor}';
 elvST['ERROR_COPROCESSOR=TRUE'] = '${stringTableErrorCoprocessorTrue}';
 elvST['ERROR_COPROCESSOR=FALSE'] = '${stringTableErrorCoprocessorFalse}';
+elvST['ERROR_DALI_BUS'] = '${stringTableErrorDaliBus}';
+elvST['ERROR_DALI_BUS=FALSE'] = '${stringTableErrorDaliBusFalse}';
+elvST['ERROR_DALI_BUS=TRUE'] = '${stringTableErrorDaliBusTrue}';
 elvST['ERROR_DEGRADED_CHAMBER'] = '${stringTableErrorDegradedChamber}';
 elvST['ERROR_DEGRADED_CHAMBER=FALSE'] = '${stringTableErrorDegradedChamberFalse}';
 elvST['ERROR_DEGRADED_CHAMBER=TRUE'] = '${stringTableErrorDegradedChamberTrue}';
@@ -5418,6 +6603,7 @@ elvST['MAINTENANCE|SABOTAGE'] = '${stringTableSabotage}';
 elvST['MAINTENANCE|SABOTAGE_STICKY'] = '${stringTableSabotageSticky}';
 elvST['MAINTENANCE|SABOTAGE_STICKY=FALSE'] = '${stringTableSabotageStickyFalse}';
 elvST['MAINTENANCE|SABOTAGE_STICKY=TRUE'] = '${stringTableSabotageStickyTrue}';
+elvST['MAINTENANCE|SENSOR_ERROR'] = '${stringTableSensorError}';
 elvST['MAINTENANCE|STICKY_BATTERY=BATTERY_DEFECT'] = '${stringTableBatteryFailure}';
 elvST['MAINTENANCE|STICKY_BATTERY=BATTERY_WAS_DEFECT'] = '${stringTableBatteryWasDefect}';
 elvST['MAINTENANCE|STICKY_POWER=POWER_FAILURE'] = '${stringTablePowerNotAvailable}';
@@ -5451,6 +6637,12 @@ elvST['MAINTENANCE|USER_AUTHORIZATION_08'] = '${stringTableUserAuthorization08}'
 elvST['MAINTENANCE|USER_AUTHORIZATION_08=FALSE'] = '${stringTableUserAuthorization08false}';
 elvST['MAINTENANCE|USER_AUTHORIZATION_08=TRUE'] = '${stringTableUserAuthorization08true}';
 elvST['MANU_MODE'] = '${stringTableClimateControlRTTransceiverManuMode}';
+elvST['MEASURED_VALUE'] = '${lblReading}';
+elvST['MEASURED_VALUE_STATUS=ERROR'] = '${lblReading}: ${lblError}';
+elvST['MEASURED_VALUE_STATUS=NORMAL'] = '${lblReading}: ${lblNormal}';
+elvST['MEASURED_VALUE_STATUS=OVERFLOW'] = '${lblReading}: ${lblOverflow}';
+elvST['MEASURED_VALUE_STATUS=UNDERFLOW'] = '${lblReading}: ${lblUnderflow}';
+elvST['MEASURED_VALUE_STATUS=UNKNOWN'] = '${lblReading}: ${lblUnknown}';
 elvST['MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE'] = '${stringTableMinMaxNotRelevantForManuMode}';
 elvST['MIOB_DIN_CONFIG'] = '${stringTableMiobDinConfig}';
 elvST['MOD_EM8BIT_TRANSMITTER'] = '${stringTable8BitTransmitterTitle}';
@@ -5545,6 +6737,8 @@ elvST['PASSAGE_DETECTOR_COUNTER_TRANSMITTER|COND_TX_DECISION_BELOW'] = '${string
 elvST['PASSAGE_DETECTOR_COUNTER_TRANSMITTER|COND_TX_THRESHOLD_HI'] = '${stringTablePassageDetectorCounterTransmitterCondTxThresholdHi}';
 elvST['PASSAGE_DETECTOR_COUNTER_TRANSMITTER|COND_TX_THRESHOLD_LO'] = '${stringTablePassageDetectorCounterTransmitterCondTxThresholdLo}';
 elvST['PASSAGE_DETECTOR_DIRECTION_TRANSMITTER'] = '${stringTablePassageDetectorDirectionTitle}';
+elvST['PERMISSION_STATE=FALSE'] = '${stringTablePermissionStateFalse}';
+elvST['PERMISSION_STATE=TRUE'] = '${stringTablePermissionStateTrue}';
 elvST['PEER_NEEDS_BURST'] = '${stringTablePeerNeedsBurst}';
 elvST['PIR_OPERATION_MODE'] = '${stringTablePirOperationMode}';
 elvST['PIR_SENSITIVITY'] = '${stringTableSensorSensivity}';
@@ -5619,7 +6813,9 @@ elvST['PRESENCE_DETECTION_STATE=TRUE'] = '${stringTablePresenceDetectionStateTru
 elvST['PRESS_LONG'] = '${stringTableKeyPressLong}';
 elvST['PRESS_LONG=TRUE'] = '${stringTableKeyPressLongTrue}';
 elvST['PRESS_LONG_RELEASE'] = '${stringTableKeyPressLongRelease}';
+elvST['PRESS_LONG_RELEASE=TRUE'] = '${stringTableKeyPressLongRelease}';
 elvST['PRESS_LONG_START'] = '${stringTableKeyPressLongStart}';
+elvST['PRESS_LONG_START=TRUE'] = '${stringTableKeyPressLongStart}';
 elvST['PRESS_SHORT'] = '${stringTableKeyPressShort}';
 elvST['PRESS_SHORT=TRUE'] = '${stringTableKeyPressShortTrue}';
 elvST['PROCESS=NOT_STABLE'] = '${stringTableProcessNotStableGeneric}';
@@ -6047,18 +7243,25 @@ elvST['TX_MINDELAY_UNIT=S'] = '${optionUnitS}';
 elvST['TX_MINDELAY_VALUE'] = '${stringTableTxMinDelayValue}';
 elvST['TX_THRESHOLD_PERCENT'] = '${stringTableTxThresholdPercent}';
 elvST['TX_THRESHOLD_POWER'] = '${stringTablePowerMeterTxThresholdPower}';
-elvST['UNIVERSAL_LIGTH_RECEIVER|LEVEL'] = '${lblColorBrightness}';
-elvST['UNIVERSAL_LIGTH_RECEIVER|ERROR_LIMIT'] = '${stringTableErrorLimitULR}';
-elvST['UNIVERSAL_LIGTH_RECEIVER|ERROR_LIMIT=FALSE'] = '${stringTableErrorLimitULR_False}';
-elvST['UNIVERSAL_LIGTH_RECEIVER|ERROR_LIMIT=TRUE'] = '${stringTableErrorLimitULR_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER'] = '${stringTableUniversalLightReceiverTitle}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT'] = '${stringTableErrorLimitULR}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT=FALSE'] = '${stringTableErrorLimitULR_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT=TRUE'] = '${stringTableErrorLimitULR_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE'] = '${stringTableErrorGearFailure}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE=FALSE'] = '${stringTableErrorGearFailure_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE=TRUE'] = '${stringTableErrorGearFailure_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE'] = '${stringTableErrorLampFailureULR}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE=FALSE'] = '${stringTableErrorLampFailureULR_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE=TRUE'] = '${stringTableErrorLampFailureULR_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|LEVEL'] = '${lblColorBrightness}';
 elvST['UNREACH=FALSE'] = '${stringTableUnreachFalse}';
 elvST['UNREACH=TRUE'] = '${stringTableUnreachTrue}';
 elvST['UPDATE_PENDING'] = '${stringTableUpdatePending}';
 elvST['UPDATE_PENDING=FALSE'] = '${stringTableUpdatePendingFalse}';
 elvST['UPDATE_PENDING=TRUE'] = '${stringTableUpdatePendingTrue}';
-elvST['UNIVERSAL_LIGHT_RECEIVER'] = '${stringTableUniversalLightReceiverTitle}';
 elvST['USER_COLOR'] = '${stringTableSubmit}';
 elvST['USER_PROGRAM'] = '${stringTableSubmit}';
+elvST['VALUE_8BIT'] = '${lblValue}';
 elvST['VALVE_MAXIMUM_POSITION'] = '${stringTableValveMaximumPosition}';
 elvST['VALVE_STATE'] = '${stringTableClimateControlRTTransceiverVentPos}';
 elvST['VALVE_STATE=ADAPTION_DONE'] = '${stringTableValveStateAdaptionDone}';
@@ -6673,21 +7876,10 @@ HttpLoader = new function()
   /*####################*/
   
   /**
-   * Hängt die Version der HomeMatic WebUI an eine URL an,
-   * um Probleme mit dem Browsercache zu umgehen.
-   **/
-  var addVersion = function(url)
-  {
-    if (0 <= url.indexOf("?")) { return url + "&_version_=" + WEBUI_VERSION; }
-    else                       { return url + "?_version_=" + WEBUI_VERSION; }
-  };
-  
-  /**
    * Lädt synchron Daten und gibt das XMLHttpRequest-Objekt zurück.
    **/
   var load = function(method, url, data)
   {
-    url = addVersion(url);
     var xhr = XMLHttpRequest_create();
     
     if (null !== xhr)
@@ -7121,10 +8313,10 @@ ConfigData = Singleton.create({
     this.callback = callback;
     if (this.isPresent === false)
     {
-      //this.isPresent = true;
-      //new ConfigDataLoader(callback);
-      this.configDataLoader.showMessage();
-      this.showMessage = true;
+      this.isPresent = true;
+      new ConfigDataLoader(callback);
+      //this.configDataLoader.showMessage();
+      //this.showMessage = true;
     }
     else
     {
@@ -7148,7 +8340,9 @@ ConfigData = Singleton.create({
 
 
   load: function() {
+    if ((typeof measureLoadingConfigData != "undefined") && (measureLoadingConfigData == true)) {console.log("Start ConfigDataLoader"); console.time(); }
     this.configDataLoader = new ConfigDataLoader(function() {
+      if ((typeof measureLoadingConfigData != "undefined") && (measureLoadingConfigData == true)) {console.timeEnd(); }
       conInfo("Config data ready to use");
       jQuery("#PagePath").css('color',"white");
       // With a CCU without devices the elem PagePath isn't available sometimes at this point,
@@ -7156,8 +8350,6 @@ ConfigData = Singleton.create({
       window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
       ConfigData.isPresent = true;
       if (ConfigData.showMessage) { this.hideMessage(); }
-      showDutyCycleHmIP(); // The DeviceList is now available for displaying the duty cycle and carrier sense of the HAP's
-      showCarrierSense();
       if (ConfigData.callback) { ConfigData.callback(); }
     });
   },
@@ -7296,7 +8488,6 @@ WebUI = Singleton.create({
     if(typeof dcTimeout == "undefined") {
       dcTimeout = window.setTimeout(function () {
         showDutyCycle();
-        showCarrierSense();
         delete dcTimeout;
       }, 10);
     }
@@ -7460,6 +8651,7 @@ WebUI = Singleton.create({
 
       var content = document.createElement("div");
       content.id = "content";
+      content.tabIndex = 1;
       Element.setStyle(content, {cursor: "wait"});
       layer0.appendChild(content);
 
@@ -7529,7 +8721,6 @@ WebUI = Singleton.create({
       // Check the dutyCycle and carrierSense periodically
       new PeriodicalExecuter(function () {
         showDutyCycle();
-        showCarrierSense();
       }, checkDutyCycleInterval);
 
       if (getProduct() >= 3) {
@@ -7565,9 +8756,23 @@ WebUI = Singleton.create({
         }
         */
 
+        var usrName = userName.replace(/[ \/\xC4\xD6\xDC\xE4\xF6\xFC\xDF]/g, function(m) {
+                        return {
+                          ' ': ';',
+                          '/': '',
+                          '\xC4': 'AE',
+                          '\xD6': 'OE',
+                          '\xDC': 'UE',
+                          '\xE4': 'ae',
+                          '\xF6': 'oe',
+                          '\xFC': 'ue',
+                          '\xDF': 'ss'
+                        }[m];
+                      });
+
         var usrPwd = homematic('User.hasUserPWD', {'userID': userId});
         if (usrPwd == false) {
-          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")});
+          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName});
           if (!result) {
             var checkUpdateContentRunning = window.setInterval(function () {
               if (!bUpdateContentRunning) {
@@ -7587,9 +8792,14 @@ WebUI = Singleton.create({
 
           // User password set
           // The User will see a hint that new firewall settings are active
-          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")}))) {
+          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName}))) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
-            homematic("CCU.setUserAckInstallWizard", {'userName': userName});
+            homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
+          }
+
+          // open the systemLanguage config dialog if no systemLanguage was selected yet
+          if (homematic('CCU.getSystemLanguage') === 'none') {
+            CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
           }
         }
       }
@@ -7689,6 +8899,12 @@ WebUI = Singleton.create({
     this.currentPageOptions  = options;
     
     this.currentPage.enter(options);
+    window.name = 'ccu-main-window';
+    window.setTimeout(() => {
+      if(jQuery(':focus').length === 0) {
+        jQuery('#content')[0].focus();
+      }
+    }, 200);
   },
   
   reload: function()
@@ -7921,10 +9137,10 @@ StringFilter = function(name, callback)
   
   
   var m_name     = name;
-  var m_value    = "";
   var m_callback = callback;
   
   var m_id     = name.replace(/\,/g, "_");
+  var m_value    = localStorage.getItem(m_id) || "";
   var m_textId = m_id + "Text";
 
   var isSet = function()
@@ -8029,6 +9245,7 @@ StringFilter = function(name, callback)
       }
     }
     if ($(m_id))     { $(m_id).hide(); }
+    localStorage.setItem(m_id, $(m_textId).value);
     if (m_callback)  { m_callback(); }
   };
   
@@ -8047,6 +9264,7 @@ StringFilter = function(name, callback)
   this.reset = function()
   {
     m_value = "";
+    localStorage.removeItem(m_id);
     this.close();
   };
 
@@ -8069,7 +9287,6 @@ StringFilter = function(name, callback)
   /*# Initialisierung #*/
   /*###################*/
   
-  this.reset();
   
 };
 
@@ -8093,7 +9310,28 @@ ListFilter = Class.create({
     this.callback = callback;
     this.id       = name.replace(/\./g, "_");
     this.formId   = this.id + "Form";
-    this.reset();
+    var self = this;
+    function fltrHandler() {
+      self.restoreFilters();
+      eQ3.HomeMatic.Event.unsubscribe('DeviceListPageLoaded', fltrHandler);
+    }
+    eQ3.HomeMatic.Event.subscribe('DeviceListPageLoaded', fltrHandler);
+  },
+
+  restoreFilters: function() {
+    var filterValues = localStorage.getItem(this.id);
+    if(filterValues) {
+      try {
+        filterValues = JSON.parse(filterValues);
+        var values = $(this.formId).values;
+        for (var i = 0, len = values.length; i < len; i++) {
+         if(filterValues.indexOf(values[i].value) !== -1) {
+            values[i].checked = true;
+          }
+        }
+        this.set();
+      } catch(e) { console.log(e); }
+    }
   },
 
   /**
@@ -8204,16 +9442,20 @@ ListFilter = Class.create({
     if ($(this.formId))
     {
       var values = $(this.formId).values;
+      var filterValues = [];
 
       for (var i = 0, len = values.length; i < len; i++)
       {
         this.select(values[i].value, values[i].checked);
+        if(values[i].checked) filterValues.push(values[i].value);
       }
 
       if ($(this.id))    {
         $(this.id).hide();
         try {jQuery("#"+ this.id).draggable("destroy");} catch (e) {}
       }
+      // JSON.stringify encodes an array twice???
+      localStorage.setItem(this.id, JSON.parse(JSON.stringify(filterValues)));
       if (this.callback) { this.callback(); }
     }
   },
@@ -8249,7 +9491,8 @@ ListFilter = Class.create({
     {
       this.list[i]._selected = false;
     }
-    
+
+    localStorage.removeItem(this.id);
     this.close();
   }
   
@@ -8737,7 +9980,13 @@ UI.Text = Class.create(UI.Component, {
     Element.setStyle(this.m_element, {"textAlign": alignment});
     return this;
   },
-  
+
+  setStyle: function(style)
+  {
+    Element.setStyle(this.m_element, style);
+    return this;
+  },
+
   /**
    * Setzt die Breite des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
@@ -8758,7 +10007,13 @@ UI.Text = Class.create(UI.Component, {
     if (height != "auto") { height = parseInt(height) + "px"; }
     Element.setStyle(this.m_element, { height    : height });
     return this;
-  }
+  },
+
+  setClass: function(name)
+  {
+    this.m_element.className = name;
+    return this;
+  },
 });
  
 /**
@@ -9025,6 +10280,16 @@ UI.Textarea = Class.create(UI.InputComponent, {
     return this;
   },
   
+  setID : function(id) {
+    this.m_element.setAttribute("id",id);
+    return this;
+  },
+
+  setName : function(name) {
+    this.m_element.setAttribute("name",name);
+    return this;
+  },
+
   setWrap: function(isWrap)
   {
     if (isWrap) { Element.writeAttribute(this.m_element, "wrap", "soft"); }
@@ -9868,10 +11133,13 @@ Channel = Class.create({
 
     window.setTimeout(function() {delete virtChCounter;},15000); // Fallback to ensure this global var is being deleted after not in use anymore.
 
-
     if ((device.deviceType.description.indexOf("HmIPW-DRBL4") != -1)
       || (device.deviceType.description.indexOf("HmIP-DRBLI4") != -1)
+      || (device.deviceType.description.indexOf("HmIP-BBL") != -1)
       || (device.deviceType.description.indexOf("HmIP-BBL-2") != -1)
+      || (device.deviceType.description.indexOf("HmIP-BBL-I") != -1)
+      || (device.deviceType.description.indexOf("HmIP-FBL") != -1)
+
     ) {
       if (chType.indexOf("BLIND_TRANSMITTER") != -1 || chType.indexOf("BLIND_VIRTUAL_RECEIVER") != -1) {
         if (typeof devToConfigure != "undefined" || typeof blindChAddress == "undefined" || blindChAddress != devAddress) {
@@ -9937,6 +11205,7 @@ Channel = Class.create({
     } else {
       this.changedMultiMode = "";
     }
+
     this.update(device, data);
   },
 
@@ -9945,7 +11214,8 @@ Channel = Class.create({
    **/
   update: function(device, data)
   {
-    var deviceType = device.deviceType;
+    var deviceType = device.deviceType,
+     chnMultiMode;
 
     if ((device) && (data))
     {
@@ -9974,6 +11244,7 @@ Channel = Class.create({
       this.isReadable = data["isReadable"];      
       this.isWritable = data["isWritable"];      
       this.isEventable = data["isEventable"];
+      this.isInternal = data["isInternal"]
 
       if (typeof data["mode_multi_mode"] != "undefined") {
         this.multiMode = data["mode_multi_mode"];
@@ -9982,6 +11253,14 @@ Channel = Class.create({
           this.multiMode = this.changedMultiMode;
         }
       }
+
+      if ((ConfigData.isPresent) && (this.channelType == "MULTI_MODE_INPUT_TRANSMITTER")) {
+        if (! isNaN(this.multiMode)) {
+          data.multiMode = this.multiMode;
+          homematic("Interface.setMetadata", {"objectId": data.id, "dataId": "channelMode", "value": this.multiMode});
+        }
+      }
+
       this.isUsable = (this.isWritable && data["isUsable"]);
       this.thumbnailHTML = deviceType.getThumbnailHTML(this.index);
       this.imageHTML = deviceType.getImageHTML(this.index);
@@ -9996,7 +11275,7 @@ Channel = Class.create({
   },
 
   m_extendName: function() {
-    var ext = getExtendedDescription({"deviceType":this.typeName,"channelType": this.channelType,"channelID": this.id, "channelIndex" : this.index, "isVisible" : this.isVisible, "multiMode" : this.multiMode});
+    var ext = getExtendedDescription({"deviceType":this.typeName,"channelType": this.channelType,"channelID": this.id, "channelAddress": this.address,"channelIndex" : this.index, "isVisible" : this.isVisible, "multiMode" : this.multiMode});
     if (ext.length > 0) {
       this.nameExtention += "<br/>" + ext;
     }
@@ -10052,6 +11331,7 @@ Channel = Class.create({
           "deviceType": this.typeName,
           "channelType": this.virtChannelType,
           "channelID": this.id,
+          "channelAddress": this.address,
           "channelIndex": this.index,
           "isVisible": this.isVisible
         });
@@ -10480,6 +11760,7 @@ Device = Class.create({
 
       this.interfaceName = data["interface"];
       this.isReadyConfig = data["isReady"];
+      this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
       this.thumbnailHTML = deviceType.getThumbnailHTML();
       this.imageHTML = deviceType.getImageHTML();
       this.deviceType = deviceType;
@@ -10538,6 +11819,162 @@ Device = Class.create({
   },
   
   /**
+   * Startet die Aktualisierung der Werte des Gerätestatus
+   **/
+  updateStatus:function(deviceStatus, rssiListHmRF)
+  {
+    // catch DUTY_CYCLE or DUTYCYCLE
+    if (typeof(deviceStatus.DUTY_CYCLE) !== "undefined")
+      this.DUTY_CYCLE = !!+deviceStatus.DUTY_CYCLE;
+    if (typeof(deviceStatus.DUTYCYCLE) !== "undefined")
+      this.DUTY_CYCLE = !!+deviceStatus.DUTYCYCLE;
+
+    // catch OPERATING_VOLTAGE
+    if (typeof(deviceStatus.OPERATING_VOLTAGE) !== "undefined")
+      this.OPERATING_VOLTAGE = deviceStatus.OPERATING_VOLTAGE;
+
+    // catch SABOTAGE
+    if (typeof(deviceStatus.SABOTAGE) !== "undefined")
+      this.SABOTAGE = !!+deviceStatus.SABOTAGE;
+
+    // catch UNREACH
+    if (typeof(deviceStatus.UNREACH) !== "undefined")
+      this.UNREACH = !!+deviceStatus.UNREACH;
+
+    // catch ERROR_OVERHEAT
+    if (typeof(deviceStatus.ERROR_OVERHEAT) !== "undefined")
+      this.ERROR_OVERHEAT = !!+deviceStatus.ERROR_OVERHEAT;
+
+    // catch LOWBAT or LOW_BAT
+    if (typeof(deviceStatus.LOWBAT) !== "undefined")
+      this.LOWBAT = !!+deviceStatus.LOWBAT;
+    if (typeof(deviceStatus.LOW_BAT) !== "undefined")
+      this.LOWBAT = !!+deviceStatus.LOW_BAT;
+
+    // catch CONFIG_PENDING
+    if (typeof(deviceStatus.CONFIG_PENDING) !== "undefined")
+      this.CONFIG_PENDING = !!+deviceStatus.CONFIG_PENDING;
+
+    // catch UPDATE_PENDING
+    if (typeof(deviceStatus.UPDATE_PENDING) !== "undefined")
+      this.UPDATE_PENDING = !!+deviceStatus.UPDATE_PENDING;
+
+    // catch RSSI_DEVICE and RSSI_PEER
+    // in case of a BidCos-RF device we take the RSSI
+    // values fron the supplied rssiListHmRF
+    if (this.interfaceName === 'BidCos-RF')
+    {
+      if (rssiListHmRF !== null)
+      {
+        var address = this.address;
+        var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
+
+        if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
+            rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
+        {
+          var rssiData = rssiInfo.partner[0].rssiData;
+          this.RSSI_DEVICE = rssiData[0];
+          this.RSSI_PEER = rssiData[1];
+          if(this.RSSI_DEVICE === 65536)
+            this.RSSI_DEVICE = -65535;
+          if(this.RSSI_PEER === 65536)
+            this.RSSI_PEER = -65535;
+        }
+      }
+    }
+    else
+    {
+      if (typeof(deviceStatus.RSSI_DEVICE) !== "undefined")
+        this.RSSI_DEVICE = deviceStatus.RSSI_DEVICE;
+
+      if (typeof(deviceStatus.RSSI_PEER) !== "undefined")
+        this.RSSI_PEER = deviceStatus.RSSI_PEER;
+    }
+
+    // update/calculate the web colors for displaying
+    // the RSSI values like in devconfig
+    if (this.RSSI_DEVICE !== null || this.RSSI_PEER !== null)
+      this.updateRssiColors();
+
+    // now we update the table cell with a pregenerated HTML
+    var cell = document.getElementById('DeviceStatus' + this.id);
+    if (cell !== null && typeof(cell) !== 'undefined')
+    {
+      var html = '';
+
+      if (this.enabledServiceMsg === false)
+        html += '<span style="background-color: #FFFF00;">NO&nbsp;SERVICEMSG</span><br/>';
+
+      if (this.CONFIG_PENDING === true)
+        html += '<span style="background-color: #FFFF00;">CONFIG</span><br/>';
+
+      if (this.UPDATE_PENDING === true)
+        html += '<span style="background-color: #FFFF00;">UPDATE</span><br/>';
+
+      if (this.LOWBAT === true)
+        html += '<span style="background-color: #FFFF00;">LOWBAT</span><br/>';
+
+      if (this.UNREACH === true)
+        html += '<span style="background-color: #FFFF00;">UNREACH</span><br/>';
+
+      if (this.ERROR_OVERHEAT === true)
+        html += '<span style="background-color: #FF0000;">OVERHEAT</span><br/>';
+
+      if (this.SABOTAGE === true)
+        html += '<span style="background-color: #FF0000;">SABOTAGE</span><br/>';
+
+      if (this.OPERATING_VOLTAGE && parseFloat(this.OPERATING_VOLTAGE) > 0)
+        html += parseFloat(this.OPERATING_VOLTAGE).toFixed(1) + '&nbsp;V<br/>';
+
+      if (this.RSSI_DEVICE && this.RSSI_DEVICE > -65535)
+        html += this.RSSI_DEVICE + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiDeviceColor + '">&darr;</span><br/>';
+
+      if (this.RSSI_PEER && this.RSSI_PEER > -65535)
+        html += this.RSSI_PEER + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiPeerColor + '">&uarr;</span><br/>';
+
+      if (this.DUTY_CYCLE === true)
+        html += '<span style="background-color: #FFFF00;">DUTYCYCLE</span><br/>';
+
+      cell.innerHTML = html;
+    }
+  },
+
+  /**
+   * Startet die Aktualisierung der RSSI Werte
+   **/
+  updateRssiColors:function()
+  {
+    var getColorCode = function(rssi)
+    {
+      var RSSI_BAD = -120.0;
+      var RSSI_MEDIUM = -100.0;
+      var RSSI_GOOD = -20.0;
+
+      var rssi_color = function(lower_bound, upper_bound, rssi)
+      {
+        var result = 256 * (rssi - lower_bound) / (upper_bound - lower_bound);
+        if (result < 0)   result = 0;
+        if (result > 255) result = 255;
+        return Math.round(result);
+      };
+
+      if (rssi > -65535)
+      {
+        var red = rssi_color(RSSI_GOOD, RSSI_MEDIUM, rssi);
+        var green = rssi_color(RSSI_BAD, RSSI_MEDIUM, rssi);
+        return "#" + ('00'+(red).toString(16)).substr(-2)
+                   + ('00'+(green).toString(16)).substr(-2)
+                   + "00";
+      }
+      else
+        return "#000000";
+    };
+
+    this.rssiDeviceColor = getColorCode(this.RSSI_DEVICE);
+    this.rssiPeerColor = getColorCode(this.RSSI_PEER);
+  },
+
+  /**
    * Legt den Namen des Geräts fest.
    **/
   setName: function(name)
@@ -10565,6 +12002,23 @@ Device = Class.create({
   setLogging: function(isLogged)
   {
   },  
+
+  /**
+   * Legt fest, ob das Geraet Servicemeldungen auslöst oder nicht
+   **/
+  setEnabledServiceMsg: function(enabledServiceMsg)
+  {
+    if (this.enabledServiceMsg != enabledServiceMsg)
+    {
+      var result = homematic("Device.setEnabledServiceMsg", {id: this.id, isEnabled: enabledServiceMsg});
+      if (typeof(result) == "boolean" && result === true)
+      {
+        this.enabledServiceMsg = enabledServiceMsg;
+      }
+    }
+    
+    return this.enabledServiceMsg;
+  },
 
   setDeviceInputCheck: function() {
     this.deviceInputCheck = true;
@@ -10924,6 +12378,36 @@ DeviceList = Singleton.create({
   */
   },
   
+  /**
+   * Startet die Aktualisierung des Status aller Geräte.
+   **/
+  updateDeviceStatus:function()
+  {
+    var _this_ = this;
+
+    homematic("Interface.rssiInfo", {"interface": "BidCos-RF"}, function(rssiInfo) {
+      for (var id in _this_.devices)
+      {
+        var device = _this_.devices[id];
+        if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
+        {
+          homematic("Device.listStatus", {"id": device.id, "address": device.address, "interface": device.interfaceName}, function(data) {
+            if (data !== null && typeof(data) !== 'undefined')
+            {
+              var id = data["ID"];
+              if (id !== null && typeof(id) !== 'undefined')
+              {
+                var device = _this_.devices[id];
+                if (device !== null && typeof(device) !== 'undefined')
+                  device.updateStatus(data, rssiInfo);
+              }
+            }
+          });
+        }
+      }
+    });
+  },
+
   /**
    * Startet die Akualisierung eines Geräts.
    **/
@@ -11514,7 +12998,12 @@ MessageBox = Class.create({
     this.m_content.setText(text);
     return this;
   },
-  
+
+  centerText: function()
+  {
+    jQuery(".UIText").addClass("alignCenter");
+  },
+
   setHtml: function(html)
   {
     this.m_content.setHtml(html);
@@ -11577,6 +13066,18 @@ MessageBox.show = function(title, content, callback, width, height, id, barGraph
 
 };
 
+MessageBox.setText = function(txt) {
+  this.msgBox.setText(txt);
+};
+
+MessageBox.centerText = function() {
+  this.msgBox.centerText();
+};
+
+MessageBox.setHtml = function(html) {
+  this.msgBox.setHtml(html);
+};
+
 MessageBox.close = function() {
   this.msgBox.ok();
 };
@@ -11621,16 +13122,16 @@ YesNoDialog = Class.create({
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
     
-    var contentElement = document.createElement("div");
-    contentElement.className = "YesNoDialogContent";
+    this.contentElement = document.createElement("div");
+    this.contentElement.className = "YesNoDialogContent";
 
     if (this.m_contentType == "html") {
-      contentElement.innerHTML = content;
+      this.contentElement.innerHTML = content;
     } else {
-      contentElement.appendChild(document.createTextNode(content));
+      this.contentElement.appendChild(document.createTextNode(content));
     }
 
-    contentWrapper.appendChild(contentElement);
+    contentWrapper.appendChild(this.contentElement);
     
     dialog.appendChild(contentWrapper);
 
@@ -11719,6 +13220,11 @@ YesNoDialog = Class.create({
 
   resetHeight: function() {
     this.setHeight();
+  },
+
+  // Here we can change the default class of the content element
+  setContentClass: function (cl) {
+    this.contentElement.className = cl;
   },
 
   setWidth: function(dlgWidth) {
@@ -12118,29 +13624,34 @@ ChannelChooser = Singleton.create({
 
   filterHmIPChannels4ProgramConditions: function(channel, arChannels) {
     var channelTypeName = channel.typeName.toLowerCase(),
-    oDevice, oMaintChannel, deviceMode, endOfScreens = false;
+      oDevice, oMaintChannel, deviceMode, endOfScreens = false;
 
     conInfo("filterHmIPChannels4ProgramConditions");
     // If the channel is visible and no KEY_TRANSCEIVER or *_WEEK_PROFILE then show the channel
-    if (channel.isVisible
+    if (channel
       && (channel.channelType != "KEY_TRANSCEIVER")
       && (channel.channelType != "UNIVERSAL_LIGHT_RECEIVER")
       && (channel.channelType != "DISPLAY_INPUT_TRANSMITTER")
       && (channel.channelType != "DISPLAY_LEVEL_INPUT_TRANSMITTER")
       && (channel.channelType != "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")
+      && (channel.channelType != "MULTI_MODE_INPUT_TRANSMITTER")
       && (channel.channelType.indexOf("_WEEK_PROFILE") == -1)
-      ) { arChannels.push(channel);}
+    ) {
+      arChannels.push(channel);
+    }
 
     // If the channel is a KEY_TRANSCEIVER and the device type no HmIP-PS / PSM (-IT/-CH/-PE/-UK) / PDT /PCBS then show the channel
     // A key press of the internal button doesn't work for the above-named devices
     if ((channel.channelType == "KEY_TRANSCEIVER")
-      && channel.isVisible
+      && channel
       && (channelTypeName != "hmip-ps")
       && (channelTypeName.indexOf("hmip-psm") == -1)
       && (channelTypeName != "hmip-pdt")
       && (channelTypeName != "hmip-pdt-uk")
       && (channelTypeName != "hmip-pcbs")
-      ) {arChannels.push(channel);}
+    ) {
+      arChannels.push(channel);
+    }
 
     if (channel.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
       if (channelTypeName == "hmip-rgbw") {
@@ -12173,24 +13684,24 @@ ChannelChooser = Singleton.create({
       if (channelTypeName == "hmip-drg-dali") {
         if ((channel.index != 0) && (channel.index <= 32)) {
           // Dali channels 1 - 32
-        if (this.noMoreDaliChannels == false) {
-          chnDescription = homematic("Interface.getParamset", {
-            "interface": "HmIP-RF",
-            "address": channel.address,
-            "paramsetKey": "MASTER"
-          });
+          if (this.noMoreDaliChannels == false) {
+            chnDescription = homematic("Interface.getParamset", {
+              "interface": "HmIP-RF",
+              "address": channel.address,
+              "paramsetKey": "MASTER"
+            });
 
-          if (parseInt(chnDescription["DALI_ADDRESS"]) != 255) {
-            arChannels.push(channel);
-            // Store UNIVERSAL_LIGHT_MAX_CAPABILITIES as meta data
-            // Because the user might have connected another DALI device to this channel we must set the meta data each time
-            //this is not necessary anymore - this.setMetaData(channel.id, "maxCap", chnDescription["UNIVERSAL_LIGHT_MAX_CAPABILITIES"]);
-           } else {
-            this.noMoreDaliChannels = true;
+            if (parseInt(chnDescription["DALI_ADDRESS"]) != 255) {
+              arChannels.push(channel);
+              // Store UNIVERSAL_LIGHT_MAX_CAPABILITIES as meta data
+              // Because the user might have connected another DALI device to this channel we must set the meta data each time
+              //this is not necessary anymore - this.setMetaData(channel.id, "maxCap", chnDescription["UNIVERSAL_LIGHT_MAX_CAPABILITIES"]);
+            } else {
+              this.noMoreDaliChannels = true;
+            }
           }
-        }
 
-        } else if ((channel.index == 0) || (channel.id >=33)) {
+        } else if ((channel.index == 0) || (channel.id >= 33)) {
           // Maintenance and group channels
           arChannels.push(channel);
         }
@@ -12198,7 +13709,8 @@ ChannelChooser = Singleton.create({
     }
 
     if (((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) && ((channelTypeName == "hmipw-wgd") || (channelTypeName == "hmipw-wgd-pl"))) {
-      var  wgdScreenOrder, screenEndID = "END",  counter, chnDescription, curDevice, tilesA = [1,3,7], tilesB = [0,1], loop,
+      var wgdScreenOrder, screenEndID = "END", counter, chnDescription, curDevice, tilesA = [1, 3, 7], tilesB = [0, 1],
+        loop,
         self = this;
       if (channel.index == 41) {
         arChannels.push(channel);
@@ -12209,25 +13721,37 @@ ChannelChooser = Singleton.create({
           oDevice = DeviceList.getDeviceByAddress(channel.address.split(":")[0]); // The device stores the screen order
           wgdScreenOrder = homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "screenOrder"});
           this.arWGDScreenOrder = wgdScreenOrder.split(",");
-          this.WGDStartChannelPerScreen = (this.arWGDScreenOrder.length < 10) ? {0: 1, 1: 9, 2: 17, 3: 25, 4: 33} : {0: 1, 1: 9, 2: 17, 3: 25, 4: 33, 5: 42, 6: 44, 7: 46, 8: 48, 9: 50};
+          this.WGDStartChannelPerScreen = (this.arWGDScreenOrder.length < 10) ? {
+            0: 1,
+            1: 9,
+            2: 17,
+            3: 25,
+            4: 33
+          } : {0: 1, 1: 9, 2: 17, 3: 25, 4: 33, 5: 42, 6: 44, 7: 46, 8: 48, 9: 50};
           this.WGDChannelInUse = [];
           this.arWGDTiles = [];
 
           // Get number of tiles
-          chnDescription = homematic("Interface.getParamset", {"interface": "HmIP-RF", "address": curDevice + ":0", "paramsetKey": "MASTER"});
+          chnDescription = homematic("Interface.getParamset", {
+            "interface": "HmIP-RF",
+            "address": curDevice + ":0",
+            "paramsetKey": "MASTER"
+          });
           loop = ((this.arWGDScreenOrder.length < 10)) ? 5 : 10;
 
-          for(var loopx = 1; loopx <= loop; loopx++) {
+          for (var loopx = 1; loopx <= loop; loopx++) {
             this.arWGDTiles.push(chnDescription["SCREEN_LAYOUT_TILE_LAYOUT_" + loopx]);
           }
 
-          jQuery.each(this.arWGDScreenOrder, function(index,screen) {
-            if ((! endOfScreens) && (screen != screenEndID)) {
+          jQuery.each(this.arWGDScreenOrder, function (index, screen) {
+            if ((!endOfScreens) && (screen != screenEndID)) {
               counter = (screen <= 4) ? tilesA[self.arWGDTiles[screen]] : tilesB[self.arWGDTiles[screen]];
               for (loop = self.WGDStartChannelPerScreen[screen]; loop <= (self.WGDStartChannelPerScreen[screen] + counter); loop++) {
                 self.WGDChannelInUse.push(loop);
               }
-            } else {endOfScreens = true;} // return false doesn't work because of a problem with the build-system
+            } else {
+              endOfScreens = true;
+            } // return false doesn't work because of a problem with the build-system
           });
         }
 
@@ -12236,7 +13760,33 @@ ChannelChooser = Singleton.create({
         }
       }
     }
-    return arChannels;
+
+    if (channel.channelType == "MULTI_MODE_INPUT_TRANSMITTER") {
+      if (channelTypeName == "elv-sh-bm-s") {
+        var channelMode = parseInt(homematic("Interface.getMetadata", {
+          "objectId": channel.id,
+          "dataId": "channelMode"
+        }));
+        if (channelMode != 0) {
+          arChannels.push(channel);
+        }
+      } else if ((channelTypeName == "hmip-flc") || (channelTypeName == "hmip-fdc")) {
+        var channelMode = parseInt(homematic("Interface.getMasterValue", {
+          "interface": this.HmIPIdentifier,
+          "address": channel.address,
+          "valueKey": "CHANNEL_OPERATION_MODE"
+        }));
+
+        if (channelMode != 0) {
+          arChannels.push(channel);
+        }
+
+      } else {
+        arChannels.push(channel);
+      }
+      return arChannels;
+    }
+
   },
 
   filterHmIPChannels4ProgramActivities: function(channel, arChannels) {
@@ -12244,7 +13794,7 @@ ChannelChooser = Singleton.create({
     var channelTypeName = channel.typeName.toLowerCase(),
     oMaintChannel, deviceMode, endOfScreens = false;
 
-    if (channel.isVisible) {
+    if (channel) {
       if (channelTypeName == "hmip-wkp") {
         if ((channel.channelType == "MAINTENANCE") || ((channel.channelType == "ACCESS_TRANSCEIVER") && (channel.index % 2 != 0))) {
           arChannels.push(channel);
@@ -12303,6 +13853,11 @@ ChannelChooser = Singleton.create({
           }
         }
 
+        if ((channelTypeName == "hmip-lsc") && (channel.index == 1)) {
+          arChannels.push(channel);
+        }
+
+
       } else if (((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) && ((channelTypeName == "hmipw-wgd") || (channelTypeName == "hmipw-wgd-pl"))) {
         var  wgdScreenOrder, screenEndID = "END",  counter, chnDescription, curDevice, tilesA = [1,3,7], tilesB = [0,1], loop,
           self = this;
@@ -12342,7 +13897,9 @@ ChannelChooser = Singleton.create({
           }
         }
       } else {
-        arChannels.push(channel);
+        if (channelTypeName != "hmip-esi") {
+          arChannels.push(channel);
+        }
       }
     }
     return arChannels;
@@ -12541,9 +14098,7 @@ ChannelChooser = Singleton.create({
       //channels         : this.filter(this.channels)
     });
 
-    if (! userIsNoExpert) {
-      jQuery(".j_expertChannel").show();
-    }
+    jQuery(".j_expertChannel").show();
 
     translateJSTemplate("#ChannelChooserDialog");
     translatePage(".j_rooms, .j_functions");
@@ -12552,9 +14107,9 @@ ChannelChooser = Singleton.create({
     jQuery(".j_extChnDescr").each(function(index) {
       try {
         var elmDescr = jQuery(this).text().split("_"),
-        deviceType = elmDescr[0],
         channelAddress = elmDescr[1],
         ch = DeviceList.getChannelByAddress(channelAddress),
+        deviceType = ch.deviceType.id,
         j_descrElem = jQuery(this);
 
         if ((ch.channelType != "MULTI_MODE_INPUT_TRANSMITTER") && (deviceType != "HmIP-WKP")) {
@@ -12586,6 +14141,8 @@ ChannelChooser = Singleton.create({
         conInfo(e);
       }
     });
+
+    DeviceList.updateDeviceStatus();
   }
 });
 /**
@@ -12728,6 +14285,11 @@ MultiChannelChooser = Singleton.create({
     }
 
     if (channel.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+
+      if (channelTypeName == "hmip-lsc") {
+        arChannels.push((channel));
+      }
+
       if (channelTypeName == "hmip-rgbw") {
         oMaintChannel = DeviceList.getChannelByAddress(channel.address.split(":")[0] + ":0"); // The maintenance channel stores the deviceMode
         deviceMode = parseInt(homematic("Interface.getMetadata", {
@@ -12794,9 +14356,7 @@ MultiChannelChooser = Singleton.create({
       var self = this;
       if (this.match(channel)) {
         if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
-          if (channel.index > 0) {
-            this.filterHmIPChannels(channel, result);
-          }
+          this.filterHmIPChannels(channel, result);
         } else {
           result.push(channel);
         }
@@ -13002,9 +14562,7 @@ MultiChannelChooser = Singleton.create({
       channels         : this.filter(this.channels)
     });
 
-    if (! userIsNoExpert) {
-      jQuery(".j_expertChannel").show();
-    }
+    jQuery(".j_expertChannel").show();
 
     // Add extended channel description and hide the second user channel
     jQuery(".j_extChnDescr").each(function(index){
@@ -13038,6 +14596,8 @@ MultiChannelChooser = Singleton.create({
 
     translateJSTemplate("#MultiChannelChooserDialog");
     translatePage(".MultiChannelChooserRow");
+
+    DeviceList.updateDeviceStatus();
   }
     
 });
@@ -13141,7 +14701,8 @@ ChannelConfigDialog = Singleton.create({
   {
     if (isTextAllowed($(this.NAME_ID).value))
     {
-      var channel = this.channel;
+      var channel = this.channel,
+        arRooms = [], arSubSection = [];
     
       channel.setName($(this.NAME_ID).value);
       channel.setVisibility($(this.VISIBLE_ID).checked);
@@ -13151,21 +14712,30 @@ ChannelConfigDialog = Singleton.create({
       channel.setUsability($(this.USABLE_ID).checked);
       channel.setLogging($(this.LOGGED_ID).checked);
       channel.setMode($(this.MODE_ID).options[$(this.MODE_ID).options.selectedIndex].value);
-    
-      $A($(this.ROOMLIST_ID).values).each(function(item) {
-        var room = RoomList.get(item.value);
 
-        if (item.checked === true) { room.addChannel(channel.id, true); }
-        else                       { room.removeChannel(channel.id, true); }
-      }, this);
-    
-      $A($(this.SUBSECTIONLIST_ID).values).each(function(item) {
-        var subsection = SubsectionList.get(item.value);
-      
-        if (item.checked === true) { subsection.addChannel(channel.id, true); }
-        else                       { subsection.removeChannel(channel.id, true); }
-      }, this);
-    
+      arRooms = $A($(this.ROOMLIST_ID));
+
+      // SPHM-1153
+      jQuery(arRooms).each(function(index,_room) {
+        var room = RoomList.get(_room.value);
+        if (jQuery(_room).prop("checked")) {
+          room.addChannel(channel.id, true);
+        } else {
+          room.removeChannel(channel.id, true);
+        }
+      });
+
+      arSubSection = $A($(this.SUBSECTIONLIST_ID));
+
+      // SPHM-1153
+      jQuery(arSubSection).each(function(index,_subSection) {
+        var subsection = SubsectionList.get(_subSection.value);
+        if (jQuery(_subSection).prop("checked")) {
+          subsection.addChannel(channel.id, true);
+        } else {
+          subsection.removeChannel(channel.id, true);
+        }
+      });
       this.close(this.RESULT_OK);
     }
   },
@@ -13266,10 +14836,13 @@ ChannelConfigDialog = Singleton.create({
 DeviceConfigDialog = Singleton.create({
   LAYER_ID: "DeviceConfigDialogLayer",
   NAME_ID: "DeviceConfigDialog_DeviceName",
+  SEPARATOR_ID: "DeviceConfigDialog_DeviceChannelsRenameSeparator",
   USABLE_ID: "DeviceConfigDialog_isUsable",
   VISIBLE_ID: "DeviceConfigDialog_isVisible",
   LOGGED_ID: "DeviceConfigDialog_isLogged",
+  SERVICEMSG_ID: "DeviceConfigDialog_enabledServiceMsg",
   TEST_RESULT_ID: "DeviceConfigDialogTestResult",
+  RENAME_OWN_ID: "DeviceConfigDialog_renameChannelIncludingOwn",
   RESULT_OK: 1,
   RESULT_ABORT: 0,
   POLL_INTERVAL: 3,
@@ -13294,6 +14867,7 @@ DeviceConfigDialog = Singleton.create({
     this.isVisibilityChanged = false;
     this.isUsabilityChanged = false;
     this.isLoggingChanged = false;   
+    this.enabledServiceMsgChanged = false;
     this.callback = callback;
     this.layer = document.createElement("div");
     this.layer.id = this.LAYER_ID;
@@ -13316,6 +14890,9 @@ DeviceConfigDialog = Singleton.create({
       this.__hideLogging();
     }
     translateJSTemplate("#DeviceConfigDialog");
+	jQuery("#DeviceConfigDialogTestHintImg").attr('title', translateKey("generalDeviceConfigHintTooltip"));
+	jQuery("#DeviceConfigDialogRenameChannelButtonHintImg").attr('title', translateKey("generalDeviceRenameChannelHintTooltip"));
+	jQuery("#DeviceConfigDialogRenameIncludingOwnHintImg").attr('title', translateKey("generalDeviceRenameChannelIncludingOwnHint"));
   },
 
   __hideFunctionTest: function() {
@@ -13360,6 +14937,8 @@ DeviceConfigDialog = Singleton.create({
         if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
         if (this.isLoggingChanged) { channel.setLogging(isLogged); }
       }, this);
+      var enabledServiceMsg = $(this.SERVICEMSG_ID).checked;
+      if (this.enabledServiceMsgChanged) { this.device.setEnabledServiceMsg(enabledServiceMsg); }
 
       this.close(this.RESULT_OK);
     }
@@ -13371,6 +14950,34 @@ DeviceConfigDialog = Singleton.create({
   abort: function()
   {
     this.close(this.RESULT_ABORT);
+  },
+  
+  /**
+  * Benennt alle Channel des Device um
+  **/
+
+  ready: function()
+  {
+    this.ok();
+  },
+  
+  renameChannels: function() {
+    if (confirm("Alle Kanäle umbenennen?")) {
+      var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;
+
+      this.device.channels.each(function(channel) {
+        var chNumber = channel.address.split(':')[1];
+        var origChName = this.device.name+":"+chNumber;
+
+        // Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
+        if (channel.name !== origChName && renameOwnChannelNames === false) return true;
+
+        var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
+        homematic("Channel.setName", {id: channel.id, name: chName});
+        channel.setName(chName);
+      }, this);
+      this.ok();
+    }
   },
   
   /**
@@ -13415,6 +15022,164 @@ DeviceConfigDialog = Singleton.create({
 /**
  * deletedevicedialog.js
  **/
+
+hasDeviceInternalProgramOrSysvar  = function(device) {
+  var result = {"id": 0, "address" : "", "type": "" };
+  try {
+    jQuery.each(device.channels, function(index, channel) {
+      if (
+        (channel.channelType == "POWERMETER")
+        || (channel.channelType == "POWERMETER_IEC1")
+        || (channel.channelType == "ENERGIE_METER_TRANSMITTER")
+        || (channel.channelType == "WEATHER_TRANSMIT" /*HmIP-SWO*/)
+        || (channel.channelType == "KEY_TRANSCEIVER") /*HnmIP-MOD-RC8*/
+      ) {
+        result.id = channel.id;
+        result.address = channel.address;
+        result.type = channel.channelType;
+        return; // leave each loop
+      }
+    });
+  } catch(e) {}
+
+  return result;
+};
+
+deleteProgSysvarPOWERMETER = function(chId, chAddress, devLabel) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_RESET"}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
+            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chId + "_" + chAddress}, function () {
+                homematic("Program.deleteProgramByName", {"name": "prgSetEnergyValuesAtMidnight" + chId}, function () {
+                  if ((typeof devLabel == "undefined") || (devLabel != "hmip-psmco")) {
+                    conInfo(chAddress + " ProgSysvarPOWERMETER deleted - next: save ObjectModel");
+                    window.setTimeout(function () {
+                      saveObjectModel();
+                    }, 5000);
+                  } else {
+                    deleteProgSysvarPOWERMETER_FeedIn(chId, chAddress);
+                  }
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarPOWERMETER_FeedIn = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterFeedIn_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldValFeedIn_" + chId}, function () {
+        //homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_RESET"}, function () {
+          //homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
+            //homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
+            homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterFeedIn_" + chId + "_" + chAddress}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgSetEnergyValuesAtMidnightFeedIn" + chId}, function () {
+                conInfo(chAddress + " ProgSysvarPOWERMETER + FeedIn deleted - next: save ObjectModel");
+                window.setTimeout(function(){saveObjectModel();},5000);
+              });
+            });
+            //});
+          //});
+        //});
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarPOWERMETER_ESI = function(device) {
+  try {
+    jQuery.each(device.channels, function (index, chn) {
+      if (chn.index >= 1) {
+        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chn.id + "_" + chn.address});
+        homematic("Program.deleteProgramByName", {"name": "prgGasCounter_" + chn.id + "_" + chn.address});
+        homematic("Program.deleteProgramByName", {"name": "prgSetEnergyValuesAtMidnight" + chn.id});
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chn.id + "_" + chn.address});
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chn.id});
+      }
+    });
+  } catch(e) {console.log(e);}
+
+  conInfo(device.typeName + ": All relevant programs and sysvars deleted - next: save ObjectModel");
+  window.setTimeout(function(){saveObjectModel();},5000);
+};
+
+
+deleteProgSysvarPOWERMETER_IGL = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGasOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_RESET"}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
+            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterGAS_" + chId + "_" + chAddress}, function () {
+                conInfo(chAddress + " ProgSysvarPOWERMETER_IGL deleted - next: ProgSysvarPOWERMETER");
+                deleteProgSysvarPOWERMETER(chId, chAddress);
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarPOWERMETER_IEC = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIECOldVal_" + chId}, function () {
+        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
+          conInfo(chAddress + " ProgSysvarPOWERMETER_IEC deleted - next: ProgSysvarPOWERMETER_IGL");
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarHmIPWeatherTransmitRainSunshine = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterYesterday_" + chId}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterToday_" + chId}, function () {
+            homematic("Program.deleteProgramByName", {"name": "prgRainCounter_" + chId + "_" + chAddress}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgDailySunshineRainCounter_" + chId}, function () {
+                conInfo(chAddress + "prgDailySunshineRainCounter and prgHmIPRainCounter deleted - next: delete prgHmIPSunshineCounter");
+                deleteProgSysvarHmIPWeatherTransmitSunshine(chId,chAddress);
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarHmIPWeatherTransmitSunshine = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterYesterday_" + chId}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterToday_" + chId}, function () {
+            homematic("Program.deleteProgramByName", {"name": "prgSunshineCounter_" + chId + "_" + chAddress}, function () {
+              conInfo(chAddress + " prgHmIPSunshineCounter deleted - next: save ObjectModel");
+              window.setTimeout(function () {
+                saveObjectModel();
+              }, 5000);
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
 
 
 /**
@@ -13696,6 +15461,37 @@ DeleteDeviceWindow = Class.create({
     Layer.add(this.m_layer);
 
     device.remove(this.m_flags, onResultHandler);
+
+    if (flags == 5) {
+      // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
+      // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
+      // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
+        chId = oChnIdAndAddress.id,
+        chAddress= oChnIdAndAddress.address;
+      if (chId != 0) {
+        if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress, this.m_device.typeName.toLowerCase());
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
+        } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+        } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+        } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+        } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
+          this.m_deleteSysvarHmIPModRC8();
+        }*/
+      } else if ((typeof this.m_device.typeName != "undefined") && (this.m_device.typeName.toLowerCase() == "hmipw-drbl4")) {
+        this.m_deleteMetaDataHmIPWBlind();
+      }
+    }
+
   },
   
   m_onResult: function(result, error)
@@ -13848,7 +15644,37 @@ ErrorOnDeleteWindow = Class.create({
     }
 
     Layer.remove(this.m_layer);
-    
+
+    if (result == null && this.m_flags == 1 && this.m_errorCode == 507) {
+      // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
+      // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
+      // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
+        chId = oChnIdAndAddress.id,
+        chAddress= oChnIdAndAddress.address;
+      if (chId != 0) {
+        if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress, this.m_device.typeName.toLowerCase());
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
+        } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+        } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+        } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+        } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
+          this.m_deleteSysvarHmIPModRC8();
+        }*/
+      } else if ((typeof this.m_device.typeName != "undefined") && (this.m_device.typeName.toLowerCase() == "hmipw-drbl4")) {
+        this.m_deleteMetaDataHmIPWBlind();
+      }
+    }
+
     if (this.m_callback) { this.m_callback(result); }
   },
   
@@ -13871,21 +15697,6 @@ ErrorOnDeleteWindow = Class.create({
 
 ErrorOnDeleteWindow.CONTENT_WIDTH = 400;
 ErrorOnDeleteWindow.CONTENT_HEIGHT = 260;
-/*
-ErrorOnDeleteWindow.TITLE = translateKey("ErrorOnDeleteWindowTitle");
-ErrorOnDeleteWindow.DELETE_OPTIONS = translateKey("ErrorOnDeleteWindowDeleteOptions");
-ErrorOnDeleteWindow.RETRY = translateKey("ErrorOnDeleteWindowRetry");
-ErrorOnDeleteWindow.RETRY_DESCRIPTION = translateKey("ErrorOnDeleteWindowRetryDescription");
-ErrorOnDeleteWindow.DEFER = translateKey("ErrorOnDeleteWindowDefer");
-ErrorOnDeleteWindow.DEFER_DESCRIPTION = translateKey("ErrorOnDeleteWindowDeferDescription");
-ErrorOnDeleteWindow.FORCE = translateKey("ErrorOnDeleteWindowForce");
-ErrorOnDeleteWindow.FORCE_DESCRIPTION = translateKey("ErrorOnDeleteWindowForceDescription");
-ErrorOnDeleteWindow.DEVICE_NOT_REACHABLE = translateKey("ErrorOnDeleteWindowDeviceNotReachable");
-ErrorOnDeleteWindow.UNKNOWN_DEVICE = translateKey("ErrorOnDeleteWindowUnknownDevice");
-ErrorOnDeleteWindow.UKNOWN_ERROR = translateKey("ErrorOnDeleteWindowUnknownError");
-ErrorOnDeleteWindow.ABORT_BUTTON = translateKey("ErrorOnDeleteWindowAbortButton");
-ErrorOnDeleteWindow.DELETE_BUTTON = translateKey("ErrorOnDeleteWindowDeleteButton");
-*/
 
 /**
  * Dialogbox zum Löschen eines Geräts
@@ -13930,108 +15741,6 @@ DeleteDeviceDialog = Class.create({
     }
   },
 
-  m_hasDeviceInternalProgramOrSysvar: function() {
-    var result = {"id": 0, "address" : "", "type": "" };
-    try {
-      jQuery.each(this.m_device.channels, function(index, channel) {
-        if (
-          (channel.channelType == "POWERMETER")
-          || (channel.channelType == "POWERMETER_IEC1")
-          || (channel.channelType == "ENERGIE_METER_TRANSMITTER")
-          || (channel.channelType == "WEATHER_TRANSMIT" /*HmIP-SWO*/)
-          || (channel.channelType == "KEY_TRANSCEIVER") /*HnmIP-MOD-RC8*/
-          ) {
-          result.id = channel.id;
-          result.address = channel.address;
-          result.type = channel.channelType;
-          return; // leave each loop
-        }
-      });
-    } catch(e) {}
-
-    return result;
-  },
-
-  m_deleteProgSysvarPOWERMETER: function(chId, chAddress) {
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_RESET"}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
-            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
-              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chId + "_" + chAddress}, function () {
-                conInfo(chAddress + " ProgSysvarPOWERMETER deleted - next: save ObjectModel");
-                window.setTimeout(function(){saveObjectModel();},5000);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarPOWERMETER_IGL: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGasOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_RESET"}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
-            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
-              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterGAS_" + chId + "_" + chAddress}, function () {
-                conInfo(chAddress + " ProgSysvarPOWERMETER_IGL deleted - next: ProgSysvarPOWERMETER");
-                self.m_deleteProgSysvarPOWERMETER(chId, chAddress);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarPOWERMETER_IEC: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIECOldVal_" + chId}, function () {
-        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
-          conInfo(chAddress + " ProgSysvarPOWERMETER_IEC deleted - next: ProgSysvarPOWERMETER_IGL");
-          self.m_deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarHmIPWeatherTransmitRainSunshine: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterYesterday_" + chId}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterToday_" + chId}, function () {
-            homematic("Program.deleteProgramByName", {"name": "prgRainCounter_" + chId + "_" + chAddress}, function () {
-                homematic("Program.deleteProgramByName", {"name": "prgDailySunshineRainCounter_" + chId}, function () {
-                  conInfo(chAddress + "prgDailySunshineRainCounter and prgHmIPRainCounter deleted - next: delete prgHmIPSunshineCounter");
-                  self.m_deleteProgSysvarHmIPWeatherTransmitSunshine(chId,chAddress);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarHmIPWeatherTransmitSunshine: function(chId, chAddress) {
-    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterYesterday_" + chId}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterToday_" + chId}, function () {
-            homematic("Program.deleteProgramByName", {"name": "prgSunshineCounter_" + chId + "_" + chAddress}, function () {
-              conInfo(chAddress + " prgHmIPSunshineCounter deleted - next: save ObjectModel");
-              window.setTimeout(function(){saveObjectModel();},5000);
-            });
-          });
-        });
-      });
-    });
-  },
-
   m_deleteSysvarHmIPModRC8: function() {
     var numberOfKeyTransceiver = 8;
 
@@ -14067,20 +15776,24 @@ DeleteDeviceDialog = Class.create({
       // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
       // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
       // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
-      var oChnIdAndAddress = this.m_hasDeviceInternalProgramOrSysvar(),
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
         chId = oChnIdAndAddress.id,
         chAddress= oChnIdAndAddress.address;
       if (chId != 0) {
         if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
-          this.m_deleteProgSysvarPOWERMETER(chId, chAddress);
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress, this.m_device.typeName.toLowerCase());
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
         } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
-          this.m_deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
         } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
-          this.m_deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
         } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
-          this.m_deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
         } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
-          this.m_deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
         } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
           this.m_deleteSysvarHmIPModRC8();
         }*/
@@ -14186,8 +15899,8 @@ HMScriptExecutor = Class.create({
   {
     var screenWidth  = WebUI.getWidth();
     var screenHeight = WebUI.getHeight();
-    var frameWidth   = HMScriptExecutor.CONTENT_WIDTH;
-    var frameHeight  = HMScriptExecutor.CONTENT_HEIGHT;
+    var frameWidth   = parseInt(screenWidth * 0.8);
+    var frameHeight  = parseInt(screenHeight * 0.8);
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
 
@@ -14197,63 +15910,142 @@ HMScriptExecutor = Class.create({
     
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-    
-    this.m_input = new UI.Textarea()
-        .setPosition(5,25)
-        .setWidth(590)
-        .setHeight(200)
-        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");');
-    
-    this.m_output = new UI.Textarea()
-        .setPosition(5,250)
-        .setWidth(590)
-        .setHeight(200); 
-    
+
     this.m_frame = new UI.Frame(true)
       .setTitle(HMScriptExecutor.TITLE)
       .setContentSize(frameWidth, frameHeight)
       .setPosition(frameX, frameY)
       .add(new UI.Text()
-        .setPosition(5,5)
-        .setText(translateKey("dialogScriptExecuterLblInput"))
+        .setStyle('margin-left: 5px')
+        .setHtml('<b>' + translateKey("dialogScriptExecuterLblInput") + '</b>')
+        .setClass("")
       )
-      .add(this.m_input)
+      .add(new UI.Textarea()
+        .setID("code")
+        .setName("code")
+        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");')
+      )
       .add(new UI.Text()
-        .setPosition(5,230)
-        .setText(translateKey("dialogScriptExecuterLblOutput"))
+        .setStyle('margin-left: 5px')
+        .setHtml('<b>' + translateKey("dialogScriptExecuterLblOutput") + '</b>')
+        .setClass("")
       )
-      .add(this.m_output)
+      .add(new UI.Textarea()
+        .setID("output")
+        .setName("output")
+      )
       .add(new UI.Button()
-        .setPosition(5,455)
+        .setPosition(5, frameHeight-30)
         .setText(HMScriptExecutor.TEXT_RUN)
         .setAction(this.run, this)
       )
       .add(new UI.Button()
-        .setPosition(445, 455)
+        .setPosition(frameWidth-155, frameHeight-30)
         .setText(HMScriptExecutor.TEXT_CLOSE)
         .setAction(this.close, this)
       );
       
-      this.m_layer.appendChild(this.m_frame.getElement());
-      Layer.add(this.m_layer);
+    this.m_layer.appendChild(this.m_frame.getElement());
+    Layer.add(this.m_layer);
+
+    this.m_input = CodeMirror.fromTextArea(document.getElementById('code'), {
+      mode: "text/x-rega",
+      autofocus: true,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      lineWrapping: true,
+      lineNumbers: true,
+      foldGutter: true,
+      indentUnit: 2,
+      tabSize: 2,
+      indentWithTabs: false,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      extraKeys: {"Ctrl-Space": "autocomplete",
+                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+                  "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
+                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
+                  "Alt-F": "findPersistent",
+                  "Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Indent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentMore");
+                        return;
+                      }
+                    }
+                    if (cm.options.indentWithTabs)
+                      cm.execCommand("insertTab");
+                    else
+                      cm.execCommand("insertSoftTab");
+                  },
+                  "Shift-Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Outdent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentLess");
+                        return;
+                      }
+                    }
+                    var charSize = cm.options.tabSize;
+                    if (cm.options.indentWithTabs)
+                      charSize = 1;
+                    var c = cm.getCursor();
+                    var lineText = cm.getRange({line: c.line, ch: c.ch - charSize}, {line: c.line, ch: c.ch});
+                    var m = /^(\s+)/.exec(lineText.reverse());
+                    if(m && m.length == 2)
+                      cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
+                  }}
+    });
+    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
+
+    this.m_output = CodeMirror.fromTextArea(document.getElementById('output'), {
+      mode: "default",
+      readOnly: true,
+      lineWrapping: true,
+      lineNumbers: false
+    });
+    this.m_output.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.4));
   },
 
   run: function()
   {
+    this.m_output.setValue("");
     var _this_ = this;
-    this.m_output.setText("");
-       
-    homematic("ReGa.runScript", {script: this.m_input.getText()}, function(response, error)
+    var code = this.m_input.getValue();
+    var val = "";
+    var ths = "2459";
+    var src = "";
+    var url = '/esp/system.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "SyntaxCheck";';
+    pb += 'string code = ^'+code.replace(/\^/g, '^#\'^\'#^')+'^;';
+    pb += 'string val = "'+val+'";';
+    pb += 'string ths = "'+ths+'";';
+    pb += 'string src = "'+src+'";';
+    var opt = 
     {
-      if (error === null)
+      postBody: ReGa.encode(pb),
+      onComplete: function(t)
       {
-        _this_.m_output.setText(response);
+        if( iseStripAll(t.responseText).length == 0 )
+        {
+          homematic("ReGa.runScript", {script: code}, function(response, error)
+              {
+                if (error === null)
+                {
+                  _this_.m_output.setValue(response);
+                }
+                });
+              }
+          else
+          {
+          	_this_.m_output.setValue(t.responseText);
       }
-      else
-      {
-        _this_.m_output.setText("Fehler: " + Object.toJSON(error));
-      }
-    });
+    }
+  }
+    new Ajax.Request(url,opt);
   },
   
   close: function()
@@ -14263,8 +16055,8 @@ HMScriptExecutor = Class.create({
   
 });
 
-HMScriptExecutor.CONTENT_WIDTH = 600;
-HMScriptExecutor.CONTENT_HEIGHT = 485;
+HMScriptExecutor.CONTENT_WIDTH = 800;
+HMScriptExecutor.CONTENT_HEIGHT = 500;
 
 /**
  * firewallconfigdialog.js
@@ -14509,7 +16301,7 @@ FirewallConfigDialog = Class.create({
     firewallPolicy = this.m_portListBox.getSelectedItem().id,
     hmscriptAccess = this.m_hmscriptListBox.getSelectedItem().id,
     mediolaAccess = this.m_mediolaListBox.getSelectedItem().id,
-    ips = this.m_ipTextArea.getText(),
+    ips = this.m_ipTextArea.getText().trim(),
     userPorts = this.m_portTextArea.getText().replace(/\s+/g, '').split(";");
 
     // Remove a trailing ; at the end of ips
@@ -17923,7 +19715,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPassword");
         html += "</td>";
         html += "<td>";
-          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' value="+passWord+">";
+          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
       html += "</tr>";
       html += "<tr>";
@@ -17931,7 +19723,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPasswordRepeat");
         html += "</td>";
         html += "<td>";
-         html += "<input id='pwd_2' type='password' value="+passWord+">";
+         html += "<input id='pwd_2' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
 
       html += "</tr>";
@@ -19301,7 +21093,10 @@ BlindCombinedParamDialog = Class.create({
       var valL2 = this.elmLevel2.val();
       result = "L="+valL+",L2="+valL2;
     } else {
-      result = "L="+valL;
+      // See SPHM-1302 result = "L="+valL;
+
+      // New with SPHM-1302
+      result = "L="+valL+",L2="+valL;
     }
 
     Layer.remove(this.m_layer);
@@ -19400,6 +21195,8 @@ DimmerCombinedParamDialog = Class.create({
     showRamptimeOff = false; // This we need among other things for certain COMBINED_PARAMETER help dialogs.
     var _this_ = this;
 
+    this.iFace = "HmIP-RF";
+
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
@@ -19414,23 +21211,27 @@ DimmerCombinedParamDialog = Class.create({
 
     this.maxOnTime = 111600;
 
-    /*
-    this.devDescr =  homematic("Interface.getParamsetDescription", {'interface': 'HmIP-RF', 'address': this.chnAddress, 'paramsetKey': 'VALUES'}, function(result) {
-      jQuery.each(result, function(index,value){
-        if (value.NAME == "ON_TIME") {
-          _this_.maxOnTime = parseInt(value.MAX);
-          return; // leave the each loop
-        }
-      });
+    this.devDescr = homematic("Interface.getDeviceDescription", {
+      "interface" : this.iFace,
+      "address" : this.chnAddress.split(":")[0]
     });
-    */
+
+    this.devFirmware = this.devDescr.firmware.split(".");
+    this.fwMajor = parseInt(this.devFirmware[0]);
+    // this.fwMinor = parseInt(this.devFirmware[1]); // currently not in use
+    // this.fwPatch = parseInt(this.devFirmware[2]); // currently not in use
 
     this.isUniversalActor = ((this.deviceType == "HmIP-WUA") || (this.deviceType == "ELV-SH-WUA")) ? true : false;
     this.isServoController = ((this.deviceType == "HmIP-WSC") || (this.deviceType == "ELV-SH-WSC")) ? true : false;
-    this.arNoOntimeAvailable = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6"];
-    this.showRampTimeOffElm = ["HmIPW-WRC6"];
-    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6"];
-    this.showBehaviourElms = ["HmIPW-WRC6"];
+    this.arNoOntimeAvailable = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showRampTimeOffElm = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showBehaviourElms = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
+
+    // SPHM-1268
+    if ((this.deviceType == "HmIP-BSL") && (this.fwMajor >= 2)) {
+      this.showBehaviourElms.push(this.deviceType);
+    }
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
@@ -19505,6 +21306,11 @@ DimmerCombinedParamDialog = Class.create({
     this.selectColorElm = jQuery("#combinedParam_Color");
     this.selectBehaviourElm = jQuery("#combinedParam_Behaviour");
     this.levelElm = jQuery("#combinedParam_Level");
+
+    this.levelFreeValElm = jQuery("#prgDimmerEnterFreeLevel");
+    this.divLevelFreeValElm = jQuery("#divLevelEnterFreeValue");
+    this.levelFreeValActive = false;
+
     this.lblBrightnessLevelElm = jQuery("#lblBrightnessLevel");
     this.lblRampTimeElm = jQuery("#lblRampTime");
     this.chkBoxTimeLimitElm = jQuery("#chkBoxTimeLimit");
@@ -19607,11 +21413,37 @@ DimmerCombinedParamDialog = Class.create({
     this.setHeight();
   },
 
+  showHideLevelFreeValue: function() {
+    if (this.levelElm.val() == "99999998") {
+      this.divLevelFreeValElm.show();
+      this.levelFreeValActive = true;
+      this.setHeight();
+    } else {
+      this.divLevelFreeValElm.hide();
+      this.levelFreeValActive = false;
+      this.setHeight();
+    }
+
+  },
+
+  isLevelValid: function(elm) {
+    var val = parseInt(elm.value);
+    if ((isNaN(val) || val < 0)) {val = 0;} else if (val > 100) {val = 100;}
+    elm.value = val;
+  },
 
   initDialog: function() {
     var self = this;
 
-    var arElmValues, valueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueC, valueCB, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration;
+    this.levelElm.change(function() {self.showHideLevelFreeValue();});
+    this.levelFreeValElm.blur(function() {self.isLevelValid(this);});
+
+    var arElmValues, valueL, iValueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueC, valueCB, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration;
+
+    arElmValues = this.initValue.split(",");
+    valueL = arElmValues[0].split("=")[1];
+    iValueL = parseInt(valueL) / 10;
+
     if (this.isUniversalActor) { // WUA
       this.lblBrightnessLevelElm.text(translateKey("lblOperatingVoltage"));
     } else if (this.isServoController) {
@@ -19621,12 +21453,16 @@ DimmerCombinedParamDialog = Class.create({
       this.lblRampTimeElm .text(translateKey("stringTableServoRamp"));
     }
 
+    // iValueL !== (iValueL | 0) = check if the value is not 0% - 100%
+    if ( (iValueL !== (iValueL | 0)) && (valueL != "100.5") && (valueL != "101")) {
+      this.levelFreeValActive = true;
+      this.levelFreeValElm.val(valueL);
+      this.divLevelFreeValElm.show();
+    }
+
     this._showColorElm();
     this._showBehaviourElm();
     if (this.isOntimeAvailable()) {
-      arElmValues = this.initValue.split(",");
-
-      valueL = arElmValues[0].split("=")[1];
       valueDVtmp = arElmValues[1].split("=")[1];
       valueDU = this._getUnitInDU4OnTime(valueDVtmp);
 
@@ -19656,8 +21492,6 @@ DimmerCombinedParamDialog = Class.create({
       minDuration = 0;
       maxDuration = 16343;
     } else {
-      arElmValues = this.initValue.split(",");
-      valueL = arElmValues[0].split("=")[1];
       valueDV = arElmValues[1].split("=")[1];
       valueDU = arElmValues[2].split("=")[1];
       valueRTV = arElmValues[3].split("=")[1];
@@ -19688,7 +21522,12 @@ DimmerCombinedParamDialog = Class.create({
       this.rampTimeOffValueElm.val(valueRTTOV);
     }
 
-    this.levelElm.val(valueL);
+    if (this.levelFreeValActive) {
+      this.levelElm.val("99999998");
+    } else {
+      this.levelElm.val(valueL);
+    }
+
     this.durationValueElm.val(valueDV);
     this.durationUnitElm.val(valueDU);
 
@@ -19835,13 +21674,16 @@ DimmerCombinedParamDialog = Class.create({
   getConfigString: function() {
     var self = this,
       result,
-      level = this.levelElm.val(),
+      level,
       durationUnit = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 2 : this.durationUnitElm.val(), // 2  = unit hour
       durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val(),
       ramptimeUnit = this.rampTimeUnitElm.val(),
       ramptimeValue = this.rampTimeValueElm.val(),
       valColor = "",
       valBehaviour = "";
+
+      level = (this.levelFreeValActive) ? this.levelFreeValElm.val() : this.levelElm.val();
+
     if (this.colorElmVisible || this.behaviourElmVisible) {
       if (this.colorElmVisible && ! this.behaviourElmVisible) {
         valColor = this.selectColorElm.val();
@@ -20123,7 +21965,7 @@ SwitchCombinedParamDialog = Class.create({
       durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val();
 
       if (this.isOntimeAvailable()) {
-        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31)) {
+        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31 && durationUnit == 2)) {
           if (! this._deviceIsWindowDrive()) {
             if (! this._deviceIsDali()) {
               result = "S=" + state;
@@ -20726,19 +22568,31 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
 
     this.rgbw = "HmIP-RGBW";
     this.drgDali = "HmIP-DRG-DALI";
+    this.lss = "HmIP-LSC";
 
     this.deviceType = deviceType;
     this.chnAddress = chnAddress;
     this.initValue = value;
 
+    this.oChannel = DeviceList.getChannelByAddress(this.chnAddress);
+
     this.maxOnTime = 111600;
 
     this.valHCL = 10200;
     this.valDim2Warm = 10150;
+    this.ColorTempDefaultMin = 2000;
+    this.ColorTempDefaultMax = 6500;
 
 
     this.arNoOntimeAvailable = [];
-    this.showRampTimeOffElm = [this.rgbw, this.drgDali];
+    this.showRampTimeOffElm = [this.rgbw, this.drgDali, this.lss];
+
+    this.chnDescription = homematic("Interface.getParamset", {'interface': this.iface, 'address': this.chnAddress, 'paramsetKey': 'MASTER'});
+    this.maxCap = (this.deviceType != this.lss) ? parseInt(this.chnDescription.UNIVERSAL_LIGHT_MAX_CAPABILITIES) : 3;
+
+
+
+    this.effectModePrg = "unknown";
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
@@ -20814,6 +22668,11 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
     this.trRampTimeElms = jQuery("[name='trRampTime']");
     this.trRampTimeOff = jQuery("#trRampTimeOff");
     this.levelElm = jQuery("#combinedParam_Level");
+
+    this.levelFreeValElm = jQuery("#prgDimmerEnterFreeLevel");
+    this.divLevelFreeValElm = jQuery("#divLevelEnterFreeValue");
+    this.levelFreeValActive = false;
+
     this.lblBrightnessLevelElm = jQuery("#lblBrightnessLevel");
     this.lblRampTimeElm = jQuery("#lblRampTime");
     this.chkBoxTimeLimitElm = jQuery("#chkBoxTimeLimit");
@@ -20852,6 +22711,7 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
     // Effects
     this.trEffects = jQuery("[name='trEffects']");
     this.effectSelBox = jQuery("#effectSelBox");
+    this.effectModeChkBox = jQuery("#effectModePrg");
   },
 
   _getOnTimeVal: function(val, unit) {
@@ -20923,6 +22783,7 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
 
   initSubDialogs: function() {
     var self = this;
+
     this.btnColorDialog.click(function() {
       JControlBtn.on(jQuery(this));
       JControlBtn.off(jQuery(self.btnColorTempDialog));
@@ -20936,18 +22797,40 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
       self.activeDialog = "color";
     });
 
-    this.btnColorTempDialog.click(function() {
-      JControlBtn.on(jQuery(this));
-      JControlBtn.off(jQuery(self.btnColorDialog));
-      JControlBtn.off(jQuery(self.btnEffectDialog));
-      self.trColor.hide();
-      self.trEffects.hide();
-      self.trRampTimeElms.show();
-      self.trTWSlider.show();
-      self.onTimePanel.show();
-      self.resetHeight();
-      self.activeDialog = "colorTemp";
-    });
+    if ((this.deviceType == this.drgDali) || (this.deviceType == this.rgbw) || (this.deviceType == this.lss)) {
+      this.btnColorTempDialog.click(function () {
+        JControlBtn.on(jQuery(this));
+        JControlBtn.off(jQuery(self.btnColorDialog));
+        JControlBtn.off(jQuery(self.btnEffectDialog));
+        self.trColor.hide();
+        self.trEffects.hide();
+        self.trRampTimeElms.show();
+        self.trTWSlider.show();
+        self.onTimePanel.show();
+        self.resetHeight();
+        self.activeDialog = "colorTemp";
+      });
+    }
+
+    if (this.deviceType == this.drgDali) {
+      switch (this.maxCap) {
+        case 2:
+          this.btnColorDialog.hide();
+          this.btnColorTempDialog.click();
+      }
+    }
+
+    if ((this.deviceType == this.rgbw)) {
+      switch (this.maxCap) {
+        case 2:
+          this.btnColorDialog.hide();
+          this.btnColorTempDialog.click();
+          break;
+        case 3:
+          this.btnColorTempDialog.hide();
+          this.btnColorDialog.click();
+      }
+    }
 
     this.btnEffectDialog.click(function() {
       JControlBtn.on(jQuery(this));
@@ -20963,9 +22846,66 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
     });
   },
 
+  setEffectNames: function() {
+    var oDevice = DeviceList.getDeviceByAddress(this.chnAddress.split(":")[0]),
+     effectName, effectNo,
+      arEffectValue = [0,1,3,5,7,9,11,13,15,17,19];
+
+    this.effectSelBox.empty().append("<option value='0'>"+translateKey('optionStopEffect')+"</option>");
+    for (effectNo = 1; effectNo <= 10; effectNo++) {
+      effectName =  homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "effectName_" + effectNo});
+      if ((effectName == "") || (effectName == "null")) {effectName = translateKey("lblEffect") + " " + effectNo;}
+      this.effectSelBox.append("<option value='"+arEffectValue[effectNo]+"'>"+effectName+"</option>");
+    }
+  },
+
+
+  setULReffectModePrg: function() {
+    this.effectModePrg = (jQuery(this.effectModeChkBox).is(":checked")) ? true : false;
+    homematic("Interface.setMetadata", {"objectId": this.oChannel.id, "dataId": "effectModePrg", "value": this.effectModePrg});
+  },
+
+
+  showHideLevelFreeValue: function() {
+    if (this.levelElm.val() == "99999998") {
+      this.divLevelFreeValElm.show();
+      this.levelFreeValActive = true;
+      this.setHeight();
+    } else {
+      this.divLevelFreeValElm.hide();
+      this.levelFreeValActive = false;
+      this.setHeight();
+    }
+
+  },
+
+  isLevelValid: function(elm) {
+    var val = parseInt(elm.value);
+    if ((isNaN(val) || val < 0)) {val = 0;} else if (val > 100) {val = 100;}
+    elm.value = val;
+  },
+
   initDialog: function() {
     var self = this;
+
+    this.levelElm.change(function() {self.showHideLevelFreeValue();});
+    this.levelFreeValElm.blur(function() {self.isLevelValid(this);});
+
+    var arElmValues, valueL, iValueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueC, valueCB, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration;
+
+    arElmValues = this.initValue.split(",");
+    valueL = arElmValues[0].split("=")[1];
+    iValueL = parseInt(valueL) / 10;
+
+
     var arElmValues, valueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueSlider, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration, effect;
+
+    // iValueL !== (iValueL | 0) = check if the value is not 0% - 100%
+    if ( (iValueL !== (iValueL | 0)) && (valueL != "100.5") && (valueL != "101")) {
+      this.levelFreeValActive = true;
+      this.levelFreeValElm.val(valueL);
+      this.divLevelFreeValElm.show();
+    }
 
     this.initSubDialogs();
 
@@ -21034,7 +22974,12 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
       this.rampTimeOffValueElm.val(valueRTTOV);
     }
 
-    this.levelElm.val(valueL);
+    if (this.levelFreeValActive) {
+      this.levelElm.val("99999998");
+    } else {
+      this.levelElm.val(valueL);
+    }
+
     this.durationValueElm.val(valueDV);
     this.durationUnitElm.val(valueDU);
 
@@ -21323,17 +23268,35 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
 
     // Effects
     effect = parseInt(this.getConfigStringValue("E"));
+
+    if (effect % 2 == 0) {
+      this.effectModePrg = true;
+      homematic("Interface.setMetadata", {"objectId": this.oChannel.id, "dataId": "effectModePrg", "value": this.effectModePrg});
+      this.effectModeChkBox.prop("checked", true);
+      effect =  (effect - 1);
+    } else {
+      this.effectModePrg = false;
+      this.effectModeChkBox.prop("checked", false);
+    }
+
     effect = (effect != -1) ? effect : 0; // 0 = default (No Effect)
+    this.setEffectNames();
+
     this.effectSelBox.val(effect);
 
-    // SShow the appropriate dialog (Color, Color Temp, Effect)
-    if ((effect != 0) ||((valueL == 0) && (arElmValues.length == 1))) {
+    // Show the appropriate dialog (Color, Color Temp, Effect)
+    if ((effect != 0) || ((valueL == 0) && (arElmValues.length == 1))) {
       this.btnEffectDialog.click();
     } else if (parseInt(this.getConfigStringValue("TC")) > 0) {
       this.btnColorTempDialog.click();
     } else {
-      this.btnColorDialog.click();
+      if ((this.deviceType == this.lss) && (this.initValue.includes("TC="))) { //
+        this.btnColorTempDialog.click();
+      } else {
+        this.btnColorDialog.click();
+      }
     }
+
   },
 
   initColorPickerEvents: function() {
@@ -21426,13 +23389,12 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
   },
 
   getSliderOpts: function() {
-
-    var chnDescription = homematic("Interface.getParamset", {'interface': this.iface, 'address': this.chnAddress, 'paramsetKey': 'MASTER'});
-
     var opts = {};
     opts.animate = "fast";
-    opts.min = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_WARM_WHITE);
-    opts.max = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_COLD_WHITE);
+    opts.min = parseInt(this.chnDescription.HARDWARE_COLOR_TEMPERATURE_WARM_WHITE);
+    opts.min = (!isNaN(opts.min)) ? opts.min : this.ColorTempDefaultMin;
+    opts.max = parseInt(this.chnDescription.HARDWARE_COLOR_TEMPERATURE_COLD_WHITE);
+    opts.max = (!isNaN(opts.max)) ? opts.max : this.ColorTempDefaultMax;
     opts.value = ((opts.max - opts.min) / 2);
     opts.step = 50;
     opts.orientation = "horizontal";
@@ -21479,7 +23441,7 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
   getConfigString: function() {
     var self = this,
       result,
-      level = this.levelElm.val(),
+      level,
       durationUnit = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 2 : this.durationUnitElm.val(), // 2  = unit hour
       durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val(),
       ramptimeUnit = this.rampTimeUnitElm.val(),
@@ -21491,10 +23453,16 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
       colorTemperature =  this.colorTemperature,
       tempColorID = "",
       effectID = "",
-      effect = this.effectSelBox.val(),
+      effect = parseInt(this.effectSelBox.val()),
       activeDialog = "color";
 
-    if (this.deviceType == this.drgDali) {
+    level = (this.levelFreeValActive) ? this.levelFreeValElm.val() : this.levelElm.val();
+
+    this.setULReffectModePrg();
+
+    effect =  (this.effectModePrg == true)  ? (effect + 1) : effect;
+
+    if ((this.deviceType == this.drgDali) || (this.deviceType == this.lss) || ((this.deviceType == this.rgbw) && ((this.maxCap == 2) || (this.maxCap == 4)))) {
       tempColorID = ",TC=" + colorTemperature;
       effectID = ",E=" + effect;
     }
@@ -21511,23 +23479,59 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
       return result;
     }
 
-
-
     if (this.isOntimeAvailable()) {
+
       if (this.chkBoxTimeLimitElm.prop("checked") == false) {
         var _rampTimeValue = parseInt(this._getRampTimeVal(ramptimeValue, ramptimeUnit));
 
         if (_rampTimeValue > 0) {
-          result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue + ",H=" + hueValue + ",SAT=" + satValue; // ON_TIME = permanently ON
+          if (this.deviceType == this.lss) {
+            if (this.getActiveDialog() == "color") {
+              result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue + ",H=" + hueValue + ",SAT=" + satValue;
+            } else {
+              // This is for the HmIP-LSS colorTemp
+              result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue;
+            }
+          } else {
+            result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue + ",H=" + hueValue + ",SAT=" + satValue;
+          }
         } else {
-          result = "L=" + level + ",OT=0,RT=0,H=" + hueValue + ",SAT=" + satValue;
+          if (this.deviceType == this.lss) {
+            if (this.getActiveDialog() == "color") {
+              result = "L=" + level + ",OT=0,RT=0,H=" + hueValue + ",SAT=" + satValue;
+            } else {
+              // this ist for the HmIP-LSS color temp
+              result = "L=" + level + ",OT=0,RT=0";
+            }
+          } else {
+            result = "L=" + level + ",OT=0,RT=0,H=" + hueValue + ",SAT=" + satValue;
+          }
         }
 
       } else {
         if (durationValue == 0) {
-          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0,H=" + hueValue + ",SAT=" + satValue;
+
+          if (this.deviceType == this.lss) {
+            if (this.getActiveDialog() == "color") {
+              result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0,H=" + hueValue + ",SAT=" + satValue;
+            } else {
+              // this ist for the HmIP-LSS color temp
+              result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0";
+            }
+          } else {
+            result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0,H=" + hueValue + ",SAT=" + satValue;
+          }
         } else {
-          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit) + ",H=" + hueValue + ",SAT=" + satValue;
+          if (this.deviceType == this.lss) {
+            if (this.getActiveDialog() == "color") {
+              result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit) + ",H=" + hueValue + ",SAT=" + satValue;
+            } else {
+              // this ist for the HmIP-LSS color temp
+              result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit);
+            }
+          } else {
+            result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit) + ",H=" + hueValue + ",SAT=" + satValue;
+          }
         }
       }
     } else {
@@ -21544,9 +23548,10 @@ UniveralLightReceiverDialog = Class.create(YesNoDialog,{
       result += ",RTTOV=" + this.rampTimeOffValueElm.val() + ",RTTOU=" + this.rampTimeOffUnitElm.val();
     }
 
-    if (this.deviceType == this.drgDali) {
+    if ((this.deviceType == this.drgDali) || ((this.deviceType == this.lss) && (this.getActiveDialog() == "colorTemp")) || ((this.deviceType == this.rgbw) && ((this.maxCap == 2) || (this.maxCap == 4)))) {
       result += tempColorID;
     }
+
     return result;
   },
 
@@ -22223,7 +24228,6 @@ HeaderBar = new function()
     url: "/ise/htm/header.htm",
     dataType: "html",
     async: false,
-    cache: false,
     context: document.body
     }).done(function(response) {
       jQuery("#header").html(response);
@@ -22275,19 +24279,19 @@ MainMenu = Singleton.create({
     var _submenuItem_ = submenuItem;
     var _menuItem_ = menuItem;
     
-    var row = document.createElement("tr");
-
-    var cell = document.createElement("td");
+    var cell = document.createElement("div");
+    var img = document.createElement("img");
+    img.src="../ise/img/menuicons/"+submenuItem.id+".png";
+    cell.appendChild(img);
     cell.className = "MainMenuSubItem";
     cell.id = submenuItem.id;
     //cell.appendChild(document.createTextNode("${"+submenuItem.id+"}"));  
-    cell.appendChild(document.createTextNode(translateKey(submenuItem.id)));
+    cell.appendChild(document.createTextNode(" "+translateKey(submenuItem.id)));
     Event.observe(cell, "mouseover", function() { MainMenu.highlightOn(this); });
     Event.observe(cell, "mouseout", function()  { MainMenu.highlightOff(this); });
     Event.observe(cell, "click", function() { MainMenu.beginHideSubmenu(_menuItem_); _submenuItem_.action.defer(); });
-    row.appendChild(cell);
     
-    return row;
+    return cell;
   },
   
   /**
@@ -22323,12 +24327,11 @@ MainMenu = Singleton.create({
       submenuElement.className = "MainMenuSubMenu";
       Element.setStyle(submenuElement, {display: "none"});
       
-      var table = document.createElement("table");
-      table.border = "0";
-      submenuElement.appendChild(table);
       
-      var tbody =  document.createElement("tbody");
-      table.appendChild(tbody);
+      var tbody =  document.createElement("div");
+      Element.setStyle(tbody, {"display": "flex"});
+      Element.setStyle(tbody, {"flex-direction": "column"});
+      submenuElement.appendChild(tbody);
       
       for (var i = 0, len = submenu.length; i < len; i++)
       {
@@ -22494,7 +24497,11 @@ var preURL = (WEBUI_VERSION.split(".")[0] < 3) ? "" : "ccu3-";
 
 StartPage = Singleton.create(Page, {
   MAINMENU_ID: "MAINMENU_STARTPAGE",
-  downloadURL: (isHTTPS) ? "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download" : "http://"+preURL+"update.homematic.com/firmware/download?cmd=download",
+  downloadURLServer: (isHTTPS) ? "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download" : "http://"+preURL+"update.homematic.com/firmware/download?cmd=download",
+  fieldTestURLServer: (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download" : "http://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download",
+  fieldTestActive: "/etc/config/fieldTestActive",
+  downloadURL : "",
+  prevDownloadURL : "",
   devList: [],
   devIndex: 0,
   newFwCounter: 0,
@@ -22547,6 +24554,25 @@ StartPage = Singleton.create(Page, {
       default:
         break;
     }
+
+    this.serial = homematic("CCU.getSerial");
+
+    if (homematic('CCU.existsFile', {'file': this.fieldTestActive})) {
+      this.downloadURL = this.fieldTestURLServer;
+    } else {
+      this.downloadURL = this.downloadURLServer;
+    }
+
+    if (this.prevDownloadURL != this.downloadURL) {
+      this.devList = [];
+      this.devIndex = 0;
+      this.newFwCounter = 0;
+      this.fetchDeviceList = false;
+      this.knownTypes = [];
+      this.numberOfKnownTypes = 0;
+    }
+    this.prevDownloadURL = this.downloadURL;
+    conInfo("Device Fw. downloadURL: " + this.downloadURL);
   },
   
   /**
@@ -22593,13 +24619,16 @@ StartPage = Singleton.create(Page, {
 
    // WebUI-Version
   showCurrentFirmware: function() {
-    //jQuery("#currentFirmware").text(WEBUI_VERSION);
+    jQuery("#currentFirmware").text(WEBUI_VERSION);
 
-    homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
-      WEBUI_VERSION = result.firmware;
-      jQuery("#currentFirmware").text(WEBUI_VERSION);
-    });
-
+    //homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
+    //  if (result != null) {
+    //    WEBUI_VERSION = result.firmware;
+    //  } else {
+    //    WEBUI_VERSION = "0.0.0";
+    //  }
+    //  jQuery("#currentFirmware").text(WEBUI_VERSION);
+    //});
   },
 
   /*evalVersionAGreaterThanB: function(a, b) {
@@ -22735,7 +24764,7 @@ StartPage = Singleton.create(Page, {
       if (devIsUpdatable && fwVersion && (fwVersion != "n/a") && (newFW != curFw)) {
         // FW not yet available on the CCU
         if (availableFW != newFW) {
-          self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial=0&product=" + deviceTypeForUrl + "'\">" + fwVersion + "</td></tr>";
+          self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial="+self.serial+"&product=" + deviceTypeForUrl + "'\">" + fwVersion + "</td></tr>";
         } else {
           self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + self.devList[self.devIndex].address + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=alert(translateKey('hintDevFwAlreadyUploaded'));>" + fwVersion + "</td></tr>";
         }
@@ -22835,6 +24864,10 @@ ControlPage = new function()
   
   this.leave = function()
   {
+    // open the systemLanguage config dialog if no systemLanguage was selected yet
+    if (homematic('CCU.getSystemLanguage') === 'none') {
+      CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
+    }
   };
 
   this.resize = function()
@@ -23201,7 +25234,7 @@ if (PLATFORM == "Central") {
   TREE_EXPANDED_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
       "</tr>" +
@@ -23209,7 +25242,7 @@ if (PLATFORM == "Central") {
   FLAT_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
       "</tr>" +
@@ -23256,6 +25289,8 @@ if (PLATFORM == "Central") {
     {id: "INTERFACE_BIDCOS_WIRED", name: translateKey("BidCosWired-Filter")}, // BidCos-Wired
     {id: "INTERFACE_HMIP_RF", name: translateKey("HmIPRF")}, // HmIP-RF
     {id: "INTERFACE_VIRTUAL_DEVICES", name: translateKey("VirtualDevices")},
+    {id: "INTERFACE_CUXD", name: "CUxD"}, //
+    {id: "INTERFACE_CCU_JACK", name: "CCU-Jack"}, //
     {id: "INTERFACE_SYSTEM", name: "System"} //
   ],
   
@@ -23484,7 +25519,6 @@ if (PLATFORM == "Central") {
     var result = true;
     switch (channel.channelType) {
       case "ALARM_COND_SWITCH_TRANSMITTER":
-      case "MAINTENANCE":
       case "WEEK_PROGRAM":
         result = false;
         break;
@@ -23866,22 +25900,26 @@ if (PLATFORM == "Central") {
       setFooter(this.FLAT_FOOTER_HTML);
     }
 
-    jQuery(".j_chMode").each(function(){
-      var elm = jQuery(this);
-
-        switch (elm.text()) {
-          case "Gesichert":
-            elm.html(translateKey("lblSecured"));
-            break;
-          case "Standard":
-            elm.html(translateKey("lblStandard"));
-        }
+    var translatedSecure = translateKey("lblSecured");
+    var translatedStandard = translateKey("lblStandard");
+    jQuery(".j_chMode").each(function(i, e){
+      switch (e.textContent) {
+        case "Gesichert":
+          e.textContent = translatedSecure;
+          break;
+        case "Standard":
+          e.textContent = translatedStandard;
+          break;
+      }
     });
 
     translateJSTemplate("#DeviceListTable");
     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
     jQuery("#DeviceListPage_RoomFilter").draggable();
     jQuery("#DeviceListPage_FuncFilter").draggable();
+
+    DeviceList.updateDeviceStatus();
+    eQ3.HomeMatic.Event.fire({type: 'DeviceListPageLoaded'});
   },
   
   onRemoveDevice: function(whatEver)
@@ -24437,6 +26475,8 @@ BidcosRfPage =
   m_gatewayTableKeyHeader: null,
   m_gatewayTableIPHeader: null,
   m_gatewayTableStateHeader: null,
+  m_gatewayTableDCStateHeader: null,
+  m_gatewayTableFWStateHeader: null,
   m_gatewayTableActionHeader: null,
   m_gatewayTableBody: null,
   m_optionsButtonBar: null,
@@ -24549,7 +26589,21 @@ BidcosRfPage =
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableStateHeader.appendChild(document.createTextNode(translateKey("thState")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableStateHeader);
-    
+
+    /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableDCStateHeader = document.createElement("th");
+    this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
+
+    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableFWStateHeader = document.createElement("th");
+    this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
+
     /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableActionHeader = document.createElement("th");
     this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
@@ -24705,7 +26759,7 @@ BidcosRfPage =
     FOOTER_HTML= "" +
       "<table border='0' cellspacing='8'>" +
         "<tr>" +
-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
         "</tr>" +
       "</table>";
 
@@ -24869,6 +26923,16 @@ BidcosRfPage =
 				    	 lgw = rfGateways[j];
 				    	}
 				    }
+				    for (var loop = 0; loop < gatewayStatus.length; loop++) {
+				    	gatewaysn = gatewayStatus[loop].address;
+				    	if (lgwStatus.serial == gatewaysn) {
+				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
+				    		lgw.setDCState(textDC);
+
+				    		var textFW = gatewayStatus[loop].fwVersion;
+				    		lgw.setFWState(textFW);
+				    	}
+				    }
 		        	if(lgw) 
 		        	{
 					  if(lgwStatus.connstat == "NO_ERROR") {
@@ -24902,6 +26966,25 @@ BidcosRfPage =
 		  {
 			  var text = "";
 	   	      var status = rfGateways[i].determineState(gatewayStatus);
+	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
+
+	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
+	   	      	gatewaysn = gatewayStatus[loop].address;
+
+	   	      	if (cfglan == gatewaysn) {
+	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
+	   	      		rfGateways[i].setDCState(textDC);
+
+	   	      		var textFW = gatewayStatus[loop].fwVersion;
+	   	      		if (textFW < "965") {
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion + " (Update: 0.965)";
+	   	      		} else {
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion;
+	   	      		}
+	   	      		rfGateways[i].setFWState(textFW);
+	   	      	}
+	   	  	  }
+
 		      if (status)
 		      {
 		        text = (status.isConnected) ? translateKey("lanGatewayLblConnected") : translateKey("lanGatewayLblNotConnected");
@@ -25040,7 +27123,7 @@ BidcosRfPage =
     var i, len, device;
     this.m_devices = [];
     
-    var devices = DeviceList.listDevices();
+    var devices = DeviceList.listDevices().ex_sortBy("name");
     
     for (i = 0, len = devices.length; i < len; i++)
     {
@@ -25102,6 +27185,8 @@ BidcosRfPage.Gateway.prototype =
   m_keyLabel: null,
   m_ipLabel: null,
   m_stateLabel: null,
+  m_stateDCLabel: null,
+  m_stateFWLabel: null,
   m_actionCell: null,
   m_deleteButton: null,
   m_onDeleteHandler: null,
@@ -25154,6 +27239,16 @@ BidcosRfPage.Gateway.prototype =
     this.m_stateLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateLabel);
     
+    /* DutyCycle Status */
+    this.m_stateDCLabel = document.createElement("td");
+    this.m_stateDCLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateDCLabel);
+    
+    /* Firmware Status */
+    this.m_stateFWLabel = document.createElement("td");
+    this.m_stateFWLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateFWLabel);
+
     /* Aktion */
     this.m_actionCell = document.createElement("td");
     this.m_actionCell.className = "bidcosrf_actioncell";
@@ -25293,6 +27388,18 @@ BidcosRfPage.Gateway.prototype =
     return this;
   },
   
+  setDCState: function(state)
+  {
+    this.m_stateDCLabel.innerHTML = "";
+    this.m_stateDCLabel.appendChild(document.createTextNode(state));
+  },
+  
+  setFWState: function(state)
+  {
+    this.m_stateFWLabel.innerHTML = "";
+    this.m_stateFWLabel.appendChild(document.createTextNode(state));
+  },
+
   getElement: function()
   {
     return this.m_element;
@@ -26712,17 +28819,18 @@ homematic.com =
   {
     this.m_ccuProduct = getProduct();
     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
-    this.m_product ="HM-CCU" + this.m_ccuProduct;
+    this.m_product = "HM-RASPBERRYMATIC";
     this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
+    this.m_fieldTestURLServer = (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com" : "http://fieldtest-ccu3-update.homematic.com";
 
-    var serial = homematic("CCU.getSerial");
-    serial = ((serial != "") && (typeof serial != "undefined") && (serial != null)) ? serial : "0";
+    this.serial = homematic("CCU.getSerial");
+    this.serial = ((this.serial != "") && (typeof this.serial != "undefined") && (this.serial != null)) ? this.serial : "0";
 
     // The server should return a string like "homematic.com.setLatestVersion('2.4.212');"
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
+    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&p=" + PRODUCT;
     $("body").appendChild(script);
   },
 
@@ -26775,18 +28883,25 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_" + index;
       script.type = "text/javascript";
-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
+      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
 
   getListOfAvailableFirmware: function(callback) {
+      var fieldTestActive = "/etc/config/fieldTestActive";
+
       // The server should return a string like "homematic.com.setDeviceFirmwareVersions([{"type":"HM-MOD-Re-8","version":"1.0.0"},{"type":"HM-MOD-Re-8","version":"1.0.0"}])"
       var script = document.createElement("script");
       script.id = "homematic_com_script_fw";
       script.type = "text/javascript";
       // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION;
+
+      if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
+        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial + "&ts=" + Date.now();
+      } else {
+        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION + "&ts=" + Date.now();
+      }
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -27727,7 +29842,7 @@ ise.Devices.prototype = {
   
   setVisible: function(id, ctrlId, mode) {
     var url = "/esp/devices.htm?sid="+SessionId;
-    var pb = "integer devId = " + id + ";";
+    var pb = "integer devId = " + DeviceList.getChannel(id).deviceId + ";";
     pb += "string action= 'setVisible';";
 
     if (mode) {
@@ -28304,6 +30419,24 @@ ise.SingleCondition.prototype =
     new Ajax.Request(url,opts);        
   },
 
+  SetNegateCondition: function(scid,nc) {                                                          
+    var url = "/esp/sico.htm?sid="+SessionId;            
+    var pb = '';                          
+    pb += 'string action = "SetNegateCondition";';                                     
+    pb += 'string scid = "'+scid+'";';               
+    pb += 'string nc = "'+nc+'";';                                                                     
+    var opts =                                                                                     
+    {                                                
+      postBody: ReGa.encode(pb),      
+      onComplete:function(t)                                    
+      {                                          
+        if(dbg){alert( t.responseText );}                                                      
+        ReloadSingleCondition(scid);                                                       
+      }                                              
+    };                                
+    new Ajax.Request(url,opts);                                  
+  },
+  
   SetLeftValue: function(scid,lv)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -28507,13 +30640,16 @@ ise.SingleDestination.prototype =
     };
     new Ajax.Request(url,opts);    
   },
-  SetValue: function(id,value,unit)
+  SetValue: function(id,value,unit, isSysVar)
   {
+    isSysVar = (typeof isSysVar == "undefined") ? false : true;
+
 		var url = "/esp/side.htm?sid="+SessionId;
     var pb = '';
     pb += 'string action = "SetValue";';
     pb += 'string id = "'+id+'";';
     pb += 'string value = "'+value+'";';
+    pb += 'boolean isSysVar = "'+isSysVar+'";';
     if( typeof( unit ) != "undefined" )
     {
       pb += 'string unit = "'+unit+'";';
@@ -28707,7 +30843,7 @@ ise.SingleDestination.prototype =
     var pb = '';
     pb += 'string action = "SetScript";';
     pb += 'string id = "'+id+'";';
-    pb += 'string value = ^'+script+'^;';
+    pb += 'string value = ^'+script.replace(/\^/g, '^#\'^\'#^')+'^;';
     var opts =
     {
       postBody: ReGa.encode(pb),
@@ -28752,7 +30888,23 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-  
+
+  sortSysVarTable: function(uid) {                                                                 
+    var url = "/esp/system.htm?sid="+SessionId;      
+    var pb = "((dom.GetObject(ID_USERS)).Get(" + uid + ")).UserSharedObjects().SortByName();";
+    pb += "string action = 'BuildUserSvTable';";                
+    pb += "integer userId = "+ uid +";";         
+    var opts = {                                                                               
+      postBody: ReGa.encode(pb),                                                           
+      onComplete: function(response) {               
+        if (200 == response.status) { 
+          translatePage("#userSysVarTbl");                       
+        }                                        
+      }                                                                                        
+    };                                                                                     
+    new Ajax.Updater("userSysVarTbl", url, opts);
+  },
+    
   addSysVarBuildTable: function(uid, newVarId) {
     //var url = "/esp/system.htm?sid="+SessionId+"&curDateTime="+new Date().getTime();
     var url = "/esp/system.htm?sid="+SessionId;
@@ -28794,6 +30946,27 @@ ise.User.prototype =
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
   
+  MoveSysVar: function(uid, svId, dir) {
+    var url = "/esp/system.htm?sid=" + SessionId;
+    var pb = "string action = 'UserMoveSysVarBuildTable';";
+    pb += "integer userId = "+ uid +";";
+    pb += "integer svId = " + svId + ";";
+    pb += "integer svMoveDirection = " + dir + ";";
+    var opts = {
+      postBody: ReGa.encode(pb),
+      onSuccess: function(t) {
+        // funktioniert seltsamerweise nur durch den "Updater"-Aufruf nicht
+        $("userSysVarTbl").innerHTML = t.responseText;
+      },
+      onComplete: function(response) {
+        if (200 == response.status) {
+          translatePage("#userSysVarTbl");
+        }
+      }
+    };
+    new Ajax.Updater("userSysVarTbl", url, opts);
+  },
+    
   buildTmpSysVarTable: function(arSysVars) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'BuildUserSvTable';";
@@ -28949,18 +31122,19 @@ iseMessageBox.prototype =
   },
   initPopup: function(id)
   {
+    var screenWidth  = WebUI.getWidth();
+    var screenHeight = WebUI.getHeight();
+
     switch(this.id)
     {
       case ID_ROOMS:
         this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_FUNCTIONS: 
         this.setTitle( translateKey("dialogEditFunction") /*"Gewerk bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_TRANSFER_PARAMETERS:
@@ -28990,14 +31164,22 @@ iseMessageBox.prototype =
         this.setTitle( translateKey("dialogCreateNewSysVar") /*"Systemvariable neu anlegen"*/ );
         this.addToPostBody( 'integer varid = 0;' );
         this.addToPostBody( 'integer createNew = 1;' );
-        this.setWidth(900);
+        this.setWidth(1100);
         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
         break;
       case ID_EDIT_SYSVAR:
         this.setTitle( translateKey("dialogEditSysVar") /*"Systemvariable bearbeiten"*/ );
         this.addToPostBody( 'integer varid = '+this.type+';' );
         this.addToPostBody( 'integer createNew = 0;' );
-        this.setWidth(900);
+        this.setWidth(1100);
+        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+        break;
+      case ID_EDIT_SYSVAR_VALUE:
+        this.setTitle( translateKey("dialogEditSysVarValue") /*"Systemvariablenwert bearbeiten"*/ );
+        this.addToPostBody( 'integer varid = '+this.type+';' );
+        this.addToPostBody( 'integer createNew = 0;' );
+        this.addToPostBody( 'boolean editValueOnly = 1;' );
+        this.setWidth(240);
         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
         break;
       case ID_CREATE_SCRIPT:
@@ -29008,9 +31190,10 @@ iseMessageBox.prototype =
         break;
       case ID_EDIT_SCRIPT:
         this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
+        this.setWidth(parseInt(screenWidth * 0.8));
+        this.setHeight(parseInt(screenHeight * 0.8));
         this.addToPostBody( 'string sdid = "'+this.type+'";' );
-        //this.setWidth(800);
-        this.setWidth('auto');
+        this.addToPostBody( 'string frameHeight = "'+this.height+'";' );
         this.setFile( "/pages/msg/editScript.htm" );
         break;
       case ID_CONTROL_TEST:
@@ -29086,7 +31269,12 @@ iseMessageBox.prototype =
         this.setWidth(800);
         this.setFile( "/pages/msg/autoLoginConfig.htm" );
         break;
-       case ID_CHOOSE_LED:
+      case ID_SYSTEM_LANGUAGE_CONFIG:
+        this.setTitle( translateKey("dialogConfigSystemLanguage") /*"Systemsprache waehlen - Konfiguration" */);
+        this.setWidth(800);
+        this.setFile( "/pages/msg/systemLanguageConfig.htm" );
+        break;
+        case ID_CHOOSE_LED:
         this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
         this.addToPostBody( 'string type = "'+this.type+'";' );
         this.setWidth(800);
@@ -29118,7 +31306,9 @@ iseMessageBox.prototype =
     }
 
     if (this.draggable) {
-      jQuery("#messagebox").draggable();
+      jQuery("#messagebox").draggable({
+        cancel: "input,textarea,button,select,option,.FooterButton,.StdButton,.CodeMirror,.CodeMirror-line"
+      });
     }
 
   },
@@ -29264,7 +31454,11 @@ iseMessageBox.prototype =
     this.removeMessagebox();
   },
   LoadFromFile: function(fn,pb) {
-    var url = fn+'?sid='+SessionId;
+    var url = fn;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
     var opt = 
     {
@@ -29274,7 +31468,12 @@ iseMessageBox.prototype =
       onComplete: function(trans)
       {
         //$("messagebox").style.width = t.width + "px";
-        jQuery("#messagebox").width(t.width + "px");
+        if(t.width !== "undefined") {
+          jQuery("#messagebox").width(t.width + "px");
+        }
+        if(t.height !== "undefined") {
+          jQuery("#messagebox").height(t.height + "px");
+        }
         jQuery("#tableContainer").css("max-height",(parseInt(jQuery(window).height() * 0.75)) + "px");
         centerMessageBox();
         iseRefr(true);
@@ -29285,6 +31484,9 @@ iseMessageBox.prototype =
   },  
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   },
   
   restorePrevious: function() {
@@ -29638,18 +31840,11 @@ isePropEditorRow.prototype = {
       // Namen im DOM ändern beim Verlassen des Textfeldes
       var changeListener = this.saveNameToDom.bindAsEventListener(this);
       Event.observe($(inputId), 'blur', changeListener);
-      var keypressEvent = this.onKeyPress.bindAsEventListener(this);
-      Event.observe($(inputId), "keyup", keypressEvent);
       
       $(inputId).focus();
     }
   },
   
-  onKeyPress: function(ev) {
-    if (ev.keyCode == Event.KEY_RETURN)
-      this.saveNameToDom();
-  },
-
   saveNameToDom: function () {
     var newName = $("nEdit" + this.id).value;
     if (newName === "") {
@@ -29874,6 +32069,8 @@ iseDOM_BuildLabel = "R1.00.0381.0100";
 dbg = false;
 rfr = true;
 
+ID_EDIT_SYSVAR_VALUE   = 9921;
+
 ID_ROOMS     = 101;  // Rooms collection ID.
 ID_FUNCTIONS = 151;  // Functions collection ID.
 ID_FAVORITES = 201;  // Favorites collection ID.
@@ -29901,6 +32098,7 @@ ID_CHOOSE_LED            = 1022;
 ID_SET_OUCFM_MODE        = 1023;
 ID_SET_STATUS_DISPLAY    = 1024;
 ID_BIDCOS_INTERFACE = 1025;
+ID_SYSTEM_LANGUAGE_CONFIG = 2001;
 
 nUA = navigator.userAgent;
 NAV_IE = false;
@@ -30004,6 +32202,11 @@ setDate = function(date)
   if ($("maindate")) { $("maindate").innerHTML = date; }
 };
 
+resetReGaSaveButton = function () {
+  document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");
+  document.getElementById("btnReGaSave").onclick=function() { LogoClick(); };
+};
+
 setAlarmMessageCount = function (count) {
 
   if ($("msgAlarms")) {
@@ -30065,23 +32268,6 @@ ReceiptAlarm = function(id,reload)
   };
   new Ajax.Request(url,opt);
 };
-
-
-/**
- * Aktualisiert Systemvariablen
- **/
-updateSysVar = function(id, value)
-{
-  var PREFIX = "SYSVAR_";
-  var element = $(PREFIX + id);
-  
-  if (element) 
-  {
-    element.innerHTML = "";
-    element.appendChild(document.createTextNode(translateString(value)));
-  }
-};
-
 
 /*setOldEnergyCounterVal = function(chn, value) {
   arrOldEnergyCounterVal[chn] = value;
@@ -30212,11 +32398,31 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
     if (file.substring(0, UI_PATH.length) == UI_PATH)
     {
       //method: 'get' ist für die ELV-CGIs notwendig.
-      opts = {evalScripts: true, method: 'get', onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
+      opts = {
+        evalScripts: true,
+        method: 'get',
+        onComplete:function(){
+          iseRefr(true);
+          bUpdateContentRunning=false;
+          setTimeout(function() {
+            eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+          }, 100);
+        }
+      };
     }
     else
     {
-      opts = {postBody: ReGa.encode(pb),evalScripts: true, onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
+      opts = {
+        postBody: ReGa.encode(pb),
+        evalScripts: true,
+        onComplete:function(){
+          iseRefr(true);
+          bUpdateContentRunning=false;
+          setTimeout(function() {
+            eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+          }, 100);
+        }
+      };
     }
     /* ELV --> */
     
@@ -30511,8 +32717,9 @@ setPath = function (path) {
 logout = function() {
   regaMonitor.stop();
   InterfaceMonitor.stop();
-  // The second url-param has to be appended by a '?' instead of a '&'
-  location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
+  location.href = "/logout.htm?lang="+getLang();
+  homematic('Session.logout', {});
+  homematic('system.saveObjectModel', {});
 };
 
 
@@ -30535,7 +32742,7 @@ buildPropTable= function(id) {
   var opts = {
     evalScripts: true,
     onComplete: function(trans) {
-      window.setTimeout(centerMessageBox, 200);
+      centerMessageBox();
     }
   };
   var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
@@ -30925,7 +33132,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
   tdSub = Builder.node('td');
   
   s = "";
-  if ((obj['type'] != "HmIPW-DRBL4") && (obj['type'] != "HmIP-DRBLI4") && (obj['type'] != "HmIP-RGBW") && (obj['type'] != "HmIPW-WGD") && (obj['type'] != "HmIPW-WGD-PL")) {
+  if ((obj['type'] != "HmIPW-DRBL4") && (obj['type'] != "HmIP-DRBLI4") && (obj['type'] != "HmIP-RGBW") && (obj['type'] != "HmIPW-WGD") && (obj['type'] != "HmIPW-WGD-PL") && (obj['type'] != "HmIP-ESI")) {
     if (bIsDev) {
       s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['iface'] + "', 'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK'});";
     } else {
@@ -31574,14 +33781,14 @@ convertDomTime = function(s) {
   return arTmp[0]+':'+arTmp[1];
 };
 
-ExecuteProgram = function(dpid)
+ExecuteProgram = function(dpid, thenOnly)
 {
   var url = "/esp/exec.htm?sid=" + SessionId;
   var pb = "";
   pb += "object o = dom.GetObject( "+dpid+" );";
   pb += "if( o )";
   pb += "{";
-  pb += "  o.ProgramExecute();";
+  pb += (thenOnly === true) ? "  o.ProgramExecute();" : "  o.State(1);";
   pb += "}";
   var opts = {postBody: ReGa.encode(pb)};
   if(dbg)alert(pb);
@@ -32023,6 +34230,9 @@ recreateControl = function(chnId,sTimeStamp)
 
 LogoClick = function()
 {
+  document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");
+  document.getElementById("btnReGaSave").onclick="";
+
   //alert( iseUpdateIDArray.join("_") );
   //alert( iseUpdateTMArray.join("_") );
   //loadLinkList();
@@ -32076,11 +34286,11 @@ StartFlashing = function()
       {
         if( $("headerLogo").src.indexOf("_red") >= 0 )
         {
-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
+          $("headerLogo").src = "/ise/img/rm-logo_small.png";
         }
         else
         {
-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
+          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
         }
       }
     },
@@ -32095,12 +34305,12 @@ StopFlashing = function()
 
 SwitchOnFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
 };
 
 SwitchOffFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
 };
 
 getAjaxLoadElem = function() {
@@ -32417,74 +34627,101 @@ showDutyCycle = function() {
     var ifaceBidCosRF = "BidCos-RF",
       ifaceHmIPRF = "HmIP-RF",
       arInterfaceDutyCycle = {},
+      arInterfaceCarrierSense = {},
       showPartingLine = false,
       dcUnit = "%",
       dcNotAvailable = -1,
-      dcAlarm = 89;  // Attention when dc >= 90%
+      csNotAvailable = -1,
+      dcWarn  = 69,  // Warning when dc >= 70%
+      dcAlarm = 89,  // Attention when dc >= 90%
+      csWarn  = 10,  // Warning when cs >= 11%
+      csAlarm = 19;  // Attention when cs >= 20%
 
-    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (BidCosIFaces) {
-      if (BidCosIFaces) {
-        var linkElem = jQuery("#iFaceShowAll");
-        if ((BidCosIFaces.length > 1) && (!linkElem.hasClass("UILink"))) {
-          linkElem
-            .addClass("UILink")
-            .on("click", function () {
-              showDutyCycle(); // actualize the dc value of the start page
-              showDCAllInterfaces();
-            });
-        }
+    homematic("Interface.getDutyCycle", {}, function(dcArray) {
+      if(jQuery.isArray(dcArray)) {
+        jQuery.each(dcArray, function(index, iface) {
+          var dutyCycleValElm = jQuery("#dutyCycleVal"+index),
+            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
+            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+            dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
+            carrierSenseValElm = jQuery("#carrierSenseVal"+index),
+            carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
+            carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
+            trPartingLineElm = jQuery("#partingLine1"),
+            csVal,
+            dcVal;
 
-        jQuery.each(BidCosIFaces, function (index, iFace) {
-          if (iFace.type == "CCU2") {
-            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
-              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
-              dutyCycleValElm = jQuery("#dutyCycleVal"),
-              trDutyCycle = jQuery("[name='trDutyCycle']"),
-              trPartingLineElm = jQuery("#partingLine1"),
-              dcVal,
-              width, value;
+          if (typeof iface.dutyCycle !== "undefined") {
+            dcVal = Math.floor(iface.dutyCycle);
+            csVal = Math.floor(iface.carrierSense);
+            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+            conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
+            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+            arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
+          } else {
+            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
+          }
 
-            if (typeof iFace.dutyCycle != "undefined") {
-              dcVal = parseInt(iFace.dutyCycle);
-              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
-              arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-            } else {
-              conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-              arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
-            }
-
-            if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
-
-              width = parseInt(dutyCycleProgressElem.css("width"));
-              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-
-              window.setTimeout(function () {
-                //dutyCycleProgressBarElm.css("width", value + "px");
-                dutyCycleProgressBarElm.css("margin-left", (width - parseInt(value)) + "px");
-
-              }, 25);
-
-              if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-                trDutyCycle.addClass("attention");
+          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+            if (iface.type === "CCU2") {
+              dutyCycleAddrElm.text("CCU:");
+            } else if(iface.type === "HMIP-HAP") {
+              if(iface.name !== "") {
+                dutyCycleAddrElm.text("HAP ("+iface.name+"):");
               } else {
-                trDutyCycle.removeClass("attention");
+                dutyCycleAddrElm.text("HAP ("+iface.address+"):");
               }
-              trPartingLineElm.show();
-              showPartingLine = true;
-              trDutyCycle.css("visibility", "visible");
+            } else if(iface.name !== "") {
+              dutyCycleAddrElm.text("LGW ("+iface.name+"):");
             } else {
-              trDutyCycle.css("visibility", "hidden");
+              dutyCycleAddrElm.text("LGW ("+iface.address+"):");
             }
 
-            if (!showPartingLine) {
-              trPartingLineElm.hide();
+            dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
+            dutyCycleBar.removeClass("bg-success");
+            dutyCycleBar.removeClass("bg-warning");
+            dutyCycleBar.removeClass("bg-danger");
+
+            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
+              dutyCycleBar.addClass("bg-danger");
+            } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
+              dutyCycleBar.addClass("bg-warning");
+            } else {
+              dutyCycleBar.addClass("bg-success");
             }
-            return false; // Leave each loop
+
+            if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
+              carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
+              carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
+              carrierSenseBar.removeClass("bg-info");
+              carrierSenseBar.removeClass("bg-warning");
+              carrierSenseBar.removeClass("bg-danger");
+
+              if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
+                carrierSenseBar.addClass("bg-danger");
+              } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
+                carrierSenseBar.addClass("bg-warning");
+              } else {
+                carrierSenseBar.addClass("bg-info");
+              }
+            } else {
+              carrierSenseValElm.text("n/a");
+              carrierSenseBar.css("width", "0%");
+            }
+            trPartingLineElm.show();
+            showPartingLine = true;
+            trDutyCycle.css("display", "table-row");
+          } else {
+            trDutyCycle.css("display", "none");
+          }
+
+          if (!showPartingLine) {
+            trPartingLineElm.hide();
           }
         });
       }
-      showDutyCycleHmIP();
     });
   }
 };
@@ -32985,6 +35222,20 @@ getProduct = function() {
  return WEBUI_VERSION.split(".")[0];
 };
 
+getDevFirmware = function(addr, iface) {
+  if (typeof addr == "undefined" ) {
+    return "x.y.z";
+  }
+  var iFace = (typeof iface == "undefined") ? "HmIP-RF" : iface,
+    devAddress = addr.split(":")[0],
+    devDescr = homematic("Interface.getDeviceDescription", {
+      "interface" : iFace,
+      "address" : devAddress
+    });
+
+  return devDescr.firmware;
+};
+
 showAllAPITools = function() {
   var self = this;
   var url = "/tools/HomeMatic-API.html";
@@ -33123,7 +35374,7 @@ getExtendedDescription = function(oChannelDescr) {
   }
 
   if (chType == "SWITCH_TRANSMITTER") {
-    if (deviceType.toLowerCase() == "hmip-mod-oc8") {
+    if ((deviceType.toLowerCase() == "hmip-mod-oc8") || (deviceType.toLowerCase() == "elv-sh-sb8")) {
       result = translateKey("chType_SWITCH_TRANSMITTER_OC");
     }
   }
@@ -33139,11 +35390,20 @@ getExtendedDescription = function(oChannelDescr) {
     if (deviceType == "HmIP-WUA" || deviceType == "ELV-SH-WUA") {
       result = translateKey("chType_UNIVERSAL_ACTOR_TRANSMITTER_010V");
     }
+
+    if (deviceType == "HmIP-BSL") {
+      result = translateKey("chType_OPTICAL_SIGNAL_RECEIVERB");
+    }
   }
 
   if (chType == "DIMMER_VIRTUAL_RECEIVER") {
     if (deviceType == "HmIP-WUA" || deviceType == "ELV-SH-WUA") {
       result = translateKey("chType_UNIVERSAL_ACTOR_VIRTUAL_RECEIVER_010V");
+    }
+
+    if (deviceType == "HmIP-BSL") {
+      // console.log("B firmware:q! " + getDevFirmware(channelAddress));
+      result = translateKey("chType_OPTICAL_SIGNAL_RECEIVER");
     }
   }
 
@@ -33176,6 +35436,7 @@ getExtendedDescription = function(oChannelDescr) {
     switch (tmpDev) {
       case "hmip-stho":
       case "hmip-stho-a":
+      case "elv-sh-cth":
         if (channelIndex == 2) result = translateKey("chType_COND_TEMPERATURE");
         if (channelIndex == 3) result = translateKey("chType_COND_HUMIDITY");
         break;
@@ -33249,11 +35510,17 @@ getExtendedDescription = function(oChannelDescr) {
       if ((multiMode != "--") && (typeof multiMode != "undefined")) {
         typeExt = "_" + multiMode;
       } else {
-        // API Call getMetaData channelMode
-        //typeExt = "_" + homematic("Interface.getMetadata", {"objectId": channelRegaID, "dataId": "channelMode"});
-        //if (typeExt == "_null") {
+        if (channelAddress != "undefined") {
+          var chn = DeviceList.getChannelByAddress(channelAddress),
+          chnMode = parseInt(chn.multiMode);
+          if (! isNaN(chnMode)) {
+            typeExt = "_" + chnMode;
+          } else {
+            typeExt = "";
+          }
+        } else {
           typeExt = "_1";
-        //}
+        }
       }
     }
     result = translateKey("chType_MULTI_MODE_INPUT_TRANSMITTER" + typeExt);
@@ -33302,13 +35569,13 @@ getExtendedDescription = function(oChannelDescr) {
   }
 
   if (chType == "ACCESS_RECEIVER") {
-    if (deviceType.toLowerCase() == "hmip-dld") {
+    if ((deviceType.toLowerCase() == "hmip-dld") || (deviceType.toLowerCase() == "hmip-dld-a") || (deviceType.toLowerCase() == "hmip-dld-s")  ) {
       result = translateKey("chType_ACCESS_RECEIVER") + " " + (channelIndex - 1);
     }
   }
 
   if (chType == "DOOR_LOCK_STATE_TRANSMITTER") {
-    if (deviceType.toLowerCase() == "hmip-dld") {
+    if ((deviceType.toLowerCase() == "hmip-dld") || (deviceType.toLowerCase() == "hmip-dld-a") || (deviceType.toLowerCase() == "hmip-dld-s") ) {
       result = translateKey("chType_DOOR_LOCK_STATE_TRANSMITTER");
     }
   }
@@ -33433,6 +35700,20 @@ getExtendedDescription = function(oChannelDescr) {
     result = translateKey("chType_DALI_UNIVERSAL_LIGHT_RECEIVER");
     if (channelIndex > 32) {
       result += "<br/>" + translateKey("lblGroup") + " " + (channelIndex - 32);
+    }
+  }
+
+  if ((deviceType.toLowerCase().includes("hmip-smo230")) || (deviceType.toLowerCase().includes("hmipw-smo230"))) {
+    var arAppendix = ["", "LEFT", "RIGHT", "BOTTOM", "VIRTUEL", "ZONE1", "ZONE2", "ZONE3", "VIRTUEL"];
+
+    if ((channelIndex >= 1) && (channelIndex <= 8)) {
+      result = translateKey("chType_" + chType + "_" + arAppendix[channelIndex]);
+    }
+  }
+
+  if (chType == "CLIMATE_TRANSCEIVER") {
+    if (deviceType == "ELV-SH-TACO") {
+      result = translateKey("chType_CLIMATE_TRANSCEIVER_TEMP");
     }
   }
 
@@ -33587,59 +35868,22 @@ getDualWhiteControllerDiagramURLs = function() {
   }
 };
 
-getTimeZoneDefinition = function(timeZone) {
-  var tz = [];
-  tz["ACST"] = [9.5, 9.5];
-  tz["ACST/ACDT"] = [9.5, 10.5];
-  tz["AEST"] = [10, 10];
-  tz["AEST/AEDT"] = [10, 11];
-  tz["AKST/AKDT"] = [-9, -8];
-  tz["AST/ADT"] = [-4, -3];
-  tz["AWST/AWDT"] = [8, 9];
-  tz["BRST/BRDT"] = [-3, -2];
-  tz["CET/CEST"] = [1, 2];
-  tz["CST"] = [-6, -6];
-  tz["CST/CDT"] = [-6, -5];
-  tz["EET/EEST"] = [2, 3];
-  tz["EST/EDT"] = [-5, -4];
-  tz["GMT/BST"] = [0, 1];
-  tz["GMT/IST"] = [0, 1];
-  tz["HAW"] = [-10, -10];
-  tz["HKT"] = [8, 8];
-  tz["MSK/MSD"] = [3, 4];
-  tz["RMST/RMDT"] = [3, 4];
-  tz["MST"] = [-7, -7];
-  tz["MST/MDT"] = [-7, -6];
-  tz["NST/NDT"] = [-3.5, -2.5];
-  tz["NZST/NZDT"] = [12, 13];
-  tz["PST/PDT"] = [-8, -7];
-  tz["SGT"] = [8, 8];
-  tz["ULAT/ULAST"] = [8, 9];
-  tz["WET/WEST"] = [0, 1];
-  tz["WIB"] = [7, 7];
-  return tz[timeZone];
-};
-
-getUTCOffset = function(tz) {
-  return getTimeZoneDefinition(tz);
-};
-
-setPositionAllDevices = function(lon, lat, timeZone) {
+setPositionAllDevices = function() {
   if (ConfigData.isPresent) {
 
-    var arUtcOffset = [];
-    arUtcOffset = getUTCOffset(timeZone);
-
-    var utcOffset = arUtcOffset[0] * 60,
-      utcOffsetDST = arUtcOffset[1] * 60;
+  homematic("system.getPositionData", {}, function(posData) {
+    var lon = posData[0].split(":")[1],
+      lat = posData[1].split(":")[1],
+      utcOffset = posData[2].split(":")[1],
+      utcOffsetDST = posData[3].split(":")[1];
 
     jQuery.each(DeviceList.devices, function (index, device) {
       var iFace = device.interfaceName;
-      if ((iFace.toLowerCase() == "hmip-rf") && (device.typeName.toLowerCase() != "hmip-rcv-50") && (device.typeName.toLowerCase() != "hmip-dld")) {
+      if ((iFace.toLowerCase() == "hmip-rf") && (device.typeName.toLowerCase() != "hmip-rcv-50") && (device.typeName.toLowerCase() != "hmip-dld") && (device.typeName.toLowerCase() != "hmip-dld-a") && (device.typeName.toLowerCase() != "hmip-dld-s") ) {
         // Check if the device has the channel *_WEEK_PROFILE
         jQuery.each(device.channels, function (index, channel) {
           if (channel.channelType.indexOf("_WEEK_PROFILE") != -1) {
-            conInfo("Set the position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
+            conInfo("Set utcOffsets+position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
 
             homematic("Interface.putParamset", {
               'interface': iFace,
@@ -33656,7 +35900,7 @@ setPositionAllDevices = function(lon, lat, timeZone) {
               conInfo(result);
             });
           } else if (channel.channelType == "HEATING_CLIMATECONTROL_TRANSCEIVER") {
-            conInfo("Set the position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
+            conInfo("Set utcOffsets of this device: " + channel.address.split(":")[0] + ":0 - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
 
             homematic("Interface.putParamset", {
               'interface': iFace,
@@ -33674,12 +35918,13 @@ setPositionAllDevices = function(lon, lat, timeZone) {
         });
       }
     });
+  });
   } else {
     window.setTimeout(function() {
       conInfo("ConfigData.isPresent: " + ConfigData.isPresent);
       counterSetPosition++;
       if (counterSetPosition < 30) {
-        setPositionAllDevices(lon, lat, timeZone);
+        setPositionAllDevices();
       }
     }, 2500);
   }
@@ -33689,12 +35934,11 @@ setNewDevicePos2SystemPos = function(oDevice) {
   homematic("system.getPositionData", {}, function(posData) {
     var lon = posData[0].split(":")[1],
       lat = posData[1].split(":")[1],
-      arUtcOffset = getUTCOffset(posData[2].split(":")[1]),
-      utcOffset = arUtcOffset[0] * 60,
-      utcOffsetDST = arUtcOffset[1] * 60;
+      utcOffset = posData[2].split(":")[1],
+      utcOffsetDST = posData[3].split(":")[1];
 
     var iFace = oDevice.iface;
-    if (iFace.toLowerCase() == "hmip-rf" && (oDevice.type.toLowerCase() != "hmip-rcv-50")  && (oDevice.type.toLowerCase() != "hmip-dld")) {
+    if (iFace.toLowerCase() == "hmip-rf" && (oDevice.type.toLowerCase() != "hmip-rcv-50") && (oDevice.type.toLowerCase() != "hmip-dld") && (oDevice.type.toLowerCase() != "hmip-dld-a") && (oDevice.type.toLowerCase() != "hmip-dld-s")) {
       // Check if the device has the channel *_WEEK_PROFILE
       jQuery.each(oDevice.chnTypes, function (index, channelType) {
         if (channelType.indexOf("_WEEK_PROFILE") != -1) {
@@ -33786,6 +36030,21 @@ setColorWebUI = function() {
   };
   dlg.run();
   dlg.resetHeight();
+};
+
+function activateDeviceBetaFw() {
+  var showBetaDevFw = jQuery("#inputShowBetaFw").is(":checked"),
+    fieldTestActive = "/etc/config/fieldTestActive";
+
+  if (showBetaDevFw) {
+    if (! homematic('CCU.existsFile', {'file': fieldTestActive})) {
+      homematic("CCU.createFile", {'file': fieldTestActive});
+    }
+  } else {
+    if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
+      homematic("CCU.removeFieldTestActive");
+    }
+  }
 };
 
 
@@ -34031,6 +36290,7 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
     this.bColLeft = false;
     this.bColCenter = false;
     this.bNameLeft = false;
@@ -34043,6 +36303,28 @@ iseFilter.prototype = {
     this.fltObjType = 0;
     if (fltObjType)
       this.fltObjType = fltObjType;
+
+    var self = this;
+    function fltrHandler() {
+      eQ3.HomeMatic.Event.unsubscribe('ContentLoaded', fltrHandler);
+      self.restoreFilters();
+    }
+    eQ3.HomeMatic.Event.subscribe('ContentLoaded', fltrHandler);
+  },
+
+  restoreFilters: function() {
+    try {
+      var iseSFilters = JSON.parse(localStorage.getItem('iseSFilters_' + this.pageID));
+      Object.keys(iseSFilters).forEach(function(id) {
+        var val = iseSFilters[id];
+        if ($(id)) {
+          $(id).value = val;
+          $(id).nextSiblings()[0].click();
+        }
+      });
+    } catch(e) {
+      console.error(e);
+    }
   },
   
 
@@ -34277,6 +36559,12 @@ iseFilter.prototype = {
             if (!bRet) { bRet = true; }
           }
         }
+        if (this.bTypeString) {
+          if (obj['type'] == "string")
+          {
+            if (!bRet) { bRet = true; }
+          }
+        }
         return bRet;
       }
     }
@@ -34330,6 +36618,7 @@ iseFilter.prototype = {
     if (this.bTypeValueList) return true;
     if (this.bTypeNumber) return true;
     if (this.bTypeAlarm) return true;
+    if (this.bTypeString) return true;
     return false; 
   },
     
@@ -34406,6 +36695,16 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
+    localStorage.removeItem('iseSFilters_' + this.pageID);
+    var filterButtons = document.querySelectorAll('.FilterSetButton[onclick*=' + this.pageID + ']');
+    filterButtons.forEach(function(el) {
+      try {
+        el.parentElement.parentElement.querySelector('.FilterBtn').style.color = '';
+      } catch(e) {
+        console.error(e);
+      }
+    });
     conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };
@@ -34438,6 +36737,7 @@ selectFilters = function(fltObj, divToShow)
       $("cbValueList").checked = fltObj.bTypeValueList;
       $("cbNumber").checked = fltObj.bTypeNumber;
       $("cbAlarm").checked = fltObj.bTypeAlarm;
+      $("cbString").checked = fltObj.bTypeString;
       break;
     case "btnFilterIfaceSub":
       $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
@@ -34514,6 +36814,12 @@ setSFilter = function(fltObj, ctrlId, fId)
 {
   //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
   fltObj.addStringFilter(fId, $(ctrlId).value);
+  try {
+    var iseFilters = JSON.parse(localStorage.getItem('iseSFilters_' + fltObj.pageID)) || {};
+    iseFilters[ctrlId] = $(ctrlId).value;
+    localStorage.setItem('iseSFilters_' + fltObj.pageID, JSON.stringify(iseFilters));
+    $(ctrlId).parentElement.previous().style.color = $(ctrlId).value ? 'red' : 'black';
+  } catch(e) { console.error(e); }
 };
 
 // Integer-Filter (Modus, Iface)
@@ -34564,7 +36870,8 @@ setAFilter = function(fltObj, sId)
       fltObj.bTypeLogic = $("cbLogic").checked;
       fltObj.bTypeValueList = $("cbValueList").checked;
       fltObj.bTypeNumber = $("cbNumber").checked;
-      fltObj.bTypeAlarm = $("cbAlarm").checked; 
+      fltObj.bTypeAlarm = $("cbAlarm").checked;
+      fltObj.bTypeString = $("cbString").checked;
       break;
     case "colPos":
       fltObj.bColLeft = $("cbColLeft").checked; 
@@ -34804,12 +37111,14 @@ iseButtonsKey.prototype = {
  **/
 iseButtonProg = Class.create();
 iseButtonProg.prototype = {
-  initialize: function(id, progActive) {
+  initialize: function(id, progActive, thenOnly) {
     this.id = id;
     this.progActive = progActive;
     
-    this.startBtn = $(id + "Start");
+    this.startBtn = (thenOnly === true) ? $(id + "StartThenOnly") : $(id + "Start");
     this.actBtn = $(id + "Act");
+    
+    this.thenOnly = thenOnly;
     
     if ( progActive ) { ControlBtn.on(this.actBtn); }
     
@@ -34821,7 +37130,7 @@ iseButtonProg.prototype = {
   onClickStart: function() 
   {
     ControlBtn.pushed(this.startBtn);
-    ExecuteProgram(this.id);
+    ExecuteProgram(this.id, this.thenOnly);
     var t = this;
     new PeriodicalExecuter(function(pe)
     {
@@ -35394,6 +37703,15 @@ iseThermostat_2ndGen = Class.create(iseThermostat, {
     if (this.opts.stTemp) {
       this.showActualTemp();
     }
+    if (this.opts.stHum) {                                            
+      this.showActualHumidity();                                      
+    }
+    if (this.opts.stBat) {
+      this.showActualBat();
+    }
+    if (this.opts.stValve !== null) {
+      this.showActualValve();
+    }
     if (this.opts.idComfort && this.opts.idLowering) {
       this.showComfortEco();
     }
@@ -35588,6 +37906,26 @@ iseThermostat_2ndGen = Class.create(iseThermostat, {
     jQuery("#"+this.id +"tblShowTemp").show();
   },
 
+  showActualHumidity: function() {
+    if (parseInt(this.opts.stHum) === 20) {
+      jQuery("#"+this.id +"actHumidity").text('n/a');
+    } else {
+      jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);
+      jQuery("#"+this.id +"actHumidityUnit").show();
+    }
+    jQuery("#"+this.id +"tblShowHumidity").show();
+  }, 
+
+  showActualBat: function() {
+    jQuery("#"+this.id +"actBatteryState").text(this.opts.stBat);
+    jQuery("#"+this.id +"tblShowBatteryState").show();
+  },
+  
+  showActualValve: function() {
+    jQuery("#"+this.id +"actValveState").text(this.opts.stValve);
+    jQuery("#"+this.id +"tblShowValveState").show();
+  },
+  
   showHolidayEndTime: function() {
     var stopTime = this.getHolidayEndTime();
     if (stopTime) {
@@ -35644,6 +37982,7 @@ iseThermostatHMIP.prototype = {
     conInfo(opts);
     var self = this;
     this.opts = opts;
+    this.devId = opts.devID;
     this.chId = this.opts.chID;
     this.chAddress = this.opts.chAddress;
     this.iface = this.opts.chInterface;
@@ -35686,21 +38025,27 @@ iseThermostatHMIP.prototype = {
     this.btnParty = this.getElemByID("Party");
     this.btnON = this.getElemByID("On");
     this.btnOFF = this.getElemByID("Off");
+
+    this.btnHeating = this.getElemByID("Heating");
+    this.btnCooling = this.getElemByID("Cooling");
+
     this.activeProfileElm = this.getElemByID("ActiveProfile");
     this.unitDegree = this.getElemByID("unitDegree");
     this.unknownState = "--";
 
+    this.heatingCoolingAllowed = (this.iface != 'VirtualDevices') ? true : false;
+    this.checkIfHeatingCoolingAllowed();
 
-    //homematic('Interface.getParamset', {"interface": this.iface, "address" : this.chAddress, "paramsetKey" : "VALUES"}, function(result) {
-      self.setResult(opts);
-      self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
-      self.setSControl("HUMIDITY", self.HUMIDITY);
-      self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
-      self.setSlider();
-      self.initElements();
-      self.bindEvents();
-    //});
 
+    this.setResult(opts);
+    this.setSControl("ACTUAL_TEMPERATURE", this.ACTUAL_TEMPERATURE);
+    this.setSControl("HUMIDITY", this.HUMIDITY);
+    this.setSControl("WINDOW_STATE", this.WINDOW_STATE);
+    this.setSControl("BATTERY_STATE", this.BATTERY_STATE);
+    this.setSControl("LEVEL", this.LEVEL);
+    this.setSlider();
+    this.initElements();
+    this.bindEvents();
   },
 
   setResult: function(opts) {
@@ -35710,6 +38055,8 @@ iseThermostatHMIP.prototype = {
     this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
     //this.FROST_PROTECTION = opts.FROST_PROTECTION;
     this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
+    this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
+    this.LEVEL = this.checkValue(opts.LEVEL, this.unknownState);
     //this.PARTY_MODE = opts.PARTY_MODE;
     this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
     this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);
@@ -36017,8 +38364,6 @@ iseThermostatHMIP.prototype = {
     });
 
     req.done(function(htmlContent) {
-
-      //partyModeDialog = new PartyModeDialog(translateKey("partyModeDialogTitle"), htmlContent, event.data.that.opts,function(result) {
       partyModeDialog = new PartyModeDialog(translateKey("partyModeDialogTitle"), htmlContent, oPartyValues,function(result) {
 
         var self = event.data.that;
@@ -36127,7 +38472,43 @@ iseThermostatHMIP.prototype = {
     this.percentElem.val(parseFloat(this.state).toFixed(1));
     conInfo("refresh: setting DP "+this.setPointID+" State -------> " + this.state);
     setDpState(setPointID, this.state);
+  },
+
+  // SPHM-1231 - When a link between a CLIMATECONTROL_FLOOR_TRANSMITTER (eg. WTH chn. 7) and a CLIMATECONTROL_FLOOR_TRANSCEIVER (e. g. FALMOT-C12 chn. 1 - 12) exists,
+  // the buttons Heating and Cooling must be only readable.
+  checkIfHeatingCoolingAllowed: function () {
+    var self = this;
+    if (this.heatingCoolingAllowed) {
+      var dev, chn, arLinkPeers = [];
+
+      dev = DeviceList.getDeviceByAddress(this.chAddress.split(":")[0]);
+
+      jQuery.each(dev.channels, function (index, chn) {
+        //  if (!self.heatingCoolingAllowed) {return false;} // exit the loop  -- this will cause a problem with the build process
+
+        if (self.heatingCoolingAllowed) {
+          if (chn.channelType == "CLIMATECONTROL_FLOOR_TRANSMITTER") {
+            arLinkPeers = homematic("Interface.getLinkPeers", {'interface': self.iface, 'address': chn.address});
+            jQuery.each(arLinkPeers, function (index, chnAddress) {
+              chn = DeviceList.getChannelByAddress(chnAddress);
+              if (chn.channelType == "CLIMATECONTROL_FLOOR_TRANSCEIVER") {
+                self.heatingCoolingAllowed = false;
+              }
+            });
+          }
+        }
+      });
+    }
+
+    if (! this.heatingCoolingAllowed) {
+      this.btnHeating.prop("onclick", null);
+      this.btnCooling.prop("onclick", null);
+      this.btnHeating.unbind("click").click(function() {MessageBox.show(translateKey("dialogHint"),translateKey("hintHeatingCoolngNotAllowed"), function() {loadChannels(self.devId);}, 500, 125);}).css("cursor", "default");
+      this.btnCooling.unbind("click").click(function() {MessageBox.show(translateKey("dialogHint"),translateKey("hintHeatingCoolngNotAllowed"), function() {loadChannels(self.devId);}, 500, 125);}).css("cursor", "default");
+    }
+
   }
+
 };/**
  * ise/iseFrequency.js
  **/
@@ -36336,6 +38717,7 @@ iseButtonsDoorContact.prototype = {
       case "CLOSED":
         return 0;
       case "1":
+      case "200":
       case "true":
       case "OPEN":
         return 1;
@@ -37747,25 +40129,25 @@ sysVarsPopupLoader.prototype = {
       IseSort(arSysVars,this.colName,false,true);
       for (var i = 0; i < arSysVars.length; i++) 
       {
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid']});
-        var td = Builder.node('td', {className: 'SysVarsTblPopup'}, strCut(translateString(arSysVars[i]['name']), true));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['desc']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['typenames']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['values']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['unit']));
-        tr.appendChild(td);
-        
         var sOnclick = "PopupClose();";
         if( this.sec ) sOnclick = "restorePrevious();";
         sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
-      
-        td = Builder.node('td', {className: 'WhiteBkg'}, [
-          Builder.node('div', {className: 'StdButton', onclick:sOnclick}, translateKey('btnSelect'))
-         ]);
+
+        var cName = 'SysVarsTblPopup';
+        if( arSysVars[i]['internal'] === 'true' ) {
+          cName = 'LightGrayBkg SysVarsTblPopup';
+        }
+
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
+        var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['typenames']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['values']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['unit']));
         tr.appendChild(td);
 
         tableBody.appendChild(tr);       
@@ -38128,6 +40510,7 @@ isePowerMeter.prototype = {
   initialize: function(id, opts) {
     conInfo("PowerMeter");
     var self = this;
+    this.opts = opts;
     this.powerMeter = "POWERMETER"; // e. g. Hm-ES-PMSw1-PL-DN-R1
     this.POWERMETER_IEC = "POWERMETER_IEC"; // e. g. Hm-ES-TX-WM
     this.energyMeterTransmitter = "ENERGIE_METER_TRANSMITTER"; // e. g. HmIP-PSM
@@ -38138,10 +40521,11 @@ isePowerMeter.prototype = {
     this.sensorTypeID.iec = "IEC";
     this.sensorTypeID.unknown = "Unknown";
     this.kiloPrefix = "";
+    this.hasFeedIn = (this.opts.chLabel == "HmIP-PSMCO") ? true : false;
 
     this.id = id;
-    this.opts = opts;
     this.summedUpEnergy = 0.0;
+    this.summedUpFeedIn = 0.0;
     this.measurementType = this.getSensorType();
     conInfo("Identified sensor: " + this.measurementType);
 
@@ -38162,6 +40546,8 @@ isePowerMeter.prototype = {
     this.EnergyCounterOldValID = "svEnergyCounter" + this.getSensorExtension() + "OldVal_" + this.id;
     this.EnergyPrice = "unknown";
 
+    this.EnergyCounterFeedInID = "svEnergyCounterFeedIn_" + this.id + "_" + this.opts.chAddress;
+
     this.bindEvents();
 
     this.setGenericInfoPanels(this.getVisibleInfoPanels());
@@ -38180,6 +40566,10 @@ isePowerMeter.prototype = {
     }
     jQuery("[name = '" + this.id + "EnergyCostDeviceUnit']").html(this.opts.unitEnergyCounter).show();
     this.setEnergyCounterPanel();
+
+    if (this.hasFeedIn) {
+      this.setEnergyCounterFeedInPanel();
+    }
 
     this.energyConfig = homematic("system.getEnergyPrice", {}, function (result) {
       self.energyConfig = result;
@@ -38249,37 +40639,27 @@ isePowerMeter.prototype = {
 
   bindEvents: function() {
     var self = this;
-    jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function(){
-      conInfo("Reset EnergyCounter.");
-      self.buttonPressed(this);
-      homematic("SysVar.setFloat", {"name" : self.EnergyCounterID, "value" : 0});
-      homematic("SysVar.setBool", {"name" : self.EnergyCounterRESETID, "value" : true});
-      if (self.opts.chType == "POWERMETER_IGL") {
-        homematic("SysVar.setFloat", {"name": self.EnergyCounterOldValID, "value": 0});
-      }
-      self.setEnergyCounterPanel();
-      self.showEnergyCost();
-    });
 
-    /*
-    jQuery("#"+ this.id + "setEnergyCounter").bind("click", function(){
+
+    jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function(){
       conInfo("Set EnergyCounter");
-      var dlgContent = "<table align='center'><tr><td><input type='text' id='meterReading'></td></tr></table>",
+      var dlgContent = "<table align='center'><tr><td>"+translateKey('lblEnergyConsumptionInWatt')+"<td><td><input type='text' id='meterReading'></td></tr></table>",
         valMeterReading;
 
-      setEnergyCounterDlg = new YesNoDialog("trans Enter meter readings", dlgContent, function(result) {
+      setEnergyCounterDlg = new YesNoDialog(translateKey("lblSetEnergyCounter"), dlgContent, function(result) {
         if (result == YesNoDialog.RESULT_YES) {
-          valMeterReading = jQuery("#meterReading").val();
-          // TODO check if the value is a valid float
+          valMeterReading = parseFloat(jQuery("#meterReading").val());
 
           // This removes the dialog from the screen
           Layer.remove(this.m_layer);
 
-          // This sets the new value of the power meter
-          homematic("SysVar.setFloat", {"name" : self.EnergyCounterID, "value" : valMeterReading}, function() {
-            self.setEnergyCounterPanel();
-            self.showEnergyCost();
-          });
+          if (! isNaN(valMeterReading)) {
+            // This sets the new value of the power meter
+            homematic("SysVar.setFloat", {"name": self.EnergyCounterID, "value": valMeterReading}, function () {
+              self.setEnergyCounterPanel();
+              self.showEnergyCost();
+            });
+          }
         } else {
           // NO pressed
           // This removes the dialog from the screen
@@ -38287,13 +40667,53 @@ isePowerMeter.prototype = {
         }
       }, "html");
 
+      setEnergyCounterDlg.btnTextNo(translateKey("dialogBack"));
+      setEnergyCounterDlg.btnTextYes(translateKey("btnOk"));
+
       // Overwrites the original close method
       setEnergyCounterDlg.close = function(result) {
         if (this.m_callback) { this.m_callback(result); }
       };
 
     });
-    */
+
+    // Feed In
+    jQuery("#"+ this.id + "resetFeedInCounter").bind("click", function(){
+      conInfo("Set Feed In Counter");
+      var dlgContent = "<table align='center'><tr><td>"+translateKey('lblEnergyConsumptionInWatt')+"<td><td><input type='text' id='meterReading'></td></tr></table>",
+        valMeterReading;
+
+      setEnergyCounterDlg = new YesNoDialog(translateKey("lblSetEnergyCounter"), dlgContent, function(result) {
+        if (result == YesNoDialog.RESULT_YES) {
+          valMeterReading = parseFloat(jQuery("#meterReading").val());
+
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+
+          if (! isNaN(valMeterReading)) {
+            // This sets the new value of the power meter
+            homematic("SysVar.setFloat", {"name": self.EnergyCounterFeedInID, "value": valMeterReading}, function () {
+              self.setEnergyCounterFeedInPanel();
+              //self.showEnergyCost();
+            });
+          }
+        } else {
+          // NO pressed
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+        }
+      }, "html");
+
+      setEnergyCounterDlg.btnTextNo(translateKey("dialogBack"));
+      setEnergyCounterDlg.btnTextYes(translateKey("btnOk"));
+
+      // Overwrites the original close method
+      setEnergyCounterDlg.close = function(result) {
+        if (this.m_callback) { this.m_callback(result); }
+      };
+
+    });
+
   },
 
   /**
@@ -38342,6 +40762,315 @@ isePowerMeter.prototype = {
     }
   },
 
+  changeToKilo: function(x) {
+    if (x == "summedUpFeedIn") {
+      return (this.summedUpFeedIn/1000).toFixed(3);
+    } else {
+      return (this.summedUpEnergy/1000).toFixed(3);
+    }
+
+  },
+
+  setEnergyCounterPanel: function() {
+    var j_panel = this.getJElemByID("EnergyCounter");
+    // For a Hm-ES-TX-WM (POWERMETER_IEC) with a firmware >= 2.0.0 show 4 decimal places
+    var decimalPlace = ((this.opts.chType.indexOf(this.POWERMETER_IEC) != -1) && (parseInt(this.opts.devFirmwareMajor) >= 2))  ? 4 : 2;
+    this.summedUpEnergy = parseFloat(homematic("SysVar.getValue", {"id" : this.EnergyCounterID})).toFixed(decimalPlace);
+    conInfo("setEnergyCounterPanel - this.summedUpEnergy: " + this.summedUpEnergy);
+
+    this.kiloPrefix = "";
+    if (this.summedUpEnergy >= 1000.0 && (this.measurementType != this.sensorTypeID.gas) && (this.measurementType != this.sensorTypeID.iec)) {
+      this.kiloPrefix = "k";
+      this.summedUpEnergy = this.changeToKilo('summedUpEnergy');
+    }
+
+    j_panel.html(this.summedUpEnergy + " " + this.kiloPrefix + this.opts.unitEnergyCounter);
+  },
+
+  setEnergyCounterFeedInPanel: function() {
+    var j_panel = this.getJElemByID("energyCounterFeedIn");
+    var decimalPlace = 2;
+
+    this.summedUpFeedIn = parseFloat(homematic("SysVar.getValue", {"id" : this.EnergyCounterFeedInID})).toFixed(decimalPlace);
+    conInfo("setEnergyCounterFeedInPanel - this.summedUpFeedIn: " + this.summedUpFeedIn);
+
+    this.kiloPrefix = "";
+    if (this.summedUpFeedIn >= 1000.0) {
+      this.kiloPrefix = "k";
+      this.summedUpFeedIn = this.changeToKilo('summedUpFeedIn');
+    }
+
+    j_panel.html(this.summedUpFeedIn + " " + this.kiloPrefix + this.opts.unitEnergyCounter);
+  },
+
+  getEnergyConsumption: function(sType) {
+    // Electricity sensor
+    if ((this.measurementType == this.sensorTypeID.eletricity )) {
+      if (sType == "CCU")  return this.summedUpEnergy;
+      if (sType == "Device") return this.opts.valEnergyCounter;
+    }
+
+    // Gas sensor
+    if (this.measurementType == this.sensorTypeID.gas) {
+      if (sType == "CCU")  return (this.summedUpEnergy * this.energyConfig.gasHeatingValue * this.energyConfig.gasConditionNumber) ;
+      if (sType == "Device") return (this.opts.valEnergyCounterGas * this.energyConfig.gasHeatingValue * this.energyConfig.gasConditionNumber);
+    }
+
+    // IEC sensor
+    if ((this.measurementType == this.sensorTypeID.iec)) {
+      if (sType == "CCU")  return this.summedUpEnergy;
+      if (sType == "Device") return this.opts["valEnergyCounter" + this.getSensorExtension()];
+    }
+
+  },
+
+  // Some channels aren't allowed to show the energy cost
+  // E. g. the channel POWERMETER_IEC2 measures the energy which a client feeds into the power supply system (solar, wind or so)
+  isChannelValid2ShowEnergyCost: function() {
+    return (this.opts.chType == "POWERMETER_IEC2") ? false : true;
+  },
+
+  showEnergyCost: function() {
+    if (this.energyConfig && (this.measurementType != this.sensorTypeID.unknown) && ( this.isChannelValid2ShowEnergyCost()) ) {
+      var unitFactorCCU = 1000,
+        unitFactorDevice = 1000,
+        kWh = " kWh";
+
+      if (this.kiloPrefix == "k") {
+        unitFactorCCU = 1;
+      }
+
+      if ((this.measurementType == this.sensorTypeID.iec)) {
+        unitFactorCCU = 1;
+        unitFactorDevice = 1;
+      }
+
+      if (this.measurementType == this.sensorTypeID.gas) {
+        this.EnergyPrice = this.energyConfig.gasPrice;
+        unitFactorCCU = 1;
+        unitFactorDevice = 1;
+      }
+      if (this.measurementType == this.sensorTypeID.eletricity || this.measurementType == this.sensorTypeID.iec) this.EnergyPrice = this.energyConfig.curPrice;
+
+      if (this.EnergyPrice != "unknown" && this.energyConfig.currency != null) {
+        var j_energyCostCCU = this.getJElemByID("EnergyCostCCU"),
+          j_energyCostDevice = this.getJElemByID("EnergyCostDevice"+this.getSensorExtension()),
+          energyConsumptionCCU = this.getEnergyConsumption("CCU"),
+          energyConsumptionDevice = this.getEnergyConsumption("Device"),
+          energyCostCCU = ((energyConsumptionCCU * this.EnergyPrice) / unitFactorCCU).toFixed(2) + " " + this.energyConfig.currency,
+          energyCostDevice = ((energyConsumptionDevice * this.EnergyPrice) / unitFactorDevice).toFixed(2) + " " + this.energyConfig.currency;
+        if (this.measurementType == this.sensorTypeID.gas) {
+          j_energyCostCCU.text(energyConsumptionCCU.toFixed(1) + kWh + " = " + energyCostCCU).show();
+          j_energyCostDevice.text(energyConsumptionDevice.toFixed(1) + kWh + " = " + energyCostDevice).show();
+        } else {
+          j_energyCostCCU.text(energyCostCCU).show();
+          j_energyCostDevice.text(energyCostDevice).show();
+        }
+      } else {
+        conInfo("Unknown energy price");
+      }
+    }
+  }
+};
+
+
+isePowerMeterESI = Class.create();
+
+isePowerMeterESI.prototype = {
+
+  initialize: function(id, opts) {
+    //console.log(opts);
+    var self = this;
+
+    this.iface = "HmIP-RF";
+    this.id = id;
+    this.opts = opts;
+
+    this.powerMeter = "POWERMETER"; // e. g. Hm-ES-PMSw1-PL-DN-R1
+    this.POWERMETER_IEC = "POWERMETER_IEC"; // e. g. Hm-ES-TX-WM
+
+    this.energyMeterTransmitter = "ENERGIE_METER_TRANSMITTER"; // e. g. HmIP-PSM
+    this.sensorTypeID = {};
+    this.sensorTypeID.gas = "Gas";
+    this.sensorTypeID.eletricity = "Electricity";
+    this.sensorTypeID.iec = "IEC";
+    this.sensorTypeID.unknown = "Unknown";
+    this.kiloPrefix = "";
+
+    this.idBtnSelfCalibration = this.opts.idBtnSelfCalibration;
+
+    this.chn = parseInt(this.opts.chn);
+
+    this.summedUpEnergy = 0.0;
+
+    this.arSensorTypes = [
+      "SENSOR_UNKNOWN",
+      "SENSOR_ES_GAS",
+      "SENSOR_ES_LED",
+      "SENSOR_ES_IEC",
+      "SENSOR_ES_IEC_SML",
+      "SENSOR_ES_IEC_SML_WH",
+      "SENSOR_ES_IEC_D0_A",
+      "SENSOR_ES_IEC_D0_B",
+      "SENSOR_ES_IEC_D0_C",
+      "SENSOR_ES_IEC_D0_D"
+    ];
+
+    this.measurementType = this.getSensorType(); // Connected Sensor
+
+    if (this.chn == 1) {
+      this.sensor =  homematic("Interface.getMetadata", {"objectId": this.id, "dataId": "sensor"});
+      console.log("this.measurementType: " + this.measurementType ,"this.sensor: " + this.sensor);
+
+      this.showPowerGasFlowPanel();
+
+      if (this.measurementType != this.sensor) {
+        console.log("set MetaData sensor: " + this.measurementType);
+        homematic("Interface.setMetadata", {"objectId": this.id, "dataId": "sensor", "value": this.measurementType});
+      }
+
+    }
+
+    this.EnergyPrice = "unknown";
+
+    this.bindEvents();
+
+    jQuery("[name = '" + this.id + "EnergyCostDeviceUnit']").html(this.opts.unitEnergyCounter).show();
+    this.setEnergyCounterPanel();
+
+    this.energyConfig = homematic("system.getEnergyPrice", {}, function (result) {
+      self.energyConfig = result;
+      // When the energy price config is available and it´s a known sensor (electricity or gas)
+      // then show the energy cost
+      if (result && (self.measurementType != self.sensorTypeID.unknown)) {
+        self.showEnergyCost();
+      }
+    });
+    jQuery("[name = '" + this.id + "sensor" + this.getSensorExtension() + "']").show();
+    conInfo("Interface: " + this.opts.iface);
+    conInfo("MeasurementType: " + this.measurementType);
+
+  },
+
+
+  showPowerGasFlowPanel: function() {
+    var panelElm = jQuery("[name='curConsumptionPanel_"+this.id+"']"),
+      noSensorElm = jQuery("#noSensorAvailable_" + this.id),
+      sensorGas = jQuery("#gasFlow_" + this.id),
+      sensorElec = jQuery("#power_" + this.id);
+
+    // console.log("showPowerGasFlowPanel", "this.measurementType: " + this.measurementType);
+
+    if ((typeof this.measurementType == "undefined") || (this.measurementType == null) ) {
+      panelElm.hide();
+      noSensorElm.show();
+      return;
+    }
+
+    switch (this.measurementType) {
+      case this.arSensorTypes[0]:  // SENSOR_UNKNOWN
+        panelElm.hide();
+        noSensorElm.show();
+        break;
+      case this.arSensorTypes[1]: // SENSOR_ES_GAS
+        noSensorElm.hide();
+        panelElm.show();
+        sensorElec.hide();
+        sensorGas.show();
+        break;
+      default:
+        noSensorElm.hide(); // SENSOR_ES_LED and all SENSOR_ES_IEC sensors (e. g. SENSOR_ES_IEC_SML)
+        panelElm.show();
+        sensorGas.hide();
+        sensorElec.show();
+    }
+  },
+
+  getSensorType: function() {
+    var paramSet = homematic("Interface.getParamset", {"interface": this.opts.iface, "address" : this.opts.chAddress, "paramsetKey" :"MASTER"});
+
+    // With the HmIP-ESI only channel 1 has the parameter CHANNEL_OPERATION_MODE
+    return (typeof paramSet.CHANNEL_OPERATION_MODE == "undefined") ? -1 : this.arSensorTypes[parseInt(paramSet.CHANNEL_OPERATION_MODE)];
+  },
+
+  buttonPressed: function(btn) {
+    var elem = jQuery(btn);
+    elem.addClass("ControlBtnOn").removeClass("ControlBtnOff");
+    setTimeout(function() {
+      elem.addClass('ControlBtnOff').removeClass('ControlBtnOn');
+    }, 500);
+
+  },
+
+  bindEvents: function() {
+    var self = this;
+
+    jQuery("#"+ this.id + "startSelfCalibration").bind("click", function() {
+      // self.searchSensor(self.idBtnSelfCalibration); for setDpState
+      self.searchSensor(self.iface, self.opts.chAddress);
+    });
+
+
+    jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function() {
+      conInfo("Set EnergyCounter");
+      var dlgContent = "<table align='center'><tr><td>"+translateKey('lblEnergyConsumptionInWatt')+"<td><td><input type='text' id='meterReading'></td></tr></table>",
+        valMeterReading;
+
+      setEnergyCounterDlg = new YesNoDialog(translateKey("lblSetEnergyCounter"), dlgContent, function(result) {
+        if (result == YesNoDialog.RESULT_YES) {
+          valMeterReading = parseFloat(jQuery("#meterReading").val());
+
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+
+          if (! isNaN(valMeterReading)) {
+            // This sets the new value of the power meter
+            homematic("SysVar.setFloat", {"name": self.EnergyCounterID, "value": valMeterReading}, function () {
+              self.setEnergyCounterPanel();
+              self.showEnergyCost();
+            });
+          }
+        } else {
+          // NO pressed
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+        }
+      }, "html");
+
+      setEnergyCounterDlg.btnTextNo(translateKey("dialogBack"));
+      setEnergyCounterDlg.btnTextYes(translateKey("btnOk"));
+
+      // Overwrites the original close method
+      setEnergyCounterDlg.close = function(result) {
+        if (this.m_callback) { this.m_callback(result); }
+      };
+
+    });
+  },
+
+  /**
+   * Returns the jQuery element of a given parameter
+   * @param {string} elem The name of the desired element
+   * @return {object} The desired element
+   */
+  getJElemByID: function(elem) {
+    return jQuery("#" + this.id + elem);
+  },
+
+  getJElemsByName: function(elem) {
+    return jQuery("[name='" + this.id + elem + "']");
+  },
+
+  getSensorExtension: function() {
+    switch (this.measurementType) {
+      case  this.sensorTypeID.gas:
+        return this.sensorTypeID.gas;
+      case this.sensorTypeID.iec:
+        return this.sensorTypeID.iec;
+      default: return "";
+    }
+  },
+
   changeToKilo: function() {
     return (this.summedUpEnergy/1000).toFixed(3);
   },
@@ -38353,6 +41082,7 @@ isePowerMeter.prototype = {
     this.summedUpEnergy = parseFloat(homematic("SysVar.getValue", {"id" : this.EnergyCounterID})).toFixed(decimalPlace);
     conInfo("setEnergyCounterPanel - this.summedUpEnergy: " + this.summedUpEnergy);
 
+    this.kiloPrefix = "";
     if (this.summedUpEnergy >= 1000.0 && (this.measurementType != this.sensorTypeID.gas) && (this.measurementType != this.sensorTypeID.iec)) {
       this.kiloPrefix = "k";
       this.summedUpEnergy = this.changeToKilo();
@@ -38428,11 +41158,29 @@ isePowerMeter.prototype = {
         conInfo("Unknown energy price");
       }
     }
+  },
+
+  searchSensor: function(iface, chnAddress) {
+    conInfo("searchSensor");
+    ShowWaitAnim();
+    homematic("Interface.putParamset",{'interface': iface, 'address' : chnAddress, 'paramsetKey' : 'VALUES', 'set':
+        [
+          {name:'SELF_CALIBRATION', type: 'int', value: 1}
+        ]
+    },function(result){
+      if (result) {
+        window.setTimeout(function() {
+          HideWaitAnim();
+          reloadPage();
+        },1000);
+      } else {
+        HideWaitAnim();
+        alert("Please press the system button and try again.");
+      }
+    });
+    HideWaitAnimAutomatically(5);
   }
-};
-
-
-// This class is currently not in use
+};// This class is currently not in use
 // See esp/controls/rgbw.fn - CreateRGBWAutomaticControl
 
 iseRGBWController = Class.create();
@@ -39338,7 +42086,8 @@ iseHmIPJalousieShutter = Class.create(iseButtonsShutter, {
     },function(result){conInfo(result);});
   },
 
-  saveValue: function() {
+  // See SPHM-1301 - this was the previous version
+  _saveValue: function() {
     var level2Value;
 
     this.state = (this.state != -1) ? this.state : 0;
@@ -39351,7 +42100,6 @@ iseHmIPJalousieShutter = Class.create(iseButtonsShutter, {
       } else if (this.pressedUpDown == "UP") {
         level2Value = 1;
       }
-
 
       // twist-1551
       if ((this.pressedUpDown != "") && (typeof level2Value != "undefined") ) {
@@ -39367,23 +42115,40 @@ iseHmIPJalousieShutter = Class.create(iseButtonsShutter, {
 
         setDpState(this.dpLevel, this.state / 100);
 
-        /*
-        homematic("Interface.putParamset", {
-          'interface': this.Interface, 'address': this.opts.chnAddress, 'paramsetKey': 'VALUES', 'set': [
-            {name: 'LEVEL', type: 'double', value: this.state / 100}
-            //{name: 'LEVEL_2', type: 'double', value: 1.005} LEVEL_2 wird intern vom Realkanal durch den crRFD ermittelt.
-          ]
-        }, function (result) {
-          conInfo(result);
-        });
-        */
-
       }
-
-
     } else {
       setDpState(this.dpLevel, this.state / 100);
     }
+  },
+
+  // See SPHM-1301
+  saveValue: function() {
+    var self=this, level2Value;
+    this.state = (this.state != -1) ? this.state : 0;
+      blindLevelDestination[this.id] = this.state;
+      if (this.pressedUpDown == "DOWN") {
+        level2Value = 0;
+      } else if (this.pressedUpDown == "UP") {
+        level2Value = 1;
+      }
+      level2Value = (typeof level2Value == "undefined") ? 0 : level2Value;
+      homematic("Interface.putParamset", {
+        'interface': this.Interface, 'address': this.opts.chnAddress, 'paramsetKey': 'VALUES', 'set': [
+          {name: 'LEVEL', type: 'double', value: this.state / 100},
+          {name: 'LEVEL_2', type: 'double', value: level2Value}
+        ]
+      }, function (result) {
+        conInfo("1st try: " + result);
+        if (result == null) {
+          homematic("Interface.putParamset", {
+            'interface': self.Interface, 'address': self.opts.chnAddress, 'paramsetKey': 'VALUES', 'set': [
+              {name: 'LEVEL', type: 'double', value: self.state / 100}
+            ]
+          }, function (result) {
+            conInfo("2nd try: " + result);
+          });
+        }
+     });
   }
 });
 iseDualWhiteColorController = Class.create();
@@ -39607,11 +42372,13 @@ iseHmIPWeeklyProgram.prototype = {
     this.callback = callback;
     this.opts = opts;
     this.id = id;
+
+    this.fwMajor = opts.fwMajor;
+    this.fwMinor = opts.fwMinor;
+    this.fwPatch = opts.fwPatch;
+
     this.devLabel = opts.deviceLabel;
     this.iface = this.opts.chInterface;
-
-    this.expert = (! this.opts.userEasyLinkMode) ? true : false;
-
     this.chAddress = this.opts.chnAddress;
 
     this.wiegandInterface = (this.isDeviceType("HmIP-FWI")) ? true : false;
@@ -39619,13 +42386,26 @@ iseHmIPWeeklyProgram.prototype = {
     this.deviceIsHmIP_MOD_WD_VK = this.isDeviceType("HmIP-MOD-WD-VK");
     this.deviceIsHmIP_RGBW = this.isDeviceType("HmIP-RGBW");
     this.deviceIsHmIP_DALI = this.isDeviceType("HmIP-DRG-DALI");
+    this.deviceIsHmIP_FLC = (this.isDeviceType("HmIP-FLC") || (this.isDeviceType("HmIP-FDC")));
+
+    this.expert = (! this.opts.userEasyLinkMode || this.deviceIsHmIP_FLC) ? true : false;
 
     this.device = this.getDevice(this.opts.deviceID);
     this.relevantChn = this.getRelevantChannels();
 
     // The HmIP-BSL consists of SWITCH and DIMMER channels. For the weekly program we are currently using only the SWITCH channels.
+    /*
     if (this.isDeviceType("HmIP-BSL")) {
       this.relevantChn = (this.expert) ? [4, 5, 6] : [4];
+    }
+    */
+
+    if (this.isDeviceType("HmIP-BSL")) {
+      if (this.fwMajor < 2) {
+        this.relevantChn = (this.expert) ? [4, 5, 6] : [4];
+      } else {
+        this.relevantChn = (this.expert) ? [4, 5, 6, 8, 9, 10, 12, 13, 14] : [4, 8, 12];
+      }
     }
 
     if (this.deviceIsHmIPWKP) {
@@ -39634,6 +42414,10 @@ iseHmIPWeeklyProgram.prototype = {
 
     if (this.deviceIsHmIP_MOD_WD_VK) {
       this.relevantChn = [2];
+    }
+
+    if ((this.isDeviceType("HmIP-SMO230")) || (this.isDeviceType("HmIP-SMO230-A")) || (this.isDeviceType("HmIPW-SMO230")) || (this.isDeviceType("HmIPW-SMO230-A"))) {
+      this.relevantChn =  [10, 11, 12];
     }
 
     if (this.deviceIsHmIP_RGBW) {
@@ -39781,18 +42565,18 @@ iseHmIPWeeklyProgram.prototype = {
     }
     jQuery.each(relevantChn, function (index, value) {
       //debugger;
-      chState = (binChannelState[index]) ? binChannelState[index] : "0";
+      chState = (binChannelState[index]) ? binChannelState[index] : "1";
       if (! self.deviceIsHmIP_DALI) {
-        if (chState == "1") {
-          jQuery("#" + self.id + "_bit" + index + "1").attr("checked", true);
+        if (chState == "0") {
+          jQuery("#" + self.id + "_bit" + index + "0").attr("checked", true); // Auto
         } else {
-          jQuery("#" + self.id + "_bit" + index + "0").attr("checked", true);
+          jQuery("#" + self.id + "_bit" + index + "1").attr("checked", true);  // Manu
         }
       } else {
-        if (chState == "1") {
-          jQuery("#" + self.id + "_bit" + (value - 1) + "1").attr("checked", true);
+        if (chState == "0") {
+          jQuery("#" + self.id + "_bit" + (value - 1) + "0").attr("checked", true); // Auto
         } else {
-          jQuery("#" + self.id + "_bit" + (value - 1) + "0").attr("checked", true);
+          jQuery("#" + self.id + "_bit" + (value - 1) + "1").attr("checked", true); // Manu
         }
       }
     });
@@ -40071,6 +42855,8 @@ iseHmIPWeeklyProgram.prototype = {
     DoorLockTransmitterID = "DOOR_LOCK_STATE_TRANSMITTER", // HmIP-DLD
     OpticalSignalID = "OPTICAL_SIGNAL_RECEIVER", // HmIPW-WRC6
     UniversalLightReceiver = "UNIVERSAL_LIGHT_RECEIVER", // HmIP-RGBW
+    PermissionTranseiverID = "PERMISSION_TRANSCEIVER", // HmIP-FLC/FLD
+    SwitchTranseiverID = "SWITCH_TRANSCEIVER", // HmIP-FLC/FLD
     expertChn;
 
     jQuery.each(this.device.channels, function(index,chn) {
@@ -40081,6 +42867,8 @@ iseHmIPWeeklyProgram.prototype = {
         || (chn.channelType.indexOf(DoorLockTransmitterID) !== -1)
         || (chn.channelType.indexOf(OpticalSignalID) !== -1)
         || (chn.channelType.indexOf(UniversalLightReceiver) !== -1)
+        || (chn.channelType.indexOf(PermissionTranseiverID) !== -1)
+        || (chn.channelType.indexOf(SwitchTranseiverID) !== -1)
       ) {
         if (self.expert) {
           result.push(index);
@@ -40118,7 +42906,9 @@ iseHmIPWeeklyProgram.prototype = {
         || channelType == "ACCESS_TRANSCEIVER"
         || channelType == "DOOR_LOCK_STATE_TRANSMITTER"
         || channelType == "OPTICAL_SIGNAL_RECEIVER"
-        || channelType == "UNIVERSAL_LIGHT_RECEIVER")
+        || channelType == "UNIVERSAL_LIGHT_RECEIVER"
+        || channelType == "PERMISSION_TRANSCEIVER"
+        || channelType == "SWITCH_TRANSCEIVER")
         {
           return channelNr;
         }
@@ -40170,7 +42960,6 @@ iseHmIPWeeklyProgram.prototype = {
     var arMode = ["MANU_MODE", "AUTO_MODE_WITH_RESET", "AUTO_MODE_WITHOUT_RESET"];
     return "WPTCLS="+this.selectedCh+",WPTCL="+arMode.indexOf(this.modeElm.val());
   }
-
 };
 /**
  * Created by grobelnik on 04.12.2020.
@@ -40514,10 +43303,7 @@ iseMOD_RC8.prototype = {
     });
 
   }
-};
-
-iseAccelerationTransceiver = Class.create();
-
+};iseAccelerationTransceiver = Class.create();
 iseAccelerationTransceiver.prototype = {
   initialize: function (chnId, valMotion, chnAddress, tiltAngle, tiltAngleUnit) {
     var self = this;
@@ -40546,6 +43332,47 @@ iseAccelerationTransceiver.prototype = {
           break;
       }
       outputElm.html(arMessage[result] + ":<br/>"+ res );
+    });
+  }
+};
+
+iseAccelerationTransceiverTaco = Class.create();
+iseAccelerationTransceiverTaco.prototype = {
+  initialize: function (chnId, valMotion, chnAddress, tiltAngle, tiltAngleUnit, position) {
+    var self = this;
+    this.chnId = chnId;
+    this.valMotion = valMotion;
+    this.chnAddress = chnAddress;
+    this.position = position; // 0 waagerecht, 1 geneigt, 2 senkrecht
+    this.tiltAngle = tiltAngle;
+    this.tiltAngleUnit = tiltAngleUnit;
+
+    var tmp = homematic("Interface.getMasterValue", {"interface": "HmIP-RF", "address": this.chnAddress, "valueKey": "CHANNEL_OPERATION_MODE"},function(result) {
+      var firstElm = jQuery("#firstElm" + chnId),
+        secondElm = jQuery("#secondElm" + chnId),
+        angleElm = jQuery("#angleElm" + chnId),
+        arMessage = ["",translateKey("lblVibration"),translateKey("lblPosition"), translateKey("lblPositionA")],
+        arMotion = [translateKey("lblNo"), translateKey("lblYes")],
+        arPosition = ["waagerecht","geneigt" ,"senkrecht"],
+        arPositionA = ["waagerecht","geneigt" ,"geneigt"],
+        lblAngle = translateKey("lblAngle") + ":<br/>",
+        motion = (self.valMotion == "false") ? arMotion[0] : arMotion[1];
+
+
+
+      switch (parseInt(result)) {
+        case 1:
+          firstElm.html(arMessage[result] + "<br/>" +  motion );
+          break;
+        case 2:
+          firstElm.html(arMessage[result]  + ":<br/>" + arPositionA[position]);
+          break;
+        case 3:
+          firstElm.html(arMessage[result]  + ":<br/>" + arPosition[position]);
+          break;
+      }
+      angleElm.html(lblAngle + self.tiltAngle + self.tiltAngleUnit);
+
     });
   }
 };
@@ -40909,6 +43736,8 @@ iseUniversalLightReceiver.prototype = {
     this.DURATION_VALUE = 31;
     this.DURATION_UNIT = 2; // hour
 
+    this.hueStatus = opts.hueStatus;
+
     this.colorPickerInit = {
       hue : parseInt(opts.hue),
       saturation : parseInt((opts.saturation*100)),
@@ -40917,16 +43746,37 @@ iseUniversalLightReceiver.prototype = {
 
     this.percLevelElm = jQuery("#"+this.chnId+"Perc");
 
-    this.hueElm = jQuery("#hueElmId_"+ chnId);
-    this.satElm = jQuery("#satElmId_"+ chnId);
-    this.bckGndlm = jQuery("#bckGndlmId_"+ chnId);
-    //this.btnOkElm = jQuery("#btnOkElmId_"+ chnId);
+    this.hueElm = jQuery("#hueElmId_"+ this.chnId);
+    this.satElm = jQuery("#satElmId_"+ this.chnId);
+    this.bckGndElm = jQuery("#bckGndlmId_"+ this.chnId);
+    this.setActiveElm();
     this.setKeyHandler();
     this.getColorPicker();
   },
 
+  setActiveElm: function() {
+    if (this.EFFECT > 0) {
+      jQuery(".j_ControlBtnInfo").first().removeClass("ControlBtnInfoActive").addClass("ControlBtnInfo");
+
+      // set the active effect button blue
+      var btnEffect = jQuery("#ulrEffect_"+(parseInt(parseInt(this.EFFECT + (this.EFFECT % 2)) / 2))+"_" + this.chnId);
+      jQuery("[name='urlEffect_"+this.chnId+"']").switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate all effect buttons
+      btnEffect.switchClass('ControlBtnOff', 'ControlBtnOn', 0); // activate the active effect button
+
+    } else {
+      jQuery(".j_ControlBtnInfo").first().removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    }
+  },
+
+
   setKeyHandler: function() {
     var self = this;
+
+    this.bckGndElm.click(function(event) {
+      self.activateColorPicker();
+      jQuery(this).change();
+      self.saveColor();
+    });
 
     this.hueElm.keyup(function(event) {
       var val;
@@ -40939,6 +43789,7 @@ iseUniversalLightReceiver.prototype = {
     });
 
     this.hueElm.blur(function(event) {
+      self.activateColorPicker();
       var val;
         val = parseInt(jQuery(this).val());
         if (val < 0 || isNaN(val)) {self.HUE = 0;} else if (val > 360) {self.HUE = 360;} else {self.HUE = val;};
@@ -40957,6 +43808,7 @@ iseUniversalLightReceiver.prototype = {
     });
 
     this.satElm.blur(function(event) {
+      self.activateColorPicker();
       var val;
       val = (parseInt(jQuery(this).val()) / 100);
       if (val < 0 || isNaN(val)) {self.SATURATION = 0;} else if (val > 1) {self.SATURATION = 1;} else {self.SATURATION = val;};
@@ -40977,9 +43829,49 @@ iseUniversalLightReceiver.prototype = {
   },
 
   getColorPicker: function() {
-    var self = this;
-    this.hueElm.val(this.colorPickerInit.hue);
-    this.satElm.val(this.colorPickerInit.saturation);
+    var self = this,
+      lastHueSat;
+
+      if (this.hueStatus == 0) {
+        this.hueElm.val(this.colorPickerInit.hue);
+        this.satElm.val(this.colorPickerInit.saturation);
+
+        homematic("Interface.setMetadata", {
+          "objectId": self.chnId,
+          "dataId": "lastValHueSat",
+          "value": "HUE:" + self.HUE + ",SAT:" + self.SATURATION * 100
+        }, function (result) {
+          conInfo("iseUniversalLightReceiver getColorPicker - Metadata set: " + result);
+        });
+
+      } else {
+        lastHueSat = homematic("Interface.getMetadata", {
+          "objectId": this.chnId,
+          "dataId": "lastValHueSat"
+        });
+
+        // get the meta data HUE and SAT
+        var arHueSat = [],
+          valHUE = 0,
+          valSATPercent = 0,
+          valSAT = 0;
+
+        if (lastHueSat != "null") {
+          arHueSat = lastHueSat.split(",");
+          valHUE = arHueSat[0].split(":")[1];
+          valSATPercent = parseInt(arHueSat[1].split(":")[1]);
+          valSAT = valSATPercent / 100;
+        }
+
+        this.HUE = valHUE;
+        this.SATURATION = valSAT;
+        this.hueElm.val(this.HUE);
+        this.satElm.val(valSATPercent);
+
+        this.colorPickerInit.hue = this.HUE;
+        this.colorPickerInit.saturation = valSATPercent;
+      }
+
 
     this.oDimmerElm.percChange = this.onPercChange.bindAsEventListener(this);
     Event.observe($(this.chnId + "Perc"), 'change', this.oDimmerElm.percChange);
@@ -41000,7 +43892,7 @@ iseUniversalLightReceiver.prototype = {
     this.colorPicker.on("mount", function(color) {
       //var rgbVal = hsvToRgb(self.colorPickerInit.hue, self.colorPickerInit.saturation, self.colorPickerInit.level);
       var rgbVal = hsvToRgb(self.colorPickerInit.hue, self.colorPickerInit.saturation, 100);
-      self.bckGndlm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
+      self.bckGndElm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
     });
 
     this.colorPicker.on("input:end", function(color) {
@@ -41011,23 +43903,22 @@ iseUniversalLightReceiver.prototype = {
 
       hsv_S = (parseInt(color.hsv.s) / 100);
 
-      self.hueElm.val(hsv_H);
+      self.hueElm.val(hsv_H).change();
       self.HUE = hsv_H;
 
-      self.satElm.val(hsv_S_Percent);
+      self.satElm.val(hsv_S_Percent).change();
       self.SATURATION = hsv_S;
 
       rgbVal = hsvToRgb(color.hsv.h, color.hsv.s, 100);
-      self.bckGndlm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
+      self.bckGndElm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
 
       self.saveColor();
     });
+  },
 
-    /*
-    this.btnOkElm.click(function() {
-      self.saveColor();
-    });
-    */
+  activateColorPicker: function() {
+    jQuery("[name='urlEffect_"+this.chnId+"']").switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate all effect buttons
+    jQuery(".j_ControlBtnInfo").first().removeClass("ControlBtnInfoNotActive").addClass("ControlBtnInfoActive");
   },
 
   saveColor: function() {
@@ -41052,7 +43943,16 @@ iseUniversalLightReceiver.prototype = {
 
         ]
     }, function (result) {
-      conInfo("saveColor: ",result);
+      if (result) {
+        conInfo("storeHueSat as MetaData");
+        homematic("Interface.setMetadata", {
+          "objectId" : self.chnId,
+          "dataId" : "lastValHueSat",
+          "value" : "HUE:" + self.HUE + ",SAT:" + self.SATURATION * 100
+        }, function(result) {
+          conInfo("iseUniversalLightReceiver saveColor - Metadata set: " +  result);
+        });
+      }
     });
   }
 };
@@ -41064,12 +43964,61 @@ function setULREffectToolTips (chnId) {
   }
 }
 
+function setURLEffectBtnActive (chnId, devAddress) {
+  // 01_EFFECT_01_COLOR_HUE_SATURATION_COLOR_TEMPERATURE_TYPE
+  var paramSet = homematic("Interface.getParamset", {"interface": "HmIP-RF", "address" : devAddress, "paramsetKey" :"MASTER"}),
+    effect, subEffect, btnEffect,
+    effectActive = false, cntSubEffect;
+
+  for (var effect = 1; effect <= 10; effect++) {
+    btnEffect =  jQuery("#ulrEffect_" + effect + "_" + chnId);
+    cntSubEffect = 0;
+
+    for (var subEffect = 1; subEffect <= 8; subEffect++) {
+      if (parseInt(paramSet[addLeadingZero(effect) + "_EFFECT_" + addLeadingZero(subEffect) + "_COLOR_HUE_SATURATION_COLOR_TEMPERATURE_TYPE"]) == 0) {
+        cntSubEffect++;
+      }
+    }
+    if (cntSubEffect == 8) { // No subEffect active
+      btnEffect.css("color", "grey");
+      btnEffect.removeAttr("onclick");
+      btnEffect.click(function() {
+        alert(translateKey("lblEffectNotActive"));
+      });
+    }
+  }
+}
+
+
+// Not in use - the effect name will be set by ReGa
+function setULREffectName (chnId, devId) {
+  var effectName, effectNo;
+  for (effectNo = 1; effectNo <= 10; effectNo++) {
+    effectName =  homematic("Interface.getMetadata", {"objectId": devId, "dataId": "effectName_" + effectNo});
+    if ((effectName == "") || (effectName == "null")) {effectName = translateKey("lblEffect") + " " + effectNo;}
+    jQuery("#ulrEffect_"+effectNo+"_"+chnId).text(effectName);
+  }
+}
+
+// This determines if the old status will be restored after the effect has come to its end.
+// true = Restore the old status - false = the light will be switched off.
+function setULReffectMode(chkBox, chnId) {
+  var mode = (jQuery(chkBox).is(":checked")) ? true : false;
+  homematic("Interface.setMetadata", {"objectId": chnId, "dataId": "effectMode", "value": mode});
+}
+
 function setULREffect (elm, effectNr, chnAddress, level) {
+  var effectLevel = level,
+  chnId = elm.id.split("_")[2],
+  saveOldStatus = homematic("Interface.getMetadata", {"objectId": chnId, "dataId": "effectMode"});
+  jQuery(".j_Button_"+chnId).switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate the color temp slider and the buttons HCL / Dim2Warm
+  jQuery(".ControlBtnInfoActive").switchClass("ControlBtnInfoActive","ControlBtnInfoNotActive", 0); // deactivate the colorpicker panel for the H and S value
 
-  var effectLevel = (effectNr == 0) ? 0.0 : parseFloat(level / 100).toFixed(2) ;
+  jQuery("[name='urlEffect_"+chnId+"']").switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate all effect buttons
+  jQuery(elm).switchClass('ControlBtnOff', 'ControlBtnOn', 0); // activate the selected button.
 
-  jQuery(elm).switchClass('ControlBtnOff', 'ControlBtnOn', 0);
-  window.setTimeout(function() {jQuery(elm).switchClass('ControlBtnOn', 'ControlBtnOff', 0);}, 500);
+  // saveOldStatus 'true' will determine if the old status will be restored. Otherwise the light will be switched off.
+  if (saveOldStatus == "true") {effectNr++;}
 
   homematic("Interface.putParamset", {
     'interface': "HmIP-RF",
@@ -41097,16 +44046,20 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
     this.iface = opts.iface;
     this.chAddress = opts.chAddress;
     this.chnId = chnId;
-
+    this.defaultColorTmpMin = 2000;
+    this.defaultColorTmpMax = 6500;
 
     this.colorTempID = opts.colorTempID;
-    this.colorTempMin = opts.colorTempMin;
-    this.colorTempMax = opts.colorTempMax;
+    this.colorTempMin = (!isNaN(opts.colorTempMin)) ? opts.colorTempMin : this.defaultColorTmpMin;
+    this.colorTempMax = (!isNaN(opts.colorTempMax)) ? opts.colorTempMax : this.defaultColorTmpMax;
+
     this.colorTemp = parseInt(opts.colorTemp);
     this.colorTempUnknown = (this.colorTemp < this.colorTempMin) ? true : false;
 
     this.valHCLVal = 10200;
     this.valDim2WarmVal = 10150;
+
+    this.hueStatus = opts.hueStatus;
 
     this.valHCL =  (opts.hcl == 'true') ? true : false;
     this.valDim2Warm = (opts.dim2Warm == 'true') ? true : false;
@@ -41117,6 +44070,8 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
 
     this.devIsDali = (opts.devLabel == "HmIP-DRG-DALI") ? true : false;
 
+    this.effect = opts.effect;
+
     window.setTimeout(function() {
       self.btnColorTemp = jQuery("#btnColorTemp" + self.chnId);
       self.trBtnColorTemp = jQuery("#trBtnColorTemp" + self.chnId);
@@ -41126,6 +44081,18 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
       self.trSliderPanel = jQuery("#trSliderPanel" + self.chnId);
       self.sliderInfoElm = jQuery("#infoSliderPos" + self.chnId);
       self.sliderElm = opts.oSlider;
+      self.colorSetElm = jQuery(".j_ControlBtnInfo")[0];
+      self.hueElm = jQuery("#hueElmId_" + self.chnId);
+      self.satElm = jQuery("#satElmId_" + self.chnId);
+      self.bckGndElm = jQuery("#bckGndlmId_"+ self.chnId);
+
+      homematic("Interface.setMetadata", {
+        "objectId": this.chnId,
+        "dataId": "lastValColorTemp",
+        "value": this.colorTemp
+      }, function (result) {
+        conInfo("iseUniversalLightReceiver setColorTemp - Metadata set: " + result);
+      });
 
       self.initButtons();
       self.initSlider();
@@ -41145,17 +44112,46 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
   initButtons: function() {
     var self = this;
 
-    if (self.valHCL) {
-      self.setElmColorActive("hcl");
-    } else if (self.valDim2Warm) {
-      self.setElmColorActive("dim2Warm");
+    if (this.effect == 0) {
+      if (self.valHCL) {
+        self.setElmColorActive("hcl");
+      } else if (self.valDim2Warm) {
+        self.setElmColorActive("dim2Warm");
+      } else {
+        self.setElmColorActive("sliderPanel");
+      }
     } else {
-      self.setElmColorActive("sliderPanel");
+      // set the active effect button blue
+      var btnEffect = jQuery("#ulrEffect_"+(parseInt(parseInt(self.effect + (self.effect % 2)) / 2))+"_" + self.chnId);
+      jQuery("[name='urlEffect_"+self.chnId+"']").switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate all effect buttons
+      btnEffect.switchClass('ControlBtnOff', 'ControlBtnOn', 0); // activate the active effect button
     }
+
     self.showHideSliderPanel();
+
+    this.hueElm.change(function() {
+      self.setAll2Off();
+      jQuery(self.colorSetElm).removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    });
+
+    this.satElm.change(function() {
+      self.setAll2Off();
+      jQuery(self.colorSetElm).removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    });
+
+    this.bckGndElm.change(function() {
+      self.setAll2Off();
+      jQuery(self.colorSetElm).removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    });
+
+    this.bckGndElm.click(function() {
+      self.setAll2Off();
+      jQuery(self.colorSetElm).removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    });
 
     this.btnColorTemp.click(function() {
       self.hideSliderPanel = false;
+      self.hueStatus == 1;
       setDpState(self.colorTempID,self.colorTemp);
       self.sliderElm.slider('value', self.colorTemp);
       self.sliderInfoElm.val(self.colorTemp);
@@ -41165,6 +44161,7 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
 
     this.btnHCL.click(function() {
       self.hideSliderPanel = true;
+      self.hueStatus == 1;
       setDpState(self.colorTempID,self.valHCLVal);
       self.setElmColorActive("hcl");
       self.showHideSliderPanel();
@@ -41172,37 +44169,56 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
 
     this.btnDim2Warm.click(function() {
       self.hideSliderPanel = true;
+      self.hueStatus == 1;
       setDpState(self.colorTempID,self.valDim2WarmVal);
       self.setElmColorActive("dim2Warm");
       self.showHideSliderPanel();
     });
   },
 
-  setElmColorActive: function (activeElm) {
+  setAll2Off: function() {
+    jQuery(this.colorSetElm).removeClass("ControlBtnInfoActive").addClass("ControlBtnInfo");
     jQuery(this.btnHCL).removeClass("ControlBtnOn").addClass("ControlBtnOff");
     jQuery(this.btnDim2Warm).removeClass("ControlBtnOn").addClass("ControlBtnOff");
     jQuery(this.sliderPanel).removeClass("ControlBtnOn").addClass("ControlBtnOff");
+    jQuery("[name='urlEffect_"+this.chnId+"']").switchClass("ControlBtnOn","ControlBtnOff", 0); // deactivate all effect buttons
+  },
 
-    switch (activeElm) {
-      case "hcl" :
-        this.btnHCL.addClass("ControlBtnOn");
-        break;
-      case "dim2Warm" :
-        this.btnDim2Warm.addClass("ControlBtnOn");
-        break;
-      case "sliderPanel" :
-        this.sliderPanel.addClass("ControlBtnOn");
-        break;
+  setElmColorActive: function (activeElm) {
+    this.setAll2Off();
+
+    if (this.hueStatus == 0) {
+      jQuery(this.colorSetElm).removeClass("ControlBtnInfo").addClass("ControlBtnInfoActive");
+    } else {
+      switch (activeElm) {
+        case "hcl" :
+          this.btnHCL.removeClass("ControlBtnOff").addClass("ControlBtnOn");
+          break;
+        case "dim2Warm" :
+          this.btnDim2Warm.removeClass("ControlBtnOff").addClass("ControlBtnOn");
+          break;
+        case "sliderPanel" :
+          this.sliderPanel.removeClass("ControlBtnOff").addClass("ControlBtnOn");
+          break;
+      }
     }
   },
 
   initSlider: function () {
 
-    if (this.colorTemp == "-1") {this.colorTemp = this.colorTempMin;}
+    var metaColorTemp = homematic("Interface.getMetadata", {
+      "objectId": this.chnId,
+      "dataId": "lastValColorTemp"
+    });
+
+    if ((metaColorTemp == "-1") || (metaColorTemp== "null") || (metaColorTemp == null) || (isNaN(metaColorTemp))) {this.colorTemp = this.colorTempMin;}
+
     var self = this;
 
     if (! self.devIsDali) {
       this.sliderInfoElm.val(this.colorTemp);
+      this.sliderElm.slider('value', this.colorTemp);
+
     } else  {
       if (this.colorTempUnknown) {
         this.sliderInfoElm.val("--");
@@ -41225,8 +44241,19 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
   },
 
   onSliderStop: function(val) {
+    this.hueStatus = 1;
+    this.setAll2Off();
     this.setElmColorActive("sliderPanel");
     setDpState(this.colorTempID,this.colorTemp);
+
+    homematic("Interface.setMetadata", {
+      "objectId": this.chnId,
+      "dataId": "lastValColorTemp",
+      "value": this.colorTemp
+    }, function (result) {
+      conInfo("iseUniversalLightReceiver setColorTemp - Metadata set: " + result);
+    });
+
   }
 
 };
@@ -41237,7 +44264,7 @@ iseHmIPUniversalLightRGBWSlider.prototype = {
 //Defines
 BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
 HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
-BG_COLOR = WebUI.getColor("channelBackground");//Background
+BG_COLOR = 'inherit'; //Background
 HL_STROKE = 4;//Background
 //-----
 
@@ -41289,8 +44316,8 @@ DrawForm = function(jg, formname, devtype, size, x_offset, y_offset)
   
   if (!form) return;
 
-  if (!x_offset) x_offset = 0;
-  if (!y_offset) y_offset = 0;
+  if (!x_offset) x_offset = 0.032;  // workaround css offsets
+  if (!y_offset) y_offset = -0.005; // workaround css offsets
 
   switch (form[gd_type])
   {
@@ -41386,7 +44413,7 @@ picDivShow = function(jg, devtype, size, formname, divelem)
     previewPicTimer = window.setTimeout(function () {
       HideElement('picDiv');
       delete previewPicTimer;
-    }, 10000);
+    }, 3000);
   }
 };
 
@@ -41587,9 +44614,6 @@ SendRequest = function(scriptname, html_container_id, callback)
 {
   scriptname = Get_ReGa_Path(scriptname);
   var params = poststr;
-
-  if (params === "") { params += "?AvoidBrowserCache=" + Math.random(); }
-  else               { params += "&AvoidBrowserCache=" + Math.random(); }
 
   if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
   else                                                   { id = Get_UI_CONTENTBOX_ID(); }
@@ -42135,7 +45159,7 @@ set_value = function(input_id, id, type)
 
 RemoveLink = function(iface, sender_address, receiver_address, sender_type, redirect_url)
 {
-  var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
+  var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_type != "HmIP-SMI55-A") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
 
   new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink, function(result) {
     if (result == YesNoDialog.RESULT_YES)
@@ -42422,7 +45446,7 @@ DetermineParameterValue = function(iface, address, ps_id, param_id, html_inputel
     ProgressBar.StartKnightRiderLight();
 };
 
-ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
+ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float, event)
 {
   var srcElm = $(srcid);
   var dstElm = $(dstid);
@@ -42443,6 +45467,8 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
   if (! max) max = 100;
   if (! dstValueFactor) dstValueFactor = 0.01;//dstValue = value/100
 
+  if (convInt2Float) {min = parseFloat(min).toFixed(2); max = parseFloat(max).toFixed(2);}
+
   var value = $F(srcid);
 
   //replace , by .
@@ -42457,54 +45483,71 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
     srcElm.value = value;
   }
 
+  var parsedValue;
+  var parsedMin = parseFloat(min);
+  var parsedMax = parseFloat(max);
+
+  var minSplit = min.toString().split(".");
+  var maxSplit = max.toString().split(".");
+  var digits = 0;
+
+  if(minSplit.length === 2) {
+    digits = Math.max(digits, minSplit[1].length);
+  }
+  if(maxSplit.length === 2) {
+    digits = Math.max(digits, maxSplit[1].length);
+  }
+
   // Check if float is allowed
   try {
     if (min.toString().indexOf(".") == -1 && max.toString().indexOf(".") == -1) {
       min = parseInt(min);
       max = parseInt(max);
-      value = (roundValue05(parseInt(value)));
+      value = Math.round(parseFloat(value));
     } else {
-      min = parseFloat(min).toFixed(2);
-      max = parseFloat(max).toFixed(2);
-      value = parseFloat(value);
-      srcElm.value = parseFloat(value);
+      min = parseFloat(parseFloat(min).toFixed(digits));
+      max = parseFloat(parseFloat(max).toFixed(digits));
+      var roundFactor = Math.pow(10, digits);
+      value = Math.round(parseFloat(value) * roundFactor) / roundFactor;
+      if (value < min || isNaN(min)) {value = min;} else if (value > max) {value = max;}
     }
+    parsedValue = parseFloat(value);
   } catch(e) {conInfo(e);}
 
   if (typeof value == "undefined")
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
   else if (isNaN(value))
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value < min)
+  else if (parsedValue < parsedMin)
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value > max)
+  else if (parsedValue > parsedMax)
   {
-    finalVal = max;
+    finalVal = parsedMax;
     ok = false;
   }
 
   if (ok)
   {
     srcElm.style.backgroundColor = "#fffffe";
-    dstElm.value = value * dstValueFactor;
-    srcElm.value = dstElm.value;
+    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
+    srcElm.value = parsedValue.toFixed(digits);
     srcElm.setAttribute("valvalid", "true");
   }
   else
   {
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
-    dstElm.value = finalVal * dstValueFactor;
-    srcElm.value = dstElm.value;
+    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
+    srcElm.value = finalVal.toFixed(digits);
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
   }
 };
@@ -44317,7 +47360,12 @@ SetEasyMode = function (iface, address, peer, special_input_id, paramid) {
     var fileExtension = "";
     var _sender = $F('dev_descr_sender_tmp').split('-')[0];
     if (_sender == "MULTI_MODE_INPUT_TRANSMITTER") {
-      fileExtension = "_" + mode_MULTI_MODE_INPUT_TRANSMITTER;
+      var chn = DeviceList.getChannelByAddress(address);
+      if (chn.typeName == "HmIP-FDC") {
+        fileExtension = "_" + mode_MULTI_MODE_INPUT_TRANSMITTER + "_FDC";
+      } else {
+        fileExtension = "_" + mode_MULTI_MODE_INPUT_TRANSMITTER;
+      }
     }
     poststr += "&new_profilepath=" + is_newProfile(paramid).split('-')[0] + fileExtension;
   }
@@ -44729,21 +47777,26 @@ ToggleChannelView = function()
 
 
 isDutyCycleOK4DevUpdate = function() {
-  var ifaceBidCosRF = "BidCos-RF";
-  var BidCosIFaces = homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF});
+  var iface = homematic("Interface.listBidcosInterfaces", {"interface": "BidCos-RF"});
   var dcVal = 0,
     dcWarningLevel = 80,
     dcOK = true;
 
-  jQuery.each(BidCosIFaces, function (index, iFace) {
-    if (iFace.type == "CCU2") {
-      dcVal = (typeof iFace.dutyCycle != "undefined") ? parseInt(iFace.dutyCycle) : 0;
-      if (dcVal >= dcWarningLevel) {
-        dcOK = false;
+  if(iface === null) {
+    iface = homematic("Interface.listBidcosInterfaces", {"interface": "HmIP-RF"});
+  }
+
+  if(iface !== null) {
+    jQuery.each(iface, function (index, iFace) {
+      if (iFace.type == "CCU2") {
+        dcVal = (typeof iFace.dutyCycle != "undefined") ? parseInt(iFace.dutyCycle) : 0;
+        if (dcVal >= dcWarningLevel) {
+          dcOK = false;
+        }
+        return false; //leave each loop
       }
-      return false; //leave each loop
-    }
-  });
+    });
+  }
   return dcOK;
 };
 
@@ -44991,7 +48044,7 @@ SetParameters = function(iface, address, special_input_id)
     // After setting the config parameters of a dali device, we have to store the UNIVERSAL_LIGHT_MAX_CAPABILITIES of each group channel as mata data.
    // Otherwise ReGa can't determne the correct value on the page Status/Control, especially when changing a group.
     var channel = DeviceList.getChannelByAddress(address);
-    if ((channel.typeName == "HmIP-DRG-DALI") && (typeof MetaDaliGroupHasBeenSet == "undefined")) {
+    if ((typeof channel !== "undefined") && (channel.typeName == "HmIP-DRG-DALI") && (typeof MetaDaliGroupHasBeenSet == "undefined")) {
       // After 5 seconds we can determine the new UNIVERSAL_LIGHT_MAX_CAPABILITIES of the DALI group channels and store them as meta data
       window.setTimeout(function() {
         var devAddress = channel.device.address,
@@ -45005,6 +48058,7 @@ SetParameters = function(iface, address, special_input_id)
          });
          grpChannel = DeviceList.getChannelByAddress(devAddress + ":" + loop);
          homematic("Interface.setMetadata", {"objectId": grpChannel.id , "dataId" : "maxCap", "value": maxCap});
+         DeviceList.channels[grpChannel.id].daliMaxCapabilities = maxCap;
         }
         window.setTimeout(function() {delete MetaDaliGroupHasBeenSet;},5000);
       },5000);
@@ -45076,10 +48130,10 @@ SetParameters = function(iface, address, special_input_id)
   */
 
   // This prevents an non-existing string for MAIN_/SUB_TEXT for e. g.  the HmIPW-WGD(-PL)
-  if ((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) {
+  if ((typeof channel !== "undefined") && ((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER") || (channel.channelType == "ENERGIE_METER_TRANSMITTER"))) {
     arPostStr = poststr.split("&");
     jQuery.each(arPostStr, function (index, val) {
-      if (val == "MAIN_TEXT=" || val == "SUB_TEXT=") {
+      if (val == "MAIN_TEXT=" || val == "SUB_TEXT=" || val == "METER_OBIS_SEARCH_STRING=") {
         // %24 = $
         poststr = poststr.replace(val, val + "%24%24%24%24%24");
       }
@@ -46075,8 +49129,8 @@ showNewFirmwareDownload = function() {
   CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
 };
 
-CreateCPPopup = function(src, pb) {
-  dlgPopup = new cpMessageBox(src, pb);
+CreateCPPopup = function(src, pb, errorLbl) {
+  dlgPopup = new cpMessageBox(src, pb, errorLbl);
 
   PopupClose = function() {
     dlgPopup.close();
@@ -46116,7 +49170,7 @@ cpMessageBox = Class.create();
 
 cpMessageBox.prototype =
 {
-  initialize: function(src, pb)
+  initialize: function(src, pb, errorLbl)
   {
     if ( $('messagebox') ){
       $("messagebox").hide();
@@ -46128,7 +49182,7 @@ cpMessageBox.prototype =
     this.setWidth(800);
 
     this.createMessagebox();
-    this.LoadFromFile(src, pb);
+    this.LoadFromFile(src, pb, errorLbl);
   },
 
   getViewPortDim : function()
@@ -46252,8 +49306,12 @@ cpMessageBox.prototype =
     this.removeMessagebox();
   },
   
-  LoadFromFile: function(src, pb) {
-    var url = src+'?sid='+SessionId;
+  LoadFromFile: function(src, pb, errorLbl) {
+    var url = src;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
     var opt = 
     {
@@ -46264,6 +49322,15 @@ cpMessageBox.prototype =
       onComplete: function(trans) {
         centerMessageBox();
         $('messagebox').style.display="";
+      },
+      onFailure: function(response) {
+        $('centerbox').hide();
+        $('trlayer').hide();
+        if(typeof errorLbl != 'undefined') {
+          MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
+        } else {
+          Ajax_failure(url, response.statusText);
+        }
       }
     };
     new Ajax.Updater('messagebox',url,opt);
@@ -46271,6 +49338,9 @@ cpMessageBox.prototype =
   
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 
@@ -46379,7 +49449,11 @@ cpMessageBox2.prototype =
   
   LoadFromFile: function(src, pb)
   {
-    var url = src+'?sid='+SessionId;
+    var url = src;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
     var opt = 
     {
@@ -46398,6 +49472,9 @@ cpMessageBox2.prototype =
   ShowPopup: function()
   {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 /**
@@ -46945,7 +50022,7 @@ MD_catchBrightness = function(url, sender_address, receiver_address, brightness,
   // Each profile of the easymode needs the brightness, so we store the value for 500 ms in the var knownBrightness
   if (typeof knownBrightness == "undefined") {
     var curBrightness = homematic("Interface.getValue", {"interface": "HmIP-RF", "address": sender_address, "valueKey": paramType});
-    brightness =  (curBrightness) ? Math.round(curBrightness) : Math.round(brightness);
+    brightness =  (curBrightness) ? parseFloat(curBrightness).toFixed(2) : parseFloat(brightness).toFixed(2);
 
     conInfo("sender_address: " + sender_address +" - paramType: " + paramType + " - current brightness via getValue: " + curBrightness + " - calculated brightness: " + brightness);
 
@@ -47092,6 +50169,7 @@ MD_init = function(id, min, max)
   if (ausdr_int.test(input.value)) {var wert_int = ausdr_int.exec(input.value); wert_int = wert_int[0];}
   var wert     = min;
   var channel = id.split("_")[2];
+  var txtIndex = (parseInt(id.split("_")[3]) + 1);
 
   if (! wert_int) {wert = min;} //1 
   if (! isNaN(wert_int)) {wert = wert_int;}
@@ -47103,7 +50181,7 @@ MD_init = function(id, min, max)
 
   if (input.name == "EVENT_FILTER_NUMBER")
   {
-    var efn = document.getElementsByClassName('event_filter_number');
+    var efn = document.getElementsByClassName('event_filter_number_' + channel);
     if (wert == 1) 
     {
       //input.options[0].text = "jedem";
@@ -47112,7 +50190,7 @@ MD_init = function(id, min, max)
       efn[0].firstChild.data = translateKey("motionDetectorEventFilterNumberB");
       efn[1].firstChild.data = " ";
 
-      $('separate_CHANNEL_' + channel + '_2').style.display = "none";
+      $('separate_CHANNEL_' + channel + '_' + txtIndex).style.display = "none";
     } else
     {
       input.options[0].text = "1";
@@ -47120,13 +50198,14 @@ MD_init = function(id, min, max)
       efn[0].firstChild.data = translateKey("motionDetectorEventFilterNumberC");
       //efn[1].firstChild.data = " Sekunden";
       efn[1].firstChild.data = translateKey("motionDetectorEventFilterNumberD");
-      $('separate_CHANNEL_' + channel + '_2').style.display = "inline";
+      $('separate_CHANNEL_' + channel + '_'+ txtIndex).style.display = "inline";
     }
   }
 
   if (input.name == "BRIGHTNESS_FILTER")
   {
-    var brightness = document.getElementsByClassName('brightness')[0];
+   // var brightness = document.getElementsByClassName('brightness')[0];
+    var brightness = document.getElementsByClassName('brightness_' + channel)[0];
     //if (wert == 0)   brightness.firstChild.data = "der zuletzt ermittelte Wert";
     if (wert == 0)   brightness.firstChild.data = translateKey("motionDetectorMinumumOfLastValuesB0");
     //else brightness.firstChild.data = "das Minimum der letzten " + (parseInt(input.value) + 1) + " Werte";
@@ -47768,22 +50847,40 @@ HMW_WebUIsetChannel = function(id, ch_type)
 
 showHintPrgLink = function(channel, prgExists) {
   var channel = parseInt(channel),
+  classMultiMode = jQuery(".j_multiMode_" + channel)[0],
   tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel],
-  elm = jQuery("#separate_CHANNEL_" + channel + "_1");
+  elm = jQuery(".j_multiMode_" + channel). find("[name='CHANNEL_OPERATION_MODE']")[0];
 
   jQuery(elm).prop("disabled", true);
-  if (prgExists) {
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintPrgExists")+"</div>");
+
+  if (typeof classMultiMode == "object") {
+    if (prgExists) {
+      jQuery(classMultiMode).after("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintPrgExists") + "</div>");
+    } else {
+      arChnHasLinks[channel] = true;
+      jQuery(classMultiMode).after("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintLinkExists") + "</div>");
+    }
   } else {
-    arChnHasLinks[channel] = true;
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintLinkExists")+"</div>");
+    if (prgExists) {
+      jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintPrgExists") + "</div>");
+    } else {
+      arChnHasLinks[channel] = true;
+      jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintLinkExists") + "</div>");
+    }
   }
 };
 
 showHintInternalLink = function(channel) {
   var channel = parseInt(channel),
-    tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel];
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintInternalLinkExists")+"</div>");
+    classMultiMode = jQuery(".j_multiMode_" + channel)[0],
+    txtHint = "<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintInternalLinkExists") + "</div>";
+
+  if (typeof classMultiMode == "object") {
+    jQuery(classMultiMode).after(txtHint);
+  } else {
+    var tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel];
+    jQuery(tableElm).append(txtHint);
+  }
 };
 
 ShowHintIfProgramExists = function(id, ch) {
@@ -47792,7 +50889,7 @@ ShowHintIfProgramExists = function(id, ch) {
       showHintPrgLink(ch, true);
     } else {
       if(arChnHasLinks[parseInt(ch)] != true) {
-        var elm = jQuery("#separate_CHANNEL_" + ch + "_1");
+        var elm = jQuery(".j_multiMode_" + ch). find("[name='CHANNEL_OPERATION_MODE']")[0];
         jQuery(elm).prop("disabled", false);
       }
     }
@@ -47813,7 +50910,7 @@ RF_existsLink = function(deviceType, ch, ch_type, internalLinkOnly) {
 
   switch(ch_type) {
     case "MULTI_MODE_INPUT_TRANSMITTER":
-      arDevMultiModeException = ["HmIP-FSI16", "HmIP-DRDI3"];
+      arDevMultiModeException = ["HmIP-FSI16", "HmIP-DRDI3", "HmIP-BDT-I"];
       if ((arDevMultiModeException.indexOf(deviceType) == -1) || (internalLinkOnly == 0)) {
         showHintPrgLink(ch, false);
       } else {
@@ -48515,7 +51612,181 @@ addHintHeatingGroupDevice = function (address) {
     }
   }
 };
-// language = getLang();//"de";
+
+
+daliRefreshDevices = function(address) {
+  var device = DeviceList.getDeviceByAddress(address);
+
+  MessageBox.show(translateKey('titleSearchDaliDevices'),'' +' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>','','320','60','msgBckID', 'msgBoxBarGraph');
+
+  homematic("Interface.searchDaliDevices", {"interface": "HmIP-RF", "address": address, "valueKey": "DALI_ADDRESS", "type": "string", "value": "refreshDaliDevices"}, function (result) {
+    if (result) {
+      MessageBox.setText(translateKey("lblPleaseWaitAMoment"));
+      MessageBox.centerText();
+
+      // Store the UNIVERSAL_LIGHT_MAX_CAPABILITIES of the DALI channels as meta data
+      window.setTimeout(function() {
+        var devAddress = address,
+          daliChannel;
+
+        for (var loop = 1; loop <= 48; loop++) {
+          var maxCap = homematic("Interface.getMasterValue", {
+            "interface": "HmIP-RF",
+            "address": devAddress + ":" + loop,
+            "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+          });
+          daliChannel = DeviceList.getChannelByAddress(devAddress + ":" + loop);
+          homematic("Interface.setMetadata", {"objectId": daliChannel.id , "dataId" : "maxCap", "value": maxCap});
+        }
+        MessageBox.close();
+        reloadPage();
+      },500);
+
+    } else {
+      MessageBox.close();
+      alert(translateKey("dialogSettingsSecuritySSHMsgBoxErrorTitle")); // An error occurred
+    }
+  });
+};
+
+// Resets the history data of a specific channel
+resetChnMetaEnergyCounter = function(chn, opMode) {
+      /*
+        initialVal
+        Values for the last 30 days. The first 0 is yesterday......
+        This is being used to store the values of the last 30 days.
+      */
+      var arDataID = ["","","startValA","startValB","startValC"];
+
+      var initialVal = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+      homematic("Interface.setMetadata", {
+        "objectId": chn.id,
+        "dataId": "energyCounter30Days",
+        "value": initialVal
+      });
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy0", "value": 0}); // Today
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy1", "value": 0}); // Yesterday
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy7", "value": 0}); // 1 Week
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy30", "value": 0}); // 1 Month
+};
+
+// Resets the history data and the start value of all relevant channels
+resetAllMetaEnergyCounter = function(dev, opMode) {
+  var arStartDataID = ["","","startValA","startValB","startValC"],
+    arTimeDataID = ["","","startTimeA","startTimeB","startTimeC"];
+
+  jQuery.each(dev.channels,function(index,chn) {
+    if (chn.index > 1) {
+      /*
+        initialVal
+        Values for the last 30 days. The first 0 is yesterday......
+        This is being used to store the values of the last 30 days.
+      */
+      var initialVal = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+      homematic("Interface.setMetadata", {
+        "objectId": chn.id,
+        "dataId": "energyCounter30Days",
+        "value": initialVal
+      });
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy0", "value": 0}); // Today
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy1", "value": 0}); // Yesterday
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy7", "value": 0}); // 1 Week
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "energy30", "value": 0}); // 1 Month
+      homematic("Interface.setMetadata", {"objectId": chn.id, "dataId": "iecPrgFirstStart","value": 1});
+
+      if (opMode < 3) {
+        homematic('Interface.setMetadata', {'objectId': chn.id, 'dataId': arStartDataID[chn.index], 'value': 0}); // Reset start value
+        homematic('SysVar.setFloat', {'name': 'svEnergyCounter_' + chn.id + '_' + chn.address, 'value': 0});
+        homematic('SysVar.setFloat', {'name': 'svEnergyCounterOldVal_' + chn.id, 'value': 0});
+        homematic('Interface.setMetadata', {'objectId': chn.id, 'dataId': arTimeDataID[chn.index], 'value': getEsiStartTime()}); // Reset time stamp
+
+      } else {
+        var devCounter = homematic("Interface.getValue", {'interface': 'HmIP-RF', 'address' : chn.address, 'valueKey': 'ENERGY_COUNTER'});
+
+        //if (devCounter == "") {devCounter = "0.000";}
+
+        homematic('Interface.setMetadata', {'objectId': chn.id, 'dataId': arStartDataID[chn.index], 'value': devCounter}); // Reset start value
+        homematic('SysVar.setFloat', {'name': 'svEnergyCounter_' + chn.id + '_' + chn.address, 'value': devCounter});
+        homematic('SysVar.setFloat', {'name': 'svEnergyCounterOldVal_' + chn.id, 'value': devCounter});
+        homematic('Interface.setMetadata', {'objectId': chn.id, 'dataId': arTimeDataID[chn.index], 'value': getEsiStartTime()}); // Reset time stamp
+        homematic('Interface.setMetadata', {'objectId': chn.id, 'dataId': 'firstStart', 'value' : 1});
+      }
+    }
+  });
+};
+
+powerIdentSensor = function(address) {
+  var device = DeviceList.getDeviceByAddress(address.split(":")[0]);
+
+  var dlgYesNo = new YesNoDialog(translateKey("btnSensorDetection"), translateKey("dialogEsiSearchButtonContent"), function(result) {
+    if (result == YesNoDialog.RESULT_YES) {
+      var opMode = -1, counter = 0, cntNoSensorFound = 0,
+      intervalId = setInterval(getOperationMode, 1000);
+
+      homematic("Interface.putParamset", {
+        'interface': "HmIP-RF",
+        'address': address,
+        'paramsetKey': 'MASTER',
+        'set':
+          [
+            {name: 'CHANNEL_OPERATION_MODE', type: 'int', value: 0}
+          ]
+      });
+
+      DeviceListPage.showConfiguration(false, 'DEVICE', device.id);
+
+      function getOperationMode() {
+        var chnPS = homematic("Interface.getParamset", {
+          "interface": "HmIP-RF",
+          "address": address,
+          "paramsetKey": "MASTER"
+        });
+        opMode = chnPS.CHANNEL_OPERATION_MODE;
+        if (typeof opMode != "undefined") {
+          if ((opMode != -1) && (opMode != 0)) {
+            clearInterval(intervalId);
+            DeviceListPage.showConfiguration(false, 'DEVICE', device.id);
+            resetAllMetaEnergyCounter(device, opMode);
+          } else {
+            conInfo("ESI - searching sensor: " + counter);
+            counter++;
+            if (counter > 120) {
+              // If on the config page of this device, after 2 minutes stop the search and show a message that the system button of the device has to be pressed.
+              // After the message has been confirmed start the search again.
+              // Do this 3 times (6 minutes). After that, stop the search. There is probably no sensor connected.
+              if ((jQuery("#btnSensorIdent").length == 1) && (cntNoSensorFound < 3)) {
+                alert("Please press the system button of the device\n\n" + device.name + "."); // ToDo - translate
+                counter = 0;
+                cntNoSensorFound++;
+              } else {
+                // If not on the config page, stop the search.
+                clearInterval(intervalId);
+                if (cntNoSensorFound > 2) {
+                  alert("No sensor found."); // ToDo translate
+                }
+              }
+            }
+          }
+        } else {
+          clearInterval(intervalId);
+          console.log("Problem: CHANNEL_OPERATION_MODE not found!");
+        }
+      }
+    }
+  },"html");
+  dlgYesNo.btnTextNo(translateKey("dialogBack"));
+  dlgYesNo.btnTextYes(translateKey("btnNext"));
+  dlgYesNo.setContentClass("YesNoDialogContentNoBold");
+  dlgYesNo.resetHeight();
+};
+
+getEsiStartTime = function() {
+  var d = new Date(),
+  dateString = ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." +
+    d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+
+  return dateString;
+};// language = getLang();//"de";
 
 setLanguage = function(lang)
 {

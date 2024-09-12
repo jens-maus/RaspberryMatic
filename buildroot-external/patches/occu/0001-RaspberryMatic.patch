@@ -114,7 +114,7 @@
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
-@@ -322,6 +322,7 @@
+@@ -225,6 +225,7 @@
                  cgi_text hostname=$hostname {id="text_hostname"}
                }
              }
@@ -122,7 +122,7 @@
              table_row {
                set checked ""
                if {! $dhcp} { set checked "checked=true" }
-@@ -412,6 +413,7 @@
+@@ -315,6 +316,7 @@
                }
  
              }
@@ -130,7 +130,7 @@
            }
          }
          table_data {class="CLASS21113"} {align="left"} {
-@@ -604,12 +606,21 @@
+@@ -440,12 +442,21 @@
        OnOK = function() {
          var pb = "action=save_settings";
          pb += "&hostname="+document.getElementById("text_hostname").value;
@@ -152,7 +152,7 @@
          
          var opts = {
            postBody: pb,
-@@ -710,7 +721,9 @@
+@@ -546,7 +557,9 @@
          },timeDelay);
        };
      }
@@ -626,7 +626,7 @@
  
      <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
      <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
-@@ -69,7 +69,8 @@
+@@ -72,7 +72,8 @@
        /*########################################################################*/
  
        PLATFORM = "Central";
@@ -636,7 +636,7 @@
  
        /**
         * Flags
-@@ -193,7 +194,7 @@
+@@ -198,7 +199,7 @@
      <div id="webuiloader_wrapper">
        <div id="webuiloader_background">
          <div id="webuiloader">
@@ -697,7 +697,7 @@
      "BidCosRF" : "Homematic Funk",
      "BidCosWired" : "Homematic Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -460,6 +460,7 @@
+@@ -463,6 +463,7 @@
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
@@ -705,7 +705,7 @@
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
      "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
-@@ -483,6 +484,7 @@
+@@ -486,6 +487,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
@@ -737,7 +737,7 @@
      "dialogSettingsStorageHintUSBStorageP1" : "Storage of data only includes the diagrams.",
      "dialogSettingsSecurityTDAuth" : "Authentication",
      "dialogSettingsSecurityLblActivateAuthRemoteXML" : "Authentication active: ",
-@@ -1038,4 +1038,4 @@
+@@ -1073,4 +1073,4 @@
  });
  
  langJSON.en.hintActivateDetectorSelfTest += langJSON.en.checkSmokeDetectorSelfTest;
@@ -757,8 +757,8 @@
 +    "CCUShortName" : "RaspMatic",
      "BidCosRF" : "Homematic RF",
      "BidCosWired" : "BidCos-Wired",
-     "HmIPRF" : "HmIP-RF",
-@@ -454,6 +454,7 @@
+     "BidCosRF-Filter" : "BidCos-RF",
+@@ -462,6 +462,7 @@
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
@@ -766,7 +766,7 @@
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
      "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
-@@ -477,6 +478,7 @@
+@@ -485,6 +486,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",

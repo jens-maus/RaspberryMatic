@@ -404,7 +404,7 @@ proc action_put_page {} {
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
-            if {[get_platform] != "oci"} {
+            if {[get_platform] != "oci" && [get_platform] != "lxc"} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchf�hren"]"
@@ -488,6 +488,12 @@ proc action_put_page {} {
                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
               }
             }
+            } else {
+              table_row {
+                table_data {align="left"} {colspan="3"} {
+                  puts "<br/>\${dialogSettingsCMLblPerformSoftwareUpdateVirt}"
+                }
+              }
             }
           }
         }
@@ -553,7 +559,7 @@ proc action_put_page {} {
       }
 
       # Recovery Modus
-      if {[get_platform] != "oci"} {
+      if {[get_platform] != "oci" && [get_platform] != "lxc"} {
         table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
             table_data {class="CLASS20903"} $styleMaxWidth {
                 #puts "Recovery<br>"
@@ -1387,10 +1393,10 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
     rega "system.LogLevel($level_rega)"
   }
 
-  if { "$LOGLEVEL_HMIP" != "$level_hmip" ||
-       "$LOGHOST" != "$loghost" } {
-    exec /usr/bin/monit restart HMIPServer >/dev/null &
-  }
+  #if { "$LOGLEVEL_HMIP" != "$level_hmip" ||
+  #     "$LOGHOST" != "$loghost" } {
+  #  exec /usr/bin/monit restart HMIPServer >/dev/null &
+  #}
 
   return 1
 }
@@ -1410,13 +1416,7 @@ proc action_apply_logging {} {
     puts "Failure"
     return
   }
-  if {[getProduct] < 3 } {
-    catch {exec killall syslogd}
-    catch {exec killall klogd}
-    exec /etc/init.d/S01logging start
-  } else {
-    exec /etc/init.d/S07logging restart
-  }
+  exec /usr/bin/monit restart syslogd
   puts "Success -confirm"
 }
 

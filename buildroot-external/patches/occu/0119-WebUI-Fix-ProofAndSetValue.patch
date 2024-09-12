@@ -55,7 +55,7 @@
  }
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -550,7 +550,7 @@
+@@ -695,7 +695,7 @@
          # append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
  
          append html "<td>"
@@ -64,7 +64,7 @@
            append html "<input id='separate_CHANNEL_$chn\_$prn' name='$param' type='text' class='hidden'>"
          append html "</td>"
        append html "</tr>"
-@@ -2971,7 +2971,7 @@
+@@ -3774,7 +3774,7 @@
          append html "<td>\${stringTableCondThresholdLo}</td>"
          append html "<td>"
  
@@ -73,7 +73,7 @@
            append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
  
          append html "</td>"
-@@ -2985,7 +2985,7 @@
+@@ -3788,7 +3788,7 @@
          append html "<td>\${stringTableCondThresholdHi}</td>"
          append html "<td>"
  
@@ -190,7 +190,7 @@
        set min [format {%1.1f} $min]
        set max [format {%1.1f} $max]
      } else {
-@@ -187,7 +197,7 @@
+@@ -185,7 +195,7 @@
        hmip-usbsm
         {
          if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
@@ -199,7 +199,7 @@
        }
        default {return "<span class=\"attention\">missing description</span>"}
     }
-@@ -243,6 +253,9 @@
+@@ -241,6 +251,9 @@
        set maxValue "stringUTF8"
        set maxLength "maxLength=16"
        set sizeTextfield 16
@@ -209,7 +209,7 @@
      }
    }
  
-@@ -265,7 +278,7 @@
+@@ -263,7 +276,7 @@
  
    # Limit float to 2 decimal places
    if {[llength [split $value "."]] == 2} {
@@ -218,7 +218,7 @@
        catch {set value [format {%1.1f} $value]}
      } else {
        catch {set value [format {%1.2f} $value]}
-@@ -348,7 +361,7 @@
+@@ -346,7 +359,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
@@ -489,7 +489,7 @@
  
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -1395,7 +1395,7 @@
+@@ -1389,7 +1389,7 @@
  
            append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id $access style=\"visibility:hidden;display:none;\" />"
            append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
@@ -520,7 +520,7 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -43487,56 +43487,71 @@
+@@ -45431,56 +45431,71 @@
      srcElm.value = value;
    }
  

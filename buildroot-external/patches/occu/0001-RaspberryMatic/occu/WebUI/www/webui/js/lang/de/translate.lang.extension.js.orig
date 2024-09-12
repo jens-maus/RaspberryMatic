@@ -6,6 +6,8 @@ jQuery.extend(true,langJSON, {
     "thTypeDescriptorWOLineBreak" : "Typenbezeichnung",
     "ruleConditionSelectValue" : "Wert",
     "ruleConditionSelectText" : "Text",
+    "ruleConditionLblIsEqual" : "gleich ",
+    "ruleDescrHexString" : "Parameterzeichenkette",
     "btnChoice" : "Auswahl",
     "btnAutoDetect" : "Automatisch ermitteln",
     "btnSelectRoomOrFunctionNew" : "Neu...",
@@ -77,7 +79,7 @@ jQuery.extend(true,langJSON, {
     "dialogCreateLinkErrorContent3" : "das Ger%E4t innerhalb der Funkreichweite befindet und aktiv ist,",
     "dialogCreateLinkErrorContent4" : "das Ger%E4t im Anlernmodus befindet.",
     "dialogCreateLinkErrorContent5" : "\"Ignorieren\", wenn die Zentrale die %DCbertragung zum Ger%E4t bei n%E4chster Gelegenheit selbstst%E4ndig durchf%FChren soll. Bis dahin ist dieser Konfigurationsvorgang als offene Servicemeldung sichtbar.",
-    "dialogCreateLinkErrorContent6" : "<u>Achtung</u><br/> Es besteht die M%FCglichkeit, dass die maximale Anzahl der erlaubten Verkn%FCpfungen erreicht wurde.",
+    "dialogCreateLinkErrorContent6" : "<u>Achtung</u><br/> Es besteht die M%F6glichkeit, dass die maximale Anzahl der erlaubten Verkn%FCpfungen erreicht wurde.",
     "dialogCreateLinkErrorUnknownDevice" : "%DCbertragung nicht erfolgt, weil das Ger%E4t unbekannt ist.",
     "dialogCreateLinkHintLinkExists" : "Achtung! Die Verkn%FCpfung existiert bereits und wird %FCberschrieben.",
     "dialogCreateLinkMsgLinkExistsA" : "Sie sind dabei ",
@@ -534,12 +536,7 @@ jQuery.extend(true,langJSON, {
     "delDevFirmwareSuccessB" : " gel%F6scht.",
     "delDevFirmwareMsgTitle" :"Best%E4tigung",
     "delDevFirmwareMsgBody" : "Wollen Sie die Firmware wirklich vom System entfernen?",
-    "fwUpdatePressConfigKey" :
-      "Bringen Sie das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" und dr%FCcken Sie die Konfigurations-Taste. "+
-      "Anschlie%DFend startet das Firmwareupdate.",
-    "fwUpdatePressSystemKey" :
-      "Bringen Sie das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" und dr%FCcken Sie die Bedientaste. "+
-      "Anschlie%DFend startet das Firmwareupdate.",
+
     "partyModeDialogTitle" : "Hier k%F6nnen Sie den Party-/Urlaubsmodus einstellen.",
     "partyStart" : "Startzeit",
     "partyEnd" : "Endzeit",
@@ -561,6 +558,11 @@ jQuery.extend(true,langJSON, {
     "temperatureMeasurement" : "Temperaturmessung",
     "energyMeasurement" : "Energiemessung",
     "powerMeasurement" : "Verbrauch",
+    "powerMeasurementA" : "Durchfluss",
+    "powerMeasurementB" : "Energie Bezug HT",
+    "powerMeasurementC" : "Energie Bezug NT",
+    "powerMeasurementD" : "Energie Lieferung",
+    "powerMeasurementFeedIn" : "Einspeisung",
     "userSpecific" : "Benutzerspezifisch",
     "diagramPeriodToday" : "Heute",
     "diagramPeriodThisWeek" : "Diese Woche",
@@ -609,7 +611,6 @@ jQuery.extend(true,langJSON, {
     "iconBell" : "Benachrichtigung",
     "iconClock" : "Uhr",
     "statusDisplayDialogTitle" : "Display Konfiguration",
-    "ruleDescrHexString" : "Parameterzeichenkette",
     "dialogChangeLogTitle" : "Changelog",
     "btnChangelog" : "Changelog",
     "errorReadChangelog": "Fehler beim Lesen des Changelogs....",
@@ -711,7 +712,6 @@ jQuery.extend(true,langJSON, {
     "msgNoGatewayFound" : "Kein Gateway gefunden",
     "dialogDeleteCertificateTitle" : "Zertifikat l%F6schen",
     "dialogSettingsNetworkLblDeleteCertificate" : "Zertifikat von der CCU entfernen",
-    "confirmCertificationPurgeA" : "Wenn Sie das Zertifikat l%F6schen, k%F6nnen Sie anschlie%DFend keine gesicherte Verbindung zu Ihrer "+HMIdentifier.de.CCUShortName+" mehr aufbauen.",
     "confirmCertificationPurgeB" : "M%F6chten Sie das Zertifikat wirklich von der "+HMIdentifier.de.CCUShortName+" entfernen?",
     "dialogRestartWebserverTitle" : "Lighttpd Restart",
     "dialogRestartWebserverContent" : "Der Webserver wird jetzt neu gestartet.",
@@ -958,15 +958,11 @@ jQuery.extend(true,langJSON, {
      "rotationDirLeftSlow" : "Langsames Drehen nach links",
      "rotationDirRightSlow" : "Langsames Drehen nach rechts",
      "rainDetectorSampleInterval" : "Zeitspanne zwischen den einzelnen Messungen<br/>(Regenerkennungsintervall)",
+     "genericSampleInterval" : "Zeitspanne zwischen den einzelnen Messungen",
     "cpSecurityHttpsRedirectTitle" : "Automatische Umleitung auf HTTPS",
     "cpSecurityHttpsRedirectLabel" : "Umleitung auf HTTPS aktiv:",
     "cpSecurityHttpsRedirectDescription" : "Ist die Funktion aktiviert, erfolgt bei Zugriff auf die WebUI %FCber HTTP eine automatische Umleitung auf HTTPS",
     "stringTableOperationPowerConsumptionState": "Status Stromaufnahme",
-    "headerDrapUpdateNecessary":
-      "Mit diesem Update wird durch Advanced Routing eine verbesserte Kommunikation zwischen den Homematic IP Funk- und den Homematic IP Wired-Komponenten etabliert. " +
-      "Dazu ist es erforderlich, dass ein Firmware-Update des Homematic IP Wired Access Point durchgef%FChrt wird.<br><br>Der Homematic IP Wired Access Point befindet sich " +
-      "nach diesem Update im Posteingang und muss dort konfiguriert werden.<br>Alle bereits angelernten und konfigurierten Wired-Ger%E4te in der Installation arbeiten nach dem Update wie gewohnt weiter.",
-    "drapUpdateNecessary": "Folgende Wired Access Points mit einer inkompatiblen Firmware wurden gefunden und m%FCssen aktualisiert werden:<br/><br/>",
     "thAvailableVersion": "Verf%FCgbare Version",
     "thInstalledVersion": "Installierte Version",
     "btnReload": "Neu laden",
@@ -1037,6 +1033,45 @@ jQuery.extend(true,langJSON, {
     "dialogAskCreateBakupText" : "Das Backup wird direkt vor der Installation erstellt und heruntergeladen. Dieser Vorgang kann einige Minuten dauern.",
     "unitNumericPinCode" : "(max. 8 Ziffern von 0-9)",
     "hintSetReadyNotComplete" : "Klicken Sie auf Fertig, um den Kanal vollst%E4ndig zu konfigurieren und rufen Sie das Ger%E4t anschlie%DFend in der Ger%E4teliste auf.",
+
+    "btnHCL" : "HCL",
+    "btnDim2Warm" : "Dim2Warm",
+    "fwUpdatePressConfigKey" :
+      "Stellen Sie sicher, dass das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" ist.  Dr%FCcken sie ggf. die Systemtaste am Ger%E4t<br/><br/>"+
+      "Bei allen Homematic IP Sensoren, wie z. B. die Wettersensoren, ist ein Dr%FCcken der Taste nicht zwingend erforderlich. " +
+      "Die Ger%E4te melden sich automatisch im Verlauf eines Tages und beginnen dann selbstst%E4ndig mit dem Update.",
+    "fwUpdatePressSystemKey" :
+      "Stellen Sie sicher, dass das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" ist.  Dr%FCcken sie ggf. die Systemtaste am Ger%E4t<br/><br/>"+
+      "Bei allen Homematic IP Sensoren, wie z. B. die Wettersensoren, ist ein Dr%FCcken der Taste nicht zwingend erforderlich. " +
+      "Die Ger%E4te melden sich automatisch im Verlauf eines Tages und beginnen dann selbstst%E4ndig mit dem Update.",
+    "minTemp" : "min.<br/>Temp",
+    "maxTemp" : "max.<br/>Temp",
+    "errorStateCoProcessor" : "Zustand Co-Prozessor",
+    "errorCoProcessorFalse" : "<br/>OK",
+    "errorCoProcessorTrue" : "<br/>Fehler",
+    "stateDaliBus" : "Zustand DALI-Bus",
+    "stateDaliBus_0" : "<br/>OK",
+    "stateDaliBus_1" : "<br/>Kurzschluss",
+    "stateDaliBus_2" : "<br/>%DCberlast",
+    "btnSearchDaliDevices" : "Pr%FCfen",
+    "titleSearchDaliDevices" : "Pr%FCfe Kan%E4le",
+    "showDeviceBetaFw" : "Zeige unver%F6ffentlichte Ger%E4te-Fw.",
+    "hintDeviceBetaFw" :
+      "Bei aktiviertem Parameter werden einer geschlossenen Benutzergruppe auf der Startseite unter dem Punkt 'Ger%E4te-Update' " +
+      "Vorabversionen geplanter Ger%E4te-Firmware Updates angeboten.",
+    "btnSensorDetection" : "Sensorerkennung",
+    "hintPressSysKeyTryAgain" : "Bet%E4tigen Sie die Systemtaste und versuchen Sie es noch einmal.",
+    "hintProblemSensorIdent" : "Bei der Erkennung des Sensors ist ein Fehler aufgetreten.",
+    "msgStartValueInvalid_A" : "Der vergebene Startwert f%FCr Kanal ",
+    "msgStartValueInvalid_B" : " ist ung%FCltig!\n\nEs wird 0.000 verwendet.",
+    "dialogEsiSearchButtonContent" :
+      "Starten Sie hier die Sensorerkennung.<br/><br/>" +
+      "<b>Nachdem</b> Sie die Sensorerkennung gestartet haben, bet%E4tigen Sie die Systemtaste des Ger%E4tes. " +
+      "Der Sensor wird jetzt ermittelt. Wenn Sie diese Seite nicht verlassen, wird sie anschlie%DFend neu aufgerufen und der gefundene Sensor angezeigt.<br/><br/>" +
+      "<u>Achtung:</u><br/>" +
+      "Bei einem Wechsel des Sensors werden die bisher erfassten Verbrauchswerte (heute, gestern usw.) zur%FCck auf 0 gesetzt.<br/><br/>" +
+      "Sollten Sie die Sensorsuche ohne angeschlossenen Sensor gestartet haben, schlie%DFen Sie einen Sensor an und f%FChren Sie einen Werksreset des Energiemessger%E4ts durch.<br/><br/>" ,
+
     "theEnd" : ""
   }
 });

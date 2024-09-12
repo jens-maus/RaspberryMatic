@@ -1,9 +1,9 @@
 <table width="100%">
 <colgroup>
-  <col width="7%" />
-  <col width="57%" />
-  <col width="24%" />
-  <col width="12%" />
+  <col style="width:7%;"/>
+  <col style="width:57%;"/>
+  <col style="width:24%;"/>
+  <col style="width:12%;"/>
 </colgroup>
 <tr>
   <!-- Logo -->
@@ -30,17 +30,24 @@
   <!-- For testing only - DUTYCYCLE -->
   <td class="CLASS11105">
     <table id="infoPanel" class="hidden">
-        <tr>
-            <td class="CLASS11107">
-                <div id="btnInterfaces"  class="CLASS11108 Messages hidden">Show Interfaces</div>
-            </td>
-        </tr>
-      <tr>
+      <tr id="btnInterfaces" class="hidden">
           <td class="CLASS11107">
-              <div id="btnAPITools"  class="CLASS11108 Messages hidden">Show API-Tools</div>
+              <div class="CLASS11108 Messages">Show Interfaces</div>
           </td>
       </tr>
-        <tr><td class="CLASS11107"><div class="CLASS11108 Messages" style="visibility: hidden">Dummy</div></td></tr>
+      <tr id="btnAPITools" class="hidden">
+          <td id="btnRestartReGa" class="CLASS11107" style="width:64px; height:47px;">
+            <div class="CLASS11108 MainMenuItemCaption">Restart ReGa</div>
+          </td>
+          <td id="btnShowAPITools" class="CLASS11107" style="width:64px; height:47px;">
+              <div class="CLASS11108 MainMenuItemCaption">API-Tools</div>
+          </td>
+      </tr>
+        <tr id="btnDutyCycle" class="hidden">
+          <td class="CLASS11107">
+            <div class="CLASS11108 Messages">DC BidCos-RF: <span id="dcBidosRF">unknown</span> - DC HmIP-RF: <span id="dcHmIPRF">unknown</span></div>
+          </td>
+        </tr>
     </table>
   </td>
 

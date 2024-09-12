@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -106,7 +106,6 @@
+@@ -118,7 +118,6 @@
        /*# Globale Variablen                                                    #*/
        /*########################################################################*/
  
@@ -10,7 +10,7 @@
        urlParamInterfaces = jQuery.url().param('showInterfaces');
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -22651,8 +22651,8 @@
+@@ -24593,8 +24593,8 @@
  
  StartPage = Singleton.create(Page, {
    MAINMENU_ID: "MAINMENU_STARTPAGE",
@@ -21,7 +21,7 @@
    fieldTestActive: "/etc/config/fieldTestActive",
    downloadURL : "",
    prevDownloadURL : "",
-@@ -26893,8 +26893,8 @@
+@@ -28771,8 +28771,8 @@
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
      this.m_product = "HM-RASPBERRYMATIC";

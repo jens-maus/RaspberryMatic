@@ -2,6 +2,10 @@
 
 <html lang="de">
   <head>
+    <!-- Required meta tags for bootstrap -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=1024">
+
     <!-- R1.00.0379.0102 eQ-3 -->
     <% Call("/esp/system.fn::CheckUserFavorite()"); %>
     <meta http-equiv="Content-Language" content="de">
@@ -15,8 +19,6 @@
     <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css" />
     <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css" />
     <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css" />
-    <link rel="stylesheet" type="text/css" href="/webui/css/extern/hmBootstrap.css" />
-    <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
 
     <link rel="apple-touch-icon" href="/ise/img/rm-touch-icon-iphone.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/ise/img/rm-touch-icon-iphone-retina.png" />
@@ -28,7 +30,7 @@
 
 
     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
-    <script type="text/javascript" src="/webui/js/extern/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jquery.powertip.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
@@ -56,6 +58,7 @@
     <script type="text/javascript" src="/webui/js/common/viewmodels.js"></script>
     <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
     <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/iro.js"></script>
 
 
 
@@ -69,6 +72,10 @@
     <!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /><![endif]-->
     <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js"></script><![endif]-->
 
+    <link rel="stylesheet" type="text/css" href="/webui/css/extern/main.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webui/css/extern/hmBootstrap.css" />
+    <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
+
     <script type="text/javascript">
 
       /*########################################################################*/
@@ -76,8 +83,8 @@
       /*########################################################################*/
 
       PLATFORM = "Central";
-      WEBUI_VERSION = "3.61.5.20211119";
-      PRODUCT = "raspmatic_ova";
+      WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
+      PRODUCT = "XXX-PRODUCT-XXX";
 
       /**
        * Flags
@@ -120,7 +127,7 @@
       createNewProgram = false;
       showAPITools = jQuery.url().param('showAPITools');
       showRFAddress = (jQuery.url().param('showRFAddress') == "true") ? true : false;
-
+      //measureLoadingConfigData = true;
 
       /**
        * jg_250
@@ -136,13 +143,7 @@
         object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
         string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
         if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
-        string sUserLevel = "lblGuest";
-        if (oUser.UserLevel() == iulAdmin) { sUserLevel = "lblAdmin"; }
-        elseif (oUser.UserLevel() == iulUser) { sUserLevel = "lblUser" ; }
-        string sUserEasyMode = "lblUIModeExpert";
-        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "lblUIModeEasy"; }
-        WriteLine('var userName = "' # sUserFullName # ' (" + translateKey("' # sUserLevel # '") + ") | " + translateKey("lblEasyModeActiveShort") + " " + translateKey("' # sUserEasyMode # '");');
-        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
+        WriteLine('var userName = "' # sUserFullName # '";');
       %>
 
 

@@ -405,7 +405,7 @@ proc put_orig_channel_parameter {address ch} {
       set PROFILE_PNAME(DESCRIPTION) $param
       if {$param_descr(TYPE) != "ENUM" && $showOption == 0} {
         append s1 "<tr><td><span class=\"stringtable_value\">$dev_descr_sender(TYPE)|$PROFILE_PNAME(DESCRIPTION)</span></td>"
-        append s1 "<td><input type=\"text\" size=\"10\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', $min, $max, $factor, event)\"></td>"
+        append s1 "<td><input type=\"text\" size=\"10\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', '$min', '$max', $factor, event)\"></td>"
         append s1 "<td>$unit&nbsp;($min-$max)</td>"
         append s1 "<td><input type=\"text\"  value=\"$value_tmp\" id=\"separate_CHANNEL_$ch\_$i\" name='$param' style=\"display:none\";\"></td>"
       } elseif {$showOption == 1} { 
@@ -439,7 +439,7 @@ proc put_orig_channel_parameter {address ch} {
             append s1 "<option>\${stringTableEnterValue}</option>"
           append s1 "</select>"
           
-          append s1 "<input type=\"text\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', $min, $max, $factor, event)\">"
+          append s1 "<input type=\"text\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', '$min', '$max', $factor, event)\">"
           append s1 "<td>$unit&nbsp;($min-$max)</td>"
           append s1 "<input type=\"text\"  value=\"$value_tmp\" id=\"separate_CHANNEL_$ch\_$i\" name='$param' style=\"display:none\";\">"
           append s1 "</td>"
@@ -785,9 +785,9 @@ proc put_channel_parameters {} {
   puts "<table id=\"id_channel_parameters_table\" class=\"parameters_table\" cellspacing=\"0\">"
   
   puts "<colgroup>"
-  puts "  <col style=\"width:20%;\"/>"
-  puts "  <col style=\"width:5%;\" />"
-  puts "  <col style=\"width:75%;\"/>"
+  puts "  <col />"
+  puts "  <col />"
+  puts "  <col />"
   puts "</colgroup>"
 
   puts "<THEAD>"
@@ -1058,7 +1058,7 @@ proc put_channel_parameters {} {
           #end if internalKey 
         }
       } 
-      catch {check_RF_links $dev_descr(TYPE) $iface $ch_descr(ADDRESS) $ch_descr(INDEX) $ch_descr(TYPE) $ise_CHANNELNAMES($iface;$ch_descr(ADDRESS))}
+      catch {check_RF_links $dev_descr(TYPE) $iface $ch_descr(ADDRESS) $ch_descr(INDEX) $ch_descr(TYPE) $ch_name}
       array_clear ch_ps
       destructor
 
@@ -1088,6 +1088,47 @@ proc put_channel_parameters {} {
            set styleVirtChn "virtualChannelBckGnd"
     }
 
+    if {([string equal $ch_descr(TYPE) "DISPLAY_INPUT_TRANSMITTER"]) || ([string equal $ch_descr(TYPE) "DISPLAY_LEVEL_INPUT_TRANSMITTER"]) || ([string equal $ch_descr(TYPE) "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER"])} {
+      # For a better differentiation, the background of the channel cell of each second channel pair is shown slightly darker.
+
+      # ATTENTION - Channel 41 (index 20) is special (Quick Motion).  So it's set to -1
+
+      array set chnDarkBckGnd {
+        0 1
+        1 2
+        2 5
+        3 6
+        4 9
+        5 10
+        6 13
+        7 14
+        8 17
+        9 18
+        10 21
+        11 22
+        12 25
+        13 26
+        14 29
+        15 30
+        16 33
+        17 34
+        18 37
+        19 38
+        20 -1
+        21 42
+        22 43
+        23 46
+        24 47
+        25 50
+        26 51
+      }
+      foreach index [array names chnDarkBckGnd] {
+        if {$ch_descr(INDEX) == $chnDarkBckGnd($index)} {
+          set styleVirtChn "virtualChannelBckGnd"
+        }
+      }
+    }
+
     puts "<tr [expr {$hide_channel==1?"style=\"visibility: hidden; display: none\"":""} ] >"
     puts "<td class=\"alignCenter\"><span onmouseover=\"picDivShow(jg_250, '$ch_descr(PARENT_TYPE)', 250, $ch_descr(INDEX), this);\" onmouseout=\"picDivHide(jg_250);\">[cgi_quote_html $ch_name]</span><span id=\"chDescr_$ch_descr(INDEX)\"></span></td>"
     puts "<td class=\"alignCenter $styleVirtChn\" >Ch.: $ch_descr(INDEX)</td>"
@@ -1097,7 +1138,7 @@ proc put_channel_parameters {} {
     incr tr_count
 
     # Due to performance reasons we spare the MULTI_MODE_INPUT_TRANSMITTER
-    if {! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]} {
+    if {(! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]) || ([string equal $dev_descr(TYPE) "HmIP-FLC"]) || ([string equal $dev_descr(TYPE) "HmIP-FDC"])  } {
       puts "<script type='text/javascript'>"
         puts "var ext = getExtendedDescription(\{\"deviceType\" : \"$ch_descr(PARENT_TYPE)\", \"channelType\" : \"$ch_descr(TYPE)\" ,\"channelIndex\" : \"$ch_descr(INDEX)\", \"channelAddress\" : \"$ch_descr(ADDRESS)\" \});"
         puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
@@ -1193,7 +1234,7 @@ proc put_Header {} {
 
           "NEW_FIRMWARE_AVAILABLE" -
           "DELIVER_FIRMWARE_IMAGE" {
-            if {[string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1} {
+            if {([string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-SWSD-2"] == 1)} {
               set fw_update_rows "<tr><td class=\"CLASS22008\"><div>\${lblDeviceFwDeliverFwImage}</div><div class=\"StdTableBtnHelp\"><img id=\"hmIPDeliverFirmwareHelp\" height=\"24\" width=\"24\"src=\"/ise/img/help.png\"></div></td></tr>"
             }
           }
@@ -1212,7 +1253,7 @@ proc put_Header {} {
           }
 
           "UP_TO_DATE" {
-            if {[string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1} {
+            if {([string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-SWSD-2"] == 1)} {
               append fw_update_rows "<tr id=\"swsdHintCheckDevice\" class=\"hidden\"><td colspan=\"2\"><span class=\"attention\">\${checkSmokeDetectorSelfTest}</span></td></tr>"
 
               append fw_update_rows "<script \"type=text/javascript\">"
@@ -1259,19 +1300,19 @@ proc put_Header {} {
 
   puts "<colgroup>"
   #Name
-  puts "  <col style=\"width:29%;\"/>"
+  puts "  <col />"
   #Typenbezeichnung
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
   #Bild
-  puts "  <col style=\"width:1%;\"/>"
+  puts "  <col style=\"width:55px;\"/>"
   #Bezeichnung
-  puts "  <col style=\"width:30%;\"/>"
+  puts "  <col />"
   #SN
-  puts "  <col style=\"width:5%;\"/>"
+  puts "  <col />"
   #Interface
-  puts "  <col style=\"width:5%;\"/>"
+  puts "  <col />"
   #Firmware
-  puts "  <col style=\"width:15%;\"/>"
+  puts "  <col />"
   puts "</colgroup>"
   
   puts "<THEAD>"

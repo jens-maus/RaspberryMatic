@@ -120,8 +120,17 @@
     {
       if (room.Visible())
       {
+        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
+        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
+        if( sEnumUserInternalIDs != "" ) {
+          if( sEnumUserIDs != "" ) {
+            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
+          } else {
+            sEnumUserIDs = sEnumUserInternalIDs;
+          }
+        }
         string tmp;
-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) 
+        foreach(tmp, sEnumUserIDs)
         {
           object chn = dom.GetObject(tmp);
           object oDev = dom.GetObject(chn.Device());
@@ -167,7 +176,7 @@
             Write("</td>");
             Write("<td class='GrayBkg'>");
             
-            Write("<table>");
+            Write("<table style='width:100%;'>");
             Write("<tr><td class='CLASS03602'><div id='tmc"#chn.ID()#"'><br /><br />");
             
             integer cId = chn.ID();

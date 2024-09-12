@@ -1088,6 +1088,47 @@ proc put_channel_parameters {} {
            set styleVirtChn "virtualChannelBckGnd"
     }
 
+    if {([string equal $ch_descr(TYPE) "DISPLAY_INPUT_TRANSMITTER"]) || ([string equal $ch_descr(TYPE) "DISPLAY_LEVEL_INPUT_TRANSMITTER"]) || ([string equal $ch_descr(TYPE) "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER"])} {
+      # For a better differentiation, the background of the channel cell of each second channel pair is shown slightly darker.
+
+      # ATTENTION - Channel 41 (index 20) is special (Quick Motion).  So it's set to -1
+
+      array set chnDarkBckGnd {
+        0 1
+        1 2
+        2 5
+        3 6
+        4 9
+        5 10
+        6 13
+        7 14
+        8 17
+        9 18
+        10 21
+        11 22
+        12 25
+        13 26
+        14 29
+        15 30
+        16 33
+        17 34
+        18 37
+        19 38
+        20 -1
+        21 42
+        22 43
+        23 46
+        24 47
+        25 50
+        26 51
+      }
+      foreach index [array names chnDarkBckGnd] {
+        if {$ch_descr(INDEX) == $chnDarkBckGnd($index)} {
+          set styleVirtChn "virtualChannelBckGnd"
+        }
+      }
+    }
+
     puts "<tr [expr {$hide_channel==1?"style=\"visibility: hidden; display: none\"":""} ] >"
     puts "<td class=\"alignCenter\"><span onmouseover=\"picDivShow(jg_250, '$ch_descr(PARENT_TYPE)', 250, $ch_descr(INDEX), this);\" onmouseout=\"picDivHide(jg_250);\">[cgi_quote_html $ch_name]</span><span id=\"chDescr_$ch_descr(INDEX)\"></span></td>"
     puts "<td class=\"alignCenter $styleVirtChn\" >Ch.: $ch_descr(INDEX)</td>"
@@ -1097,7 +1138,7 @@ proc put_channel_parameters {} {
     incr tr_count
 
     # Due to performance reasons we spare the MULTI_MODE_INPUT_TRANSMITTER
-    if {! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]} {
+    if {(! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]) || ([string equal $dev_descr(TYPE) "HmIP-FLC"]) || ([string equal $dev_descr(TYPE) "HmIP-FDC"])  } {
       puts "<script type='text/javascript'>"
         puts "var ext = getExtendedDescription(\{\"deviceType\" : \"$ch_descr(PARENT_TYPE)\", \"channelType\" : \"$ch_descr(TYPE)\" ,\"channelIndex\" : \"$ch_descr(INDEX)\", \"channelAddress\" : \"$ch_descr(ADDRESS)\" \});"
         puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
@@ -1220,7 +1261,7 @@ proc put_Header {} {
 
           "NEW_FIRMWARE_AVAILABLE" -
           "DELIVER_FIRMWARE_IMAGE" {
-            if {[string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1} {
+            if {([string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-SWSD-2"] == 1)} {
               set fw_update_rows "<tr><td class=\"CLASS22008\"><div>\${lblDeviceFwDeliverFwImage}</div><div class=\"StdTableBtnHelp\"><img id=\"hmIPDeliverFirmwareHelp\" height=\"24\" width=\"24\"src=\"/ise/img/help.png\"></div></td></tr>"
             }
           }
@@ -1239,7 +1280,7 @@ proc put_Header {} {
           }
 
           "UP_TO_DATE" {
-            if {[string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1} {
+            if {([string equal $dev_descr(TYPE) "HmIP-SWSD"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-SWSD-2"] == 1)} {
               append fw_update_rows "<tr id=\"swsdHintCheckDevice\" class=\"hidden\"><td colspan=\"2\"><span class=\"attention\">\${checkSmokeDetectorSelfTest}</span></td></tr>"
 
               append fw_update_rows "<script \"type=text/javascript\">"

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/cp_software.cgi.orig
 +++ occu/WebUI/www/config/cp_software.cgi
-@@ -452,14 +452,14 @@
+@@ -485,14 +485,14 @@
    if { $loop > -1 } {
      translatePage $loop
    } else {
@@ -19,7 +19,7 @@
      puts "function getVersion(url, callback) {"
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
-@@ -636,6 +636,7 @@
+@@ -1267,6 +1267,7 @@
        });
  
        translatePage('#messagebox');

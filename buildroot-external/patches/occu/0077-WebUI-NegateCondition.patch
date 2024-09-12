@@ -111,7 +111,7 @@
          if( sValueUnit == "100%" )
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -803,6 +803,7 @@
+@@ -810,6 +810,7 @@
      "ruleConditionLblTimeDuringNight" : "nachts",
      "ruleConditionLblTimeClock" : "Uhr",
      "ruleConditionLblTimeIteration" : "Wiederholungen",
@@ -121,7 +121,7 @@
      "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -837,6 +837,7 @@
+@@ -844,6 +844,7 @@
      "ruleConditionLblTimeDuringNight" : "at night",
      "ruleConditionLblTimeClock" : "o'clock",
      "ruleConditionLblTimeIteration" : "repetitions",
@@ -131,7 +131,7 @@
      "ruleConditionSelectCheckOnly" : "check only",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -24823,6 +24823,24 @@
+@@ -30285,6 +30285,24 @@
      new Ajax.Request(url,opts);        
    },
  

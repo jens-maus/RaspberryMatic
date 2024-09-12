@@ -41,14 +41,17 @@
     <script type="text/javascript" src="/webui/js/extern/jqplot.categoryAxisRenderer.min.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jqplot.canvasAxisTickRenderer.min.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jqplot.canvasTextRenderer.min.js"></script>
-    <script type="text/javascript" src="/webui/js/extern/jqplot.cursor.min.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/jqplot.cursor.js"></script>
     <script type="text/javascript" src="/webui/js/extern/jqplot.enhancedLegendRenderer.min.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/jqplot.highlighter.min.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/jqplot.markerRenderer.js"></script>
     <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
     <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
     <script type="text/javascript" src="/webui/js/extern/knockout.js"></script>
     <script type="text/javascript" src="/webui/js/common/viewmodels.js"></script>
     <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
     <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
+    <script type="text/javascript" src="/webui/js/extern/iro.js"></script>
 
 
 
@@ -105,12 +108,14 @@
 
       isHTTPS = window.location.protocol.startsWith("https:");
       forceUpdate = false;
-      preventInterfaceCheck = false;
+      preventInterfaceCheck = (jQuery.url().param('preventInterfaceCheck') == "true") ? true : false;
       urlParamInterfaces = jQuery.url().param('showInterfaces');
       urlDebug = jQuery.url().param('debug');
       showDummyLicense = jQuery.url().param('showDummyLicense');
       createNewProgram = false;
       showAPITools = jQuery.url().param('showAPITools');
+      showRFAddress = (jQuery.url().param('showRFAddress') == "true") ? true : false;
+      //measureLoadingConfigData = true;
 
       /**
        * jg_250

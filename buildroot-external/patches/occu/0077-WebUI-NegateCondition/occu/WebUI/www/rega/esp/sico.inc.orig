@@ -326,7 +326,7 @@
           sValueUnit = "";
         }
 
-        if( (iCT1 != 5) && (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
+        if( (iCT1 != 5) && (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 9) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 12) )
         {
           oSC.ConditionType(6);
           iCT1 = 6;
@@ -343,6 +343,10 @@
         if( iCT1 == 9 ) { sCT = "${ruleConditionLblGreaterOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
         !if( iCT1 == 11 ) { sCT = "kleiner oder gleich "#iRV1.ToString(2)#sValueUnit; }
         if( iCT1 == 11 ) { sCT = "${ruleConditionLblLessOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
+        !if( iCT1 == 5 ) { sCT = "gleich "#iRV1.ToString(2)#sValueUnit; }
+        if( iCT1 == 5) { sCT = "${ruleConditionLblEqualThan} "#iRV1.ToString(2)#sValueUnit; }
+        !if( iCT1 == 12 ) { sCT = "ungleich "#iRV1.ToString(2)#sValueUnit; }
+        if( iCT1 == 12 ) { sCT = "${ruleConditionLblNotEqualThan} "#iRV1.ToString(2)#sValueUnit; }
 
         Write( ' <b class="CLASS02201" onclick="CreatePopup(ID_SET_VALUE_RANGE,'#oSC.ID()#');">'#sCT#'</b>' );
       }

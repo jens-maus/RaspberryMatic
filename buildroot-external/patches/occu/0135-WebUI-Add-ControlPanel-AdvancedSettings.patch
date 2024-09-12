@@ -716,8 +716,8 @@
 -    <title>HomeMatic WebUI</title>
 +    <title><% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %></title>
  
-     <link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=1.509pre1" />
-     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
+     <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
+     <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
 @@ -1,7 +1,7 @@
@@ -731,7 +731,7 @@
      <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -24,7 +24,7 @@
+@@ -26,7 +26,7 @@
      <link rel="icon" type="image/png" sizes="16x16" href="/ise/img/rm-favicon-16x16.png">
      <link rel="manifest" href="/webui/site.webmanifest">
  
@@ -742,7 +742,7 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -463,6 +463,8 @@
+@@ -468,6 +468,8 @@
      "lblMenuStatusControlSysProtocolTime" : "Zeit",
      "lblMenuStatusControlSysProtocolChannelSysvar" : "Kanal / Systemvariable",
      "lblMenuStatusControlSysProtocolActivity" : "Aktivit%E4t",
@@ -751,7 +751,7 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -624,6 +626,53 @@
+@@ -630,6 +632,53 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -807,7 +807,7 @@
      "dialogSettingsNetworkTDIPSettings" : "IP-Einstellungen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -462,6 +462,8 @@
+@@ -467,6 +467,8 @@
      "lblMenuStatusControlSysProtocolTime" : "Time",
      "lblMenuStatusControlSysProtocolChannelSysvar" : "Channel / system variable",
      "lblMenuStatusControlSysProtocolActivity" : "Activity",
@@ -816,7 +816,7 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -624,6 +626,53 @@
+@@ -630,6 +632,53 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -872,7 +872,7 @@
      "dialogSettingsNetworkTDIPSettings" : "IP settings",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -28601,15 +28601,25 @@
+@@ -32757,15 +32757,25 @@
  };
  
  setPath = function (path) {
@@ -905,7 +905,7 @@
  
  
  
-@@ -30583,7 +30593,7 @@
+@@ -34678,7 +34688,7 @@
  
  
  showDutyCycle = function() {
@@ -914,7 +914,7 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
-@@ -42912,6 +42922,11 @@
+@@ -49187,6 +49197,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

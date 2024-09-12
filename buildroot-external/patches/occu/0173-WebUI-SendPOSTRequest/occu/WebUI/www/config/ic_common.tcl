@@ -473,7 +473,6 @@ proc base_put_page {iface address pid peer ps_type} {
 
   html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"de\" lang=\"de\" {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />"
       title "$HTMLTITLE - Geräteparameter"
 
@@ -567,7 +566,6 @@ proc activate_link_paramset {iface address ps_id long_push} {
 
   html {
     head {
-      put_meta_nocache
     }
     body {
       if { ![catch { xmlrpc $url activateLinkParamset [list string $address] [list string $ps_id] [list bool $long_push] } ] } then {
@@ -694,7 +692,6 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
     html {
       head {
-        put_meta_nocache
       }
       body {
         if {$ret == "1"} then {
@@ -712,7 +709,6 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
     html {
       head {
-        put_meta_nocache
       }
       body {
         if {$ret == "1"} then {
@@ -733,7 +729,6 @@ proc put_error404 {} {
 
   html {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
       title "$HTMLTITLE - Profil nicht gefunden"
     }
@@ -751,7 +746,6 @@ proc put_error_profilenotfound {} {
 
   html {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
       title "$HTMLTITLE - Profil nicht gefunden"
     }
@@ -1397,7 +1391,7 @@ proc cmd_link_paramset2 {iface address pps_descr pps ps_type {pnr 0}} {
 
           append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id $access style=\"visibility:hidden;display:none;\" />"
           append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
-          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', [expr $min + 0.001], [expr $max + 0.001], parseFloat([expr 1 / $factor]));\" /></td>"
+          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
           append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
       }
       "ENUM" {
@@ -1744,12 +1738,6 @@ proc get_Pulse {val_arr id ps_arr pname dev_address arr_pulse {extraparam ""}} {
     upvar $val_arr arr
   upvar arr_pulse pulse
   return [get_Pulse2 arr $id $ps($pname) $dev_address pulse $extraparam]
-}
-
-proc put_meta_nocache {} {
-  puts "<meta http-equiv=\"cache-control\" content=\"no-cache\" />"
-  puts "<meta http-equiv=\"pragma\"        content=\"no-cache\" />"
-  puts "<meta http-equiv=\"expires\"       content=\"0\" />"
 }
 
 proc get_InputElem {name id ps_arr pname {extraparam ""}} {

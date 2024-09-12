@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.label.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.label.js
-@@ -117,8 +117,8 @@
+@@ -149,8 +149,8 @@
      "lblInfoLevelReal" : "Realer Wert",
      "lblInfoLevelRealBrightness" : "Reale Helligkeit",
      "lblInfoStatusControlCurrent" : "Strom",
@@ -10,10 +10,10 @@
 +    "lblInfoStatusControlEnergyCounter" : "Energie-Z%E4hler - Zentrale",
      "lblInfoStatusControlFrequency" : "Netzfrequenz",
      "lblInfoStatusControlGas" : "Verbrauch",
-     "lblInfoStatusControlPower" : "Leistung",
+     "lblInfoStatusControlGasFlow" : "Gasdurchfluss",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.label.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.label.js
-@@ -117,8 +117,8 @@
+@@ -149,8 +149,8 @@
      "lblInfoLevelReal" : "Actual value",
      "lblInfoLevelRealBrightness" : "Actual brightness",
      "lblInfoStatusControlCurrent" : "Current",
@@ -23,4 +23,4 @@
 +    "lblInfoStatusControlEnergyCounter" : "Energy counter - Central",
      "lblInfoStatusControlFrequency" : "Frequency",
      "lblInfoStatusControlGas" : "Consumption",
-     "lblInfoStatusControlPower" : "Power",
+     "lblInfoStatusControlGasFlow" : "Gas flow",

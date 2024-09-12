@@ -728,8 +728,12 @@ puts "</div>"
     }
     puts {
       OnInbox = function() {
-        rf_install_mode(false);
-        hmip_install_mode_stop();
+        if (jQuery("body").data("BidCos-RF")) {
+          rf_install_mode(false);
+        }
+        if (jQuery("body").data("HmIP-RF")) {
+          hmip_install_mode_stop();
+        }
         PopupClose();
         WebUI.enter(NewDeviceListPage, {"fromTeachIn":true});
       }

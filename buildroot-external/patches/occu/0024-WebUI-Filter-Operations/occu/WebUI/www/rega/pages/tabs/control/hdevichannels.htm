@@ -35,13 +35,16 @@
   arChns = new Array();
   chn = null;
 </script>
+
+<img id="ajaxLoad" style="margin: 30px;" alt="Loading..." src="/ise/img/loading.gif" />
+
 <table id="tblHDeviChannel" class="filterTable CLASS03500 j_translate" cellpadding="0" cellspacing="0" border="1" >
   <colgroup>
-     <col width="12%" />
-     <col width="10%" />
-     <col width="10%" />
-     <col width="10%" />
-     <col width="58%" />
+     <col style="width:12%;"/>
+     <col style="width:10%;"/>
+     <col style="width:10%;"/>
+     <col style="width:10%;"/>
+     <col style="width:58%;"/>
   </colgroup>
   <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -55,7 +58,7 @@
   </tr>
   <%
     Write("<script type='text/javascript'>");
-        Write("translatePage('#tblHDeviChannel');");
+      Write("translatePage('#tblHDeviChannel');");
     Write("</script>");
   %>
   <tr>
@@ -127,7 +130,7 @@
     object oUser = dom.GetObject( system.GetSessionVar('sessionUserID'));
     integer userID = oUser.ID();
     object user = dom.GetObject(userID);
-
+    integer virtChnCounter = 0;
     
     object device = dom.GetObject(system.GetVar("id"));
     if (device) {
@@ -166,29 +169,24 @@
             }
           }
 
-          if (sInterface != "HmIP-RF") {
+          if ((sInterface != "HmIP-RF") && (sInterface != "VirtualDevices")) {
             Call("/esp/functions.fn::showHideRFChannel()");
           } else {
             Call("/esp/functions.fn::showHideHmIPChannel()");
           }
-
           if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
           {
             string trId = device.ID()#tmp;
+            boolean showExtDesc = false;
             Write("<tr id='"#trId#"'>");
             Write("<td class='GrayBkg' name='devName'>");
 
-            if ((chn.HssType() == "SWITCH_TRANSMITTER") && (chn.Label() == "HmIP-MOD-OC8") ) {
-              Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_OC}</span>");
-            } else {
-              if ((chn.HssType() == "PASSAGE_DETECTOR_DIRECTION_TRANSMITTER") && (chn.Label() == "HmIP-SPDR")) {
-                ! Show the device address instead of the channel address because channel 2 and 3 are summarized together in channel 2.
-                ! Channel 3 is not visible.
-                Write(chn.Label()#"<br/>&nbsp;"#device.Address()#"&nbsp;");
-              } else {
-                Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"}</span>");
-              }
+            Call("/pages/tabs/control/function.fn::ShowExtDesc()");
+
+            if (showExtDesc == false) {
+              Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"}</span>");
             }
+
             Write("</td>");
             Write("<td class='GrayBkg'>");
             string rooms = "";
@@ -223,13 +221,13 @@
             Write(sLastTime);
             
             Write("</span></td></tr>");
-            Write( '<tr><td align="center" class="CLASS03502">' );
+            Write( '<tr><td style="text-align:center;" class="CLASS03502">' );
             string sDisplay = 'none';
             if( chn.WorkingDPState() ) { sDisplay = "inline"; }
             Write( '<span id="work'#cId#'" style="display:'#sDisplay#';"><img src="/ise/img/pinion_gears_32.png" /></span>' );
             sDisplay = 'none';
             if( chn.ExistServiceMsg() ) { sDisplay = "inline"; }
-            Write( '<span id="warn'#cId#'" style="display:'#sDisplay#'"><img src="/ise/img/warning.png" /></span>' );
+            Write( '<span id="warn'#cId#'" style="display:'#sDisplay#'"><img name="attention" src="/ise/img/warning.png"/></span>' );
             Write( '</td></tr></table>' );
             
             Write("</td>");
@@ -282,6 +280,10 @@
   jQuery("#btnFilterName").click(function(){
     jQuery("#ftName").focus();
   });
+
+ jQuery("#ajaxLoad").hide();
+
+ jQuery("[name='attention']").data('powertip', '<div>'+translateKey("lblSeeServiceMessage")+'</div>').powerTip();
 
   translatePage("#tblHDeviChannel", function () {
     jQuery("[name='hssType']").each(function(index, elm) {

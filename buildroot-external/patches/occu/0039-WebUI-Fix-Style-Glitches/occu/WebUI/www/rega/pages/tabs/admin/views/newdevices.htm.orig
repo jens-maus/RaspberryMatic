@@ -806,22 +806,24 @@ CreateSysVar = function (name, type, value, chnID) {
   }
 };
 
-CreateMetaEnergyCounter = function(chn) {
+CreateMetaEnergyCounter = function(chn, feed) {
   /*
     initialVal
     Values for the last 30 days. The first 0 is yesterdy......
     This is being used to store the values of the last 30 days.
   */
-  var initialVal = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+  var initialVal = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+    feedIn = ((typeof feed == "undefined") || (!feed)) ? "" : "FeedIn";
+
   homematic("Interface.setMetadata", {
     "objectId" : chn.id,
-    "dataId" : "energyCounter30Days",
+    "dataId" : "energyCounter30Days" + feedIn,
     "value" : initialVal
   });
-  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy0","value" : 0}); // Today
-  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy1","value" : 0}); // Yesterday
-  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy7","value" : 0}); // 1 Week
-  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy30","value" : 0}); // 1 Month
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy0" + feedIn,"value" : 0}); // Today
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy1" + feedIn,"value" : 0}); // Yesterday
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy7" + feedIn,"value" : 0}); // 1 Week
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy30" + feedIn,"value" : 0}); // 1 Month
 };
 
 //Standard EnergyCounter
@@ -1143,6 +1145,111 @@ CreateSysVarEnergyCounterScriptPSM = function(chn) {
 
   "program.Active(true);"+
   "dom.RTUpdate(0);";
+
+  homematic("ReGa.runScript", {"script": script});
+};
+
+//HmIP-PSM Feed In EnergyCounter (e. g. HmIP-PSMCO)
+CreateSysVarEnergyCounterScriptPSMFeedIn = function(chn) {
+
+  var sysVarIds = getSysVarEnergyCounterIds(chn, true);
+
+  var sysVarId = sysVarIds.counterId,
+    sysVarOldValId = sysVarIds.tmpCounterId;
+
+  var updateScript =
+    "object chn = dom.GetObject('"+chn.id+"');\n" +
+    "object oOverflow = chn.DPByControl('POWERMETER_PSM.ENERGY_COUNTER_FEED_IN_OVERFLOW');\n" +
+    "object oEnergyCounter = chn.DPByControl('POWERMETER_PSM.ENERGY_COUNTER_FEED_IN');\n" +
+    "object oSysVarEnergyCounter = dom.GetObject('"+sysVarId+"');\n" +
+    "object oSysVarEnergyCounterOldVal = dom.GetObject('"+sysVarOldValId+"');\n" +
+
+    "boolean overFlowFlag = oOverflow.Value();\n" +
+    "real devVal = oEnergyCounter.Value();\n" +
+    "real devValMax = oEnergyCounter.ValueMax();\n" +
+    "real oldDevVal = oSysVarEnergyCounterOldVal.Value();\n" +
+    "real diffVal = 0.0;\n" +
+    "real sysVarVal = oSysVarEnergyCounter.Value();\n" +
+    "integer tmp_devVal = (devVal.ToString().ToFloat() * 1000).ToInteger();\n" +
+    "integer tmp_oldDevVal = (oldDevVal.ToString().ToFloat() * 1000).ToInteger();\n" +
+
+    "real energy0 = chn.MetaData('energy0FeedIn').ToFloat();\n" +
+
+    "if (overFlowFlag == false) {\n" +
+    "! Normal conditions\n" +
+    "if (tmp_oldDevVal <= tmp_devVal) {\n" +
+    "diffVal = devVal - oldDevVal;\n" +
+    "}\n" +
+
+    "! Device has rebooted\n" +
+    "if (tmp_oldDevVal > tmp_devVal) {\n" +
+    "diffVal = devVal;\n" +
+    "}\n"+
+
+    "} else {\n" +
+    "!overFlow is true\n" +
+    "if (tmp_oldDevVal > tmp_devVal) {\n" +
+    "! An device overflow has occured\n" +
+    "diffVal = (devVal + devValMax) - oldDevVal;\n" +
+    "} else {\n" +
+    "! Once the overflow flag has been set it will only be false when the device reboots\n"+
+    "! Therefore this is the normal condition after an device overflow\n" +
+    "diffVal = devVal - oldDevVal;\n" +
+    "}\n" +
+    "}\n" +
+
+    "if (tmp_devVal != 0) {" +
+    "oSysVarEnergyCounterOldVal.State(devVal);\n" +
+    "oSysVarEnergyCounter.State(sysVarVal + diffVal);\n" +
+
+    "! Save todays energy consumption\n" +
+    "chn.MetaData('energy0FeedIn',energy0 + diffVal);\n" +
+
+    "}";
+
+  var script =
+    "var sysVarId = '"+sysVarId+"';\n" +
+    "var channel = dom.GetObject('"+chn.id+"');\n" +
+    "var channelId = channel.ID();\n" +
+    "var paramId = channel.DPByControl('POWERMETER_PSM.ENERGY_COUNTER_FEED_IN').ID();\n"+
+    "var _script = \""+updateScript+"\";\n" +
+
+    "var DP_VALUE_CHECK_UPDATE = 13;"+
+
+    "var programs = dom.GetObject(ID_PROGRAMS);"+
+    "var program  = dom.CreateObject(OT_PROGRAM);"+
+    "program.Name('prgEnergyCounterFeedIn_"+ chn.id +"_"+chn.address+"');"+
+    "program.Internal(true);"+
+    "programs.Add(program.ID());"+
+
+
+    "var rule = program.Rule();"+
+    "rule.RuleOperatorType(OPERATOR_NONE);"+
+
+    "var condition = rule.RuleAddCondition();"+
+    "condition.CndOperatorType(OPERATOR_NONE);"+
+
+    "var singleCondition = condition.CndAddSingle();"+
+    "singleCondition.OperatorType(OPERATOR_NONE);"+
+    "singleCondition.ConditionType(9);"+
+    "singleCondition.ConditionType2(DP_VALUE_CHECK_UPDATE);"+
+    "singleCondition.LeftValType(ivtObjectId);"+
+    "singleCondition.LeftVal(paramId);"+
+    "singleCondition.RightVal1ValType(ivtFloat);"+
+    "singleCondition.RightVal1(0.0);"+
+    "singleCondition.RightVal2ValType(ivtFloat);"+
+    "singleCondition.RightVal2(0.0);"+
+
+    "singleCondition.ConditionChannel(channelId);"+
+
+    "var destination = rule.RuleDestination();"+
+    "var action = destination.DestAddSingle();"+
+    "action.DestinationParam(ivtString);"+
+    "action.DestinationValueType(ivtString);"+
+    "action.DestinationValue(_script);"+
+
+    "program.Active(true);"+
+    "dom.RTUpdate(0);";
 
   homematic("ReGa.runScript", {"script": script});
 };
@@ -1739,8 +1846,9 @@ CreateHmIPSunRainTodayYesterdayScript = function(chn) {
   homematic("ReGa.runScript", {"script": script});
 };
 
-getSysVarEnergyCounterIds = function (chn) {
-  return {"counterId": "svEnergyCounter_" + chn.id + "_" + chn.address, "tmpCounterId": "svEnergyCounterOldVal_" + chn.id};
+getSysVarEnergyCounterIds = function (chn, feed) {
+  var feedIn = ((typeof feed == "undefined") || (!feed)) ? "" : "FeedIn";
+  return {"counterId": "svEnergyCounter"+feedIn+ "_" + chn.id + "_" + chn.address, "tmpCounterId": "svEnergyCounterOldVal"+feedIn+ "_" + chn.id};
 };
 
 getSysVarRainSunshineCounterIds = function (chn, hasRainSensor) {
@@ -1779,45 +1887,80 @@ getSysVarEnergyCounterIECIds = function (chn) {
   return {"counterId": "svEnergyCounterIEC_" + chn.id + "_" + chn.address, "tmpCounterId": "svEnergyCounterIECOldVal_" + chn.id};
 };
 
-CheckAndCreateSysVarEnergyCounter = function(chn) {
-  var sysVarIds = getSysVarEnergyCounterIds(chn);
-  var SysVarEnergyCounterId = sysVarIds.counterId,
-   SysVarEnergyCounterOldValId = sysVarIds.tmpCounterId;
 
-  var oSysVarEnergyCounter = homematic("SysVar.get", {"id" : SysVarEnergyCounterId});
+getChnLabel = function(id) {
+  var regaScript = "object chn = dom.GetObject('"+id+"');" +
+    "WriteLine(chn.Label());";
+
+  return homematic("ReGa.runScript", {"script": regaScript});;
+};
+
+
+CheckAndCreateSysVarEnergyCounter = function(chn) {
+  var hasFeedIn = false,
+  chnLabel = getChnLabel(chn.id);
+
+  if (chnLabel.indexOf('HmIP-PSMCO') != -1) {
+    hasFeedIn = true;
+  }
+
+  var sysVarIds = getSysVarEnergyCounterIds(chn),
+   SysVarEnergyCounterId = sysVarIds.counterId,
+   SysVarEnergyCounterOldValId = sysVarIds.tmpCounterId,
+   oSysVarEnergyCounter = homematic("SysVar.get", {"id" : SysVarEnergyCounterId});
+
+  if (hasFeedIn) {
+    var sysVarIdsFeedIn = getSysVarEnergyCounterIds(chn, hasFeedIn),
+      SysVarEnergyCounterFeedInId = sysVarIdsFeedIn.counterId,
+      SysVarEnergyCounterOldValFeedInId = sysVarIdsFeedIn.tmpCounterId,
+      oSysVarEnergyCounterFeedIn = homematic("SysVar.get", {"id" : SysVarEnergyCounterFeedInId});
+  }
 
   // SysVar svEnergyCounter_xxxx doesn´t exist
   if (!oSysVarEnergyCounter) {
     conInfo("create system variable: " + SysVarEnergyCounterId);
     CreateSysVar(SysVarEnergyCounterId, "float");
     CreateSysVar(SysVarEnergyCounterOldValId, "float");
+
+    if (hasFeedIn) {
+      conInfo("create system variable: " + SysVarEnergyCounterFeedInId);
+      CreateSysVar(SysVarEnergyCounterFeedInId, "float");
+      CreateSysVar(SysVarEnergyCounterOldValFeedInId, "float");
+    }
+
     if (chn.channelType == "ENERGIE_METER_TRANSMITTER") {
 
-      var chnLabel = "";
-
-      var regaScript = "object chn = dom.GetObject('"+chn.id+"');" +
-      "WriteLine(chn.Label());";
-
-      homematic("ReGa.runScript", {"script": regaScript}, function (response, error) {
-        chnLabel = response;
-
-        if (chnLabel.indexOf('HmIP-ESI') !== -1) {
-          conInfo("CreateSysVarEnergyCounterScriptESI");
+      if (chnLabel.indexOf('HmIP-ESI') !== -1) {
+        if (chn.index != 1) {
           CreateSysVarEnergyCounterScriptESI(chn);
           CreateSysVarGasCounterScriptESI(chn);
+          CreateMetaEnergyCounter(chn);
+          storeEnergyValuesAtMidnight(chn);
+        }
+      } else {
+
+        if (hasFeedIn) {
+          conInfo("CreateSysVarEnergyCounterScriptPSM with FeedIn");
+          // The second parameter says that the device can also be used for feeding in energy
+          CreateMetaEnergyCounter(chn);
+          CreateMetaEnergyCounter(chn, hasFeedIn);
+          CreateSysVarEnergyCounterScriptPSM(chn);
+          CreateSysVarEnergyCounterScriptPSMFeedIn(chn);
+
           //Set the values of the last 31 days at midnight (00:00).
-          if (chn.index != 1) {
-            CreateMetaEnergyCounter(chn);
-            storeEnergyValuesAtMidnight(chn);
-          }
+          // The second parameter says that the device can also be used for feeding in energy
+          storeEnergyValuesAtMidnight(chn);
+          storeEnergyValuesAtMidnight(chn, hasFeedIn);
+
         } else {
           conInfo("CreateSysVarEnergyCounterScriptPSM");
           CreateMetaEnergyCounter(chn);
           CreateSysVarEnergyCounterScriptPSM(chn);
+
           //Set the values of the last 31 days at midnight (00:00).
           storeEnergyValuesAtMidnight(chn);
         }
-      });
+      }
     } else {
       conInfo("CreateSysVarEnergyCounterScript");
       CreateSysVarEnergyCounterScript(chn);
@@ -1941,7 +2084,9 @@ CheckAndCreateSysVarHmIPRainSunshineCounter = function(chn, hasRainSensor) {
 
 };
 
-storeEnergyValuesAtMidnight = function(chn) {
+storeEnergyValuesAtMidnight = function(chn, feed) {
+
+  var feedIn = ((typeof feed == "undefined") || (!feed)) ? "" : "FeedIn";
 
   var destinationScript =
 
@@ -1955,10 +2100,10 @@ storeEnergyValuesAtMidnight = function(chn) {
     "object chn = dom.GetObject('"+chn.id+"');\n" +
 
     "! Retrieve energyCounter30Days\n" +
-    "string energyCounter30Days = chn.MetaData('energyCounter30Days');\n" +
+    "string energyCounter30Days = chn.MetaData('energyCounter30Days"+feedIn+"');\n" +
 
     "! Retrieve todays value\n" +
-    "real energy0 = chn.MetaData('energy0').ToFloat();\n" +
+    "real energy0 = chn.MetaData('energy0"+feedIn+"').ToFloat();\n" +
 
     "! Move the values of the array energyCounter30Days one position to the right\n" +
     "foreach (val, energyCounter30Days.Split(',')) {\n" +
@@ -1978,13 +2123,13 @@ storeEnergyValuesAtMidnight = function(chn) {
     "last30Days = energy0.ToString(1) + ',' + last30Days;\n" +
 
     "!Store energyCounter30Days as meta data\n" +
-    "chn.MetaData('energyCounter30Days', last30Days);\n" +
+    "chn.MetaData('energyCounter30Days"+feedIn+"', last30Days);\n" +
 
     "! Set the meta data of energy1 (yesterday), energy7 (week) and energy30 (months)\n" +
     "loop = 0;\n" +
     "foreach (val, last30Days.Split(',')) {\n" +
       "val = val.ToFloat();\n" +
-      "if (loop == 0) {chn.MetaData('energy1', val);}\n" +
+      "if (loop == 0) {chn.MetaData('energy1"+feedIn+"', val);}\n" +
       "if (loop <= 6) {\n" +
         "energy7 = energy7 + val;\n" +
       "}\n" +
@@ -1994,11 +2139,11 @@ storeEnergyValuesAtMidnight = function(chn) {
       "loop = loop +1;\n" +
     "}\n" +
 
-    "chn.MetaData('energy7', energy7);\n" +
-    "chn.MetaData('energy30', energy30);\n" +
+    "chn.MetaData('energy7"+feedIn+"', energy7);\n" +
+    "chn.MetaData('energy30"+feedIn+"', energy30);\n" +
 
     "! Reset energy0 (today) - a new day begins\n" +
-    "chn.MetaData('energy0', 0.0);\n" ;
+    "chn.MetaData('energy0"+feedIn+"', 0.0);\n" ;
 
 
   var script =
@@ -2011,7 +2156,7 @@ storeEnergyValuesAtMidnight = function(chn) {
 
     "var programs = dom.GetObject(ID_PROGRAMS);"+
     "var program  = dom.CreateObject(OT_PROGRAM);"+
-    "program.Name('prgSetEnergyValuesAtMidnight"+ chn.id + "');"+
+    "program.Name('prgSetEnergyValuesAtMidnight"+feedIn+ chn.id + "');"+
     "program.Internal(true);"+
     "programs.Add(program.ID());"+
 

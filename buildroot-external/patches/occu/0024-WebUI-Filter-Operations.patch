@@ -354,7 +354,7 @@
  </script>
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -45,7 +45,7 @@
+@@ -48,7 +48,7 @@
    </colgroup>
    <tr>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -571,7 +571,7 @@
  
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -6025,8 +6025,6 @@
+@@ -6334,8 +6334,6 @@
  
  .CLASS03903 {
  	border:solid 1px $_(black); /* black */

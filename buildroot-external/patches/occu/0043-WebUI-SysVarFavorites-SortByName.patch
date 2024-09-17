@@ -47,7 +47,7 @@
      "btnChooseChannel" : "Channel selection",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -30574,7 +30574,23 @@
+@@ -30579,7 +30579,23 @@
      };
      new Ajax.Updater("userSysVarTbl", url, opts);
    },

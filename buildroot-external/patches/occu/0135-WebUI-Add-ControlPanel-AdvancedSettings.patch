@@ -872,7 +872,7 @@
      "dialogSettingsNetworkTDIPSettings" : "IP settings",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32757,15 +32757,25 @@
+@@ -32762,15 +32762,25 @@
  };
  
  setPath = function (path) {
@@ -905,7 +905,7 @@
  
  
  
-@@ -34678,7 +34688,7 @@
+@@ -34683,7 +34693,7 @@
  
  
  showDutyCycle = function() {
@@ -914,7 +914,7 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
-@@ -49187,6 +49197,11 @@
+@@ -49202,6 +49212,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

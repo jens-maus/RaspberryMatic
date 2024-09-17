@@ -789,7 +789,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -23356,16 +23356,16 @@
+@@ -23361,16 +23361,16 @@
  
     // WebUI-Version
    showCurrentFirmware: function() {
@@ -815,7 +815,7 @@
    },
  
    /*evalVersionAGreaterThanB: function(a, b) {
-@@ -27478,7 +27478,7 @@
+@@ -27483,7 +27483,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
@@ -824,7 +824,7 @@
      this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
      this.m_fieldTestURLServer = (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com" : "http://fieldtest-ccu3-update.homematic.com";
  
-@@ -27489,7 +27489,7 @@
+@@ -27494,7 +27494,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -833,7 +833,7 @@
      $("body").appendChild(script);
    },
  
-@@ -32853,11 +32853,11 @@
+@@ -32858,11 +32858,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -847,7 +847,7 @@
          }
        }
      },
-@@ -32872,12 +32872,12 @@
+@@ -32877,12 +32877,12 @@
  
  SwitchOnFlashLight = function()
  {

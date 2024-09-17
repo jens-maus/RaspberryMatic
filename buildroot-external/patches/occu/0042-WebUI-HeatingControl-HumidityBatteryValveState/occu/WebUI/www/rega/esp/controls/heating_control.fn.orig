@@ -504,7 +504,6 @@ function ::CreateHeatingControlHmIP() {
                   && (chnLabel != "HmIP-eTRV-C")
                   && (chnLabel != "HmIP-eTRV-C-2")
                   && (chnLabel != "HmIP-eTRV-CL")
-                  && (chnLabel != "HmIP-eTRV-3")
                   && (chnLabel != "HmIP-eTRV-E")
                   && (chnLabel != "HmIP-eTRV-E-S")
                   && (chnLabel != "HmIP-eTRV-E-A")

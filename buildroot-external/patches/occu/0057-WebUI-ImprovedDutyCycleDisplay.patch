@@ -289,7 +289,7 @@
  .CLASS01812 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -8263,8 +8263,6 @@
+@@ -8266,8 +8266,6 @@
        window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
        ConfigData.isPresent = true;
        if (ConfigData.showMessage) { this.hideMessage(); }
@@ -298,7 +298,7 @@
        if (ConfigData.callback) { ConfigData.callback(); }
      });
    },
-@@ -8403,7 +8401,6 @@
+@@ -8406,7 +8404,6 @@
      if(typeof dcTimeout == "undefined") {
        dcTimeout = window.setTimeout(function () {
          showDutyCycle();
@@ -306,7 +306,7 @@
          delete dcTimeout;
        }, 10);
      }
-@@ -8636,7 +8633,6 @@
+@@ -8639,7 +8636,6 @@
        // Check the dutyCycle and carrierSense periodically
        new PeriodicalExecuter(function () {
          showDutyCycle();
@@ -314,7 +314,7 @@
        }, checkDutyCycleInterval);
  
        if (getProduct() >= 3) {
-@@ -34458,74 +34454,101 @@
+@@ -34463,74 +34459,101 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},

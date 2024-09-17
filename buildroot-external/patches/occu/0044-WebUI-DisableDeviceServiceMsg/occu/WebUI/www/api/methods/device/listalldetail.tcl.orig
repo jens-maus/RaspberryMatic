@@ -39,6 +39,7 @@ set deviceDescrScript {
 
     var first = true;
     string channelId;
+    boolean noMoreDaliChannels = false;
     foreach(channelId, device.Channels())
     {
       var channel = dom.GetObject(channelId);
@@ -115,6 +116,7 @@ set deviceDescrScript {
         Write(" AES_AVAILABLE {" # isAesAvailable # "}");
         Write(" VIRTUAL {" # isVirtual # "}");
         Write(" CHANNEL_TYPE {" # chnType # "}");
+        Write(" CHANNEL_NAME {" # channel.Label() # "}");
 
         ! BLIND_* is necessary e. g. the HmIPW-DRBL4, which can be used as a BLIND or a SHUTTER. The metadata channelMode determines the current state.
 
@@ -137,6 +139,19 @@ set deviceDescrScript {
           }
         }
 
+        if (! noMoreDaliChannels) {
+          if ((channel.Label() == "HmIP-DRG-DALI") && (chnType == "UNIVERSAL_LIGHT_RECEIVER")) {
+            integer maxCap = channel.MetaData('maxCap');
+            if (maxCap) {
+              Write(" DALI_MAX_CAPABILITIES {" # maxCap # "}");
+              if (maxCap == 5) {
+                noMoreDaliChannels = true;
+              }
+            } else {
+              Write(" DALI_MAX_CAPABILITIES {--}");
+            }
+          }
+        }
         Write("}");
       }
     }
@@ -200,7 +215,7 @@ foreach id $deviceIds {
 
 
 #
-# channesl
+# channel
 #
   set firstChannel 1
   append result ",\"channels\":\["
@@ -236,7 +251,11 @@ foreach id $deviceIds {
      append result ",\"mode_multi_mode\":[json_toString $channel(MODE_MULTI_MODE_CHANNEL)]"
     }
 
-
+   if {($channel(CHANNEL_NAME) == "HmIP-DRG-DALI") && ($channel(CHANNEL_TYPE) == "UNIVERSAL_LIGHT_RECEIVER")} {
+      if {[info exists channel(DALI_MAX_CAPABILITIES)] == 1} {
+       append result ",\"daliMaxCapabilities\":[json_toString $channel(DALI_MAX_CAPABILITIES)]"
+      }
+    }
     append result "\}"
 
     array_clear channel

@@ -5360,6 +5360,9 @@ elvST['ACCELERATION_TRANSCEIVER|MSG_FOR_POS_B=NO_MSG'] = '${stringTableTiltSenso
 elvST['ACCELERATION_TRANSCEIVER|MSG_FOR_POS_B=OPEN'] = '${stringTableTiltSensorMsgPosB3}';
 elvST['ACCELERATION_TRANSCEIVER|NOTIFICATION_SOUND_TYPE_HIGH_TO_LOW'] = '${stringTableAccelerationTransceiverNotificationSoundTypeHighToLow}';
 elvST['ACCELERATION_TRANSCEIVER|NOTIFICATION_SOUND_TYPE_LOW_TO_HIGH'] = '${stringTableAccelerationTransceiverNotificationSoundTypeLowToHigh}';
+elvST['ACCELERATION_TRANSCEIVER|STATE=CLOSED'] = '${stringTableRHSMsgPosClosed}';
+elvST['ACCELERATION_TRANSCEIVER|STATE=OPEN'] = '${stringTableRHSMsgPosOpen}';
+elvST['ACCELERATION_TRANSCEIVER|STATE=TILTED'] = '${stringTableRHSMsgPosTilted}';
 elvST['ACCESS_RECEIVER'] = '${stringTableAccessReceiverTitle}';
 elvST['ACCESS_RECEIVER|STATE=FALSE'] = '${stringTableAccessReceiverStateFalse}';
 elvST['ACCESS_RECEIVER|STATE=TRUE'] = '${stringTableAccessReceiverStateTrue}';
@@ -10961,12 +10964,14 @@ Channel = Class.create({
     // For the group channels 33 - 48 we need all UNIVERSAL_LIGHT_MAX_CAPABILITIES.
     if ((device.typeName == "HmIP-DRG-DALI")) {
       if ((data.channelType == "UNIVERSAL_LIGHT_RECEIVER") && (((data.index < 33) && (typeof noMoreDaliDevices == "undefined"))  || (data.index >= 33)))  {
-        var maxCap = homematic("Interface.getMasterValue", {
-          "interface": "HmIP-RF",
-          "address": data.address,
-          "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
-        });
-        homematic("Interface.setMetadata", {"objectId": data.id, "dataId": "maxCap", "value": maxCap});
+          var maxCap = data.daliMaxCapabilities;
+  //      var maxCap = homematic("Interface.getMasterValue", {
+  //        "interface": "HmIP-RF",
+  //        "address": data.address,
+  //        "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+  //      });
+  //      homematic("Interface.setMetadata", {"objectId": data.id, "dataId": "maxCap", "value": maxCap});
+
         if ((data.index < 33) && (maxCap == 5)) {
            noMoreDaliDevices = true;
         }
@@ -38182,11 +38187,8 @@ iseThermostatHMIP.prototype = {
       var dev, chn, arLinkPeers = [];
 
       dev = DeviceList.getDeviceByAddress(this.chAddress.split(":")[0]);
-
-      jQuery.each(dev.channels, function (index, chn) {
-        //  if (!self.heatingCoolingAllowed) {return false;} // exit the loop  -- this will cause a problem with the build process
-
-        if (self.heatingCoolingAllowed) {
+      if (typeof dev != "undefined") {
+        jQuery.each(dev.channels, function (index, chn) {
           if (chn.channelType == "CLIMATECONTROL_FLOOR_TRANSMITTER") {
             arLinkPeers = homematic("Interface.getLinkPeers", {'interface': self.iface, 'address': chn.address});
             jQuery.each(arLinkPeers, function (index, chnAddress) {
@@ -38196,17 +38198,26 @@ iseThermostatHMIP.prototype = {
               }
             });
           }
+        });
+
+        if (!this.heatingCoolingAllowed) {
+          this.btnHeating.prop("onclick", null);
+          this.btnCooling.prop("onclick", null);
+          this.btnHeating.unbind("click").click(function () {
+            MessageBox.show(translateKey("dialogHint"), translateKey("hintHeatingCoolngNotAllowed"), function () {
+              loadChannels(self.devId);
+            }, 500, 125);
+          }).css("cursor", "default");
+          this.btnCooling.unbind("click").click(function () {
+            MessageBox.show(translateKey("dialogHint"), translateKey("hintHeatingCoolngNotAllowed"), function () {
+              loadChannels(self.devId);
+            }, 500, 125);
+          }).css("cursor", "default");
         }
-      });
+      } else {
+        window.setTimeout(function() {self.checkIfHeatingCoolingAllowed();}, 2000);
+      }
     }
-
-    if (! this.heatingCoolingAllowed) {
-      this.btnHeating.prop("onclick", null);
-      this.btnCooling.prop("onclick", null);
-      this.btnHeating.unbind("click").click(function() {MessageBox.show(translateKey("dialogHint"),translateKey("hintHeatingCoolngNotAllowed"), function() {loadChannels(self.devId);}, 500, 125);}).css("cursor", "default");
-      this.btnCooling.unbind("click").click(function() {MessageBox.show(translateKey("dialogHint"),translateKey("hintHeatingCoolngNotAllowed"), function() {loadChannels(self.devId);}, 500, 125);}).css("cursor", "default");
-    }
-
   }
 
 };/**
@@ -45146,7 +45157,7 @@ DetermineParameterValue = function(iface, address, ps_id, param_id, html_inputel
     ProgressBar.StartKnightRiderLight();
 };
 
-ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float, event)
+ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, convInt2Float, event)
 {
   var srcElm = $(srcid);
   var dstElm = $(dstid);
@@ -45224,7 +45235,9 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float
   {
     srcElm.style.backgroundColor = "#fffffe";
     dstElm.value = value * dstValueFactor;
-    srcElm.value = dstElm.value;
+    if (_iface != "BidCos-RF") {
+      srcElm.value = dstElm.value;
+    }
     srcElm.setAttribute("valvalid", "true");
   }
   else
@@ -45232,7 +45245,9 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
     dstElm.value = finalVal * dstValueFactor;
-    srcElm.value = dstElm.value;
+    if (_iface != "BidCos-RF") {
+      srcElm.value = dstElm.value;
+    }
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
   }
 };
@@ -49711,6 +49726,8 @@ MD_catchBrightness = function(url, sender_address, receiver_address, brightness,
   } else {
     brightness = knownBrightness;
   }
+
+  if (brightness < 0) {brightness = 0.0;}
 
   ResetPostString();
   poststr += "&url=" +url;

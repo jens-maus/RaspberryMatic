@@ -14,7 +14,7 @@
      <table class="CLASS11102">
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32268,37 +32268,31 @@
+@@ -32273,37 +32273,31 @@
  };
  
  setAlarmMessageCount = function (count) {
@@ -66,7 +66,7 @@
      }
    }
  };
-@@ -34335,12 +34329,14 @@
+@@ -34340,12 +34334,14 @@
  
  SwitchOnFlashLight = function()
  {

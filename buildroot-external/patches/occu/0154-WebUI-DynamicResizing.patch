@@ -425,7 +425,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -8219,7 +8219,6 @@
+@@ -8222,7 +8222,6 @@
           1 - user selected YES
           */
          if (action == 1) {
@@ -433,7 +433,7 @@
            jQuery(".Layer0").show();
            homematic("CCU.setSecurityHint");
            if (getProduct() >= 3) {
-@@ -8456,42 +8455,8 @@
+@@ -8459,42 +8458,8 @@
      this.currentPageOptions  = null;    // Argumente der aktuellen Seite
      this.previousPage        = null;    // Vorherige Seite
      this.previousPageOptions = null;    // Argumente der vorherigen Seite
@@ -476,7 +476,7 @@
    /*########################*/
    /*# Öffentliche Elemente #*/
    /*########################*/
-@@ -8690,8 +8655,6 @@
+@@ -8693,8 +8658,6 @@
  
  
      if (result) {
@@ -485,7 +485,7 @@
        if (!isFF) {
          jQuery(".Layer0").show();
          WebUI.enter(StartPage);
-@@ -8875,13 +8838,6 @@
+@@ -8878,13 +8841,6 @@
        throw new Error("content not defined");
      }
    },
@@ -499,7 +499,7 @@
    
    /**
     * Lädt eine Seite.
-@@ -24450,11 +24406,6 @@
+@@ -24455,11 +24411,6 @@
     **/
    leave: function() {},
    
@@ -511,7 +511,7 @@
  });
  /**
   * page.js
-@@ -24482,13 +24433,6 @@
+@@ -24487,13 +24438,6 @@
    {
    },
    
@@ -525,7 +525,7 @@
  });
  /**
   * StartPage.js
-@@ -24517,19 +24461,6 @@
+@@ -24522,19 +24466,6 @@
    initialize: function ()
    {
      this.deviceList = [];
@@ -545,7 +545,7 @@
    },
  
    /**
-@@ -24540,7 +24471,6 @@
+@@ -24545,7 +24476,6 @@
      iseInitUpdateArrays();
      setPath("");
      setFooter("");
@@ -553,7 +553,7 @@
    
      switch (getUPL())
      {
-@@ -24575,35 +24505,6 @@
+@@ -24580,35 +24510,6 @@
      this.prevDownloadURL = this.downloadURL;
      conInfo("Device Fw. downloadURL: " + this.downloadURL);
    },
@@ -589,7 +589,7 @@
  
    getPageMeasurement: function() {
      var pageElements = ["body","#header", "#menubar", "#favSelector", "#favView", "#footer"],
-@@ -24897,11 +24798,9 @@
+@@ -24902,11 +24803,9 @@
      }
    },
    
@@ -604,7 +604,7 @@
    
  });
  ControlPage = new function()
-@@ -24922,10 +24821,6 @@
+@@ -24927,10 +24826,6 @@
      }
    };
  
@@ -615,7 +615,7 @@
  }();
  ControlRoomsPage = new function()
  {
-@@ -24941,10 +24836,6 @@
+@@ -24946,10 +24841,6 @@
    {
    };
  
@@ -626,7 +626,7 @@
  }();
  ControlFunctionsPage = new function()
  {
-@@ -24960,10 +24851,6 @@
+@@ -24965,10 +24856,6 @@
    {
    };
  
@@ -637,7 +637,7 @@
  }();
  ControlFavoritesPage = new function()
  {
-@@ -24980,10 +24867,6 @@
+@@ -24985,10 +24872,6 @@
    {
    };
  
@@ -648,7 +648,7 @@
  }();
  ControlFavoritePage = new function()
  {
-@@ -24999,10 +24882,6 @@
+@@ -25004,10 +24887,6 @@
    {
    };
  
@@ -659,7 +659,7 @@
  }();
  ControlDevicesPage = new function()
  {
-@@ -25018,10 +24897,6 @@
+@@ -25023,10 +24902,6 @@
    {
    };
  
@@ -670,7 +670,7 @@
  }();
  ControlProgramsPage = new function()
  {
-@@ -25037,10 +24912,6 @@
+@@ -25042,10 +24917,6 @@
    {
    };
  
@@ -681,7 +681,7 @@
  }();
  ControlVariablesPage = new function()
  {
-@@ -25056,10 +24927,6 @@
+@@ -25061,10 +24932,6 @@
    {
    };
  
@@ -692,7 +692,7 @@
  }();
  ControlProtocolPage = new function()
  {
-@@ -25075,10 +24942,6 @@
+@@ -25080,10 +24947,6 @@
    {
    };
  
@@ -703,7 +703,7 @@
  }();
  LinksAndProgramsPage = new function()
  {
-@@ -25094,10 +24957,6 @@
+@@ -25099,10 +24962,6 @@
    {
    };
  
@@ -714,7 +714,7 @@
  }();
  LinkListPage = new function()
  {
-@@ -25122,10 +24981,6 @@
+@@ -25127,10 +24986,6 @@
    {
    };
  
@@ -725,7 +725,7 @@
  }();
  ProgramListPage = new function()
  {
-@@ -25141,10 +24996,6 @@
+@@ -25146,10 +25001,6 @@
    {
    };
  
@@ -736,7 +736,7 @@
  }();
  LinkEditProfilePage = new function()
  {
-@@ -25165,10 +25016,6 @@
+@@ -25170,10 +25021,6 @@
    {
    };
    
@@ -747,7 +747,7 @@
  };AlarmMessagesPage = new function()
  {
    
-@@ -25184,10 +25031,6 @@
+@@ -25189,10 +25036,6 @@
      if ($("msgAlarms")) { $("msgAlarms").removeClassName("Messages_Selected"); }
    };
  
@@ -758,7 +758,7 @@
  }();
  ServiceMessagesPage = new function()
  {
-@@ -25204,10 +25047,6 @@
+@@ -25209,10 +25052,6 @@
      if ($("msgServices")) { $("msgServices").removeClassName("Messages_Selected"); }
    };
  
@@ -769,7 +769,7 @@
  }();
  HelpPage = new function()
  {
-@@ -25224,10 +25063,6 @@
+@@ -25229,10 +25068,6 @@
    {
    };
  
@@ -780,7 +780,7 @@
  }();
  adminFirstStartup = new function()
  {
-@@ -25241,10 +25076,6 @@
+@@ -25246,10 +25081,6 @@
    {
    };
  
@@ -791,7 +791,7 @@
  }();
  userFirstStartup = new function()
  {
-@@ -25258,10 +25089,6 @@
+@@ -25263,10 +25094,6 @@
    {
    };
  
@@ -802,7 +802,7 @@
  }();
  /**
   * devielistpage.js
-@@ -26000,10 +25827,6 @@
+@@ -26005,10 +25832,6 @@
    {
    };
  
@@ -813,7 +813,7 @@
   }();
  
  }
-@@ -26021,10 +25844,6 @@
+@@ -26026,10 +25849,6 @@
    {
    };
  
@@ -824,7 +824,7 @@
  }();
  FunctionListPage = new function()
  {
-@@ -26039,10 +25858,6 @@
+@@ -26044,10 +25863,6 @@
    {
    };
  
@@ -835,7 +835,7 @@
  }();
  NewDeviceListPage = new function()
  {
-@@ -26066,10 +25881,6 @@
+@@ -26071,10 +25886,6 @@
    {
    };
  
@@ -846,7 +846,7 @@
  }();
  RoomListPage = new function()
  {
-@@ -26085,10 +25896,6 @@
+@@ -26090,10 +25901,6 @@
    {
    };
  
@@ -857,7 +857,7 @@
  }();
  SystemConfigPageUser = new function()
  {
-@@ -26104,10 +25911,6 @@
+@@ -26109,10 +25916,6 @@
    {
    };
  
@@ -868,7 +868,7 @@
  }();
  SystemConfigPage = new function()
  {
-@@ -26123,10 +25926,6 @@
+@@ -26128,10 +25931,6 @@
    {
    };
  
@@ -879,7 +879,7 @@
  }();
  UserAdminPageUser = new function()
  {
-@@ -26142,10 +25941,6 @@
+@@ -26147,10 +25946,6 @@
    {
    };
  
@@ -890,7 +890,7 @@
  }();
  UserAdminPageAdmin = new function()
  {
-@@ -26161,10 +25956,6 @@
+@@ -26166,10 +25961,6 @@
    {
    };
  
@@ -901,7 +901,7 @@
  }();
  SystemControlPage = new function()
  {
-@@ -26180,10 +25971,6 @@
+@@ -26185,10 +25976,6 @@
    {
    };
  
@@ -912,7 +912,7 @@
  }();
  CreateDiagramPage = new function()
  {
-@@ -26222,10 +26009,6 @@
+@@ -26227,10 +26014,6 @@
    {
    };
  
@@ -923,7 +923,7 @@
  }();
  CreateDiagramPage = new function()
  {
-@@ -26264,10 +26047,6 @@
+@@ -26269,10 +26052,6 @@
    {
    };
  
@@ -934,7 +934,7 @@
  }();
  DiagramListPage = new function()
  {
-@@ -26294,10 +26073,6 @@
+@@ -26299,10 +26078,6 @@
    {
    };
  
@@ -945,7 +945,7 @@
  }();
  CreateGroupPage = new function()
  {
-@@ -26326,10 +26101,6 @@
+@@ -26331,10 +26106,6 @@
    {
    };
  
@@ -956,7 +956,7 @@
  }();
  CreateTestPage = new function()
  {
-@@ -26356,10 +26127,6 @@
+@@ -26361,10 +26132,6 @@
    {
    };
  
@@ -967,7 +967,7 @@
  }();
  DeviceFirmware = new function()
  {
-@@ -26386,10 +26153,6 @@
+@@ -26391,10 +26158,6 @@
    {
    };
  
@@ -978,7 +978,7 @@
  }();
  function compare(a,b) {
    if (a.name < b.name)
-@@ -26440,10 +26203,6 @@
+@@ -26445,10 +26208,6 @@
    {
    };
  
@@ -989,7 +989,7 @@
  }();VariableListPage = new function()
  {
    var MAINMENU_ID = "MAINMENU_OPTIONS";
-@@ -26458,10 +26217,6 @@
+@@ -26463,10 +26222,6 @@
    {
    };
  
@@ -1000,7 +1000,7 @@
  }();
  DeviceConfigPage = new function()
  {
-@@ -26495,10 +26250,6 @@
+@@ -26500,10 +26255,6 @@
    {
    };
  
@@ -1011,7 +1011,7 @@
  }();
  getGatewayStatus = function()
  {
-@@ -26832,10 +26583,6 @@
+@@ -26837,10 +26588,6 @@
      InterfaceMonitor.start();
    },
    

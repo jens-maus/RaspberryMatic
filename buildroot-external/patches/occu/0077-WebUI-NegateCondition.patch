@@ -131,7 +131,7 @@
      "ruleConditionSelectCheckOnly" : "check only",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -30285,6 +30285,24 @@
+@@ -30290,6 +30290,24 @@
      new Ajax.Request(url,opts);        
    },
  

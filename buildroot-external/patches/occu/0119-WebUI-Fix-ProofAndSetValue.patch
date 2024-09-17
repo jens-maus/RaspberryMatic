@@ -489,12 +489,12 @@
  
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -1389,7 +1389,7 @@
+@@ -1380,7 +1380,7 @@
  
            append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id $access style=\"visibility:hidden;display:none;\" />"
            append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
--          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', [expr $min + 0.001], [expr $max + 0.001], parseFloat([expr 1 / $factor]));\" /></td>"
-+          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
+-          append s "  onblur=\"_iface='$iface'; ProofAndSetValue('$input_idval', '${idval}', [expr $min + 0.001], [expr $max + 0.001], parseFloat([expr 1 / $factor]));\" /></td>"
++          append s "  onblur=\"_iface='$iface'; ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
            append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
        }
        "ENUM" {
@@ -520,7 +520,7 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -45431,56 +45431,71 @@
+@@ -45442,49 +45442,64 @@
      srcElm.value = value;
    }
  
@@ -592,19 +592,22 @@
    {
      srcElm.style.backgroundColor = "#fffffe";
 -    dstElm.value = value * dstValueFactor;
--    srcElm.value = dstElm.value;
 +    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
-+    srcElm.value = parsedValue.toFixed(digits);
+     if (_iface != "BidCos-RF") {
+-      srcElm.value = dstElm.value;
++      srcElm.value = parsedValue.toFixed(digits);
+     }
      srcElm.setAttribute("valvalid", "true");
    }
-   else
+@@ -45492,9 +45507,9 @@
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";
 -    dstElm.value = finalVal * dstValueFactor;
--    srcElm.value = dstElm.value;
 +    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
-+    srcElm.value = finalVal.toFixed(digits);
+     if (_iface != "BidCos-RF") {
+-      srcElm.value = dstElm.value;
++      srcElm.value = finalVal.toFixed(digits);
+     }
      window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
    }
- };

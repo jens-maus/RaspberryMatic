@@ -66,7 +66,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11145,14 +11145,16 @@
+@@ -11150,14 +11150,16 @@
          if (typeof devToConfigure != "undefined" || typeof blindChAddress == "undefined" || blindChAddress != devAddress) {
            blindChAddress = devAddress;
            var devDescr = homematic("Interface.getDeviceDescription", {"interface": "HmIP-RF", "address":devAddress});

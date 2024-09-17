@@ -7,65 +7,82 @@ OCCU_ROOT=
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
 	mkdir -p $(TARGET_DIR)/lib
-	mkdir -p $(TARGET_DIR)/$(OCCU_LIBDIR)
+	mkdir -p $(TARGET_DIR)/$(OCCU_LIB)
 	mkdir -p $(TARGET_DIR)/etc/config_templates
 	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
-	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/bin/avrprog
-	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libXmlRpc.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libxmlparser.so
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
-	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
-	cp -R firmware/* $(TARGET_DIR)/firmware
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/RFD/bin/avrprog
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libXmlRpc.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libxmlparser.so
+	chmod 755 $(OCCU_ARCH)/packages-eQ-3/RFD/bin/*
+	cp -av $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/$(OCCU_LIB)/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
+	cp -Rv firmware/* $(TARGET_DIR)/firmware
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
-	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/
-	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
-	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD_ccu3.conf $(TARGET_DIR)/etc/config_templates/crRFD.conf
+	cp -av $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD_ccu3.conf $(TARGET_DIR)/etc/config_templates/crRFD.conf
+endif
+ifneq ($(OCCU_ARCH64), )
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIB64)/
 endif
 
 install_hs485d_arch:
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/etc/* $(TARGET_DIR)/etc/
-	rm -f $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libXmlRpc.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libxmlparser.so
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
+	chmod 755 $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/*
+	cp -av $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/* $(TARGET_DIR)/bin/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/HS485D/etc/* $(TARGET_DIR)/etc/
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libXmlRpc.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libxmlparser.so
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/* $(TARGET_DIR)/$(OCCU_LIB)/
 
 install_webui_arch:
 	# remove unnecessary stuff
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.normal
-	mv -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.community $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/eq3-uds-services
-	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libXmlRpc.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libxmlparser.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/config
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.normal
+	mv -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.community $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/eq3-uds-services
+	rm -rfv $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libXmlRpc.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libxmlparser.so
 	# TCL 8.6 tuning
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2/homematic $(TARGET_DIR)/usr/lib/tcl8.6/
-	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libtcl8.2.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl*.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/tclsh
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2/homematic $(TARGET_DIR)/usr/lib/tcl8.6/
+	rm -rfv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libtcl8.2.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl*.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/tclsh
 	ln -sf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
 	# copy WebUI stuff to target dir
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
-	cp -R WebUI/* $(TARGET_DIR)/
+	chmod 755 $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/*
+	cp -av $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIB)/
+	cp -Rv WebUI/* $(TARGET_DIR)/
 	# copy ReGaHss beta to target dir
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libXmlRpc.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libxmlparser.so
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/ || true
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libXmlRpc.so
+	rm -fv $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libxmlparser.so
+	chmod 755 $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/*
+	cp -av $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+	cp -Rv $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIB)/ || true
+	# copy 64bit ReGaHss if it exists
+ifneq ($(OCCU_ARCH64), )
+	chmod 755 $(OCCU_ARCH64)/packages-eQ-3/WebUI-Beta/bin/*
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+endif
 endif
 
 install_linuxbasis_arch:
+	chmod 755 $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/*
 	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/* $(TARGET_DIR)/bin/
-	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/$(OCCU_LIB)/
+ifneq ($(OCCU_ARCH64), )
+	chmod 755 $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/*
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/* $(TARGET_DIR)/bin/
+endif
 
 install_lighttpd_arch:
 	mkdir -p $(TARGET_DIR)/etc/lighttpd
@@ -83,7 +100,7 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/etc/init.d/S62HMServer $(TARGET_DIR)/etc/init.d/
-	chmod a+rx $(TARGET_DIR)/etc/init.d/S62HMServer
+	chmod 755 $(TARGET_DIR)/etc/init.d/S62HMServer
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/opt/HmIP $(TARGET_DIR)/opt/
@@ -125,7 +142,7 @@ update_webui:
 
 	ln -snf ${OCCU_ROOT}/etc/config/addons/www            $(TARGET_DIR)/www/addons
 
-	chmod a+rx $(TARGET_DIR)/www/config/fileupload.ccc
+	chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc
 
 	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g'
 	grep -rl 'XXX-PRODUCT-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-PRODUCT-XXX/$(PRODUCT)/g'

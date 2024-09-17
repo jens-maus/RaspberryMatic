@@ -126,7 +126,7 @@ fi
 
 echo -n "RaspberryMatic Add-on Hostname (e.g. 5422eb72-raspberrymatic): "
 if [[ -z "${CCU_CONTAINER_NAME}" ]]; then
-  CCU_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep "_raspberrymatic" | cut -c7-)
+  CCU_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep "_raspberrymatic" | cut -c7- | awk '{print $0}')
   if [[ -z "${NON_INTERACTIVE}" ]]; then
     read -r -e -i "${CCU_CONTAINER_NAME}" CCU_CONTAINER_NAME </dev/tty
   else

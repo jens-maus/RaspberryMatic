@@ -14,6 +14,9 @@ echo "PLATFORM=ova" >>"${TARGET_DIR}/VERSION"
 # fix some permissions
 [ -e "${TARGET_DIR}/etc/monitrc" ] && chmod 600 "${TARGET_DIR}/etc/monitrc"
 
+# remove unnecessary stuff from TARGET_DIR
+rm -f "${TARGET_DIR}/etc/init.d/S50crond"
+
 # copy grub boot.img to binaries dir
 cp -f "${HOST_DIR}"/../build/grub2-2.??/build-i386-pc/grub-core/boot.img "${BINARIES_DIR}/"
 

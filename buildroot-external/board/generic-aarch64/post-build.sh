@@ -14,6 +14,9 @@ echo "PLATFORM=generic-aarch64" >>"${TARGET_DIR}/VERSION"
 # fix some permissions
 [ -e "${TARGET_DIR}/etc/monitrc" ] && chmod 600 "${TARGET_DIR}/etc/monitrc"
 
+# remove unnecessary stuff from TARGET_DIR
+rm -f "${TARGET_DIR}/etc/init.d/S50crond"
+
 # link VERSION in /boot on rootfs
 mkdir -p "${TARGET_DIR}/boot"
 ln -sf ../VERSION "${TARGET_DIR}/boot/VERSION"

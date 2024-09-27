@@ -618,7 +618,7 @@ function ::CreatePowermeterPSMControl() {
           WriteLine("</tr>");
 
           if ((consumptionHidden == "") && (feedInHidden == "")) {
-            WriteLine("<tr><td colspan='2'><hr style='height:5px;border-width:0;color:gray;background-color:gray'></td></tr>");
+            WriteLine("<tr><td colspan='2'><hr style='height:12px;border-width:0;color:gray;background-color:gray'></td></tr>");
           }
         }
 
@@ -780,7 +780,7 @@ function ::CreatePowermeterPSMControl() {
           WriteLine("</tr>");
         }
 
-        WriteLine("<tr><td colspan='2'><hr style='height:5px;border-width:0;color:gray;background-color:gray'></td></tr>");
+        WriteLine("<tr><td colspan='2'><hr style='height:12px;border-width:0;color:gray;background-color:gray'></td></tr>");
 
        ! Voltage & Current
         WriteLine("<tr>");

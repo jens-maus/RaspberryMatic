@@ -1,5 +1,7 @@
 
 ABSOLUTE_ANGLE	${stringTableAbsoluteAngle}
+ABSOLUTE_ANGLE_STATUS=NORMAL	${stringTableAbsoluteAngleStatus}: ${lblNormal}
+ABSOLUTE_ANGLE_STATUS=UNKNOWN	${stringTableAbsoluteAngleStatus}: ${lblUnknown}
 ACCELERATION_TRANSCEIVER	${stringTableAccelerationTransceiverTitle}
 ACCELERATION_TRANSCEIVER|CHANNEL_OPERATION_MODE	${stringTableAccelerationTransceiverChannelOperationMode}
 ACCELERATION_TRANSCEIVER|CHANNEL_OPERATION_MODE=OFF	${stringTableAccelerationTransceiverChannelOperationModeOff}

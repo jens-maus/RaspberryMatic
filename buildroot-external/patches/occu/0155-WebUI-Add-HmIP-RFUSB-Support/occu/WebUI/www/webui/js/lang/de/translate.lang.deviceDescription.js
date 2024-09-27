@@ -27,7 +27,7 @@ jQuery.extend(true,langJSON, {
     "DEVICE": "Unbekanntes Ger%E4t",
     "ELV-SH-BM-S" : "ELV Smart Home Sensor-Base",
     "ELV-SH-CTV" : "ELV Smart Home<br/>Neigungs- und Ersch%FCtterungssensor<br/>Kompakt",
-    "ELV-SH-SB8" : "ELV Schaltaktor mit OC-Ausgang",
+    "ELV-SH-SB8" : "ELV Smart Home Status-Board",
     "ELV-SH-TACO" : "ELV Smart Home<br/>Temperatur- und Beschleunigungssensor<br/>au%DFen",
     "FDT": "Homematic IP Dimmaktor, Unterputzmontage",
     "FSM": "Homematic IP Schaltaktor mit Leistungsmessung, Unterputzmontage",

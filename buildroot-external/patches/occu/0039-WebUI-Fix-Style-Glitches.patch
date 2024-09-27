@@ -1548,16 +1548,16 @@
 -              </script>
                <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                  <colgroup>
-                   <col style="width:80%;"/>
+                   <col style="width:50%;"/>
 @@ -92,7 +87,7 @@
                          }
                          string trId = "devices"#devs.ID();
                          WriteLine('<tr id="'#trId#'" class="CLASS03904">');
--                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
-+                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+-                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' style='height: 80px;' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
++                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' style='height: 80px;' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                            Write(devs.Name());
                            Write("</td>");
-                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
+                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' style='height: 80px;'>");
 @@ -130,12 +125,7 @@
      <!-- Rechte Spalte -->
      <td id="contentRight">
@@ -3645,7 +3645,7 @@
    <\/colgroup>\n
    <thead>\n
      <tr>\n
-@@ -24944,7 +24944,7 @@
+@@ -24990,7 +24990,7 @@
    TREE_EXPANDED_FOOTER_HTML: "" +
      "<table border='0' cellspacing='8'>" +
        "<tr>" + 
@@ -3654,7 +3654,7 @@
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
        "</tr>" +
-@@ -24952,7 +24952,7 @@
+@@ -24998,7 +24998,7 @@
    FLAT_FOOTER_HTML: "" +
      "<table border='0' cellspacing='8'>" +
        "<tr>" + 
@@ -3663,7 +3663,7 @@
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
        "</tr>" +
-@@ -26466,7 +26466,7 @@
+@@ -26512,7 +26512,7 @@
      FOOTER_HTML= "" +
        "<table border='0' cellspacing='8'>" +
          "<tr>" +
@@ -3672,7 +3672,7 @@
          "</tr>" +
        "</table>";
  
-@@ -30779,13 +30779,11 @@
+@@ -30825,13 +30825,11 @@
        case ID_ROOMS:
          this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
          this.setWidth75Perc();
@@ -3686,7 +3686,7 @@
          this.setFile( "/pages/msg/popupPropEditor.htm" );
          break;
        case ID_TRANSFER_PARAMETERS:
-@@ -32360,7 +32358,7 @@
+@@ -32406,7 +32404,7 @@
    var opts = {
      evalScripts: true,
      onComplete: function(trans) {
@@ -3695,7 +3695,7 @@
      }
    };
    var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
-@@ -43823,7 +43821,7 @@
+@@ -43869,7 +43867,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3704,7 +3704,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -43875,8 +43873,8 @@
+@@ -43921,8 +43919,8 @@
    
    if (!form) return;
  
@@ -3715,7 +3715,7 @@
  
    switch (form[gd_type])
    {
-@@ -43972,7 +43970,7 @@
+@@ -44018,7 +44016,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

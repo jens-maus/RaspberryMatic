@@ -113,7 +113,7 @@
        }
 --- occu/WebUI/www/config/stringtable_de.txt.orig
 +++ occu/WebUI/www/config/stringtable_de.txt
-@@ -463,6 +463,8 @@
+@@ -465,6 +465,8 @@
  COND_TX_THRESHOLD_LO_POWER	${stringTableCondThresholdLoPower}
  CONFIG_PENDING=FALSE	${stringTableConfigPendingFalse}
  CONFIG_PENDING=TRUE	${stringTableConfigPendingTrue}
@@ -272,7 +272,7 @@
            {var virtualChannel = \"\"}\n
            {var classExpertOnly = \"hidden j_expertChannel\"}\n
            {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
-@@ -5833,6 +5831,8 @@
+@@ -5879,6 +5877,8 @@
  elvST['COND_TX_THRESHOLD_LO_POWER'] = '${stringTableCondThresholdLoPower}';
  elvST['CONFIG_PENDING=FALSE'] = '${stringTableConfigPendingFalse}';
  elvST['CONFIG_PENDING=TRUE'] = '${stringTableConfigPendingTrue}';
@@ -281,7 +281,7 @@
  elvST['CONF_BUTTON_TIME'] = '${stringTableConfButtonTime}';
  elvST['CONF_BUTTON_TIME=PERMANENT'] = '${stringTableConfButtonTimePermanent}';
  elvST['CONTROL_MODE=AUTO-MODE'] = '${stringTableClimateControlRTTransceiverAutoMode}';
-@@ -11188,6 +11188,7 @@
+@@ -11234,6 +11234,7 @@
        this.isReadable = data["isReadable"];      
        this.isWritable = data["isWritable"];      
        this.isEventable = data["isEventable"];
@@ -289,7 +289,7 @@
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
-@@ -14299,9 +14300,7 @@
+@@ -14345,9 +14346,7 @@
        var self = this;
        if (this.match(channel)) {
          if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
@@ -300,7 +300,7 @@
          } else {
            result.push(channel);
          }
-@@ -25460,7 +25459,6 @@
+@@ -25506,7 +25505,6 @@
      var result = true;
      switch (channel.channelType) {
        case "ALARM_COND_SWITCH_TRANSMITTER":

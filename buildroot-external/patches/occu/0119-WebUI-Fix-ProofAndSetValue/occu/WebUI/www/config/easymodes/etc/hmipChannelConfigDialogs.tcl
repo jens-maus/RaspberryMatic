@@ -4169,13 +4169,51 @@ proc getAccelerationTransceiver {chn p descr address} {
           append html "jQuery(\"\[name='NotiMovement'\]\").html(translateKey(\"motionDetectorNotificationMovement_\"+value));"
           append html "jQuery(\"\[name='NotiNoMovement'\]\").html(translateKey(\"motionDetectorNotificationNoMovement_\"+value));"
 
+          # SPHM-1343
+          append html "if (value == 1) \{"
+            append html "jQuery('\#triggerAngle, #triggerAngleHysteresis').hide();"
+          append html "\} else \{"
+            append html "jQuery('\#triggerAngle, #triggerAngleHysteresis').show();"
+          append html "\}"
+
+          # SPHM-1343
+          append html "if (value == 2) \{"
+              append html "var min = 10, max = 45,"
+              append html "triggerAngleElm = jQuery(\"\[name='TRIGGER_ANGLE'\]\").first(),"
+              append html "triggerAngleMinMaxElm = jQuery('\#triggerAngleMinMax');"
+
+              append html "triggerAngleMinMaxElm.text('(10 - 45)');"
+
+              append html "triggerAngleElm.unbind(\"blur\");"
+              append html "triggerAngleElm.removeAttr(\"onblur\");"
+              append html "triggerAngleElm.bind(\"blur\",function() \{"
+                append html "SetTriggerAngle2(this.value, 180);"
+                append html "ProofAndSetValue(this.id, this.id, min, max, 1);"
+              append html "\});"
+          append html "\} else \{"
+              append html "var min = 1, max = 180,"
+              append html "triggerAngleElm = jQuery(\"\[name='TRIGGER_ANGLE'\]\").first(),"
+              append html "triggerAngleMinMaxElm = jQuery('\#triggerAngleMinMax');"
+
+              append html "triggerAngleMinMaxElm.text('(1 - 180)');"
+
+              append html "triggerAngleElm.unbind(\"blur\");"
+              append html "triggerAngleElm.removeAttr(\"onblur\");"
+              append html "triggerAngleElm.bind(\"blur\",function() \{"
+                append html "SetTriggerAngle2(this.value, 180);"
+                append html "ProofAndSetValue(this.id, this.id, min, max, 1);"
+              append html "\});"
+          append html "\}"
+
            append html "if (value == 3) \{"
             append html "jQuery(\"\[name='tiltElem'\]\").show();"
           append html "\} else \{"
             append html "jQuery(\"\[name='tiltElem'\]\").hide();"
           append html "\}"
-
         append html "};"
+
+        append html "window.setTimeout(function() \{jQuery(\"\[name='CHANNEL_OPERATION_MODE'\]\").change();\},50);"
+
       append html "</script>"
     append html "</tr>"
   }
@@ -4316,9 +4354,9 @@ proc getAccelerationTransceiver {chn p descr address} {
     }
 
     incr prn
-    append html "<tr>"
+    append html "<tr id='triggerAngle'>"
       append html "<td>\${motionDetectorTriggerAngle}</td>"
-      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param 320 100]</td>"
+      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;<span id='triggerAngleMinMax'>[getMinMaxValueDescr $param]</span>&nbsp;[getHelpIcon $param 320 100]</td>"
     append html "</tr>"
   }
 
@@ -4326,7 +4364,7 @@ proc getAccelerationTransceiver {chn p descr address} {
   if { [info exists ps($param)] == 1 } {
 
     incr prn
-    append html "<tr>"
+    append html "<tr id='triggerAngleHysteresis'>"
       append html "<td>\${motionDetectorTriggerAngleHysteresis}</td>"
       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param 320 100]</td>"
     append html "</tr>"

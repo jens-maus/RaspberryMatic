@@ -181,7 +181,7 @@
       default {return "<span class=\"attention\">max value not available</span>"}
      }
    }
-@@ -86,7 +96,7 @@
+@@ -132,7 +142,7 @@
  
    # Limit float to 1 decimal places
    if {([llength [split $min "."]] == 2) || ([llength [split $max "."]] == 2)} {
@@ -190,7 +190,7 @@
        set min [format {%1.1f} $min]
        set max [format {%1.1f} $max]
      } else {
-@@ -185,7 +195,7 @@
+@@ -231,7 +241,7 @@
        hmip-usbsm
         {
          if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
@@ -199,7 +199,7 @@
        }
        default {return "<span class=\"attention\">missing description</span>"}
     }
-@@ -241,6 +251,9 @@
+@@ -287,6 +297,9 @@
        set maxValue "stringUTF8"
        set maxLength "maxLength=16"
        set sizeTextfield 16
@@ -209,7 +209,7 @@
      }
    }
  
-@@ -263,7 +276,7 @@
+@@ -309,7 +322,7 @@
  
    # Limit float to 2 decimal places
    if {[llength [split $value "."]] == 2} {
@@ -218,7 +218,7 @@
        catch {set value [format {%1.1f} $value]}
      } else {
        catch {set value [format {%1.2f} $value]}
-@@ -346,7 +359,7 @@
+@@ -392,7 +405,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
@@ -520,7 +520,7 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -45442,49 +45442,64 @@
+@@ -45488,49 +45488,64 @@
      srcElm.value = value;
    }
  
@@ -593,19 +593,19 @@
      srcElm.style.backgroundColor = "#fffffe";
 -    dstElm.value = value * dstValueFactor;
 +    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
-     if (_iface != "BidCos-RF") {
+     if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
 -      srcElm.value = dstElm.value;
 +      srcElm.value = parsedValue.toFixed(digits);
      }
      srcElm.setAttribute("valvalid", "true");
    }
-@@ -45492,9 +45507,9 @@
+@@ -45538,9 +45553,9 @@
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";
 -    dstElm.value = finalVal * dstValueFactor;
 +    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
-     if (_iface != "BidCos-RF") {
+     if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
 -      srcElm.value = dstElm.value;
 +      srcElm.value = finalVal.toFixed(digits);
      }

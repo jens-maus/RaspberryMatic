@@ -3951,12 +3951,24 @@ DEV_PATHS["HmIP-ASIR-2"] = new Object();
 DEV_PATHS["HmIP-ASIR-2"]["50"] = "/config/img/devices/50/196_hmip-ASIR-2_thumb.png";
 DEV_PATHS["HmIP-ASIR-2"]["250"] = "/config/img/devices/250/196_hmip-ASIR-2.png";
 DEV_HIGHLIGHT["HmIP-ASIR-2"] = new Object();
+DEV_LIST.push('HmIP-STH-A 8DU');
+DEV_DESCRIPTION["HmIP-STH-A 8DU"] = "STH";
+DEV_PATHS["HmIP-STH-A 8DU"] = new Object();
+DEV_PATHS["HmIP-STH-A 8DU"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIP-STH-A 8DU"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIP-STH-A 8DU"] = new Object();
 DEV_LIST.push('HM-CC-RT-DN');
 DEV_DESCRIPTION["HM-CC-RT-DN"] = "HM-CC-RT-DN";
 DEV_PATHS["HM-CC-RT-DN"] = new Object();
 DEV_PATHS["HM-CC-RT-DN"]["50"] = "/config/img/devices/50/83_hm-cc-rt-dn_thumb.png";
 DEV_PATHS["HM-CC-RT-DN"]["250"] = "/config/img/devices/250/83_hm-cc-rt-dn.png";
 DEV_HIGHLIGHT["HM-CC-RT-DN"] = new Object();
+DEV_LIST.push('HmIP-STHD-A L9D');
+DEV_DESCRIPTION["HmIP-STHD-A L9D"] = "HmIP-STHD";
+DEV_PATHS["HmIP-STHD-A L9D"] = new Object();
+DEV_PATHS["HmIP-STHD-A L9D"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIP-STHD-A L9D"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIP-STHD-A L9D"] = new Object();
 DEV_LIST.push('HM-LC-Dim1TPBU-FM');
 DEV_DESCRIPTION["HM-LC-Dim1TPBU-FM"] = "HM-LC-Dim1TPBU-FM";
 DEV_PATHS["HM-LC-Dim1TPBU-FM"] = new Object();
@@ -4015,6 +4027,38 @@ DEV_PATHS["ELV-SH-SB8"] = new Object();
 DEV_PATHS["ELV-SH-SB8"]["50"] = "/config/img/devices/50/236_elv-sh-sb8_thumb.png";
 DEV_PATHS["ELV-SH-SB8"]["250"] = "/config/img/devices/250/236_elv-sh-sb8.png";
 DEV_HIGHLIGHT["ELV-SH-SB8"] = new Object();
+DEV_HIGHLIGHT["ELV-SH-SB8"]["1"] = [1, 0.710, 0.169, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["2"] = [1, 0.715, 0.230, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["3"] = [1, 0.720, 0.291, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["4"] = [1, 0.727, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["5"] = [1, 0.732, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["6"] = [1, 0.737, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["7"] = [1, 0.742, 0.550, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["8"] = [1, 0.747, 0.615, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["10"] = [1, 0.770, 0.165, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["11"] = [1, 0.770, 0.165, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["12"] = [1, 0.770, 0.165, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["14"] = [1, 0.775, 0.226, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["15"] = [1, 0.775, 0.226, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["16"] = [1, 0.775, 0.226, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["18"] = [1, 0.780, 0.290, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["19"] = [1, 0.780, 0.290, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["20"] = [1, 0.780, 0.290, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["22"] = [1, 0.787, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["23"] = [1, 0.787, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["24"] = [1, 0.787, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["26"] = [1, 0.792, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["27"] = [1, 0.792, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["28"] = [1, 0.792, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["30"] = [1, 0.795, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["31"] = [1, 0.795, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["32"] = [1, 0.795, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["34"] = [1, 0.798, 0.549, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["35"] = [1, 0.798, 0.549, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["36"] = [1, 0.798, 0.549, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["38"] = [1, 0.803, 0.610, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["39"] = [1, 0.803, 0.610, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["40"] = [1, 0.803, 0.610, 0.02];
 DEV_LIST.push('HmIP-STHD');
 DEV_DESCRIPTION["HmIP-STHD"] = "HmIP-STHD";
 DEV_PATHS["HmIP-STHD"] = new Object();
@@ -4544,6 +4588,8 @@ DEV_getImageHighlight = function(type, form)
 };
 elvST = new Array();
 elvST['ABSOLUTE_ANGLE'] = '${stringTableAbsoluteAngle}';
+elvST['ABSOLUTE_ANGLE_STATUS=NORMAL'] = '${stringTableAbsoluteAngleStatus}: ${lblNormal}';
+elvST['ABSOLUTE_ANGLE_STATUS=UNKNOWN'] = '${stringTableAbsoluteAngleStatus}: ${lblUnknown}';
 elvST['ACCELERATION_TRANSCEIVER'] = '${stringTableAccelerationTransceiverTitle}';
 elvST['ACCELERATION_TRANSCEIVER|CHANNEL_OPERATION_MODE'] = '${stringTableAccelerationTransceiverChannelOperationMode}';
 elvST['ACCELERATION_TRANSCEIVER|CHANNEL_OPERATION_MODE=OFF'] = '${stringTableAccelerationTransceiverChannelOperationModeOff}';
@@ -44032,7 +44078,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, convInt2Floa
   {
     srcElm.style.backgroundColor = "#fffffe";
     dstElm.value = value * dstValueFactor;
-    if (_iface != "BidCos-RF") {
+    if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
       srcElm.value = dstElm.value;
     }
     srcElm.setAttribute("valvalid", "true");
@@ -44042,7 +44088,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, convInt2Floa
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
     dstElm.value = finalVal * dstValueFactor;
-    if (_iface != "BidCos-RF") {
+    if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
       srcElm.value = dstElm.value;
     }
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);

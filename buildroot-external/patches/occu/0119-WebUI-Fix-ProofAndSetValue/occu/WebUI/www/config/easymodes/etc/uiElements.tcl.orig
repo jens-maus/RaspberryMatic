@@ -48,12 +48,58 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
 }
 
 proc getMinMaxValueDescr {param} {
-  global psDescr dev_descr
+  global psDescr dev_descr ps
   upvar psDescr descr
+  upvar ps PS
+
   array_clear param_descr
   array set param_descr $descr($param)
   set min $param_descr(MIN)
   set max $param_descr(MAX)
+
+
+  if {[string equal $dev_descr(TYPE) "HmIP-STV"] == 1} {
+
+    if {$param == "TRIGGER_ANGLE"} {
+      if {$PS(CHANNEL_OPERATION_MODE) ==  2} {
+        set min 10
+        set max 45
+
+        cgi_javascript {
+          puts {
+            var min = 10, max = 45,
+            triggerAngleElm = jQuery("[name='TRIGGER_ANGLE']").first();
+
+            triggerAngleElm.unbind("blur");
+            triggerAngleElm.removeAttr("onblur");
+            triggerAngleElm.bind("blur",function() {
+              ProofAndSetValue(this.id, this.id, min, max, 1);
+            });
+          }
+        }
+
+      }
+    }
+
+    if {$param == "TRIGGER_ANGLE_HYSTERESIS"} {
+      set min 0
+      set max 5
+
+      cgi_javascript {
+        puts {
+          var min = 0, max = 5,
+          triggerAngleHysElm = jQuery("[name='TRIGGER_ANGLE_HYSTERESIS']").first();
+
+          triggerAngleHysElm.unbind("blur")
+          triggerAngleHysElm.removeAttr("onblur");
+          triggerAngleHysElm.bind("blur",function() {
+            ProofAndSetValue(this.id, this.id, min, max, 1);
+          });
+        }
+      }
+    }
+  }
+
 
 
 
@@ -70,10 +116,10 @@ proc getMinMaxValueDescr {param} {
   }
 
 
-    if {[string equal $dev_descr(TYPE) "HmIP-WUA"] == 1} {
-      if {$param == "VOLTAGE_0"} {set max 99.5}
-      if {$param == "VOLTAGE_100"} {set min 0.5}
-    }
+  if {[string equal $dev_descr(TYPE) "HmIP-WUA"] == 1} {
+    if {$param == "VOLTAGE_0"} {set max 99.5}
+    if {$param == "VOLTAGE_100"} {set min 0.5}
+  }
 
   set unit "noUnit"
 
@@ -104,7 +150,7 @@ proc getMinMaxValueDescr {param} {
 
   if {$param == "TRIGGER_ANGLE_2"} {
     upvar valTriggerAngle triggerAngle
-    set min "<span id='minTriggerAngle' >$triggerAngle</span>"
+    set min "<span id='minTriggerAngle2' >$triggerAngle</span>"
   }
 
   if {$param == "NUMERIC_PIN_CODE"} {
@@ -296,9 +342,9 @@ set comment {
           if (isNaN(valTriggerAngle) || (valTriggerAngle < minTriggerAngle)) {valTriggerAngle = minTriggerAngle; valTriggerAngle2 = minTriggerAngle;}
           if (valTriggerAngle > maxTriggerAngle) {valTriggerAngle = maxTriggerAngle; valTriggerAngle2 = maxTriggerAngle;}
 
-          jQuery("\#minTriggerAngle").text(valTriggerAngle);
+          jQuery("\#minTriggerAngle2").text(valTriggerAngle);
 
-          if ((valTriggerAngle > valTriggerAngle2) || (valTriggerAngle == minTriggerAngle) || (valTriggerAngle == maxTriggerAngle)) {
+          if ((valTriggerAngle > valTriggerAngle2) || (valTriggerAngle < minTriggerAngle) || (valTriggerAngle == maxTriggerAngle)) {
             triggerAngleElm2.val(valTriggerAngle);
           }
 

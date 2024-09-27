@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -48948,8 +48948,8 @@
+@@ -48994,8 +48994,8 @@
    CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
  };
  
@@ -11,7 +11,7 @@
  
    PopupClose = function() {
      dlgPopup.close();
-@@ -48989,7 +48989,7 @@
+@@ -49035,7 +49035,7 @@
  
  cpMessageBox.prototype =
  {
@@ -20,7 +20,7 @@
    {
      if ( $('messagebox') ){
        $("messagebox").hide();
-@@ -49001,7 +49001,7 @@
+@@ -49047,7 +49047,7 @@
      this.setWidth(800);
  
      this.createMessagebox();
@@ -29,7 +29,7 @@
    },
  
    getViewPortDim : function()
-@@ -49125,7 +49125,7 @@
+@@ -49171,7 +49171,7 @@
      this.removeMessagebox();
    },
    
@@ -38,7 +38,7 @@
      var url = src;
      if(url.indexOf('?sid=') === -1)
      {                                                                                 
-@@ -49141,6 +49141,15 @@
+@@ -49187,6 +49187,15 @@
        onComplete: function(trans) {
          centerMessageBox();
          $('messagebox').style.display="";

@@ -27,7 +27,7 @@ jQuery.extend(true,langJSON, {
     "DEVICE": "Unknown device",
     "ELV-SH-BM-S" : "ELV Smart Home Sensor-Base",
     "ELV-SH-CTV" : " ELV Smart Home<br/>Tilt and Vibration Sensor<br/>Compact",
-    "ELV-SH-SB8" : "ELV Switch Actuator with OC-Output",
+    "ELV-SH-SB8" : "ELV smart home status board",
     "ELV-SH-TACO" : "ELV Smart Home<br/>Temperature and Acceleration Sensor<br/>Outdoor",
     "FDT": "Homematic IP Dimming Actuator, flush-mount",
     "FSM": "Homematic IP Switch Actuator with power measurement, flush-mount",

@@ -1532,7 +1532,7 @@
        string sStyle = "";
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -21,15 +21,10 @@
+@@ -21,19 +21,14 @@
    <tr>
      <!-- Linke Spalte -->
      <td id="contentLeft" class="hidden">
@@ -1548,16 +1548,26 @@
 -              </script>
                <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                  <colgroup>
-                   <col style="width:50%;"/>
-@@ -92,7 +87,7 @@
+-                  <col style="width:50%;"/>
+-                  <col style="width:50%;"/>
++                  <col style="width:80%;"/>
++                  <col style="width:20%;"/>
+                 </colgroup>
+                 <tr>
+                   <th>${thName}</th>
+@@ -92,10 +87,10 @@
                          }
                          string trId = "devices"#devs.ID();
                          WriteLine('<tr id="'#trId#'" class="CLASS03904">');
 -                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' style='height: 80px;' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
-+                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' style='height: 80px;' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
++                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                            Write(devs.Name());
                            Write("</td>");
-                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' style='height: 80px;'>");
+-                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' style='height: 80px;'>");
++                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906'>");
+                           
+                           string sPicDivId = "picDiv"#devs.ID();
+                           Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
 @@ -130,12 +125,7 @@
      <!-- Rechte Spalte -->
      <td id="contentRight">

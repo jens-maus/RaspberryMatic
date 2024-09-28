@@ -711,14 +711,14 @@ entries:
         - name: Documentation
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
-    appVersion: 3.79.3.20240927-55fdb0f
-    created: "2024-09-27T15:23:49.953405065Z"
+    appVersion: 3.79.3.20240928-64b108f
+    created: "2024-09-28T03:55:25.957409123Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
       version: 0.2.2
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
-    digest: 0e7c8b8f62205d20cc51caaec685bfd9560aea95e41eb5faa09d2f6f6013d85b
+    digest: 8835dbc8669c37e5e96bb242a664844669c83571b527360fb930620721cb7273
     home: https://github.com/jens-maus/RaspberryMatic
     icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
     keywords:
@@ -738,4 +738,4 @@ entries:
     urls:
     - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-0.1.tgz
     version: "0.1"
-generated: "2024-09-27T15:23:49.950749636Z"
+generated: "2024-09-28T03:55:25.954784073Z"

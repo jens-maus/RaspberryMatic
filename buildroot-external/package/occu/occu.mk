@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OCCU_VERSION = 3.79.3-1
+OCCU_VERSION = 3.79.3-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 OCCU_LICENSE = HMSL
 OCCU_LICENSE_FILES = LicenseDE.txt
@@ -61,6 +61,9 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# link /etc/firmware to /lib/firmware
 		ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 
+		# fix permissions
+		chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc
+
 		# remove obsolete init.d jobs
 		rm -f $(TARGET_DIR)/etc/init.d/S01logging
 		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
@@ -100,38 +103,43 @@ ifeq ($(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA),y)
 endif
 
 ifeq ($(BR2_arm),y)
-  OCCU_ARCH=arm-gnueabihf-gcc8
+  OCCU_COMMON=arm-gnueabihf-gcc8
+  OCCU_ARCH32=arm-linux-gnueabihf
   OCCU_ARCH64=
-  OCCU_LIB=lib
+  OCCU_LIB32=lib
   OCCU_LIB64=
 endif
 
 ifeq ($(BR2_aarch64),y)
-  OCCU_ARCH=arm-gnueabihf-gcc8
+  OCCU_COMMON=arm-gnueabihf-gcc8
+  OCCU_ARCH32=arm-linux-gnueabihf
   OCCU_ARCH64=aarch64-linux-gnu
-  OCCU_LIB=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_LIB32=$(BR2_ROOTFS_LIB32_DIR)
   OCCU_LIB64=$(BR2_ROOTFS_LIB_DIR)
 endif
 
 ifeq ($(BR2_i386),y)
-  OCCU_ARCH=X86_32_GCC8
+  OCCU_COMMON=X86_32_GCC8
+  OCCU_ARCH32=i686-linux-gnu
   OCCU_ARCH64=
-  OCCU_LIB=lib
+  OCCU_LIB32=lib
   OCCU_LIB64=
 endif
 
 ifeq ($(BR2_x86_64),y)
-  OCCU_ARCH=X86_32_GCC8
+  OCCU_COMMON=X86_32_GCC8
+  OCCU_ARCH32=i686-linux-gnu
   OCCU_ARCH64=x86_64-linux-gnu
-  OCCU_LIB=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_LIB32=$(BR2_ROOTFS_LIB32_DIR)
   OCCU_LIB64=$(BR2_ROOTFS_LIB_DIR)
 endif
 
 define OCCU_INSTALL_TARGET_CMDS
 		$(MAKE) OCCU_RF_PROTOCOL=$(OCCU_RF_PROTOCOL) \
-			OCCU_ARCH=$(OCCU_ARCH) \
+			OCCU_COMMON=$(OCCU_COMMON) \
+			OCCU_ARCH32=$(OCCU_ARCH32) \
 			OCCU_ARCH64=$(OCCU_ARCH64) \
-			OCCU_LIB=$(OCCU_LIB) \
+			OCCU_LIB32=$(OCCU_LIB32) \
 			OCCU_LIB64=$(OCCU_LIB64) \
 			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
 			-C $(@D) install

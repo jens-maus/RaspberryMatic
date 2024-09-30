@@ -81,12 +81,12 @@ jobs:
           SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
 
       - name: Check Home Assistant Add-on Lint
-        uses: frenck/action-addon-linter@main
+        uses: frenck/action-addon-linter@v2
         with:
           path: "./home-assistant-addon"
 
       - name: Check Home Assistant Add-on Lint (dev)
-        uses: frenck/action-addon-linter@main
+        uses: frenck/action-addon-linter@v2
         with:
           path: "./home-assistant-addon-dev"
 

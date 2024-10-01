@@ -61,6 +61,9 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# link /etc/firmware to /lib/firmware
 		ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 
+		# link /bin/tclsh to /usr/bin/tclsh
+		ln -snf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
+
 		# fix permissions
 		chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc
 

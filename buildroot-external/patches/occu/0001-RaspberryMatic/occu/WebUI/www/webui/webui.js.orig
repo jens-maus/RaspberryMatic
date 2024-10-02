@@ -4027,38 +4027,46 @@ DEV_PATHS["ELV-SH-SB8"] = new Object();
 DEV_PATHS["ELV-SH-SB8"]["50"] = "/config/img/devices/50/236_elv-sh-sb8_thumb.png";
 DEV_PATHS["ELV-SH-SB8"]["250"] = "/config/img/devices/250/236_elv-sh-sb8.png";
 DEV_HIGHLIGHT["ELV-SH-SB8"] = new Object();
-DEV_HIGHLIGHT["ELV-SH-SB8"]["1"] = [1, 0.710, 0.169, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["2"] = [1, 0.715, 0.230, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["3"] = [1, 0.720, 0.291, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["4"] = [1, 0.727, 0.355, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["5"] = [1, 0.732, 0.418, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["6"] = [1, 0.737, 0.485, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["7"] = [1, 0.742, 0.550, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["8"] = [1, 0.747, 0.615, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["10"] = [1, 0.770, 0.165, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["11"] = [1, 0.770, 0.165, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["12"] = [1, 0.770, 0.165, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["14"] = [1, 0.775, 0.226, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["15"] = [1, 0.775, 0.226, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["16"] = [1, 0.775, 0.226, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["18"] = [1, 0.780, 0.290, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["19"] = [1, 0.780, 0.290, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["20"] = [1, 0.780, 0.290, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["22"] = [1, 0.787, 0.355, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["23"] = [1, 0.787, 0.355, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["24"] = [1, 0.787, 0.355, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["26"] = [1, 0.792, 0.418, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["27"] = [1, 0.792, 0.418, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["28"] = [1, 0.792, 0.418, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["30"] = [1, 0.795, 0.485, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["31"] = [1, 0.795, 0.485, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["32"] = [1, 0.795, 0.485, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["34"] = [1, 0.798, 0.549, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["35"] = [1, 0.798, 0.549, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["36"] = [1, 0.798, 0.549, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["38"] = [1, 0.803, 0.610, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["39"] = [1, 0.803, 0.610, 0.02];
-DEV_HIGHLIGHT["ELV-SH-SB8"]["40"] = [1, 0.803, 0.610, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["1"] = [1, 0.770, 0.165, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["2"] = [1, 0.775, 0.226, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["3"] = [1, 0.780, 0.290, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["4"] = [1, 0.787, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["5"] = [1, 0.792, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["6"] = [1, 0.795, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["7"] = [1, 0.798, 0.549, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["8"] = [1, 0.803, 0.610, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["10"] = [1, 0.710, 0.169, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["11"] = [1, 0.710, 0.169, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["12"] = [1, 0.710, 0.169, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["14"] = [1, 0.715, 0.230, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["15"] = [1, 0.715, 0.230, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["16"] = [1, 0.715, 0.230, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["18"] = [1, 0.720, 0.291, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["19"] = [1, 0.720, 0.291, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["20"] = [1, 0.720, 0.291, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["22"] = [1, 0.727, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["23"] = [1, 0.727, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["24"] = [1, 0.727, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["26"] = [1, 0.732, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["27"] = [1, 0.732, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["28"] = [1, 0.732, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["30"] = [1, 0.737, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["31"] = [1, 0.737, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["32"] = [1, 0.737, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["34"] = [1, 0.742, 0.550, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["35"] = [1, 0.742, 0.550, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["36"] = [1, 0.742, 0.550, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["38"] = [1, 0.747, 0.615, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["39"] = [1, 0.747, 0.615, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["40"] = [1, 0.747, 0.615, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["1"] = [1, 0.770, 0.165, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["2"] = [1, 0.775, 0.226, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["3"] = [1, 0.780, 0.290, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["4"] = [1, 0.787, 0.355, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["5"] = [1, 0.792, 0.418, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["6"] = [1, 0.795, 0.485, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["7"] = [1, 0.798, 0.549, 0.02];
+DEV_HIGHLIGHT["ELV-SH-SB8"]["8"] = [1, 0.803, 0.610, 0.02];
 DEV_LIST.push('HmIP-STHD');
 DEV_DESCRIPTION["HmIP-STHD"] = "HmIP-STHD";
 DEV_PATHS["HmIP-STHD"] = new Object();
@@ -33965,8 +33973,13 @@ getExtendedDescription = function(oChannelDescr) {
   }
 
   if (chType == "SWITCH_TRANSMITTER") {
-    if ((deviceType.toLowerCase() == "hmip-mod-oc8") || (deviceType.toLowerCase() == "elv-sh-sb8")) {
-      result = translateKey("chType_SWITCH_TRANSMITTER_OC");
+    var devType = deviceType.toLowerCase();
+    if ((devType == "hmip-mod-oc8") || (devType == "elv-sh-sb8")) {
+      if (devType == "elv-sh-sb8") {
+        result = translateKey("chType_SWITCH_TRANSMITTER_LED");
+      } else {
+        result = translateKey("chType_SWITCH_TRANSMITTER_OC");
+      }
     }
   }
 
@@ -34008,7 +34021,11 @@ getExtendedDescription = function(oChannelDescr) {
       ) && (! channelIsVisible)) {
       result = translateKey("lblHmIP_NotSupported");
     } else {
-      result = translateKey("chType_SWITCH_VIRTUAL_RECEIVER");
+      if (deviceType.toLowerCase() == "elv-sh-sb8") {
+        result = translateKey("chType_SWITCH_VIRTUAL_RECEIVER_LED");
+      } else {
+        result = translateKey("chType_SWITCH_VIRTUAL_RECEIVER");
+      }
     }
   }
 

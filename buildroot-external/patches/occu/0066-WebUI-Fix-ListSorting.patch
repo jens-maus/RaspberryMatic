@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -14050,9 +14050,7 @@
+@@ -14058,9 +14058,7 @@
        //channels         : this.filter(this.channels)
      });
  
@@ -11,7 +11,7 @@
  
      translateJSTemplate("#ChannelChooserDialog");
      translatePage(".j_rooms, .j_functions");
-@@ -14518,9 +14516,7 @@
+@@ -14526,9 +14524,7 @@
        channels         : this.filter(this.channels)
      });
  

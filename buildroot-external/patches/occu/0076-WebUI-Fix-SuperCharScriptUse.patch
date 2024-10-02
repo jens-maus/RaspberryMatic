@@ -11,7 +11,7 @@
      pb += 'string src = "'+src+'";';
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -30742,7 +30742,7 @@
+@@ -30750,7 +30750,7 @@
      var pb = '';
      pb += 'string action = "SetScript";';
      pb += 'string id = "'+id+'";';

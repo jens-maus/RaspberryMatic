@@ -106,7 +106,7 @@
      }
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25895,16 +25895,17 @@
+@@ -25903,16 +25903,17 @@
        setFooter(this.FLAT_FOOTER_HTML);
      }
  

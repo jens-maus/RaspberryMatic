@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -47644,21 +47644,26 @@
+@@ -47661,21 +47661,26 @@
  
  
  isDutyCycleOK4DevUpdate = function() {

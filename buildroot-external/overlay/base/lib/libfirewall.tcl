@@ -56,7 +56,7 @@ set Firewall_MODE $Firewall_MODE_RESTRICTIVE
 # @var Firewall_LOG_ENABLED
 # Aktiviert Logging über syslog, default ist 'aus'.
 ##
-set Firewall_LOG_ENABLED 0
+set Firewall_LOG_ENABLED 1
 
 ##
 # @var Firewall_IPS
@@ -610,7 +610,7 @@ proc try_exec_cmd {cmdline} {
   } err ] } {
     catch { close $fd }
     if { $Firewall_LOG_ENABLED == 1 } {
-      catch { [exec logger -t firewall -p user.info $err] } 
+      catch { [exec logger -t firewall -p user.err $err] }
     }
   }
 }

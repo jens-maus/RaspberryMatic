@@ -1,6 +1,6 @@
 # Locally computed
 sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-sha256  80bb57d3e64d52966526bde5810b89e1a58426c7f5546d1b42c05f5475b2704d  zulu11.74.15-ca-jre11.0.24-linux_x64.tar.gz
-sha256  7b68da55af649c33abc11c29eeeb17febb69ada1b8d5d66344dca851f68c45ba  zulu11.74.15-ca-jre11.0.24-linux_i686.tar.gz
+sha256  fabe2091d43604d3ae248a7d96e6cfb9ed37eaf980b225730b7b18289b3f6eaf  zulu11.76.21-ca-jdk11.0.25-linux_x64.tar.gz
+sha256  dec3dd696bab39869a52cbd6f6e019dd80cae7db2e9ecb4feaad1da35eee5398  zulu11.76.21-ca-jdk11.0.25-linux_i686.tar.gz
 sha256  33f428e4da21304351a86a834e967b091c86aa17a8b7a449afbfce07ddd8cd4a  zulu11.70.15-ca-hl-jre11.0.22-linux_aarch32hf.tar.gz
-sha256  8f031eecbc0c0bc877c7072934842ed11fb3e93a8f66fc1d1d8f167a5bf41c87  zulu11.74.15-ca-jre11.0.24-linux_aarch64.tar.gz
+sha256  7ae5d196916dc4e8b84e4c5b48fd16f45f83e94eac35a22f019194896c210de1  zulu11.76.21-ca-jdk11.0.25-linux_aarch64.tar.gz

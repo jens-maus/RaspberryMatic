@@ -3705,7 +3705,7 @@
      }
    };
    var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
-@@ -43886,7 +43884,7 @@
+@@ -43895,7 +43893,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3714,7 +3714,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -43938,8 +43936,8 @@
+@@ -43947,8 +43945,8 @@
    
    if (!form) return;
  
@@ -3725,7 +3725,7 @@
  
    switch (form[gd_type])
    {
-@@ -44035,7 +44033,7 @@
+@@ -44044,7 +44042,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

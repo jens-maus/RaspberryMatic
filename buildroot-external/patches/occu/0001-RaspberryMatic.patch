@@ -833,7 +833,7 @@
      $("body").appendChild(script);
    },
  
-@@ -32912,11 +32912,11 @@
+@@ -32921,11 +32921,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -847,7 +847,7 @@
          }
        }
      },
-@@ -32931,12 +32931,12 @@
+@@ -32940,12 +32940,12 @@
  
  SwitchOnFlashLight = function()
  {

@@ -1135,7 +1135,7 @@ function ::dcCreate()
 
               integer maxCap = ch.MetaData('maxCap');
 
-              if ((maxCap != null) && (maxCap < 5)) {
+              if ((maxCap != null) && (maxCap != "--") && (maxCap < 5)) {
                 ! Switch
                 if (maxCap == 0) {Call("/esp/controls/switch.fn::CreateVIR-LG-ONOFF_Actuator()");}
 

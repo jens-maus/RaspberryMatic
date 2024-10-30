@@ -70,7 +70,7 @@
          Write(" CHANNEL_TYPE {" # chnType # "}");
          Write(" CHANNEL_NAME {" # channel.Label() # "}");
  
-@@ -255,6 +262,7 @@
+@@ -251,6 +258,7 @@
      append result ",\"isEventable\":$channel(EVENTABLE)"
      append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
      append result ",\"isVirtual\":$channel(VIRTUAL)"

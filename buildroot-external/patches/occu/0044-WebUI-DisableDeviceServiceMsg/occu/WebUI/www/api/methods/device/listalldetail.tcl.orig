@@ -139,17 +139,13 @@ set deviceDescrScript {
           }
         }
 
-        if (! noMoreDaliChannels) {
-          if ((channel.Label() == "HmIP-DRG-DALI") && (chnType == "UNIVERSAL_LIGHT_RECEIVER")) {
-            integer maxCap = channel.MetaData('maxCap');
-            if (maxCap) {
-              Write(" DALI_MAX_CAPABILITIES {" # maxCap # "}");
-              if (maxCap == 5) {
-                noMoreDaliChannels = true;
-              }
-            } else {
-              Write(" DALI_MAX_CAPABILITIES {--}");
-            }
+        if ((channel.Label() == "HmIP-DRG-DALI") && (chnType == "UNIVERSAL_LIGHT_RECEIVER")) {
+          integer maxCap = channel.MetaData('maxCap');
+          if (maxCap) {
+            Write(" DALI_MAX_CAPABILITIES {" # maxCap # "}");
+          } else {
+            channel.MetaData("maxCap","--");
+            Write(" DALI_MAX_CAPABILITIES {--}");
           }
         }
         Write("}");

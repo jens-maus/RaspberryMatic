@@ -299,7 +299,7 @@
        }
        $("body").appendChild(script);
        homematic.com.callback = callback;
-@@ -43183,9 +43171,6 @@
+@@ -43192,9 +43180,6 @@
    scriptname = Get_ReGa_Path(scriptname);
    var params = poststr;
  

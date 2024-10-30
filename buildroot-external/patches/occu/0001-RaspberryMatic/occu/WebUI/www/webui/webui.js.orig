@@ -10206,17 +10206,17 @@ Channel = Class.create({
     //
     // For the group channels 33 - 48 we need all UNIVERSAL_LIGHT_MAX_CAPABILITIES.
     if ((device.typeName == "HmIP-DRG-DALI")) {
-      if ((data.channelType == "UNIVERSAL_LIGHT_RECEIVER") && (((data.index < 33) && (typeof noMoreDaliDevices == "undefined"))  || (data.index >= 33)))  {
-          var maxCap = data.daliMaxCapabilities;
-  //      var maxCap = homematic("Interface.getMasterValue", {
-  //        "interface": "HmIP-RF",
-  //        "address": data.address,
-  //        "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
-  //      });
-  //      homematic("Interface.setMetadata", {"objectId": data.id, "dataId": "maxCap", "value": maxCap});
-
-        if ((data.index < 33) && (maxCap == 5)) {
-           noMoreDaliDevices = true;
+      if (data.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+        var maxCap = data.daliMaxCapabilities;
+        if ((typeof maxCap == "undefined") || (maxCap == "undefined")) {
+          var maxCap = homematic("Interface.getMasterValue", {
+            "interface": "HmIP-RF",
+            "address": data.address,
+            "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+          });
+          homematic("Interface.setMetadata", {
+            "objectId": data.id, "dataId": "maxCap", "value": maxCap
+          });
         }
         this.daliMaxCapabilities = maxCap; // currently used for determining the target channels of the weekly program.
       }
@@ -31761,7 +31761,16 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
   tdSub = Builder.node('td');
   
   s = "";
-  if ((obj['type'] != "HmIPW-DRBL4") && (obj['type'] != "HmIP-DRBLI4") && (obj['type'] != "HmIP-RGBW") && (obj['type'] != "HmIPW-WGD") && (obj['type'] != "HmIPW-WGD-PL") && (obj['type'] != "HmIP-ESI")) {
+  if (
+    (obj['type'] != "HmIPW-DRBL4")
+    && (obj['type'] != "HmIP-DRBLI4")
+    && (obj['type'] != "HmIP-RGBW")
+    && (obj['type'] != "HmIPW-WGD")
+    && (obj['type'] != "HmIPW-WGD-PL")
+    && (obj['type'] != "HmIP-ESI")
+    && (obj['type'] != "HmIP-DRG-DALI")
+  ) {
+
     if (bIsDev) {
       s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['iface'] + "', 'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK'});";
     } else {
@@ -50170,6 +50179,7 @@ daliRefreshDevices = function(address) {
             "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
           });
           daliChannel = DeviceList.getChannelByAddress(devAddress + ":" + loop);
+          daliChannel.daliMaxCapabilities = maxCap;
           homematic("Interface.setMetadata", {"objectId": daliChannel.id , "dataId" : "maxCap", "value": maxCap});
         }
         MessageBox.close();

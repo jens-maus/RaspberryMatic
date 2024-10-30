@@ -59,7 +59,7 @@
      Write(" CHANNELS {");
  
      var first = true;
-@@ -212,6 +221,7 @@
+@@ -208,6 +217,7 @@
    append result ",\"type\":[json_toString $device(DEVICE_TYPE)]"
    append result ",\"operateGroupOnly\":[json_toString $device(GROUP_ONLY)]"
    append result ",\"isReady\":[json_toString $device(READY_CONFIG)]"

@@ -1,5 +1,5 @@
---- occu/HMServer/opt/HMServer/pages/GroupEditPage.ftl.orig
-+++ occu/HMServer/opt/HMServer/pages/GroupEditPage.ftl
+--- occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl
 @@ -305,7 +305,8 @@
          {
              ShowWaitAnim();

@@ -7,8 +7,12 @@
 </script>
 <!--</head>
 <body>-->
-<form id="groupEditForm" style="display: none">
- <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0">
+<form id="groupEditForm" style="display: none; width: 100%;">
+ <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
+  <colgroup>
+    <col style="width:20%;"/>
+    <col style="width:80%;"/>
+  </colgroup>
   <thead>
   <tr>
       <td class="thCell CLASS04900" >${"$"}{groupParameterName}</td>
@@ -48,7 +52,14 @@
 	
   </tbody>
  </table>
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
+ <colgroup>
+   <col style="width:30%;"/>
+   <col style="width:30%;"/>
+   <col style="width:50px;"/>
+   <col style="width:20%;"/>
+   <col style="width:20%;"/>
+ </colgroup>
  <thead>
      <tr>
          <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupAssignedDevices}</td>
@@ -84,7 +95,14 @@
  </tfoot>
  </table>
 
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
+ <colgroup>
+   <col style="width:30%;"/>
+   <col style="width:30%;"/>
+   <col style="width:50px;"/>
+   <col style="width:20%;"/>
+   <col style="width:20%;"/>
+ </colgroup>
   <thead>
     <tr>
       <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupAllDevices}</td>
@@ -127,7 +145,13 @@
   </tfoot>
  </table>
 
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
+ <colgroup>
+   <col style="width:30%;"/>
+   <col style="width:30%;"/>
+   <col style="width:50px;"/>
+   <col style="width:40%;"/>
+ </colgroup>
      <thead>
      <tr>
          <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupLinkedDevices}</td>

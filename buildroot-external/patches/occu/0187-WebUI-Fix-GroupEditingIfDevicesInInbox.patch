@@ -1,6 +1,6 @@
 --- occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl.orig
 +++ occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl
-@@ -305,7 +305,8 @@
+@@ -329,7 +329,8 @@
          {
              ShowWaitAnim();
  
@@ -10,7 +10,7 @@
              HideWaitAnim();
  
              /*
-@@ -544,7 +545,9 @@
+@@ -568,7 +569,9 @@
          });
  
          ko.utils.arrayForEach(viewModel.assignableDevices(), function(item) {

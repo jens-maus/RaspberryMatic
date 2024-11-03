@@ -820,7 +820,7 @@ if [[ "${VMTYPE}" == "VM" ]]; then
       --acpi 1 \
       --agent 1,fstrim_cloned_disks=1,type=virtio \
       --hotplug network,disk,usb \
-      --description "# RaspberryMatic CCU" \
+    --description "<div align='center'><a href='https://raspberrymatic.de/' target='_blank' rel='noopener noreferrer'><img src='https://raspberrymatic.de/wp-content/uploads/2021/07/logo.png'/></a></div>" \
       --net0 virtio,bridge=vmbr0,firewall=1 \
       --onboot 1 \
       --tablet 1 \
@@ -848,7 +848,7 @@ if [[ "${VMTYPE}" == "VM" ]]; then
       --numa 1 \
       --agent 1,fstrim_cloned_disks=1,type=virtio \
       --hotplug network,disk,usb,cpu,memory \
-      --description "# RaspberryMatic CCU" \
+    --description "<div align='center'><a href='https://raspberrymatic.de/' target='_blank' rel='noopener noreferrer'><img src='https://raspberrymatic.de/wp-content/uploads/2021/07/logo.png'/></a></div>" \
       --net0 virtio,bridge=vmbr0,firewall=1 \
       --onboot 1 \
       --tablet 0 \
@@ -889,7 +889,7 @@ elif [[ "${VMTYPE}" == "CT" ]]; then
     --memory 1024 \
     --rootfs volume=${STORAGE}:1,mountoptions=noatime \
     --mp0 volume=${STORAGE}:${DISK_SIZE},mp=/usr/local,mountoptions=noatime \
-    --description "# RaspberryMatic CCU" \
+    --description "<div align='center'><a href='https://raspberrymatic.de/' target='_blank' rel='noopener noreferrer'><img src='https://raspberrymatic.de/wp-content/uploads/2021/07/logo.png'/></a></div>" \
     --hostname "RaspberryMatic"
 
   # patching container config

@@ -107,7 +107,11 @@ endif
 
 ifeq ($(BR2_arm),y)
   OCCU_COMMON=arm-gnueabihf-gcc8
-  OCCU_ARCH32=arm-linux-gnueabihf
+  ifeq (,$(findstring rpi0,$(PRODUCT)))
+    OCCU_ARCH32=
+  else
+    OCCU_ARCH32=arm-linux-gnueabihf
+  endif
   OCCU_ARCH64=
   OCCU_LIB32=lib
   OCCU_LIB64=
@@ -138,7 +142,8 @@ ifeq ($(BR2_x86_64),y)
 endif
 
 define OCCU_INSTALL_TARGET_CMDS
-		$(MAKE) OCCU_RF_PROTOCOL=$(OCCU_RF_PROTOCOL) \
+		$(MAKE) PRODUCT=$(PRODUCT) \
+			OCCU_RF_PROTOCOL=$(OCCU_RF_PROTOCOL) \
 			OCCU_COMMON=$(OCCU_COMMON) \
 			OCCU_ARCH32=$(OCCU_ARCH32) \
 			OCCU_ARCH64=$(OCCU_ARCH64) \

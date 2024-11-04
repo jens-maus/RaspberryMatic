@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.13"
+VERSION="3.14"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -820,7 +820,7 @@ if [[ "${VMTYPE}" == "VM" ]]; then
       --acpi 1 \
       --agent 1,fstrim_cloned_disks=1,type=virtio \
       --hotplug network,disk,usb \
-      --description "# RaspberryMatic CCU" \
+      --description "[![RaspberryMatic](https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/logo.png 'RaspberryMatic')](https://raspberrymatic.de)" \
       --net0 virtio,bridge=vmbr0,firewall=1 \
       --onboot 1 \
       --tablet 1 \
@@ -848,7 +848,7 @@ if [[ "${VMTYPE}" == "VM" ]]; then
       --numa 1 \
       --agent 1,fstrim_cloned_disks=1,type=virtio \
       --hotplug network,disk,usb,cpu,memory \
-      --description "# RaspberryMatic CCU" \
+      --description "[![RaspberryMatic](https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/logo.png 'RaspberryMatic')](https://raspberrymatic.de)" \
       --net0 virtio,bridge=vmbr0,firewall=1 \
       --onboot 1 \
       --tablet 0 \
@@ -889,7 +889,7 @@ elif [[ "${VMTYPE}" == "CT" ]]; then
     --memory 1024 \
     --rootfs volume=${STORAGE}:1,mountoptions=noatime \
     --mp0 volume=${STORAGE}:${DISK_SIZE},mp=/usr/local,mountoptions=noatime \
-    --description "# RaspberryMatic CCU" \
+    --description "[![RaspberryMatic](https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/logo.png 'RaspberryMatic')](https://raspberrymatic.de)" \
     --hostname "RaspberryMatic"
 
   # patching container config

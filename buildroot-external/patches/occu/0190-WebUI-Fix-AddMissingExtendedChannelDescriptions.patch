@@ -1,0 +1,22 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -35441,15 +35441,15 @@
+     multiMode = oChannelDescr.multiMode;
+   var tmpDev;
+ 
+-  if (typeof channelAddress != "undefined") {
++  if (typeof channelType != "undefined") {
++    chType = channelType;
++  } else if (typeof channelAddress != "undefined") {
+     var channel = DeviceList.getChannelByAddress(channelAddress);
+     if (channel) {
+       chType = channel.channelType;
+       channelIsVisible = channel.isVisible;
+     }
+-  } else if (typeof channelType != "undefined") {
+-    chType = channelType;
+-  }
++  } 
+ 
+   if (chType == "KEY_TRANSCEIVER") {
+     if (deviceType.toLowerCase().indexOf("hmip-asir") != -1) {

@@ -1018,7 +1018,8 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       "iarNone iarRead iarWrite iarCreate iarChange iarExecute iarFullAccess " +
       "OPERATOR_NONE OPERATOR_AND OPERATOR_OR OPERATOR_XOR " +
       "iufNone iufVisible iufInternal iufReadyState iufOperated iufVirtualChn " +
-      "iufReadable iufWriteable iufEventable iufAll"
+      "iufReadable iufWriteable iufEventable iufAll" +
+      "soAsc soDesc stAlpha stNatural"
     ),
     indentStatements: false,
     indentSwitch: false,

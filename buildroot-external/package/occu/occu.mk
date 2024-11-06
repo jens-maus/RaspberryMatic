@@ -107,7 +107,7 @@ endif
 
 ifeq ($(BR2_arm),y)
   OCCU_COMMON=arm-gnueabihf-gcc8
-  ifeq (,$(findstring rpi0,$(PRODUCT)))
+  ifneq (,$(findstring rpi0,$(PRODUCT)))
     OCCU_ARCH32=
   else
     OCCU_ARCH32=arm-linux-gnueabihf

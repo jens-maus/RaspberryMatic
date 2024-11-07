@@ -6,9 +6,9 @@
      {
 -      oSysVarArray.SortByName();
 +      oSysVarArray.SortByName(soAsc,stNatural);
-       string sTmp;
-       foreach( sTmp, oSysVarArray.EnumEnabledIDs() )
-       {
+       
+       string sEnumSVIDs = oSysVarArray.EnumEnabledIDs();
+ 
 --- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
 @@ -20,7 +20,7 @@

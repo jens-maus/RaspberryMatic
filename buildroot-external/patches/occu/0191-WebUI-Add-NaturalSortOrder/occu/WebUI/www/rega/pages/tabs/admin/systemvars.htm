@@ -19,8 +19,20 @@
     if( oSysVarArray )
     {
       oSysVarArray.SortByName(soAsc,stNatural);
+      
+      string sEnumSVIDs = oSysVarArray.EnumEnabledIDs();
+
+      if( system.IsSessionVar("sessionSISV") )
+      {
+        string sEnable = system.GetSessionVar("sessionSISV");
+        if( sEnable == "1" )
+        {
+          sEnumSVIDs = sEnumSVIDs#"\t"#oSysVarArray.EnumEnabledInternalIDs();
+        }
+      }
+      
       string sTmp;
-      foreach( sTmp, oSysVarArray.EnumEnabledIDs() )
+      foreach( sTmp, sEnumSVIDs )
       {
         object oTmp = dom.GetObject( sTmp );
         if( oTmp )
@@ -45,29 +57,29 @@
   
 </script>
 <div id="svOffset" style="display:none"></div>
-<table id="sysVars" cellspacing="0" cellpadding="0" class="tTable filterTable" style="display:none">
+<table id="sysVars" cellspacing="0" cellpadding="0" class="tTable" style="display:none">
 <colgroup>
-  <col style="width:9%;"/>
-  <col style="width:18%;"/>
-  <col style="width:9%;"/>
-  <col style="width:18%;"/>
-  <col style="width:9%;"/>
-  <col style="width:9%;"/>
-  <col style="width:18%;"/>
-  <col style="width:10%;"/>
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col style="width:200px;" />
+  <col style="width:100px;" />
 </colgroup>
 <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-  <th><div class="pt11 CLASS05200 <%Write(sCssName);%>" onclick="DivSort('name');">${thName}</div></th>
+  <th class="thCell CLASS05200"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="DivSort('name');">${thName}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
-  <th><div class="pt11 CLASS05200 <%Write(sCssName);%>" onclick="DivSort('desc');">${thDescription}</div></th>
+  <th class="thCell CLASS05200"><div id="name" class="pt11 <%Write(sCssName);%>" onclick="DivSort('desc');">${thDescription}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
-  <th><div class="pt11 CLASS05200 <%Write(sCssName);%>" onclick="DivSort('type');">${thTypeOfVariable}</div></th>
+  <th class="thCell CLASS05200"><div id="name" class="pt11 <%Write(sCssName);%>" onclick="DivSort('type');">${thTypeOfVariable}</div></th>
   <th class="thCell">${thValues}</th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="unit"){sCssName="SortSelected";} %>
-  <th><div class="pt11 CLASS05200 <%Write(sCssName);%>" onclick="DivSort('unit');">${thUnit}</div></th>
+  <th class="thCell CLASS05200"><div id="name" class="pt11 <%Write(sCssName);%>" onclick="DivSort('unit');">${thUnit}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="chn"){sCssName="SortSelected";} %>
-  <th><div class="pt11 CLASS05200 <%Write(sCssName);%>" onclick="DivSort('chn');">${thCannelMapping}</div></th>
+  <th class="thCell CLASS05200"><div id="name" class="pt11 <%Write(sCssName);%>" onclick="DivSort('chn');">${thCannelMapping}</div></th>
   <th class="thCell">${thAction}</th>
   <th class="thCell">${thLink}</th>
 </tr>
@@ -100,6 +112,9 @@
           <tr>
             <td>${lblAlarm}</td>
             <td><input type="checkbox" id="cbAlarm" /></td>
+          </tr>
+            <td>${lblString}</td>
+            <td><input type="checkbox" id="cbString" /></td>
           </tr>
         </table>
         <div class='FilterSetButton' onclick='setAFilter(fltSYV, "vartypes");updateTable();$("btnFilterVarTypeSub").hide();'>${filterSet}</div>
@@ -138,15 +153,17 @@
     string sTrId = "sv"#sysvar;
     Write("<tr id='"#sTrId#"'>");
     object sv = dom.GetObject(sysvar);
-    Write("<td style='text-align:center;' class='GrayBkg CLASS05206' >");
+    string CellBkg = "GrayBkg";
+    if (sv.Internal() == true) { CellBkg = "LightGrayBkg"; }
+    Write("<td style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
       Write(sv.Name());
     Write("</td>");
     
-    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
-      Write(sv.DPInfo());
+    Write("<td  style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
+      Write(sv.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>'));
     Write("</td>");
     
-    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
+    Write("<td  style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
       string s = "Unbekannt: " # sv.ValueSubType();
       if( sv.ValueSubType() == istPresent )
       {
@@ -175,7 +192,7 @@
       Write(s);
     Write("</td>");
     
-    Write("<td class='GrayBkg CLASS05209' >");
+    Write("<td class='"#CellBkg#" CLASS05209' >");
       if (sv.ValueSubType() == istPresent) {
       }
       if (sv.ValueSubType() == istChar8859) {
@@ -199,19 +216,21 @@
     Write("</td>");
     
     
-    Write("<td class='GrayBkg CLASS05206' >");
+    Write("<td class='"#CellBkg#" CLASS05206' >");
       Write(sv.ValueUnit());
     Write("</td>");
     
-    Write("<td class='GrayBkg CLASS05206' >");
+    Write("<td class='"#CellBkg#" CLASS05206' >");
       object svCH = dom.GetObject( sv.Channel() );
       if( svCH ) { Write( svCH.Name() ); }
     Write("</td>");
     
    
-    Write("<td class='WhiteBkg CLASS05206' >");
-      Write("<table>");
+    Write("<td class='"#CellBkg#" CLASS05206' >");
+      Write("<table cellspacing='0' cellpadding='0' border='0' style='width:100%;'>");
       Write("<tr>");
+      Write("<td>");
+        Write("<table cellspacing='0' cellpadding='0' style='width:100%;'><tr>");
         Write("<td class='CLASS05210'>");
           string sClassName = "StdButton";
           string sOnclick = "DeleteSysVar("#sv.ID()#");";
@@ -222,6 +241,22 @@
           }
           Write("<div onclick='"#sOnclick#"' class='"#sClassName#"'>${btnRemove}</div>");
         Write("</td>");
+        Write("</tr><tr>");
+        Write("<td class='CLASS05210'>");
+          string sClassName = "StdButton";
+          string sOnclick = "editSysVar("#sv.ID()#")";
+          if( (sv.ID() == ID_GW_SYSALARM) || (sv.ID() == ID_GW_SYSSERVICE) )
+          {
+            sClassName = sClassName#"Inactive";
+            sOnclick = "";
+          }
+          Write("<div onclick='"#sOnclick#"' class='"#sClassName#"'>${btnEdit}</div>");
+        Write("</td>");
+        Write("</tr></table>");
+      Write("</td>");
+      
+      Write("<td>");
+        Write("<table cellspacing='0' cellpadding='0'><tr>");
         Write("<td class='CLASS05211'>");
           string sChecked = "";
           if (sv.Visible()) {
@@ -229,24 +264,29 @@
           }
           Write("<input id='svvis"#sv.ID()#"' type='checkbox' "#sChecked#" onclick='iseSystem.saveDpVisibility("#sv.ID()#", this)' />${lblVisible}");
         Write("</td>");
-      Write("</tr>");
-      
-      Write("<tr>");
-        Write("<td class='CLASS05210'>");
-          Write("<div class='StdButton' onclick='editSysVar("#sv.ID()#")'>${btnEdit}</div>");
-        Write("</td>");
+        Write("</tr><tr>");
         Write("<td class='CLASS05211'>");
-          sChecked = "";
+          string sChecked = "";
           if (sv.DPArchive()) {
             sChecked = "checked";
           }
           Write("<input id='svp"#sv.ID()#"' type='checkbox' "#sChecked#" onclick='iseSystem.saveDpProto("#sv.ID()#", this)' />${lblRecorded}");
         Write("</td>");
+        Write("</tr><tr>");
+        Write("<td class='CLASS05211'>");
+          string sChecked = "";
+          if (sv.Internal()) {
+            sChecked = "checked";
+          }
+          Write("<input id='svinternal"#sv.ID()#"' type='checkbox' "#sChecked#" onclick='iseSystem.saveDpInternal("#sv.ID()#", this);reloadPage();' />${lblSystemIntern}");
+        Write("</td>");
+        Write("</tr></table>");
+      Write("</td>");
       Write("</tr>");
       Write("</table>");
     Write("</td>");
     
-    Write("<td class='GrayBkg CLASS05206' >");
+    Write("<td class='"#CellBkg#" CLASS05206' >");
       string sJSTmp = "WebUI.enter(ProgramListPage, '"#sv.DPEnumUsagePrograms()#"');";
       Write( '<div class="StdButton" onclick="'#sJSTmp#'">${btnPrograms}</div>' );
     Write("</td>");
@@ -258,7 +298,7 @@
       Write("tmp['id'] = '"#sv.ID()#"';");
       Write("tmp['unit'] = '"#sv.ValueUnit()#"';");
       Write("tmp['name'] = '"#sv.Name()#"';");
-      Write("tmp['desc'] = '"#sv.DPInfo()#"';");
+      Write("tmp['desc'] = '"#sv.DPInfo().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
       Write("tmp['chn'] = '';");
       object obj = dom.GetObject( sv.Channel() );
       if( obj )
@@ -302,7 +342,39 @@
   new iseSubMenuControl("btnFilterVarType", "btnFilterVarTypeSub", "svOffset", {}, mouseOpts, false, true);  
   new iseSubMenuControl("btnFilterUnit", "btnFilterUnitSub", "svOffset", {}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterChn", "btnFilterChnSub", "svOffset", {}, mouseOpts, false, true);
- 
+  
+  ShowInternalSysVars = function()
+  {
+    var url = '/esp/system.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "ShowInternalSystemVars";';
+    var opt =
+    {
+      postBody: pb,
+      onComplete: function(t)
+      {
+        if(dbg){alert(t.responseText);}
+        reloadPage();
+      }
+    };
+    new Ajax.Request(url,opt);
+  };
+  
+  <%
+    string sInternalBtnText = "";
+    if( system.GetSessionVar("sessionSISV") == "1" )
+    {
+        !sInternalBtnText = "aus";
+        sInternalBtnText = "footerBtnHideInternalSystemVars";
+    }
+    else
+    {
+        !sInternalBtnText = "ein";
+        sInternalBtnText = "footerBtnShowInternalSystemVars";
+    }
+    Write("var internalBtnText = '"#sInternalBtnText#"';");
+  %>
+   
   var s = "";
   
   s += "<table cellspacing='8'>";
@@ -310,6 +382,7 @@
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05207' onclick='fltSYV.clearFilters();reloadPage();' >${footerBtnResetFilter}</div></td>";
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='newSysVar()'>${footerBtnNew}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalSysVars()'>"+translateKey(internalBtnText)+"</div></td>";
   s += "</tr>";
   s += "</table>";
 

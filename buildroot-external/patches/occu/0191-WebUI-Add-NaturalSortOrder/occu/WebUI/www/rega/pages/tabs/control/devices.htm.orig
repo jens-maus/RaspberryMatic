@@ -13,27 +13,17 @@
   arItems = new Array();
 </script>
 
-<table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
-  <colgroup>
-    <col style="width:20%;"/>
-    <col style="width:80%;"/>
-  </colgroup>
-  <tr>
+<div id="devicepage" class="CLASS03900">
     <!-- Linke Spalte -->
-    <td id="contentLeft" class="hidden">
-      <table class="filterTable CLASS03901 j_translate">
+    <div id="contentLeft" class="hidden">
+      <table class="filterTable CLASS03901 j_translate" cellpadding="0" cellspacing="0">
         <tr>
           <td style="vertical-align: top; border: 0px">
             <div id="divDL" class="CLASS03902">
-              <script type="text/javascript">
-                var contHeight = $("content").style.height;
-                contHeight = contHeight.replace(/px/, "");
-                $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
-              </script>
               <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                 <colgroup>
-                  <col style="width:50%;"/>
-                  <col style="width:50%;"/>
+                  <col style="width:80%;"/>
+                  <col style="width:20%;"/>
                 </colgroup>
                 <tr>
                   <th>${thName}</th>
@@ -92,10 +82,10 @@
                         }
                         string trId = "devices"#devs.ID();
                         WriteLine('<tr id="'#trId#'" class="CLASS03904">');
-                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' style='height: 80px;' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
+                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                           Write(devs.Name());
                           Write("</td>");
-                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' style='height: 80px;'>");
+                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' onclick='picDivHide(jg_250);DeviceListPage.showConfiguration(event, \"DEVICE\", "# devs.ID() #");' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                           
                           string sPicDivId = "picDiv"#devs.ID();
                           Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
@@ -125,25 +115,19 @@
           </td>
        </tr> 
      </table>
-   </td>
+   </div>
 
     <!-- Rechte Spalte -->
-    <td id="contentRight">
+    <div id="contentRight">
       <div id="divRTD" class="CLASS03908">
-        <script type="text/javascript">
-          var contHeight = $("content").style.height;
-          contHeight = contHeight.replace(/px/, "");
-          $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
-        </script>
-        <table id="tblRightContent" class="CLASS03909">
+        <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
          <tr class="CLASS03910">
            <td style="vertical-align: top;" id="chnList"></td>
          </tr>
         </table>
       </div>
-    </td>
-  </tr>
-</table>
+    </div>
+</div>
 <script type="text/javascript">
        
   loadChannels = function(id, specialFlag)
@@ -198,6 +182,38 @@
 </script>
 
 <script type="text/javascript">
+  ShowInternalDeviceChannels = function()
+  {
+    var url = '/esp/system.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "ShowInternalDeviceChannels";';
+    var opt =
+    {
+      postBody: pb,
+      onComplete: function(t)
+      {
+        if(dbg){alert(t.responseText);}
+        reloadPage();
+      }
+    };
+    new Ajax.Request(url,opt);
+  };
+
+  <%
+    string sInternalBtnText = "";
+    if( system.GetSessionVar("sessionSIDC") == "1" )
+    {
+        !sInternalBtnText = "aus";
+        sInternalBtnText = "footerBtnHideInternalDeviceChannels";
+    }
+    else
+    {
+        !sInternalBtnText = "ein";
+        sInternalBtnText = "footerBtnShowInternalDeviceChannels";
+    }
+    Write("var internalBtnText = '"#sInternalBtnText#"';");
+  %>
+
   var s = "";
 
   var mouseOpts =
@@ -218,6 +234,7 @@
   s += "<tr>";
   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltDL.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
   s += "</tr>";
   s += "</table>";
   

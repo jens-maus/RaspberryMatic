@@ -233,7 +233,7 @@
         Write("<table cellspacing='0' cellpadding='0' style='width:100%;'><tr>");
         Write("<td class='CLASS05210'>");
           string sClassName = "StdButton";
-          string sOnclick = "DeleteSysVar("#sv.ID()#");";
+          string sOnclick = "DeleteSysVar("#sv.ID()#",\""#sv.Name()#"\");";
           if( sv.Unerasable() )
           {
             sClassName = sClassName#"Inactive";
@@ -427,10 +427,11 @@
     }
   }
   
-  DeleteSysVar = function(id)
+  DeleteSysVar = function(id,name)
   {
     var _id_ = id;
-    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveSysVar"), function(result) {
+	var _name_ = name;
+    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveSysVar").replace(/%s/, _name_), function(result) {
       if (result == YesNoDialog.RESULT_YES) { DeleteObject(_id_); }
     });    
   };

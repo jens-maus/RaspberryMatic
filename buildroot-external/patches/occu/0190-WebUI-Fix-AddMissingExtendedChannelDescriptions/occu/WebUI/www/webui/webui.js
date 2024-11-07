@@ -51094,6 +51094,7 @@ ShowHintIfProgramExists = function(id, ch) {
     } else {
       if(arChnHasLinks[parseInt(ch)] != true) {
         var elm = jQuery(".j_multiMode_" + ch). find("[name='CHANNEL_OPERATION_MODE']")[0];
+        if (elm === undefined) elm = jQuery("#separate_CHANNEL_" + ch + "_1");
         jQuery(elm).prop("disabled", false);
       }
     }

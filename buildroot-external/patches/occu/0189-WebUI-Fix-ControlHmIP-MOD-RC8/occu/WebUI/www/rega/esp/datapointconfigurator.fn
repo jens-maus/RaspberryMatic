@@ -744,7 +744,7 @@ function ::dcCreate()
               Call("/esp/controls/hap.fn::CreateHAP()");
             }
 
-            if ((ch.Label() == "RPI-RF-MOD") || (ch.Label() =="HmIP-CCU3")) {
+            if ((ch.Label() == "RPI-RF-MOD") || (ch.Label() == "HmIP-CCU3") || (ch.Label() == "HmIP-RFUSB")) {
               WriteLine( "<script>conInfo('Create CoPro Control.');</script>" );
               sLastControlName = CN_MAINTENANCE;
               isKnownControl = true;

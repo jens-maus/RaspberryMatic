@@ -66,7 +66,7 @@
        {
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -55,7 +55,7 @@
+@@ -45,7 +45,7 @@
                    object obj = dom.GetObject(ID_DEVICES);
                    if ( obj )
                    {
@@ -77,7 +77,7 @@
                      foreach( tmp, obj.EnumEnabledIDs() )
 --- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
-@@ -49,7 +49,7 @@
+@@ -39,7 +39,7 @@
                    object obj = dom.GetObject(ID_FUNCTIONS);
                    if ( obj )
                    {
@@ -131,7 +131,7 @@
        {
 --- occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/rooms.htm
-@@ -50,7 +50,7 @@
+@@ -40,7 +40,7 @@
                  object obj = dom.GetObject(ID_ROOMS);
                  if ( obj )
                  {

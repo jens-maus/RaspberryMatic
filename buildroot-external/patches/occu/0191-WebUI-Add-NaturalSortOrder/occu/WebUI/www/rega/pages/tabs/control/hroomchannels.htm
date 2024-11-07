@@ -16,7 +16,7 @@
     object oTmpArray = dom.GetObject(system.GetVar("id"));
     if( oTmpArray )
     {
-      oTmpArray.SortByName();
+      oTmpArray.SortByName(soAsc,stNatural);
       string sTmp;
       foreach(sTmp,oTmpArray.EnumIDs())
       {
@@ -40,7 +40,6 @@
         }
       }
     }
-    oUser.UserTempViewIDs().SortByName(soAsc,stNatural);
     firstSort = true;  
   }
   system.SetSessionVar("sessionTAB1", system.GetVar("id") );

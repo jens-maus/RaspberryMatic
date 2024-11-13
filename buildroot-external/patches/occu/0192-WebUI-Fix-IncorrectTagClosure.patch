@@ -1,0 +1,173 @@
+--- occu/WebUI/www/config/easymodes/etc/hmip_helper.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmip_helper.tcl
+@@ -117,7 +117,7 @@
+         append s "<option value=\"11\">\${optionUnit15M}</option>"
+         append s "<option value=\"12\">\${optionUnit1H}</option>"
+         append s "<option value=\"13\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+ 
+       if {$paramType == "eventDelay"} {
+         append s "&nbsp;[getHelpIcon EVENT_DELAY 450 75]"
+@@ -282,7 +282,7 @@
+         append s "<option value=\"10\">\${optionUnit4M}</option>"
+         append s "<option value=\"11\">\${optionUnit15M}</option>"
+         append s "<option value=\"12\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+ 
+       if {$paramType == "eventDelay"} {
+         append s "&nbsp;[getHelpIcon EVENT_DELAY 450 75]"
+@@ -442,7 +442,7 @@
+         append s "<option value=\"10\">\${optionUnit15M}</option>"
+         append s "<option value=\"11\">\${optionUnit1H}</option>"
+         append s "<option value=\"12\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -583,7 +583,7 @@
+         append s "<option value=\"4\">\${optionUnit5M}</option>"
+         append s "<option value=\"5\">\${optionUnit15M}</option>"
+         append s "<option value=\"6\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -688,7 +688,7 @@
+         append s "<option value=\"6\">\${optionUnit60S}</option>"
+         append s "<option value=\"7\">\${optionUnit105S}</option>"
+         append s "<option value=\"8\">\${stringTableEnterValue}</option>"
+-      append s "/<select>&nbsp;&nbsp;"
++      append s "</select>&nbsp;&nbsp;"
+ 
+       append s [getHelpIcon $helpEvemtFilterTime]
+ 
+@@ -811,7 +811,7 @@
+         append s "<option value=\"10\">\${optionUnit20M}</option>"
+ 
+         # append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -952,7 +952,7 @@
+         append s "<option value=\"9\">\${optionUnit30M}</option>"
+         append s "<option value=\"10\">\${optionUnit1H}</option>"
+         append s "<option value=\"11\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1097,7 +1097,7 @@
+         append s "<option value=\"7\">\${optionUnit2M}</option>"
+         append s "<option value=\"8\">\${optionUnit1H}</option>"
+         append s "<option value=\"9\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1238,7 +1238,7 @@
+         append s "<option value=\"19\">\${optionUnit24H}</option>"
+         append s "<option value=\"20\">\${stringTablePermanent}</option>"
+         append s "<option value=\"21\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1445,7 +1445,7 @@
+         append s "<option value=\"7\">\${optionUnit20S}</option>"
+         append s "<option value=\"8\">\${optionUnit30S}</option>"
+         append s "<option value=\"9\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1572,7 +1572,7 @@
+         append s "<option value=\"4\">\${optionUnit24D}</option>"
+ 
+         # append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1671,7 +1671,7 @@
+         append s "<option value=\"4\">\${optionDisable}</option>"
+         append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+ 
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1767,7 +1767,7 @@
+         append s "<option value=\"4\">\${optionUnit10M}</option>"
+ 
+         # append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -1868,7 +1868,7 @@
+         append s "<option value=\"4\">\${optionUnit7D}</option>"
+         # append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+ 
+-      append s "/<select>"
++      append s "</select>"
+ 
+       append s "&nbsp;[getHelpIcon AUTO_SENSOR_CLEANING 600 150]"
+ 
+@@ -1973,7 +1973,7 @@
+           append s "<option value=\"3\">\${optionUnit90S}</option>"
+           append s "<option value=\"4\">\${stringTableEnterValue}</option>"
+ 
+-        append s "/<select> "
++        append s "</select> "
+         append s [getHelpIcon $helpRunningTime]
+       append s "</td>"
+ 
+@@ -2072,7 +2072,7 @@
+         append s "<option value=\"9\">\${optionUnit30S}</option>"
+         append s "<option value=\"10\">\${stringTableEnterValue}</option>"
+ 
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -2199,7 +2199,7 @@
+         append s "<option value=\"4\">\${optionUnit30M}</option>"
+ 
+         append s "<option value=\"5\">\${stringTableEnterValue}</option>"
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"
+@@ -2306,7 +2306,7 @@
+ 
+     # Hide the next value because the max value should not exceed 10 minutes
+     # append s "<option value=\"12\">\${stringTableEnterValue}</option>"
+-  append s "/<select>"
++  append s "</select>"
+   append s "</td>"
+ 
+   append s "<script type=\"text/javascript\">"
+@@ -2455,7 +2455,7 @@
+         append s "<option value=\"5\">\${optionUnit5S}</option>"
+         append s "<option value=\"6\">\${stringTableEnterValue}</option>"
+ 
+-      append s "/<select>"
++      append s "</select>"
+       append s "</td>"
+ 
+       append s "<script type=\"text/javascript\">"

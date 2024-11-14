@@ -1,8 +1,7 @@
+---
 name: Build-Proxy
 
 on:
-  #push:
-  #pull_request:
   workflow_dispatch:
     inputs:
       type:

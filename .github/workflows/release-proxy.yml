@@ -45,5 +45,5 @@ jobs:
             --${{ matrix.arch }} \
             --target /data/home-assistant-addon-proxy \
             --image "${{ env.IMAGE }}" \
-            --docker-hub "ghcr.io/${{ github.repository }}" \
+            --docker-hub "ghcr.io/${{ github.repository_owner }}" \
             --addon

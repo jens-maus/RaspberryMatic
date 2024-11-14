@@ -1,6 +1,9 @@
 ---
 name: Release Build (HA Proxy-Addon)
 
+on:
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

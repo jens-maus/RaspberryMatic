@@ -1,0 +1,31 @@
+---
+name: RaspberryMatic CCU (Proxy)
+version: 0.1.0
+stage: experimental
+slug: raspberrymatic_proxy
+image: ghcr.io/jens-maus/raspberrymatic-proxy
+arch:
+  - armv7
+  - aarch64
+  - amd64
+  - armhf
+  - i386
+description: Proxy to externally running RaspberryMatic CCU
+url: https://github.com/jens-maus/RaspberryMatic
+ingress: true
+ingress_stream: true
+panel_title: RaspberryMatic
+panel_icon: mdi:router-wireless
+boot: auto
+init: true
+timeout: 30
+ports:
+  80/tcp: 80
+ports_description:
+  80/tcp: Frontend tcp-listen port
+options:
+  server: null
+schema:
+  server: url
+map:
+  - config:ro

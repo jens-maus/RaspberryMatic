@@ -7,7 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build HA Proxy-Addon
+    name: Build HA Proxy-Addon [${{ matrix.arch }}]
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
     steps:
       - name: Check out repository
@@ -39,8 +42,8 @@ jobs:
         with:
           args: |
             ${{ env.BUILD_ARGS }} \
-            --all \
+            --${{ matrix.arch }} \
             --target /data/home-assistant-addon-proxy \
             --image "${{ env.IMAGE }}" \
-            --docker-hub "ghcr.io/${{ github.repository_owner }}" \
+            --docker-hub "ghcr.io/${{ github.repository }}" \
             --addon

@@ -1,22 +1,10 @@
 ---
-name: Release Build (Proxy)
-
-on:
-  workflow_dispatch:
-    inputs:
-      type:
-        description: 'Type (edge/proxy)'
-        default: 'proxy'
-        required: true
+name: Release Build (HA Proxy-Addon)
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build Proxy HA-addon [${{ matrix.arch }}]
-    strategy:
-      matrix:
-        addon: ["home-assistant-addon-proxy"]
-        arch: ["aarch64"]
+    name: Build HA Proxy-Addon
 
     steps:
       - name: Check out repository
@@ -26,20 +14,13 @@ jobs:
         id: info
         uses: home-assistant/actions/helpers/info@master
         with:
-          path: "./${{ matrix.addon }}"
+          path: "./home-assistant-addon-proxy"
 
-      - name: Check if add-on should be built
-        id: check
+      - name: Set Environment
         run: |
-          if [[ "${{ steps.info.outputs.architectures }}" =~ ${{ matrix.arch }} ]]; then
-             echo "build_arch=true" >> $GITHUB_OUTPUT;
-             echo "image=$(echo ${{ steps.info.outputs.image }} | cut -d'/' -f3)" >> $GITHUB_OUTPUT;
-             if [[ -z "${{ github.head_ref }}" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
-                 echo "BUILD_ARGS=" >> $GITHUB_ENV;
-             fi
-           else
-             echo "${{ matrix.arch }} is not a valid arch for ${{ matrix.addon }}, skipping build";
-             echo "build_arch=false" >> $GITHUB_OUTPUT;
+          echo "IMAGE=$(echo ${{ steps.info.outputs.image }} | cut -d'/' -f3)" >> $GITHUB_ENV;
+          if [[ -z "${{ github.head_ref }}" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "BUILD_ARGS=" >> $GITHUB_ENV;
           fi
 
       - name: Login to GitHub Container Registry
@@ -50,15 +31,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
-      - name: Build ${{ matrix.addon }} add-on
-        if: steps.check.outputs.build_arch == 'true'
+      - name: Build+Push add-on
         uses: home-assistant/builder@2024.08.2
         with:
           args: |
             ${{ env.BUILD_ARGS }} \
-            --test \
             --all \
-            --target /data/${{ matrix.addon }} \
-            --image "${{ steps.check.outputs.image }}" \
+            --target /data/home-assistant-addon-proxy \
+            --image "${{ env.IMAGE }}" \
             --docker-hub "ghcr.io/${{ github.repository_owner }}" \
             --addon

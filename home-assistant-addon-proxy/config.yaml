@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (Proxy)
-version: 0.2.12
+version: 0.2.13
 stage: experimental
 slug: raspberrymatic_proxy
 image: ghcr.io/jens-maus/raspberrymatic-proxy
@@ -8,8 +8,6 @@ arch:
   - armv7
   - aarch64
   - amd64
-  - armhf
-  - i386
 description: Proxy to externally running RaspberryMatic CCU
 url: https://github.com/jens-maus/RaspberryMatic
 ingress: true

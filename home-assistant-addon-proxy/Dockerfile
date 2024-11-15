@@ -22,8 +22,8 @@ LABEL \
     org.opencontainers.image.source="https://github.com/jens-maus/RaspberyMatic" \
     org.opencontainers.image.documentation="https://github.com/jens-maus/RaspberryMatic/wiki" \
     org.opencontainers.image.version=${package_version} \
-    io.hass.name="${BUILD_NAME}" \
-    io.hass.description="${BUILD_DESCRIPTION}" \
+    io.hass.name="RaspberryMatic CCU (Proxy)" \
+    io.hass.description="A web proxy to your homematicIP CCU" \
     io.hass.url=https://github.com/jens-maus/RaspberryMatic/tree/master/home-assistant-addon-proxy \
     io.hass.arch="armhf|aarch64|i386|amd64" \
     io.hass.type="addon" \

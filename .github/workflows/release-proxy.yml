@@ -66,28 +66,28 @@ jobs:
           context: home-assistant-addon-proxy
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: false
-        labels: |
-          org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
-          org.opencontainers.image.description=A web proxy to your homematicIP CCU
-          org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-          org.opencontainers.image.authors=RaspberryMatic OpenSource Team
-          org.opencontainers.image.licenses=Apache-2.0
-          org.opencontainers.image.url=https://raspberrymatic.de
-          org.opencontainers.image.source=https://github.com/${{ github.repository }}
-          org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
-          org.opencontainers.image.revision=${{ github.sha }}
-          org.opencontainers.image.version=${{ steps.info.outputs.version }}
-          io.hass.name=RaspberryMatic CCU (Proxy)
-          io.hass.description=A web proxy to your homematicIP CCU
-          io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon-proxy
-          io.hass.version=${{ steps.info.outputs.version }}
-          io.hass.type=addon
-          io.hass.arch=armv7|aarch64|amd64
-        tags: |
-          ${{ steps.info.outputs.image }}:${{ steps.info.outputs.version }}
-          ${{ steps.info.outputs.image }}:latest
-        annotations: |
-          ${{ steps.meta.outputs.annotations }}
+          labels: |
+            org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
+            org.opencontainers.image.description=A web proxy to your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.licenses=Apache-2.0
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.info.outputs.version }}
+            io.hass.name=RaspberryMatic CCU (Proxy)
+            io.hass.description=A web proxy to your homematicIP CCU
+            io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon-proxy
+            io.hass.version=${{ steps.info.outputs.version }}
+            io.hass.type=addon
+            io.hass.arch=armv7|aarch64|amd64
+          tags: |
+            ${{ steps.info.outputs.image }}:${{ steps.info.outputs.version }}
+            ${{ steps.info.outputs.image }}:latest
+          annotations: |
+            ${{ steps.meta.outputs.annotations }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

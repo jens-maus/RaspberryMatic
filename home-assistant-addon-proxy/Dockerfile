@@ -1,7 +1,7 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-WORKDIR /
+WORKDIR /app
 
 # Install nodejs and specific npm version to fix
 # install stalling on armv7/armhf

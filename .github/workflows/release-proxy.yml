@@ -64,7 +64,7 @@ jobs:
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
-     - name: Build and push container image
+      - name: Build and push container image
         uses: docker/build-push-action@v6.9.0
         id: docker_build
         with:

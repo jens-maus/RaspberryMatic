@@ -3,6 +3,13 @@ FROM $BUILD_FROM
 
 RUN apk add --no-cache --update nodejs-current
 RUN apk add --no-cache --update npm
+
+# Install a chosen NPM version
+ENV NPM_VERSION=10.3.0
+RUN npm install -g npm@"${NPM_VERSION}"
+
+# Install express + http-proxy-middleware packages for
+# ha-proxy.js
 RUN npm install -g --no-audit --force express
 RUN npm install -g --no-audit --force http-proxy-middleware
 

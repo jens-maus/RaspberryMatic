@@ -84,8 +84,8 @@ jobs:
             io.hass.type=addon
             io.hass.arch=armv7|aarch64|amd64
           tags: |
-            ${{ steps.info.outputs.image }}:${{ steps.info.outputs.version }}
-            ${{ steps.info.outputs.image }}:latest
+            "${{ steps.info.outputs.image }}:${{ steps.info.outputs.version }}"
+            "${{ steps.info.outputs.image }}:latest"
           annotations: |
             ${{ steps.meta.outputs.annotations }}
 

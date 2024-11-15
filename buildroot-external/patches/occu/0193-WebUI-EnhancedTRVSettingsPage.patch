@@ -20,20 +20,10 @@
      "stringTableDisplayInformation" : "Display information",
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -2931,10 +2931,21 @@
-       if { [info exists ps($param)] == 1  } {
-         incr prn
-         append html "<tr>"
--        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableOptimumStartStop}</td>"
--        append html "<td name=\"expertParam\" class=\"hidden\">"
--        append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
--        append html "</td>"
-+         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableOptimumStartStop}</td>"
-+         append html "<td name=\"expertParam\" class=\"hidden\">"
-+         append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
-+         append html "</td>"
-+        append html "</tr>"
-+      }
+@@ -2937,6 +2937,17 @@
+         append html "</td>"
+         append html "</tr>"
+       }
 +        
 +      set param BOOST_AFTER_WINDOW_OPEN
 +      if { [info exists ps($param)] == 1  } {
@@ -43,29 +33,12 @@
 +         append html "<td name=\"expertParam\" class=\"hidden\">"
 +         append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
 +         append html "</td>"
-         append html "</tr>"
-       }
++        append html "</tr>"
++      }
  
-@@ -2946,13 +2957,12 @@
-           append html "<td colspan=\"2\" >[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param]</td>"
- 
-           append html "<script type=\"text/javascript\">"
--            append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {"
--            append html "var value = this.value;"
--            append html "this.value = Math.round(this.value / 5) * 5;"
--            append html "ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);"
--            append html "});"
-+          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {"
-+          append html "var value = this.value;"
-+          append html "this.value = Math.round(this.value / 5) * 5;"
-+          append html "ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);"
-+          append html "});"
-           append html "</script>"
--
-         append html "</tr>"
-       }
- 
-@@ -2962,18 +2972,11 @@
+       set param DURATION_5MIN
+       if { [info exists ps($param)] == 1  } {
+@@ -2962,18 +2973,11 @@
  
      append html "<table class=\"ProfileTbl\">"
      # left
@@ -88,7 +61,7 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        if { [info exists ps(TEMPERATURE_WINDOW_OPEN_COOLING)] == 1  } {
-@@ -2981,7 +2984,7 @@
+@@ -2981,7 +2985,7 @@
        } else {
          append html "<tr><td>\${stringTableTemperatureFallWindowOpen}</td>"
        }
@@ -97,7 +70,7 @@
        append html "</tr>"
      }
  
-@@ -2990,7 +2993,7 @@
+@@ -2990,7 +2994,7 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        append html "<tr><td>\${lblTemperatureWindowOpenCooling}</td>"
@@ -106,7 +79,7 @@
        append html "</tr>"
      }
  
-@@ -2999,6 +3002,138 @@
+@@ -2999,6 +3003,138 @@
    append html "<hr>"
  
    append html "<table class=\"ProfileTbl\">"
@@ -137,7 +110,7 @@
 +	   
 +	set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
 +	if { [info exists ps($param)] == 1  } {
-+	  incr prn
++      incr prn
 +       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
 +       append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
 +      append html "</tr>"
@@ -149,10 +122,10 @@
 +
 +    append html "<table class=\"ProfileTbl\">"
 +	
-+	 array_clear options
-+      for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-+        set options($val) "[expr int($val * 100)] %"
-+      } 
++    array_clear options
++     for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
++       set options($val) "[expr int($val * 100)] %"
++     } 
 +	  
 +	set param VALVE_ERROR_RUN_POSITION
 +    if { [info exists ps($param)] == 1  } {
@@ -170,7 +143,7 @@
 +      append html "</tr>"
 +    }
 +
-+	# left
++    # left
 +    incr prn
 +    set param TEMPERATURE_OFFSET
 +    array_clear options
@@ -245,12 +218,10 @@
      # left
      incr prn
      set param BOOST_TIME_PERIOD
-@@ -3007,9 +3142,24 @@
-         set options($val) "$val min"
+@@ -3008,9 +3144,24 @@
      }
      append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
--      append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
-+     append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+       append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
 +
 +	# right	
 +    set param BOOST_POSITION
@@ -266,9 +237,9 @@
 +     append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
 +    }
      append html "</tr>"
--  append html "</table>"
-+   append html "</table>"
-+
+   append html "</table>"
  
++
    if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {
      append html "<hr>"
+     append html "<table class=\"ProfileTbl\">"

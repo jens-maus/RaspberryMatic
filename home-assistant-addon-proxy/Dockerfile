@@ -1,9 +1,13 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
-RUN apk add --no-cache --update nginx
+
+RUN apk add --no-cache --update nodejs-current
+RUN apk add --no-cache --update npm
+RUN npm install express
+RUN npm install http-proxy-middleware
 
 # Copy root filesystem
-ADD nginx.conf.gtpl /
+ADD ha-proxy.js.gtpl /
 ADD entrypoint.sh /
 
 RUN chmod +x /entrypoint.sh

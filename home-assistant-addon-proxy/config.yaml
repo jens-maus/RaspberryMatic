@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (Proxy)
-version: 0.2.3
+version: 0.2.4
 stage: experimental
 slug: raspberrymatic_proxy
 image: ghcr.io/jens-maus/raspberrymatic-proxy

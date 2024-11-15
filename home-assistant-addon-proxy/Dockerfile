@@ -2,6 +2,7 @@ ARG BUILD_FROM
 FROM $BUILD_FROM
 
 WORKDIR /app
+ENV NODE_PATH=/app/node_modules
 
 # Install nodejs and specific npm version to fix
 # install stalling on armv7/armhf

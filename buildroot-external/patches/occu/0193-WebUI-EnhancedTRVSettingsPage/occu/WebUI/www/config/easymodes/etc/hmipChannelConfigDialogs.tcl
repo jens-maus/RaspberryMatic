@@ -2931,10 +2931,10 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       if { [info exists ps($param)] == 1  } {
         incr prn
         append html "<tr>"
-         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableOptimumStartStop}</td>"
-         append html "<td name=\"expertParam\" class=\"hidden\">"
-         append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
-         append html "</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableOptimumStartStop}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">"
+        append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
+        append html "</td>"
         append html "</tr>"
       }
         
@@ -2957,12 +2957,13 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
           append html "<td colspan=\"2\" >[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param]</td>"
 
           append html "<script type=\"text/javascript\">"
-          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {"
-          append html "var value = this.value;"
-          append html "this.value = Math.round(this.value / 5) * 5;"
-          append html "ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);"
-          append html "});"
+            append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {"
+            append html "var value = this.value;"
+            append html "this.value = Math.round(this.value / 5) * 5;"
+            append html "ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);"
+            append html "});"
           append html "</script>"
+
         append html "</tr>"
       }
 
@@ -3029,7 +3030,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
 	   
 	set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
 	if { [info exists ps($param)] == 1  } {
-	  incr prn
+      incr prn
        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
       append html "</tr>"
@@ -3041,10 +3042,10 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
 
     append html "<table class=\"ProfileTbl\">"
 	
-	 array_clear options
-      for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-        set options($val) "[expr int($val * 100)] %"
-      } 
+    array_clear options
+     for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
+       set options($val) "[expr int($val * 100)] %"
+     } 
 	  
 	set param VALVE_ERROR_RUN_POSITION
     if { [info exists ps($param)] == 1  } {
@@ -3062,7 +3063,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       append html "</tr>"
     }
 
-	# left
+    # left
     incr prn
     set param TEMPERATURE_OFFSET
     array_clear options
@@ -3142,7 +3143,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
         set options($val) "$val min"
     }
     append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
-     append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+      append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
 
 	# right	
     set param BOOST_POSITION
@@ -3158,7 +3159,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
      append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
     append html "</tr>"
-   append html "</table>"
+  append html "</table>"
 
 
   if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {

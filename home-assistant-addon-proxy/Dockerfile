@@ -1,32 +1,16 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM ghcr.io/hassio-addons/base-nodejs:0.2.5
 
 # set workdir to /app
 WORKDIR /app
 
-# Install nodejs and specific npm version to fix
-# install stalling on armv7/armhf
-# (cf. https://github.com/nodejs/docker-node/issues/1946)
-RUN apk add --no-cache --update nodejs-current
-RUN apk add --no-cache --update npm
+ENV SUPERVISOR_TOKEN ""
+VOLUME /config
 
-# Install express + http-proxy-middleware packages for
-# ha-proxy.js
-ENV NODE_PATH=/app/node_modules
-RUN npm install express
-RUN npm install http-proxy-middleware
-
-# Copy root filesystem and set permissions
-ADD ha-proxy.js.gtpl /app
-ADD entrypoint.sh /app
+COPY ha-proxy.js.gtpl /app/ha-proxy.js.gtpl
+COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Build arguments
-ARG BUILD_ARCH
-ARG BUILD_DESCRIPTION
-ARG BUILD_NAME
-ARG BUILD_VERSION
-
+ARG package_version
 # Labels
 LABEL \
     org.opencontainers.image.title="RaspberryMatic HA Proxy-Addon" \
@@ -37,13 +21,18 @@ LABEL \
     org.opencontainers.image.url="https://raspberrymatic.de" \
     org.opencontainers.image.source="https://github.com/jens-maus/RaspberyMatic" \
     org.opencontainers.image.documentation="https://github.com/jens-maus/RaspberryMatic/wiki" \
-    org.opencontainers.image.version=${BUILD_VERSION} \
+    org.opencontainers.image.version=${package_version} \
     io.hass.name="${BUILD_NAME}" \
     io.hass.description="${BUILD_DESCRIPTION}" \
     io.hass.url=https://github.com/jens-maus/RaspberryMatic/tree/master/home-assistant-addon-proxy \
-    io.hass.arch="${BUILD_ARCH}" \
-    #io.hass.arch="armhf|aarch64|i386|amd64"\
+    io.hass.arch="armhf|aarch64|i386|amd64" \
     io.hass.type="addon" \
-    io.hass.version=${BUILD_VERSION}
+    io.hass.version=${package_version}
+
+# Install express + http-proxy-middleware packages for
+# ha-proxy.js
+ENV NODE_PATH=/app/node_modules
+RUN npm install express
+RUN npm install http-proxy-middleware
 
 ENTRYPOINT ["/app/entrypoint.sh"]

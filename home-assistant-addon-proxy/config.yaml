@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (Proxy)
-version: 0.2.0
+version: 0.2.1
 stage: experimental
 slug: raspberrymatic_proxy
 image: ghcr.io/jens-maus/raspberrymatic-proxy
@@ -22,7 +22,7 @@ timeout: 30
 options:
   server: "http://homematic-raspi:80"
 schema:
-  server: url
+  server: url?
 map:
   - config:ro
 environment:

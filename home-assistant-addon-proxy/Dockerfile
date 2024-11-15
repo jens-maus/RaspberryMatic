@@ -1,6 +1,8 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
+WORKDIR /
+
 # Install nodejs and specific npm version to fix
 # install stalling on armv7/armhf
 # (cf. https://github.com/nodejs/docker-node/issues/1946)
@@ -9,8 +11,8 @@ RUN apk add --no-cache --update npm
 
 # Install express + http-proxy-middleware packages for
 # ha-proxy.js
-RUN npm install -g express
-RUN npm install -g http-proxy-middleware
+RUN npm install express
+RUN npm install http-proxy-middleware
 
 # Copy root filesystem
 ADD ha-proxy.js.gtpl /

@@ -1,12 +1,11 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
+# Install nodejs and specific npm version to fix
+# install stalling on armv7/armhf
+# (cf. https://github.com/nodejs/docker-node/issues/1946)
 RUN apk add --no-cache --update nodejs-current
-RUN apk add --no-cache --update npm
-
-# Install a chosen NPM version
-ENV NPM_VERSION=10.3.0
-RUN npm install -g npm@"${NPM_VERSION}"
+RUN apk add --no-cache --update npm=10.3.0
 
 # Install express + http-proxy-middleware packages for
 # ha-proxy.js

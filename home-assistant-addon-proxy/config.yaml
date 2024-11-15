@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (Proxy)
-version: 0.2.10
+version: 0.2.11
 stage: experimental
 slug: raspberrymatic_proxy
 image: ghcr.io/jens-maus/raspberrymatic-proxy
@@ -14,7 +14,7 @@ description: Proxy to externally running RaspberryMatic CCU
 url: https://github.com/jens-maus/RaspberryMatic
 ingress: true
 ingress_stream: true
-panel_title: RaspberryMatic WebUI
+panel_title: RaspberryMatic
 panel_icon: mdi:router-wireless
 boot: auto
 init: true
@@ -24,9 +24,11 @@ ports:
 ports_description:
   8099/tcp: External port to proxied WebUI
 options:
-  webui-url: http://homematic-raspi:80
+  webui-url: http://homematic-raspi
+  allowed-ips: null
 schema:
   webui-url: str?
+  allowed-ips: str?
 map:
   - config:ro
 environment:

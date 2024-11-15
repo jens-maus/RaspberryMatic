@@ -76,11 +76,12 @@ const apiProxy = createProxyMiddleware({
 const app = express();
 app.use((req, res, next) => {
   //Get whitelisted range
-  let whitelisted_range = ipaddr.parseCIDR(process.env.HM_HAPROXY_SRC);
+  let whitelisted_range = ipaddr.parseCIDR('{{ index . "allowed-ips" }}');
+  let whitelisted_internal = ipaddr.parseCIDR(process.env.HM_HAPROXY_SRC);
   //Get source IP
   let source_ip = ipaddr.parse(req.ip.split(':').pop());
   //Check if source IP in whitelisted range
-  if(source_ip.match(whitelisted_range)) {
+  if(source_ip.match(whitelisted_internal) || source_ip.match(whitelisted_range)) {
     // allowed, forward to next middleware (proxy)
     next();
   } else {

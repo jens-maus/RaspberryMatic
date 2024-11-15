@@ -1,8 +1,8 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
+# set workdir to /app
 WORKDIR /app
-ENV NODE_PATH=/app/node_modules
 
 # Install nodejs and specific npm version to fix
 # install stalling on armv7/armhf
@@ -12,16 +12,14 @@ RUN apk add --no-cache --update npm
 
 # Install express + http-proxy-middleware packages for
 # ha-proxy.js
+ENV NODE_PATH=/app/node_modules
 RUN npm install express
 RUN npm install http-proxy-middleware
 
-# Copy root filesystem
-ADD ha-proxy.js.gtpl /
-ADD entrypoint.sh /
-
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/bin/sh", "-c", "/entrypoint.sh"]
+# Copy root filesystem and set permissions
+ADD ha-proxy.js.gtpl /app
+ADD entrypoint.sh /app
+RUN chmod +x /app/entrypoint.sh
 
 # Build arguments
 ARG BUILD_ARCH
@@ -48,4 +46,4 @@ LABEL \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION}
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]

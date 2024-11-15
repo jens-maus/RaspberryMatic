@@ -3,8 +3,8 @@ FROM $BUILD_FROM
 
 RUN apk add --no-cache --update nodejs-current
 RUN apk add --no-cache --update npm
-RUN npm install -g express
-RUN npm install -g http-proxy-middleware
+RUN npm install -g --no-audit --force express
+RUN npm install -g --no-audit --force http-proxy-middleware
 
 # Copy root filesystem
 ADD ha-proxy.js.gtpl /

@@ -17,7 +17,7 @@ const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middl
 const ipaddr = require('ipaddr.js');
 
 const apiProxy = createProxyMiddleware({
-  target: '{{ .webui-url }}',
+  target: '{{ index . "webui-url" }}',
   pathFilter: '/',
   changeOrigin: true, // for vhosted sites
   //logger: console,

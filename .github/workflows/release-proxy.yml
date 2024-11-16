@@ -1,3 +1,5 @@
+# RaspberryMatic HA-Proxy Addon Release build
+# yamllint disable rule:truthy
 ---
 name: Release Build (HA Proxy-Addon)
 

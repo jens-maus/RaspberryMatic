@@ -2938,17 +2938,6 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
         append html "</tr>"
       }
         
-      set param BOOST_AFTER_WINDOW_OPEN
-      if { [info exists ps($param)] == 1  } {
-        incr prn
-        append html "<tr>"
-         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostAfterWindowOpen}</td>"
-         append html "<td name=\"expertParam\" class=\"hidden\">"
-         append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
-         append html "</td>"
-        append html "</tr>"
-      }
-
       set param DURATION_5MIN
       if { [info exists ps($param)] == 1  } {
         incr prn
@@ -3147,7 +3136,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
 
 	# right	
     set param BOOST_POSITION
-	if { [info exists ps($param)] == 1  } {
+    if { [info exists ps($param)] == 1  } {
 	  incr prn
       array_clear options
       set i 0
@@ -3159,6 +3148,17 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
      append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
     append html "</tr>"
+
+    set param BOOST_AFTER_WINDOW_OPEN
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      append html "<tr>"
+       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostAfterWindowOpen}</td>"
+       append html "<td name=\"expertParam\" class=\"hidden\">"
+       append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
+       append html "</td>"
+      append html "</tr>"
+    }
   append html "</table>"
 
 

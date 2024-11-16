@@ -25,7 +25,7 @@ LABEL \
     io.hass.name="RaspberryMatic CCU (Proxy)" \
     io.hass.description="A web proxy to your homematicIP CCU" \
     io.hass.url=https://github.com/jens-maus/RaspberryMatic/tree/master/home-assistant-addon-proxy \
-    io.hass.arch="armhf|aarch64|i386|amd64" \
+    io.hass.arch="armv7|aarch64|amd64" \
     io.hass.type="addon" \
     io.hass.version=${package_version}
 

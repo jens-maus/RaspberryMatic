@@ -8,10 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build HA Proxy-Addon
-    # strategy:
-    #  matrix:
-    #    arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -80,7 +76,7 @@ jobs:
         with:
           context: home-assistant-addon-proxy
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: false
+          push: true
           labels: |
             org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
             org.opencontainers.image.description=A web proxy to your homematicIP CCU

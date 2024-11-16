@@ -20,25 +20,16 @@
      "stringTableDisplayInformation" : "Display information",
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -2937,6 +2937,17 @@
+@@ -2937,7 +2937,7 @@
          append html "</td>"
          append html "</tr>"
        }
+-
 +        
-+      set param BOOST_AFTER_WINDOW_OPEN
-+      if { [info exists ps($param)] == 1  } {
-+        incr prn
-+        append html "<tr>"
-+         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostAfterWindowOpen}</td>"
-+         append html "<td name=\"expertParam\" class=\"hidden\">"
-+         append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
-+         append html "</td>"
-+        append html "</tr>"
-+      }
- 
        set param DURATION_5MIN
        if { [info exists ps($param)] == 1  } {
-@@ -2962,18 +2973,11 @@
+         incr prn
+@@ -2962,18 +2962,11 @@
  
      append html "<table class=\"ProfileTbl\">"
      # left
@@ -61,7 +52,7 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        if { [info exists ps(TEMPERATURE_WINDOW_OPEN_COOLING)] == 1  } {
-@@ -2981,7 +2985,7 @@
+@@ -2981,7 +2974,7 @@
        } else {
          append html "<tr><td>\${stringTableTemperatureFallWindowOpen}</td>"
        }
@@ -70,19 +61,20 @@
        append html "</tr>"
      }
  
-@@ -2990,7 +2994,7 @@
+@@ -2990,15 +2983,147 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        append html "<tr><td>\${lblTemperatureWindowOpenCooling}</td>"
 -        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]<input id=\"comfortOld\" type=\"hidden\" value=\"$ps($param)\"</td>"
 +        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
-       append html "</tr>"
-     }
- 
-@@ -2999,6 +3003,138 @@
-   append html "<hr>"
- 
-   append html "<table class=\"ProfileTbl\">"
++      append html "</tr>"
++    }
++
++  append html "</table>"
++
++  append html "<hr>"
++
++  append html "<table class=\"ProfileTbl\">"
 +
 +    set param TEMPERATUREFALL_MODUS
 +    if { [info exists ps($param)] == 1  } {
@@ -140,9 +132,9 @@
 +      incr prn
 +       append html "<td>\${stringTableValveMaximumPosition}</td>"
 +       append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
-+      append html "</tr>"
-+    }
-+
+       append html "</tr>"
+     }
+ 
 +    # left
 +    incr prn
 +    set param TEMPERATURE_OFFSET
@@ -209,23 +201,23 @@
 +    }
 +	}
 +	
-+  append html "</table>"
-+
-+  append html "<hr>"
-+
-+  append html "<table class=\"ProfileTbl\">"
+   append html "</table>"
+ 
+   append html "<hr>"
+ 
+   append html "<table class=\"ProfileTbl\">"
 +
      # left
      incr prn
      set param BOOST_TIME_PERIOD
-@@ -3008,9 +3144,24 @@
+@@ -3008,9 +3133,35 @@
      }
      append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
 +
 +	# right	
 +    set param BOOST_POSITION
-+	if { [info exists ps($param)] == 1  } {
++    if { [info exists ps($param)] == 1  } {
 +	  incr prn
 +      array_clear options
 +      set i 0
@@ -237,6 +229,17 @@
 +     append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
 +    }
      append html "</tr>"
++
++    set param BOOST_AFTER_WINDOW_OPEN
++    if { [info exists ps($param)] == 1  } {
++      incr prn
++      append html "<tr>"
++       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostAfterWindowOpen}</td>"
++       append html "<td name=\"expertParam\" class=\"hidden\">"
++       append html  "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]"
++       append html "</td>"
++      append html "</tr>"
++    }
    append html "</table>"
  
 +

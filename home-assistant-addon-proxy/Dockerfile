@@ -14,7 +14,7 @@ ARG package_version
 # Labels
 LABEL \
     org.opencontainers.image.title="RaspberryMatic HA Proxy-Addon" \
-    org.opencontainers.image.description="A web proxy to your homematicIP CCU" \
+    org.opencontainers.image.description="Proxy to externally running RaspberryMatic CCU" \
     org.opencontainers.image.vendor="RasperryMatic OpenSource Project" \
     org.opencontainers.image.authors="RaspberryMatic OpenSource Team" \
     org.opencontainers.image.licenses="Apache-2.0" \
@@ -23,7 +23,7 @@ LABEL \
     org.opencontainers.image.documentation="https://github.com/jens-maus/RaspberryMatic/wiki" \
     org.opencontainers.image.version=${package_version} \
     io.hass.name="RaspberryMatic CCU (Proxy)" \
-    io.hass.description="A web proxy to your homematicIP CCU" \
+    io.hass.description="Proxy to externally running RaspberryMatic CCU" \
     io.hass.url=https://github.com/jens-maus/RaspberryMatic/tree/master/home-assistant-addon-proxy \
     io.hass.arch="armv7|aarch64|amd64" \
     io.hass.type="addon" \

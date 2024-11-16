@@ -41,13 +41,15 @@ jobs:
         with:
           images: ${{ steps.info.outputs.image }}
           labels: |
-            org.opencontainers.image.description=A web proxy to your homematicIP CCU
+            org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
+            org.opencontainers.image.description=Proxy to externally running RaspberryMatic CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.version=${{ steps.info.outputs.version }}
             org.opencontainers.image.url=https://raspberrymatic.de
           annotations: |
-            org.opencontainers.image.description=A web proxy to your homematicIP CCU
+            org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
+            org.opencontainers.image.description=Proxy to externally running RaspberryMatic CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.version=${{ steps.info.outputs.version }}
@@ -79,7 +81,7 @@ jobs:
           push: true
           labels: |
             org.opencontainers.image.title=RaspberryMatic HA Proxy-Addon
-            org.opencontainers.image.description=A web proxy to your homematicIP CCU
+            org.opencontainers.image.description=Proxy to externally running RaspberryMatic CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
@@ -89,7 +91,7 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ steps.info.outputs.version }}
             io.hass.name=RaspberryMatic CCU (Proxy)
-            io.hass.description=A web proxy to your homematicIP CCU
+            io.hass.description=Proxy to externally running RaspberryMatic CCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon-proxy
             io.hass.version=${{ steps.info.outputs.version }}
             io.hass.type=addon

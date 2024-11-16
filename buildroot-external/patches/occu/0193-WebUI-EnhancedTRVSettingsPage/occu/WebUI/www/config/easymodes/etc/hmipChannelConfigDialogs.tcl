@@ -2937,7 +2937,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
         append html "</td>"
         append html "</tr>"
       }
-        
+
       set param DURATION_5MIN
       if { [info exists ps($param)] == 1  } {
         incr prn
@@ -2963,10 +2963,10 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     append html "<table class=\"ProfileTbl\">"
     # left
     set param TEMPERATURE_WINDOW_OPEN
-     array_clear options
-     for {set val 5.0} {$val <= 30.0} {set val [expr $val + 0.5]} {
-       set options($val) "$val &#176;C"
-     }
+    array_clear options
+    for {set val 5.0} {$val <= 30.0} {set val [expr $val + 0.5]} {
+      set options($val) "$val &#176;C"
+    }
     if { [info exists ps($param)] == 1  } {
       incr prn
       if { [info exists ps(TEMPERATURE_WINDOW_OPEN_COOLING)] == 1  } {
@@ -2987,11 +2987,11 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       append html "</tr>"
     }
 
-  append html "</table>"
+    append html "</table>"
 
-  append html "<hr>"
+    append html "<hr>"
 
-  append html "<table class=\"ProfileTbl\">"
+    append html "<table class=\"ProfileTbl\">"
 
     set param TEMPERATUREFALL_MODUS
     if { [info exists ps($param)] == 1  } {
@@ -3003,52 +3003,52 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       set options(3) "\${stringTableTemperatureFallModeOpt3}"
       set options(4) "\${stringTableTemperatureFallModeOpt4}"
       append html "<tr>"
-       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallModeOptions}</td>"
-       append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param ]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.75]]"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallModeOptions}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param ]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.75]]"
       append html "</td></tr>"
     }
 	   
     set param TEMPERATUREFALL_VALUE
     if { [info exists ps($param)] == 1  } {
-	  incr prn
+      incr prn
       append html "<tr>"
-       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallValue}</td>"
-       append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallValue}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
       append html "</tr>"
     }
 	   
-	set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
-	if { [info exists ps($param)] == 1  } {
+    set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
+    if { [info exists ps($param)] == 1  } {
       incr prn
-       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
-       append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
       append html "</tr>"
-	}
+    }
 	
-	append html "</table>"
+    append html "</table>"
 
     append html "<hr>"
 
     append html "<table class=\"ProfileTbl\">"
 	
     array_clear options
-     for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-       set options($val) "[expr int($val * 100)] %"
-     } 
-	  
-	set param VALVE_ERROR_RUN_POSITION
+    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
+      set options($val) "[expr int($val * 100)] %"
+    }
+
+    set param VALVE_ERROR_RUN_POSITION
     if { [info exists ps($param)] == 1  } {
       incr prn
       append html "<tr>"
-       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveStateErrorPosition}</td>"
-       append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveStateErrorPosition}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
 
     set param VALVE_MAXIMUM_POSITION
     if { [info exists ps($param)] == 1  } {
       incr prn
-       append html "<td>\${stringTableValveMaximumPosition}</td>"
-       append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
+        append html "<td>\${stringTableValveMaximumPosition}</td>"
+        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
       append html "</tr>"
     }
 
@@ -3059,24 +3059,24 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     for {set val -3.5} {$val <= 3.5} {set val [expr $val + 0.5]} {
       set options($val) "$val &#176;C"
     }
-	append html "<tr>"
-     append html "<td>\${stringTableTemperatureOffset}</td>"
-     append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"	
+    append html "<tr>"
+    append html "<td>\${stringTableTemperatureOffset}</td>"
+    append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
 	
-	# right
-	 array_clear options
-      for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-        set options($val) "[expr int($val * 100)] %"
-      }
-	set param VALVE_OFFSET
+    # right
+	  array_clear options
+    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
+      set options($val) "[expr int($val * 100)] %"
+    }
+    set param VALVE_OFFSET
     if { [info exists ps($param)] == 1  } {
       incr prn
-       append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveOffset}</td>"
-       append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveOffset}</td>"
+        append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
-      append html "</tr>"
+    append html "</tr>"
 	
-	# left
+    # left
     set param DECALCIFICATION_WEEKDAY
     if { [info exists ps($param)] == 1 } {
       incr prn
@@ -3084,13 +3084,13 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       set i 0
       set comment {
         foreach day {\${optionSat} \${optionSun} \${optionMon} \${optionTue} \${optionWed} \${optionThu} \${optionFri}} {
-         set options($i) $day
-         incr i
+          set options($i) $day
+          incr i
         }
       }
       append html "<tr><td>\${stringTableClimateControlRegDecalcDay}</td>"
-       append html "<td>"
-        append html "<select id='separate_$CHANNEL\_$prn' class='SUNDAY' name='DECALCIFICATION_WEEKDAY'>"
+        append html "<td>"
+         append html "<select id='separate_$CHANNEL\_$prn' class='SUNDAY' name='DECALCIFICATION_WEEKDAY'>"
          append html "<option value='0'>\${optionSun}</option>"
          append html "<option value='1'>\${optionMon}</option>"
          append html "<option value='2'>\${optionTue}</option>"
@@ -3103,27 +3103,26 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       append html "<script type=\"text/javascript\">jQuery('\#separate_$CHANNEL\_$prn\').val($ps($param));</script>"
 
     # right
-    set param  DECALCIFICATION_TIME
-	if { [info exists ps($param)] == 1 } {
-	  incr prn
+    set param DECALCIFICATION_TIME
+    if { [info exists ps($param)] == 1 } {
+      incr prn
       array_clear options
       for {set i 0} {$i <= 23} {incr i} {
         set hour $i
-      if {$i < 10} {set hour "0$i"}
-      set options([expr $i * 2]) "$hour:00"
+        if {$i < 10} {set hour "0$i"}
+        set options([expr $i * 2]) "$hour:00"
       }
-       append html "<td>\${stringTableClimateControlRegDecalcTime}</td>"
-       append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
+        append html "<td>\${stringTableClimateControlRegDecalcTime}</td>"
+        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
       append html "</tr>"
     }
-	}
+  }
 	
   append html "</table>"
 
   append html "<hr>"
 
   append html "<table class=\"ProfileTbl\">"
-
     # left
     incr prn
     set param BOOST_TIME_PERIOD
@@ -3134,18 +3133,18 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
       append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
 
-	# right	
+    # right
     set param BOOST_POSITION
     if { [info exists ps($param)] == 1  } {
-	  incr prn
+	    incr prn
       array_clear options
       set i 0
-       for {set val 0} {$val <= 100} {incr val 5} {
+      for {set val 0} {$val <= 100} {incr val 5} {
         set options($val) "$val %"
-      incr i;
-    }
-     append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostPosition}</td>"
-     append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
+        incr i;
+      }
+      append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableBoostPosition}</td>"
+      append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
     append html "</tr>"
 
@@ -3160,7 +3159,6 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       append html "</tr>"
     }
   append html "</table>"
-
 
   if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {
     append html "<hr>"

@@ -134,7 +134,7 @@ jQuery.extend(true,langJSON, {
     "chType_JALOUSIE" : "Jalousie actuator",
     "chType_KEY" : "Push button",
     "chType_KEY_TRANSCEIVER" : "Push button",
-    "chType_KWL_CONTROLLER_TRANSMITTER" : "",
+    "chType_KWL_CONTROLLER_TRANSMITTER" : "Controlled Ventilation System Controller",
     "chType_LEVEL_COMMAND_TRANSMITTER_CO2" : "Condition CO2",
     "chType_LEVEL_COMMAND_TRANSMITTER_HUMIDITY" : "Condition humidity",
     "chType_LEVEL_COMMAND_TRANSMITTER_TEMPERATURE" : "Condition temperature",

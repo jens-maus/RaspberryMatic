@@ -137,7 +137,7 @@ jQuery.extend(true,langJSON, {
     "chType_JALOUSIE" : "Jalousieaktor",
     "chType_KEY" : "Taster",
     "chType_KEY_TRANSCEIVER" : "Taster",
-    "chType_KWL_CONTROLLER_TRANSMITTER" : "",
+    "chType_KWL_CONTROLLER_TRANSMITTER" : "KWL Controller Sender",
     "chType_LEVEL_COMMAND_TRANSMITTER_CO2" : "Entscheidungswert CO2",
     "chType_LEVEL_COMMAND_TRANSMITTER_HUMIDITY" : "Entscheidungswert Feuchtigkeit",
     "chType_LEVEL_COMMAND_TRANSMITTER_TEMPERATURE" : "Entscheidungswert Temperatur",

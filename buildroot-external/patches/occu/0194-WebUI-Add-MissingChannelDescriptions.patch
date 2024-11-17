@@ -57,6 +57,15 @@
  
      "chType_ACCELERATION_TRANSCEIVER" : "Lage-/Beschleunigungssensor",
      "chType_ACCESS_RECEIVER" : "Benutzer",
+@@ -108,7 +159,7 @@
+     "chType_MULTI_MODE_INPUT_TRANSMITTER_4" : "Level",
+     "chType_MULTI_MODE_INPUT_TRANSMITTER_5" : "Bedingung",
+     "chType_OPTICAL_SIGNAL_RECEIVER" : "Farbsignal",
+-    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Farbsignal</br>alle Tasten",
++    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Farbsignal<br/>alle Tasten",
+     "chType_OPTICAL_SIGNAL_RECEIVERB" : "Statusmitteilung Farbsignal",
+     "chType_PASSAGE_DETECTOR_COUNTER_TRANSMITTER" : "Durchgangsz%E4hler",
+     "chType_PASSAGE_DETECTOR_DIRECTION_TRANSMITTER_LR" : "Durchgangserkennung<br/>Links nach Rechts",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.channelDescription.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.channelDescription.js
 @@ -1,5 +1,56 @@
@@ -69,11 +78,11 @@
 +    "chType_CAPACITIVE_FILLING_LEVEL_SENSOR" : "Filling Level Sensor",
 +    "chType_CARBON_DIOXIDE_RECEIVER" : "Carbon Dioxide Sensor",
 +    "chType_CENTRAL_KEY" : "Central Key",
-+    "chType_CLIMATECONTROL_REGULATOR" : "Climate Control</br>Regulator",
-+    "chType_CLIMATECONTROL_VENT_DRIVE" : "Climate Control</br>Vent Drive",
++    "chType_CLIMATECONTROL_REGULATOR" : "Climate Control<br/>Regulator",
++    "chType_CLIMATECONTROL_VENT_DRIVE" : "Climate Control<br/>Vent Drive",
 +    "chType_CLIMATE_TRANSCEIVER" :"Temperature and<br/>Humidity sensor",
 +    "chType_COND_SWITCH_TRANSMITTER_NOX" : "Decision Value NOX",
-+    "chType_COND_SWITCH_TRANSMITTER_PARTICULATE_MATTER" : "Decision Value<br/>Partical Matter",
++    "chType_COND_SWITCH_TRANSMITTER_PARTICULATE_MATTER" : "Decision Value<br/>Particle Matter",
 +    "chType_COND_SWITCH_TRANSMITTER_VOC" : "Decision Value VOC",
 +    "chType_DISPLAY" : "Display",
 +    "chType_DISPLAY_INPUT_TRANSMITTER" : "Display Input",
@@ -116,3 +125,12 @@
      "chType_ACCELERATION_TRANSCEIVER" : "Position/Acceleration sensor",
      "chType_ACCESS_RECEIVER" : "User",
      "chType_ACCESSPOINT_GENERIC_RECEIVER_1" : "Homematic IP Wired Bus Channel 1",
+@@ -105,7 +156,7 @@
+     "chType_MULTI_MODE_INPUT_TRANSMITTER_4" : "Level",
+     "chType_MULTI_MODE_INPUT_TRANSMITTER_5" : "Condition",
+     "chType_OPTICAL_SIGNAL_RECEIVER" : "Colour signal",
+-    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Colour signal</br>all keys",
++    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Colour signal<br/>all keys",
+     "chType_OPTICAL_SIGNAL_RECEIVERB" : "Status report colour signal",
+     "chType_PASSAGE_DETECTOR_COUNTER_TRANSMITTER" : "Passage counter",
+     "chType_PASSAGE_DETECTOR_DIRECTION_TRANSMITTER_LR" : "Passage detection<br/>left to right",

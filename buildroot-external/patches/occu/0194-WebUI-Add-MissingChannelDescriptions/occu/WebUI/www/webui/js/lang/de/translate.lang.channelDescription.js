@@ -159,7 +159,7 @@ jQuery.extend(true,langJSON, {
     "chType_MULTI_MODE_INPUT_TRANSMITTER_4" : "Level",
     "chType_MULTI_MODE_INPUT_TRANSMITTER_5" : "Bedingung",
     "chType_OPTICAL_SIGNAL_RECEIVER" : "Farbsignal",
-    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Farbsignal</br>alle Tasten",
+    "chType_OPTICAL_SIGNAL_RECEIVERA" : "Farbsignal<br/>alle Tasten",
     "chType_OPTICAL_SIGNAL_RECEIVERB" : "Statusmitteilung Farbsignal",
     "chType_PASSAGE_DETECTOR_COUNTER_TRANSMITTER" : "Durchgangsz%E4hler",
     "chType_PASSAGE_DETECTOR_DIRECTION_TRANSMITTER_LR" : "Durchgangserkennung<br/>Links nach Rechts",

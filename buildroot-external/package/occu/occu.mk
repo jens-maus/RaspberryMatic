@@ -163,6 +163,11 @@ define OCCU_WRAP_WEBUI_JS
 endef
 OCCU_POST_PATCH_HOOKS += OCCU_WRAP_WEBUI_JS
 
+define OCCU_POST_PATCH_FIXUP
+		find $(@D) -type f -not -name '.?*' -empty -print -delete
+endef
+OCCU_POST_PATCH_HOOKS += OCCU_POST_PATCH_FIXUP
+
 define OCCU_USERS
 	-      -1 hm     -1 * - - -      homematic access group
 	-      -1 status -1 * - - -      status access group

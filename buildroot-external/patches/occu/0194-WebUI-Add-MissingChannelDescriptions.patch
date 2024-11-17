@@ -7,7 +7,7 @@
 +    "chType_AKKU" : "Akku",
 +    "chType_ALARMACTUATOR" : "Alarmgeber",
 +    "chType_BRIGHTNESS_TRANSMITTER" : "Helligkeitsensor",
-+    "chType_CAPACITIVE_FILLING_LEVEL_SENSOR" : "Füllstandssensor",
++    "chType_CAPACITIVE_FILLING_LEVEL_SENSOR" : "F%FCllstandssensor",
 +    "chType_CARBON_DIOXIDE_RECEIVER" : "Kohlendioxidsensor",
 +    "chType_CENTRAL_KEY" : "Zentralentaste",
 +    "chType_CLIMATECONTROL_REGULATOR" : "Heizungsregler Temperatur",
@@ -24,7 +24,7 @@
 +    "chType_DOOR_RECEIVER" : "Tor%F6ffner",
 +    "chType_ENERGY_MANAGMENT" : "Energie Management",
 +    "chType_GENERIC_MEASURING_TRANSMITTER" : "Universeller Sensorkanal",
-+    "chType_KEYMATIC" : "Türschlossanrieb Keymatic",
++    "chType_KEYMATIC" : "T%FCrschlossanrieb Keymatic",
 +    "chType_LISTENER" : "Central-Device 63",
 +    "chType_MAINTENANCE" : "Wartungskanal",
 +    "chType_POWER_MAINS_TRANSMITTER" : "Stromnetzsensor",
@@ -75,6 +75,15 @@
      "chType_OPTICAL_SIGNAL_RECEIVERB" : "Statusmitteilung Farbsignal",
      "chType_PASSAGE_DETECTOR_COUNTER_TRANSMITTER" : "Durchgangsz%E4hler",
      "chType_PASSAGE_DETECTOR_DIRECTION_TRANSMITTER_LR" : "Durchgangserkennung<br/>Links nach Rechts",
+@@ -175,7 +226,7 @@
+     "SENSOR_WINDOW" : "Homematic IP Fenster Zustandserkennung",
+     "SWITCH_ACTUATOR" : "Homematic IP Schaltaktor",
+     "WALLMOUNTED_THERMOSTAT" : "Homematic IP Wandthermostat",
+-    "FLOOR_HEATING" : "Homematic IP Fußbodenheizungsaktor",
++    "FLOOR_HEATING" : "Homematic IP Fu%DFbodenheizungsaktor",
+ 
+     "theEnd" : ""
+   }
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.channelDescription.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.channelDescription.js
 @@ -1,5 +1,56 @@

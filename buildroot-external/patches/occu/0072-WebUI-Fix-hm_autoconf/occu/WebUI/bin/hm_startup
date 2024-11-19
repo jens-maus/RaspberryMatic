@@ -199,9 +199,13 @@ proc fix_alarmDPs {} {
   }
 }
 
-proc clear_sysalarm {} {
+proc clear_sysvars {} {
   rega_script {
     object sv=dom.GetObject(ID_GW_SYSALARM);
+    if(sv != null) {
+      sv.State(0);
+    }
+    sv=dom.GetObject(ID_GW_SYSSERVICE);
     if(sv != null) {
       sv.State(0);
     }
@@ -216,4 +220,4 @@ checkDevices
 create_default_objects
 convert_byte2int_HSSDPs
 fix_alarmDPs
-clear_sysalarm
+clear_sysvars

@@ -203,11 +203,11 @@ proc clear_sysvars {} {
   rega_script {
     object sv=dom.GetObject(ID_GW_SYSALARM);
     if(sv != null) {
-      sv.State(0);
+      sv.Variable(0);
     }
     sv=dom.GetObject(ID_GW_SYSSERVICE);
     if(sv != null) {
-      sv.State(0);
+      sv.Variable(0);
     }
   }
 }

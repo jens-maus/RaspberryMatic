@@ -227,6 +227,28 @@
    append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
  
    append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
+@@ -406,10 +419,18 @@
+   set select ""
+   foreach val [lsort -real [array names optionValues]] {
+ 
+-     if {$val == $value} {
+-      set select "selected=\"selected\""
++     if {[string is double -strict $value]} {
++       if {[expr abs($val - $value)] < 1e-15} {
++         set select "selected=\"selected\""
++       } else {
++         set select ""
++       }
+      } else {
+-      set select ""
++       if {$val == $value} {
++         set select "selected=\"selected\""
++       } else {
++         set select ""
++       }
+      }
+ 
+      append s "<option class=\"[extractParamFromTranslationKey $optionValues($val)]\" value=$val $select>$optionValues($val)</option>"
 --- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
 +++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
 @@ -24,7 +24,12 @@

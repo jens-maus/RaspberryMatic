@@ -419,10 +419,18 @@ proc getOptionBox {param options value chn prn {extraparam ""}} {
   set select ""
   foreach val [lsort -real [array names optionValues]] {
 
-     if {$val == $value} {
-      set select "selected=\"selected\""
+     if {[string is double -strict $value]} {
+       if {[expr abs($val - $value)] < 1e-15} {
+         set select "selected=\"selected\""
+       } else {
+         set select ""
+       }
      } else {
-      set select ""
+       if {$val == $value} {
+         set select "selected=\"selected\""
+       } else {
+         set select ""
+       }
      }
 
      append s "<option class=\"[extractParamFromTranslationKey $optionValues($val)]\" value=$val $select>$optionValues($val)</option>"

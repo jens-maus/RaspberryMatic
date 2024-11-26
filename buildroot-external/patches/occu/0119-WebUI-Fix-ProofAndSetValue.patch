@@ -199,17 +199,20 @@
        }
        default {return "<span class=\"attention\">missing description</span>"}
     }
-@@ -287,6 +297,9 @@
+@@ -287,6 +297,12 @@
        set maxValue "stringUTF8"
        set maxLength "maxLength=16"
        set sizeTextfield 16
-+    } elseif {($param == "METER_CONSTANT_VOLUME") || ($param == "METER_CONSTANT_ENERGY")} {
++    } elseif {($param == "METER_CONSTANT_VOLUME")} {
 +      set minValue [format {%1.2f} $param_descr(MIN)]
 +      set maxValue [format {%1.2f} $param_descr(MAX)]
++    } elseif {($param == "METER_CONSTANT_ENERGY")} {
++      set minValue [format {%1.0f} $param_descr(MIN)]
++      set maxValue [format {%1.0f} $param_descr(MAX)]
      }
    }
  
-@@ -309,7 +322,7 @@
+@@ -309,7 +325,7 @@
  
    # Limit float to 2 decimal places
    if {[llength [split $value "."]] == 2} {
@@ -218,7 +221,7 @@
        catch {set value [format {%1.1f} $value]}
      } else {
        catch {set value [format {%1.2f} $value]}
-@@ -392,7 +405,7 @@
+@@ -392,7 +408,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
@@ -227,7 +230,7 @@
    append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
  
    append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
-@@ -406,10 +419,18 @@
+@@ -406,10 +422,18 @@
    set select ""
    foreach val [lsort -real [array names optionValues]] {
  

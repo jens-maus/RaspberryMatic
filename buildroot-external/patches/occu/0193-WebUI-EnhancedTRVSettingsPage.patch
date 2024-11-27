@@ -20,7 +20,7 @@
      "stringTableDisplayInformation" : "Display information",
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -2962,18 +2962,11 @@
+@@ -2966,18 +2966,11 @@
  
      append html "<table class=\"ProfileTbl\">"
      # left
@@ -41,7 +41,7 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        if { [info exists ps(TEMPERATURE_WINDOW_OPEN_COOLING)] == 1  } {
-@@ -2981,7 +2974,7 @@
+@@ -2985,7 +2978,7 @@
        } else {
          append html "<tr><td>\${stringTableTemperatureFallWindowOpen}</td>"
        }
@@ -50,7 +50,7 @@
        append html "</tr>"
      }
  
-@@ -2990,10 +2983,141 @@
+@@ -2994,10 +2987,141 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        append html "<tr><td>\${lblTemperatureWindowOpenCooling}</td>"
@@ -193,7 +193,7 @@
    append html "</table>"
  
    append html "<hr>"
-@@ -3008,7 +3132,32 @@
+@@ -3012,7 +3136,32 @@
      }
      append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"

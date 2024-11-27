@@ -1,11 +1,15 @@
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -1119,7 +1119,7 @@
+@@ -1119,7 +1119,11 @@
      append html "};"
  
      append html "window.setTimeout(function() {"
 -      append html "var elmOperationMode = jQuery(\"#separate_$CHANNEL\_2\"),"
-+      append html "var elmOperationMode = jQuery(\"#separate_$CHANNEL\_1\"),"
++      if {[string equal $dev_descr(TYPE) "HmIP-MOD-RC8"] == 1} {
++        append html "var elmOperationMode = jQuery(\"#separate_$CHANNEL\_2\"),"
++      } else {
++        append html "var elmOperationMode = jQuery(\"#separate_$CHANNEL\_1\"),"
++      }
        append html "mode = elmOperationMode.val(),"
        append html "chn = elmOperationMode.prop(\"id\").split(\"_\")\[2\];"
        append html "showHideKeyParams(mode, chn);"

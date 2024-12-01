@@ -38,7 +38,7 @@ index 9a6790cc17..a521653ff8 100644
 +obj-$(CONFIG_CMD_FILEENV) += fileenv.o
  obj-$(CONFIG_CMD_SPI) += spi.o
  obj-$(CONFIG_CMD_STRINGS) += strings.o
- obj-$(CONFIG_CMD_SMC) += smccc.o
+ obj-$(CONFIG_CMD_SMBIOS) += smbios.o
 diff --git a/cmd/fileenv.c b/cmd/fileenv.c
 new file mode 100644
 index 0000000000..9891cb05ab

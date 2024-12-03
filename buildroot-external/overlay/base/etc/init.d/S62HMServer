@@ -167,7 +167,7 @@ start() {
   # calculate the maximum used heap size (-Xmx) depending on the
   # total amount of RAM we have (use max. 25%) - use multiple of 128MB
   if [[ -e /sys/fs/cgroup/memory.max ]]; then
-    MAXHEAP=$(cat /sys/fs/cgroup/memory.max | awk '{print int(($1/1024/1024)*0.25/128)*128}')
+    MAXHEAP=$(awk '{print int(($1/1024/1024)*0.25/128)*128}' /sys/fs/cgroup/memory.max)
   else
     MAXHEAP=$(/usr/bin/free -m | grep Mem: | awk '{print int($2*0.25/128)*128}')
   fi

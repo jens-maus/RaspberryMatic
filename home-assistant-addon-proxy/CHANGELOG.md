@@ -1,5 +1,8 @@
 # ChangeLog
 
+## 0.4.2
+- minor fixes
+
 ## 0.4.1
 - minor fixes
 

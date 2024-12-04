@@ -1,14 +1,9 @@
 # ChangeLog
 
-## 0.4.2
-- minor fixes
-
-## 0.4.1
-- minor fixes
-
-## 0.4.0
+## 0.4.3
 - add healthcheck for better addon watchdog support
 - add debug output when starting ha-proxy.
+- minor fixes
 
 ## 0.3.0
 - initial release

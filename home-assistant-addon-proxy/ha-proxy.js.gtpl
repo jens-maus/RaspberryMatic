@@ -90,10 +90,10 @@ app.use((req, res, next) => {
 }, apiProxy);
 
 // listen on port 8099
-app.listen(8099, (err) =>
+app.listen(8099, (err) => {
   if(err) {
     console.error(`ERROR: could not start ha-proxy: ${err}`);
   } else {
     console.log('Serving proxy requests for ' + '{{ index . "webui-url" }}' + ' on port 8099.');
   }
-);
+});

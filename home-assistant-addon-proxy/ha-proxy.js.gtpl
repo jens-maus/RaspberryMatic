@@ -88,4 +88,6 @@ app.use((req, res, next) => {
     res.status(403).end();
   }
 }, apiProxy);
+console.log('Serving proxy requests for ' + '{{ index . "webui-url" }}' + ' on port 8099...');
 app.listen(8099);
+console.log('Stopped serving proxy requests.');

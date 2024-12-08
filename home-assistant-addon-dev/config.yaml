@@ -10,6 +10,7 @@ arch:
   - amd64
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot)
 url: https://github.com/jens-maus/RaspberryMatic/
+apparmor: true
 ingress: true
 ingress_stream: true
 panel_title: RaspberryMatic (snapshot)

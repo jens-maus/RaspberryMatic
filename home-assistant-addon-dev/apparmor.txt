@@ -41,6 +41,9 @@ profile raspberrymatic-dev flags=(attach_disconnected,mediate_deleted,complain) 
   /usr/local/** rwx,
   /etc/config/** rwx,
 
+  # suppress ptrace denials when using 'docker ps' or using 'ps' inside a container
+  ptrace (trace,read) peer=docker-default,
+
   # docker daemon confinement requires explict allow rule for signal
   signal (receive) set=(kill,term) peer=/usr/bin/docker,
 }

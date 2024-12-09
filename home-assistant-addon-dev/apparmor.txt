@@ -32,7 +32,8 @@ profile raspberrymatic-dev flags=(attach_disconnected,mediate_deleted,complain) 
   /opt/** ix,
   /etc/init.d/** rwix,
   /var/run/** mrwkl,
-  /run/{,**} rwk,
+  /run/** mrwkl,
+  /proc/self/attr/** mrwkl,
   /dev/* mrwkl,
   /tmp/** rwk,
 

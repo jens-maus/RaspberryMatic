@@ -20,7 +20,5 @@ options:
   webui-url: http://homematic-raspi
 schema:
   webui-url: str?
-map:
-  - config:ro
 environment:
   HM_HAPROXY_SRC: 172.30.32.2/32

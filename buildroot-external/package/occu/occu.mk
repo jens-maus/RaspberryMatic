@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OCCU_VERSION = 3.79.6-4
+OCCU_VERSION = 3.79.6-6
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 OCCU_LICENSE = HMSL
 OCCU_LICENSE_FILES = LicenseDE.txt
@@ -162,6 +162,11 @@ define OCCU_WRAP_WEBUI_JS
 		sed -i ':a;N;$$!ba;s/\\n\n/\\n/g' $(@D)/WebUI/www/webui/webui.js
 endef
 OCCU_POST_PATCH_HOOKS += OCCU_WRAP_WEBUI_JS
+
+define OCCU_POST_PATCH_FIXUP
+		find $(@D) -type f -not -name '.?*' -empty -print -delete
+endef
+OCCU_POST_PATCH_HOOKS += OCCU_POST_PATCH_FIXUP
 
 define OCCU_USERS
 	-      -1 hm     -1 * - - -      homematic access group

@@ -95,36 +95,51 @@ proc create_default_rooms {} {
 
 proc create_default_sysvars {} {
   rega_script {
-    object sv=dom.CreateObject(OT_ALARMDP, "${sysVarAlarmZone1}");
-    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
-    sv.DPInfo("${sysVarAlarmZone1Msg}");
-    sv.ValueUnit("");
-    sv.ValueType( ivtBinary );
-    sv.ValueSubType( istAlarm );
-    sv.ValueName1("${sysVarAlarmZone1Triggered}");
-    sv.ValueName0("${sysVarAlarmZone1NotTriggered}");
-    sv.AlType(atSystem);
-    sv.AlArm(true);
+    object sv=dom.CreateObject(OT_ALARMDP);
+    if(sv != null) {
+      sv.Name("${sysVarAlarmZone1}");
+      sv.ValueType(ivtBinary);
+      sv.ValueSubType(istAlarm);
+      sv.ValueName0("${sysVarAlarmZone1NotTriggered}");
+      sv.AddMetaData("trIDValue0", "sysVarAlarmZone1NotTriggered");
+      sv.ValueName1("${sysVarAlarmZone1Triggered}");
+      sv.AddMetaData("trIDValue1", "sysVarAlarmZone1Triggered");
+      sv.ValueUnit("");
+      sv.AlType(atSystem);
+      sv.AlArm(true);
+      sv.AlSetBinaryCondition();
+      sv.Internal(false);
+      sv.State(false);
+      sv.DPInfo("${sysVarAlarmZone1Msg}");
+      dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
+      dom.RTUpdate(1);
+    }
 
     sv=dom.GetObject(ID_PRESENT);
-    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
-    sv.Name("${sysVarPresence}");
-    sv.DPInfo("${sysVarPresenceMsg}");
-    sv.ValueUnit("");
-    sv.ValueName1("${sysVarPresencePresent}");
-    sv.ValueName0("${sysVarPresenceNotPresent}");
+    if(sv != null) {
+      sv.Name("${sysVarPresence}");
+      sv.DPInfo("${sysVarPresenceMsg}");
+      sv.ValueUnit("");
+      sv.ValueName0("${sysVarPresenceNotPresent}");
+      sv.ValueName1("${sysVarPresencePresent}");
+      dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
+    }
 
     sv=dom.GetObject(ID_GW_SYSALARM);
-    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
-    sv.Name("${sysVarAlarmMessages}");
-    sv.DPInfo("${sysVarAlarmMessagesCount}");
-    sv.Internal(0);
+    if(sv != null) {
+      sv.Name("${sysVarAlarmMessages}");
+      sv.DPInfo("${sysVarAlarmMessagesCount}");
+      sv.Internal(true);
+      dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
+    }
 
     sv=dom.GetObject(ID_GW_SYSSERVICE);
-    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
-    sv.Name("${sysVarServiceMessages}");
-    sv.DPInfo("${sysVarServiceMessagesCount}");
-    sv.Internal(0);
+    if(sv != null) {
+      sv.Name("${sysVarServiceMessages}");
+      sv.DPInfo("${sysVarServiceMessagesCount}");
+      sv.Internal(true);
+      dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
+    }
   }
 }
 
@@ -165,6 +180,38 @@ proc convert_byte2int_HSSDPs {} {
   }
 }
 
+proc fix_alarmDPs {} {
+  rega_script {
+    string sDP;
+    foreach(sDP, dom.GetObject(ID_SYSTEM_VARIABLES).EnumIDs()) {
+      object obj = dom.GetObject(sDP.ToInteger());
+      if((obj) && (obj.Type() == OT_ALARMDP)) {
+        object condition = obj.AlCondition();
+        if(condition) {
+          integer count = condition.CndSingleCount();
+          if(count == 0) {
+            ! the binary condition does not yet exist, so create it now
+            obj.AlSetBinaryCondition();
+          }
+        }
+      }
+    }
+  }
+}
+
+proc clear_sysvars {} {
+  rega_script {
+    object sv=dom.GetObject(ID_GW_SYSALARM);
+    if(sv != null) {
+      sv.Variable(0);
+    }
+    sv=dom.GetObject(ID_GW_SYSSERVICE);
+    if(sv != null) {
+      sv.Variable(0);
+    }
+  }
+}
+
 ################################################################################
 # Einsprungpunkt                                                               #
 ################################################################################
@@ -172,3 +219,5 @@ proc convert_byte2int_HSSDPs {} {
 checkDevices
 create_default_objects
 convert_byte2int_HSSDPs
+fix_alarmDPs
+clear_sysvars

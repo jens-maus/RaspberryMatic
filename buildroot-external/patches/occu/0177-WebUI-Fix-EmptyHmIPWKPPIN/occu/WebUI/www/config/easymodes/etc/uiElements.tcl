@@ -297,9 +297,12 @@ proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
       set maxValue "stringUTF8"
       set maxLength "maxLength=16"
       set sizeTextfield 16
-    } elseif {($param == "METER_CONSTANT_VOLUME") || ($param == "METER_CONSTANT_ENERGY")} {
+    } elseif {($param == "METER_CONSTANT_VOLUME")} {
       set minValue [format {%1.2f} $param_descr(MIN)]
       set maxValue [format {%1.2f} $param_descr(MAX)]
+    } elseif {($param == "METER_CONSTANT_ENERGY")} {
+      set minValue [format {%1.0f} $param_descr(MIN)]
+      set maxValue [format {%1.0f} $param_descr(MAX)]
     }
   }
 
@@ -419,10 +422,18 @@ proc getOptionBox {param options value chn prn {extraparam ""}} {
   set select ""
   foreach val [lsort -real [array names optionValues]] {
 
-     if {$val == $value} {
-      set select "selected=\"selected\""
+     if {[string is double -strict $value]} {
+       if {[expr abs($val - $value)] < 1e-15} {
+         set select "selected=\"selected\""
+       } else {
+         set select ""
+       }
      } else {
-      set select ""
+       if {$val == $value} {
+         set select "selected=\"selected\""
+       } else {
+         set select ""
+       }
      }
 
      append s "<option class=\"[extractParamFromTranslationKey $optionValues($val)]\" value=$val $select>$optionValues($val)</option>"

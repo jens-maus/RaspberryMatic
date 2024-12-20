@@ -50,6 +50,8 @@ dtoverlay=dwc2
 [pi1]
 # add rpi1 device tree overlay for RPI-RF-MOD
 dtoverlay=rpi-rf-mod-rpi1
+# use dwc2 for rpi0 as ordinary dwc crashes with kfence
+dtoverlay=dwc2
 
 [all]
 

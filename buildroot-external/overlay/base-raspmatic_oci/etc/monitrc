@@ -352,5 +352,24 @@ check program tailscaleEnabled with path "/usr/bin/test -f /etc/config/tailscale
     group system
     if status != 0 for 1 cycles then unmonitor
 
+# ha-proxy monitoring
+check process ha-proxy with pidfile /var/run/ha-proxy.pid
+    group system
+    start = "/etc/init.d/S51ha-proxy start"
+    stop = "/etc/init.d/S51ha-proxy stop"
+    restart = "/etc/init.d/S51ha-proxy restart"
+    if not exist for 1 cycles then restart
+    if failed port 8099 for 5 cycles then restart
+    if 1 restart within 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'ha-proxy restarted' 'WatchDog: ha-proxy-restart' true"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'ha-proxy: high filedescriptor usage (>95%)' 'WatchDog: ha-proxy-highfd' true"
+    depends on ha-proxyEnabled
+
+# check if ha-proxyEnabled is enabled at all
+check program ha-proxyEnabled with path "/bin/grep -q 'HM_RUNNING_IN_HA=' /var/hm_mode"
+    group system
+    if status != 0 for 1 cycles then unmonitor
+
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

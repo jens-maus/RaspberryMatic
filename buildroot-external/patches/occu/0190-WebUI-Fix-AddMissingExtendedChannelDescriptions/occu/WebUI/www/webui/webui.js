@@ -35609,12 +35609,14 @@ getExtendedDescription = function(oChannelDescr) {
         typeExt = "_" + multiMode;
       } else {
         if (channelAddress != "undefined") {
-          var chn = DeviceList.getChannelByAddress(channelAddress),
-          chnMode = parseInt(chn.multiMode);
+          var chn = DeviceList.getChannelByAddress(channelAddress);
+          if (typeof chn != "undefined") {
+          var chnMode = parseInt(chn.multiMode);
           if (! isNaN(chnMode)) {
             typeExt = "_" + chnMode;
           } else {
             typeExt = "";
+          }
           }
         } else {
           typeExt = "_1";

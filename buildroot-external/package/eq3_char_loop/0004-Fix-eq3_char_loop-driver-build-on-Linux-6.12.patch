@@ -1,5 +1,7 @@
 Remove llseek NULL'd in 6.0 (868941b) removed in 6.12 (cb787f4)
 
+Upstream: Not applicable
+
 Signed-off-by: Nick Venenga <nick@venenga.com>
 
 --- a/KernelDrivers/eq3_char_loop.c

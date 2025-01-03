@@ -1,5 +1,7 @@
 Replace `gpiochip_add` removed in 6.11 (3ff1180) with `gpiochip_add_data` added in 4.5 (b08ea35)
 
+Upstream: Not applicable
+
 Signed-off-by: Nick Venenga <nick@venenga.com>
 
 --- a/kernel/hb_rf_eth.c

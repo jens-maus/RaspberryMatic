@@ -1,0 +1,195 @@
+--- /www/rega/pages/tabs/control/devices.htm.orig
++++ /www/rega/pages/tabs/control/devices.htm
+@@ -42,6 +42,7 @@
+                   <td class="CLASS03304"></td>
+                 </tr>
+                 <%
++                string sEnumDeviceIds = "";
+                   object obj = dom.GetObject(ID_DEVICES);
+                   if ( obj )
+                   {
+@@ -98,6 +99,7 @@
+                             Write("InitGD(jg_0, 50);");
+                             Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
+                           Write("var tmp = new Object();");
++                          Write("tmp['id'] = '"#devs.ID()#"';");
+                           Write("tmp['name'] = '"#devs.Name()#"';");
+                           Write("tmp['trid'] = '"#trId#"';");
+                           Write("arItems[arItems.length] = tmp;");
+@@ -106,6 +108,7 @@
+                           
+                           Write("</td>");
+                         Write("</tr>");
++                        sEnumDeviceIds = sEnumDeviceIds # devs.ID() # "\t";
+                       }
+                     }
+                   }
+@@ -174,9 +177,26 @@
+     if( system.GetSessionVar("sessionTAB1") == "" )
+     {
+       system.SetSessionVar("sessionTAB1",sFirstId);
++    } else {
++      !Fehlerhaftes Laden umgehen
++     
++      string tmpID = system.GetSessionVar("sessionTAB1");
++      string tmp = "";
++      boolean bFound = false;
++      foreach (tmp, sEnumDeviceIds) {
++        if (tmp == tmpID) {
++          bFound = true;
++        }
++      }
++      if (!bFound) {
++        system.SetSessionVar("sessionTAB1",sFirstId);
++      }
+     }
+   %>
+-  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  // to avoid a double channelload, do only initialload if no devices-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == ""){
++    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  }
+   
+   filterOptions = new iseFilter();
+ </script>
+@@ -260,6 +280,7 @@
+ 
+   updateDevTable = function()
+   {
++    var sFirstId = "";
+     colorFilterBtns(fltDL);
+     for (var i = 0; i < arItems.length; i++)
+     {
+@@ -270,8 +291,13 @@
+       else
+       {
+         show(arItems[i]['trid']);
++        if(sFirstId == "")
++        {
++          sFirstId = arItems[i]['id'];
++        }
+       }
+     }
++    loadChannels(sFirstId);
+   };
+ 
+   clearInputLeft = function()
+--- /www/rega/pages/tabs/control/functions.htm.orig
++++ /www/rega/pages/tabs/control/functions.htm
+@@ -36,6 +36,7 @@
+                   </td>
+                 </tr>
+                 <%
++                string sEnumFunctionIds = "";
+                   object obj = dom.GetObject(ID_FUNCTIONS);
+                   if ( obj )
+                   {
+@@ -55,12 +56,14 @@
+                           Write("</td>");
+                           Write("<script type='text/javascript'>");
+                           Write("var tmp = new Object();");
++                          Write("tmp['id'] = '"#func.ID()#"';");
+                           Write("tmp['name'] = '"#func.Name()#"';");
+                           Write("tmp['trid'] = '"#trId#"';");
+                           Write("arItems[arItems.length] = tmp;");
+                           Write("Cursor.set(Cursor.NORMAL);");
+                           Write("</script>");
+                         Write("</tr>");
++                        sEnumFunctionIds = sEnumFunctionIds # func.ID() # "\t";
+                       }
+                     }
+                   }
+@@ -127,9 +130,26 @@
+     if( system.GetSessionVar("sessionTAB1") == "" )
+     {
+       system.SetSessionVar("sessionTAB1",sLoadId);
++    } else {
++      !Fehlerhaftes Laden umgehen
++     
++      string tmpID = system.GetSessionVar("sessionTAB1");
++      string tmp = "";
++      boolean bFound = false;
++      foreach (tmp, sEnumFunctionIds) {
++        if (tmp == tmpID) {
++          bFound = true;
++        }
++      }
++      if (!bFound) {
++        system.SetSessionVar("sessionTAB1",sLoadId);
++      }
+     }
+   %>
+-  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  // to avoid a double channelload, do only initialload if no function-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == ""){
++    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  }
+   
+   // filterOptions = new iseFilter();
+   translatePage("#tblFunctionNames");
+@@ -178,6 +198,7 @@
+ 
+   updateFuncTable = function()
+   {
++    var sFirstId = "";
+     colorFilterBtns(fltFN);
+     for (var i = 0; i < arItems.length; i++)
+     {
+@@ -188,8 +209,13 @@
+       else
+       {
+         show(arItems[i]['trid']);
++        if(sFirstId == "")
++        {
++          sFirstId = arItems[i]['id'];
++        }
+       }
+     }
++    loadChannels(sFirstId);
+   };
+ 
+   clearInputLeft = function()
+--- /www/rega/pages/tabs/control/rooms.htm.orig
++++ /www/rega/pages/tabs/control/rooms.htm
+@@ -56,6 +56,7 @@
+                         Write("</td>");
+                         Write("<script type='text/javascript'>");
+                         Write("var tmp = new Object();");
++                        Write("tmp['id'] = '"#room.ID()#"';");
+                         Write("tmp['name'] = '"#room.Name()#"';");
+                         Write("tmp['trid'] = '"#trId#"';");
+                         Write("arItems[arItems.length] = tmp;");
+@@ -153,7 +154,10 @@
+       }
+     }
+   %>
+-  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  // to avoid a double channelload, do only initialload if no room-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == ""){
++    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
++  }
+   
+   filterOptions = new iseFilter();
+   translatePage("#tblRoomNames");
+@@ -202,6 +206,7 @@
+ 
+   updateRoomTable = function()
+   {
++    var sFirstId = "";
+     colorFilterBtns(fltRM);
+     for (var i = 0; i < arItems.length; i++)
+     {
+@@ -212,8 +217,13 @@
+       else
+       {
+         show(arItems[i]['trid']);
++        if(sFirstId == "")
++        {
++          sFirstId = arItems[i]['id'];
++        }
+       }
+     }
++    loadChannels(sFirstId);
+   };
+ 
+   clearInputLeft = function()

@@ -1,5 +1,5 @@
---- /www/rega/pages/tabs/control/devices.htm.orig
-+++ /www/rega/pages/tabs/control/devices.htm
+--- /occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ /occu/WebUI/www/rega/pages/tabs/control/devices.htm
 @@ -42,6 +42,7 @@
                    <td class="CLASS03304"></td>
                  </tr>
@@ -74,8 +74,8 @@
    };
  
    clearInputLeft = function()
---- /www/rega/pages/tabs/control/functions.htm.orig
-+++ /www/rega/pages/tabs/control/functions.htm
+--- /occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
++++ /occu/WebUI/www/rega/pages/tabs/control/functions.htm
 @@ -36,6 +36,7 @@
                    </td>
                  </tr>
@@ -149,8 +149,8 @@
    };
  
    clearInputLeft = function()
---- /www/rega/pages/tabs/control/rooms.htm.orig
-+++ /www/rega/pages/tabs/control/rooms.htm
+--- /occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
++++ /occu/WebUI/www/rega/pages/tabs/control/rooms.htm
 @@ -56,6 +56,7 @@
                          Write("</td>");
                          Write("<script type='text/javascript'>");

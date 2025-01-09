@@ -72,7 +72,7 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 		rm -f $(TARGET_DIR)/etc/init.d/S01syslogd
 		rm -f $(TARGET_DIR)/etc/init.d/S02klogd
-		rm -f $(TARGET_DIR)/etc/init.d/S49chrony
+		rm -f $(TARGET_DIR)/etc/init.d/S49chronyd
 
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf

@@ -8,10 +8,11 @@ on:
     - cron: '0 0 * * *'  # run at 0 AM UTC
   workflow_dispatch:
     inputs:
-      skip_build:
-        description: 'Skip build (for testing workflow)?'
+      test_workflow:
+        description: 'Test workflow (dry-run)?'
         required: true
-        default: "false"
+        type: 'boolean'
+        default: 'false'
       platforms:
         description: 'List of platforms to build (comma seperated, e.g. "rpi3","rpi4")'
         required: true
@@ -72,7 +73,11 @@ jobs:
           echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-          echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+          if [[ "${{ github.event.inputs.test_workflow }}" == "true" ]]; then
+            echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "FAKE_BUILD=" >> $GITHUB_ENV
+          fi
           JLEVEL=0
           if [[ -f /sys/fs/cgroup/cpu.max ]]; then # cgroups v2
             CPU_QUOTA=$(cut -d ' ' -f1 /sys/fs/cgroup/cpu.max)
@@ -112,7 +117,7 @@ jobs:
       # check linux kernel config consistency
       - name: Check Linux Kconfig
         if: |
-          github.event.inputs.skip_build == 'false' &&
+          github.event.inputs.test_workflow != 'true' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
         run: |

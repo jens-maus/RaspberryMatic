@@ -9,11 +9,13 @@ on:
       release_date:
         description: 'Release date override (YYYYMMDD)'
         required: true
-        default: "YYYYMMDD"
-      skip_build:
-        description: 'Skip build (for testing workflow)?'
+        type: string
+        default: 'YYYYMMDD'
+      test_workflow:
+        description: 'Test workflow (dry-run)?'
         required: true
-        default: "true"
+        type: 'boolean'
+        default: 'false'
       platforms:
         description: 'List of platforms to build (comma seperated, e.g. "rpi3","rpi4")'
         required: true
@@ -56,7 +58,7 @@ jobs:
           echo "occu_version=${OCCU_VERSION}" >> $GITHUB_OUTPUT
           echo "version=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
           echo "date=${BUILD_DATE}" >> $GITHUB_OUTPUT
-          if [[ "${{ github.event.inputs.skip_build }}" == "true" ]]; then
+          if [[ "${{ github.event.inputs.test_workflow }}" == "true" ]]; then
             echo "tag=${OCCU_VERSION}.${BUILD_DATE}-draft" >> $GITHUB_OUTPUT
           else
             echo "tag=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
@@ -151,7 +153,11 @@ jobs:
             fi
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
-          echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+          if [[ "${{ github.event.inputs.test_workflow }}" == "true" ]]; then
+            echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "FAKE_BUILD=" >> $GITHUB_ENV
+          fi
           echo "build_datetime=$(date -u +'%FT%T.%3NZ')" >> $GITHUB_OUTPUT
 
       # - name: remote debug tmate session
@@ -409,7 +415,7 @@ jobs:
           install: true
 
       - name: Login to GitHub Container Registry
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
@@ -439,7 +445,7 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
@@ -548,7 +554,7 @@ jobs:
           git diff
 
       - name: Commit changes
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -570,7 +576,7 @@ jobs:
           fetch-depth: 0
 
       - name: Publish Helm chart
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

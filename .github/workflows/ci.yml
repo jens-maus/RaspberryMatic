@@ -28,10 +28,11 @@ on:
       - 'home-assistant-addon-dev/config.yaml'
   workflow_dispatch:
     inputs:
-      skip_build:
-        description: 'Skip build (for testing workflow)?'
+      test_workflow:
+        description: 'Test workflow (dry-run)?'
         required: true
-        default: "true"
+        type: 'boolean'
+        default: 'false'
 
 # default read-only permission
 permissions:
@@ -142,11 +143,7 @@ jobs:
           echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-          if [[ -z "${{ github.event.inputs.skip_build }}" ]]; then
-            echo "FAKE_BUILD=true" >> $GITHUB_ENV
-          else
-            echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
-          fi
+          echo "FAKE_BUILD=true" >> $GITHUB_ENV
           JLEVEL=0
           if [[ -f /sys/fs/cgroup/cpu.max ]]; then # cgroups v2
             CPU_QUOTA=$(cut -d ' ' -f1 /sys/fs/cgroup/cpu.max)
@@ -301,7 +298,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Extract docker metadata
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         id: meta
         uses: docker/metadata-action@v5.6.1
         with:
@@ -324,7 +321,7 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
@@ -421,7 +418,7 @@ jobs:
           sudo -E ./scripts/install-docker.sh
 
       - name: Test container startup+stop
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         run: |
           docker start ccu
           error=0
@@ -442,7 +439,7 @@ jobs:
           exit $error
 
       - name: Upload debug information
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: actions/upload-artifact@v4
         with:
           path: debug_output.tgz

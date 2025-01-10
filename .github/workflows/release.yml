@@ -31,7 +31,7 @@ jobs:
     permissions:
       contents: write  # ncipollo/release-action
     name: Release draft
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       upload_url: ${{ steps.release_drafter.outputs.upload_url }}
       occu_version: ${{ steps.env.outputs.occu_version }}
@@ -306,7 +306,7 @@ jobs:
     permissions:
       contents: write  # ncipollo/release-action
     name: Update checksums
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build]
 
     steps:
@@ -349,7 +349,7 @@ jobs:
       contents: write  # ncipollo/release-action
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build]
     if: github.event_name != 'pull_request' &&
       ( github.event.inputs.platforms == '' ||
@@ -493,7 +493,7 @@ jobs:
     permissions:
       contents: write  # github-actions[bot] repo write access
     name: Publish build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build, oci-multiarch-build-push]
 
     steps:
@@ -566,7 +566,7 @@ jobs:
     permissions:
       contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, oci-multiarch-build-push, publish-build]
 
     steps:

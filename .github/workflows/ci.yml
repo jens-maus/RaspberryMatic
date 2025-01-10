@@ -28,8 +28,8 @@ on:
       - 'home-assistant-addon-dev/config.yaml'
   workflow_dispatch:
     inputs:
-      test_workflow:
-        description: 'Test workflow (dry-run)?'
+      full_build:
+        description: 'Run a full build incl. docker tests?'
         required: true
         type: 'boolean'
         default: 'false'
@@ -143,7 +143,11 @@ jobs:
           echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-          echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          if [[ "${{ github.event.inputs.full_build }}" == "true" ]]; then
+            echo "FAKE_BUILD=" >> $GITHUB_ENV
+          else
+            echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          fi
           JLEVEL=0
           if [[ -f /sys/fs/cgroup/cpu.max ]]; then # cgroups v2
             CPU_QUOTA=$(cut -d ' ' -f1 /sys/fs/cgroup/cpu.max)
@@ -298,7 +302,6 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Extract docker metadata
-        if: github.event.inputs.test_workflow != 'true'
         id: meta
         uses: docker/metadata-action@v5.6.1
         with:
@@ -321,7 +324,7 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
-        if: github.event.inputs.test_workflow != 'true'
+        if: github.event.inputs.full_build == 'true'
         uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
@@ -415,11 +418,8 @@ jobs:
           sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
           sudo -E ./scripts/install-docker.sh
 
-      - name: remote debug tmate session
-        uses: mxschmitt/action-tmate@v1
-
       - name: Test container startup+stop
-        if: github.event.inputs.test_workflow != 'true'
+        if: github.event.inputs.full_build == 'true'
         run: |
           docker container list -a
           docker start ccu
@@ -441,7 +441,7 @@ jobs:
           exit $error
 
       - name: Upload debug information
-        if: github.event.inputs.test_workflow != 'true'
+        if: github.event.inputs.full_build == 'true'
         uses: actions/upload-artifact@v4
         with:
           path: debug_output.tgz

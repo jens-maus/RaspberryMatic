@@ -372,7 +372,6 @@ jobs:
           push: false
           build-args: |
             tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
-            BUILDKIT_MULTI_PLATFORM=1
           labels: |
             org.opencontainers.image.title=RaspberryMatic
             org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
@@ -394,8 +393,6 @@ jobs:
             io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
-          annotations: |
-            ${{ steps.meta.outputs.annotations }}
 
       - name: Enable experimental features for the Docker daemon and CLI
         run: |

@@ -415,9 +415,13 @@ jobs:
           sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
           sudo -E ./scripts/install-docker.sh
 
+      - name: remote debug tmate session
+        uses: mxschmitt/action-tmate@v1
+
       - name: Test container startup+stop
         if: github.event.inputs.test_workflow != 'true'
         run: |
+          docker container list -a
           docker start ccu
           error=0
           n=1

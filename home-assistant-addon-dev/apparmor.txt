@@ -40,7 +40,10 @@ profile raspberrymatic-dev flags=(attach_disconnected,mediate_deleted,complain) 
   /tmp/** mrkwl,
 
   # Data access
-  /usr/local/** rw,
+  /data/** rw,
+
+  # suppress ptrace denials when using 'docker ps' or using 'ps' inside a container
+  ptrace (trace,read) peer=docker-default,
 
   # docker daemon confinement requires explict allow rule for signal
   signal (receive) set=(kill,term) peer=/usr/bin/docker,

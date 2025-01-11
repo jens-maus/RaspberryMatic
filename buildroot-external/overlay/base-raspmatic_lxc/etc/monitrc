@@ -39,7 +39,7 @@ check process eq3configd with pidfile /var/run/eq3configd.pid
     stop = "/etc/init.d/S50eq3configd stop"
     restart = "/etc/init.d/S50eq3configd restart"
     if not exist for 1 cycles then restart
-    if failed port 43439 type udp for 5 cycles then restart
+    if failed port 43439 type udp for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'eq3configd restarted' 'WatchDog: eq3configd-restart' true"
     if filedescriptors > 95% for 5 cycles then
@@ -81,7 +81,7 @@ check process ssdpd with pidfile /var/run/ssdpd.pid
     stop = "/etc/init.d/S50ssdpd stop"
     restart = "/etc/init.d/S50ssdpd restart"
     if not exist for 1 cycles then restart
-    if failed port 1900 type udp for 5 cycles then restart
+    if failed port 1900 type udp for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'ssdpd restarted' 'WatchDog: ssdpd-restart' true"
     if filedescriptors > 95% for 5 cycles then
@@ -112,7 +112,7 @@ check process hs485d with pidfile /var/run/hs485dLoader.pid
     stop = "/etc/init.d/S60hs485d stop"
     restart = "/etc/init.d/S60hs485d restart"
     if not exist for 1 cycles then restart
-    if failed port 32000 for 5 cycles then restart
+    if failed port 32000 for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'hs485d restarted' 'WatchDog: hs485d-restart' true"
     if filedescriptors > 95% for 5 cycles then
@@ -164,7 +164,7 @@ check process rfd with pidfile /var/run/rfd.pid
     stop = "/etc/init.d/S61rfd stop"
     restart = "/etc/init.d/S61rfd restart"
     if not exist for 1 cycles then restart
-    if failed port 32001 for 5 cycles then restart
+    if failed port 32001 for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'rfd restarted' 'WatchDog: rfd-restart' true"
     if filedescriptors > 95% for 5 cycles then
@@ -182,10 +182,10 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     stop = "/etc/init.d/S62HMServer stop"
     restart = "/etc/init.d/S62HMServer restart"
     if not exist for 1 cycles then restart
-    #if failed port 9293 for 5 cycles then restart
-    #if failed port 32010 for 5 cycles then restart
-    if failed port 39292 for 5 cycles then restart
-    #if failed port 43438 type udp for 5 cycles then restart
+    #if failed port 9293 for 20 cycles then restart
+    #if failed port 32010 for 20 cycles then restart
+    if failed port 39292 for 20 cycles then restart
+    #if failed port 43438 type udp for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'HMIPServer restarted' 'WatchDog: hmipserver-restart' true"
     if filedescriptors > 95% for 5 cycles then
@@ -199,9 +199,9 @@ check process ReGaHss with pidfile /var/run/ReGaHss.pid
     stop = "/etc/init.d/S70ReGaHss stop"
     restart = "/etc/init.d/S70ReGaHss restart"
     if not exist for 1 cycles then restart
-    if failed port 8183 protocol http for 5 cycles then restart
-    if failed port 31999 for 5 cycles then restart
-    if failed port 1998 type udp for 5 cycles then restart
+    if failed port 8183 protocol http for 20 cycles then restart
+    if failed port 31999 for 20 cycles then restart
+    if failed port 1998 type udp for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'ReGaHss restarted' 'WatchDog: regahss-restart' true"
     if filedescriptors > 95% for 5 cycles then

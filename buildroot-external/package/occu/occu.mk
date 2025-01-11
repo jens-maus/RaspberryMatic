@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OCCU_VERSION = 3.79.6-8
+OCCU_VERSION = 3.79.6-9
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 OCCU_LICENSE = HMSL
 OCCU_LICENSE_FILES = LicenseDE.txt
@@ -72,7 +72,7 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 		rm -f $(TARGET_DIR)/etc/init.d/S01syslogd
 		rm -f $(TARGET_DIR)/etc/init.d/S02klogd
-		rm -f $(TARGET_DIR)/etc/init.d/S49chrony
+		rm -f $(TARGET_DIR)/etc/init.d/S49chronyd
 
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf

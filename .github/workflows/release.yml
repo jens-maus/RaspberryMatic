@@ -9,11 +9,13 @@ on:
       release_date:
         description: 'Release date override (YYYYMMDD)'
         required: true
-        default: "YYYYMMDD"
-      skip_build:
-        description: 'Skip build (for testing workflow)?'
+        type: string
+        default: 'YYYYMMDD'
+      test_workflow:
+        description: 'Test workflow (dry-run)?'
         required: true
-        default: "true"
+        type: 'boolean'
+        default: 'false'
       platforms:
         description: 'List of platforms to build (comma seperated, e.g. "rpi3","rpi4")'
         required: true
@@ -29,7 +31,7 @@ jobs:
     permissions:
       contents: write  # ncipollo/release-action
     name: Release draft
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       upload_url: ${{ steps.release_drafter.outputs.upload_url }}
       occu_version: ${{ steps.env.outputs.occu_version }}
@@ -56,7 +58,7 @@ jobs:
           echo "occu_version=${OCCU_VERSION}" >> $GITHUB_OUTPUT
           echo "version=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
           echo "date=${BUILD_DATE}" >> $GITHUB_OUTPUT
-          if [[ "${{ github.event.inputs.skip_build }}" == "true" ]]; then
+          if [[ "${{ github.event.inputs.test_workflow }}" == "true" ]]; then
             echo "tag=${OCCU_VERSION}.${BUILD_DATE}-draft" >> $GITHUB_OUTPUT
           else
             echo "tag=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
@@ -151,7 +153,11 @@ jobs:
             fi
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
-          echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+          if [[ "${{ github.event.inputs.test_workflow }}" == "true" ]]; then
+            echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "FAKE_BUILD=" >> $GITHUB_ENV
+          fi
           echo "build_datetime=$(date -u +'%FT%T.%3NZ')" >> $GITHUB_OUTPUT
 
       # - name: remote debug tmate session
@@ -300,7 +306,7 @@ jobs:
     permissions:
       contents: write  # ncipollo/release-action
     name: Update checksums
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build]
 
     steps:
@@ -343,7 +349,7 @@ jobs:
       contents: write  # ncipollo/release-action
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build]
     if: github.event_name != 'pull_request' &&
       ( github.event.inputs.platforms == '' ||
@@ -409,7 +415,7 @@ jobs:
           install: true
 
       - name: Login to GitHub Container Registry
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
@@ -439,8 +445,8 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
-        if: github.event.inputs.skip_build == 'false'
-        uses: docker/build-push-action@v6.10.0
+        if: github.event.inputs.test_workflow != 'true'
+        uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
           context: oci_build
@@ -487,7 +493,7 @@ jobs:
     permissions:
       contents: write  # github-actions[bot] repo write access
     name: Publish build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, build, oci-multiarch-build-push]
 
     steps:
@@ -548,7 +554,7 @@ jobs:
           git diff
 
       - name: Commit changes
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -560,7 +566,7 @@ jobs:
     permissions:
       contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [release_draft, oci-multiarch-build-push, publish-build]
 
     steps:
@@ -570,7 +576,7 @@ jobs:
           fetch-depth: 0
 
       - name: Publish Helm chart
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.test_workflow != 'true'
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

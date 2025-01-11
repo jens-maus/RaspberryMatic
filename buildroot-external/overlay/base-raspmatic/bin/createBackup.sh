@@ -3,7 +3,7 @@
 #
 # simple wrapper script to generate a CCU compatible sbk file
 #
-# Copyright (c) 2016-2022 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2016-2025 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ if [[ -d "${TMPDIR}" ]]; then
 
   # create a tar.gz of /usr/local
   set +e # disable abort on error
-  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude=/usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
+  /bin/tar -C / --owner=root --group=root --exclude=usr/local/tmp --exclude="usr/local/.*" --exclude=usr/local/lost+found --exclude="${BACKUPDIR}" --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
   if [[ $? -eq 2 ]]; then
     exit 2
   fi

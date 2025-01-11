@@ -28,10 +28,11 @@ on:
       - 'home-assistant-addon-dev/config.yaml'
   workflow_dispatch:
     inputs:
-      skip_build:
-        description: 'Skip build (for testing workflow)?'
+      full_build:
+        description: 'Run a full build incl. docker tests?'
         required: true
-        default: "true"
+        type: 'boolean'
+        default: 'false'
 
 # default read-only permission
 permissions:
@@ -45,7 +46,7 @@ env:
 jobs:
   skip_check:
     name: Duplicate Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       should_skip: ${{ steps.check.outputs.should_skip }}
     steps:
@@ -59,7 +60,7 @@ jobs:
     name: Linter Checks
     needs: skip_check
     if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout Code
@@ -142,10 +143,10 @@ jobs:
           echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-          if [[ -z "${{ github.event.inputs.skip_build }}" ]]; then
-            echo "FAKE_BUILD=true" >> $GITHUB_ENV
+          if [[ "${{ github.event.inputs.full_build }}" == "true" ]]; then
+            echo "FAKE_BUILD=" >> $GITHUB_ENV
           else
-            echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+            echo "FAKE_BUILD=true" >> $GITHUB_ENV
           fi
           JLEVEL=0
           if [[ -f /sys/fs/cgroup/cpu.max ]]; then # cgroups v2
@@ -242,7 +243,7 @@ jobs:
       contents: write  # actions/upload-artifact
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
 
     steps:
@@ -301,7 +302,6 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Extract docker metadata
-        if: github.event.inputs.skip_build == 'false'
         id: meta
         uses: docker/metadata-action@v5.6.1
         with:
@@ -324,8 +324,8 @@ jobs:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
-        if: github.event.inputs.skip_build == 'false'
-        uses: docker/build-push-action@v6.10.0
+        if: github.event.inputs.full_build == 'true'
+        uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
           context: oci_build
@@ -365,7 +365,7 @@ jobs:
 
       # Testing
       - name: Build and load container image for test
-        uses: docker/build-push-action@v6.10.0
+        uses: docker/build-push-action@v6.11.0
         id: docker_build_test
         with:
           context: oci_build
@@ -396,8 +396,6 @@ jobs:
             io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
-          annotations: |
-            ${{ steps.meta.outputs.annotations }}
 
       - name: Enable experimental features for the Docker daemon and CLI
         run: |
@@ -421,8 +419,9 @@ jobs:
           sudo -E ./scripts/install-docker.sh
 
       - name: Test container startup+stop
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.full_build == 'true'
         run: |
+          docker container list -a
           docker start ccu
           error=0
           n=1
@@ -442,7 +441,7 @@ jobs:
           exit $error
 
       - name: Upload debug information
-        if: github.event.inputs.skip_build == 'false'
+        if: github.event.inputs.full_build == 'true'
         uses: actions/upload-artifact@v4
         with:
           path: debug_output.tgz

@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: Build HA Proxy-Addon
     steps:
       - name: Check out repository
@@ -75,7 +75,7 @@ jobs:
           echo "branch_tag=${BRANCH_TAG}" >> $GITHUB_OUTPUT
 
       - name: Build and push container image
-        uses: docker/build-push-action@v6.10.0
+        uses: docker/build-push-action@v6.11.0
         id: docker_build
         with:
           context: home-assistant-addon-proxy

@@ -16,8 +16,8 @@ diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/
 index 91c9769fda20..ececc6b17639 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
 +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-@@ -248,6 +248,12 @@ usb-hub-hog {
- 	};
+@@ -264,6 +264,12 @@
+ 		"PIN_36"; /* GPIOX_19 */
  };
  
 +&i2c2 {

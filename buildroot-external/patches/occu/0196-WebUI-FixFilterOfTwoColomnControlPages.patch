@@ -4,7 +4,7 @@
                    <td class="CLASS03304"></td>
                  </tr>
                  <%
-+                string sEnumDeviceIds = "";
++                  string sEnumDeviceIds = "";
                    object obj = dom.GetObject(ID_DEVICES);
                    if ( obj )
                    {
@@ -24,35 +24,38 @@
                        }
                      }
                    }
-@@ -174,9 +177,26 @@
-     if( system.GetSessionVar("sessionTAB1") == "" )
+@@ -175,8 +178,29 @@
      {
        system.SetSessionVar("sessionTAB1",sFirstId);
-+    } else {
-+      !Fehlerhaftes Laden umgehen
-+     
+     }
++    else
++    {
 +      string tmpID = system.GetSessionVar("sessionTAB1");
 +      string tmp = "";
 +      boolean bFound = false;
-+      foreach (tmp, sEnumDeviceIds) {
-+        if (tmp == tmpID) {
++      foreach (tmp, sEnumDeviceIds)
++      {
++        if (tmp == tmpID)
++        {
 +          bFound = true;
++          break;
 +        }
 +      }
-+      if (!bFound) {
-+        system.SetSessionVar("sessionTAB1",sFirstId);
++      if (bFound == false)
++      {
++        system.SetSessionVar("sessionTAB1", sFirstId);
 +      }
-     }
++    }
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
-+  // to avoid a double channelload, do only initialload if no devices-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == ""){
++  // to avoid a double channelload, perform only initial load if no room-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    
    filterOptions = new iseFilter();
  </script>
-@@ -260,6 +280,7 @@
+@@ -260,6 +284,7 @@
  
    updateDevTable = function()
    {
@@ -60,7 +63,7 @@
      colorFilterBtns(fltDL);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -270,8 +291,13 @@
+@@ -270,8 +295,13 @@
        else
        {
          show(arItems[i]['trid']);
@@ -80,7 +83,7 @@
                    </td>
                  </tr>
                  <%
-+                string sEnumFunctionIds = "";
++                  string sEnumFunctionIds = "";
                    object obj = dom.GetObject(ID_FUNCTIONS);
                    if ( obj )
                    {
@@ -99,35 +102,37 @@
                        }
                      }
                    }
-@@ -127,9 +130,26 @@
-     if( system.GetSessionVar("sessionTAB1") == "" )
+@@ -128,8 +131,28 @@
      {
        system.SetSessionVar("sessionTAB1",sLoadId);
-+    } else {
-+      !Fehlerhaftes Laden umgehen
-+     
+     }
++    else
++    {
 +      string tmpID = system.GetSessionVar("sessionTAB1");
 +      string tmp = "";
 +      boolean bFound = false;
-+      foreach (tmp, sEnumFunctionIds) {
-+        if (tmp == tmpID) {
++      foreach (tmp, sEnumFunctionIds)
++      {
++        if (tmp == tmpID)
++        {
 +          bFound = true;
++          break;
 +        }
 +      }
-+      if (!bFound) {
-+        system.SetSessionVar("sessionTAB1",sLoadId);
++      if (bFound == false)
++      {
++        system.SetSessionVar("sessionTAB1", sLoadId);
 +      }
-     }
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
-+  // to avoid a double channelload, do only initialload if no function-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == ""){
++  // to avoid a double channelload, perform only initial load if no room-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    
    // filterOptions = new iseFilter();
    translatePage("#tblFunctionNames");
-@@ -178,6 +198,7 @@
+@@ -178,6 +201,7 @@
  
    updateFuncTable = function()
    {
@@ -135,7 +140,7 @@
      colorFilterBtns(fltFN);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -188,8 +209,13 @@
+@@ -188,8 +212,13 @@
        else
        {
          show(arItems[i]['trid']);
@@ -164,8 +169,8 @@
      }
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
-+  // to avoid a double channelload, do only initialload if no room-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == ""){
++  // to avoid a double channelload, perform only initial load if no room-filter is set
++  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    

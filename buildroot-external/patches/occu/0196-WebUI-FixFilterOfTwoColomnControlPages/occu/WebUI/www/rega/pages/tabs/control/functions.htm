@@ -36,7 +36,7 @@
                   </td>
                 </tr>
                 <%
-                string sEnumFunctionIds = "";
+                  string sEnumFunctionIds = "";
                   object obj = dom.GetObject(ID_FUNCTIONS);
                   if ( obj )
                   {
@@ -130,24 +130,27 @@
     if( system.GetSessionVar("sessionTAB1") == "" )
     {
       system.SetSessionVar("sessionTAB1",sLoadId);
-    } else {
-      !Fehlerhaftes Laden umgehen
-     
+    }
+    else
+    {
       string tmpID = system.GetSessionVar("sessionTAB1");
       string tmp = "";
       boolean bFound = false;
-      foreach (tmp, sEnumFunctionIds) {
-        if (tmp == tmpID) {
+      foreach (tmp, sEnumFunctionIds)
+      {
+        if (tmp == tmpID)
+        {
           bFound = true;
+          break;
         }
       }
-      if (!bFound) {
-        system.SetSessionVar("sessionTAB1",sLoadId);
+      if (bFound == false)
+      {
+        system.SetSessionVar("sessionTAB1", sLoadId);
       }
-    }
   %>
-  // to avoid a double channelload, do only initialload if no function-filter is set
-  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == ""){
+  // to avoid a double channelload, perform only initial load if no room-filter is set
+  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

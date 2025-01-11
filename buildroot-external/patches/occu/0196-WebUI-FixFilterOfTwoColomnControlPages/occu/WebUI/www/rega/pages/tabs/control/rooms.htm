@@ -154,8 +154,8 @@
       }
     }
   %>
-  // to avoid a double channelload, do only initialload if no room-filter is set
-  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == ""){
+  // to avoid a double channelload, perform only initial load if no room-filter is set
+  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

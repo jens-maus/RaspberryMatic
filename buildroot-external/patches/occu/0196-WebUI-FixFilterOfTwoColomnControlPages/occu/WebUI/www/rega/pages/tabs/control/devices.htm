@@ -42,7 +42,7 @@
                   <td class="CLASS03304"></td>
                 </tr>
                 <%
-                string sEnumDeviceIds = "";
+                  string sEnumDeviceIds = "";
                   object obj = dom.GetObject(ID_DEVICES);
                   if ( obj )
                   {
@@ -177,24 +177,28 @@
     if( system.GetSessionVar("sessionTAB1") == "" )
     {
       system.SetSessionVar("sessionTAB1",sFirstId);
-    } else {
-      !Fehlerhaftes Laden umgehen
-     
+    }
+    else
+    {
       string tmpID = system.GetSessionVar("sessionTAB1");
       string tmp = "";
       boolean bFound = false;
-      foreach (tmp, sEnumDeviceIds) {
-        if (tmp == tmpID) {
+      foreach (tmp, sEnumDeviceIds)
+      {
+        if (tmp == tmpID)
+        {
           bFound = true;
+          break;
         }
       }
-      if (!bFound) {
-        system.SetSessionVar("sessionTAB1",sFirstId);
+      if (bFound == false)
+      {
+        system.SetSessionVar("sessionTAB1", sFirstId);
       }
     }
   %>
-  // to avoid a double channelload, do only initialload if no devices-filter is set
-  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == ""){
+  // to avoid a double channelload, perform only initial load if no room-filter is set
+  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

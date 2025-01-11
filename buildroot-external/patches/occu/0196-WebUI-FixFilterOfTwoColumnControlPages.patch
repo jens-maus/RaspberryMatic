@@ -24,7 +24,7 @@
                        }
                      }
                    }
-@@ -175,8 +178,29 @@
+@@ -175,8 +178,30 @@
      {
        system.SetSessionVar("sessionTAB1",sFirstId);
      }
@@ -49,13 +49,14 @@
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  // to avoid a double channelload, perform only initial load if no room-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == "") {
++  var filterItem = localStorage.getItem('iseSFilters_fltDL');
++  if(!filterItem || JSON.parse(filterItem).ftDevName == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    
    filterOptions = new iseFilter();
  </script>
-@@ -260,6 +284,7 @@
+@@ -260,6 +285,7 @@
  
    updateDevTable = function()
    {
@@ -63,7 +64,7 @@
      colorFilterBtns(fltDL);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -270,8 +295,13 @@
+@@ -270,8 +296,13 @@
        else
        {
          show(arItems[i]['trid']);
@@ -102,7 +103,7 @@
                        }
                      }
                    }
-@@ -128,8 +131,28 @@
+@@ -128,8 +131,29 @@
      {
        system.SetSessionVar("sessionTAB1",sLoadId);
      }
@@ -126,13 +127,14 @@
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  // to avoid a double channelload, perform only initial load if no room-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltFN')).ftFunc == "") {
++  var filterItem = localStorage.getItem('iseSFilters_fltFN');
++  if(!filterItem || JSON.parse(filterItem).ftFunc == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    
    // filterOptions = new iseFilter();
    translatePage("#tblFunctionNames");
-@@ -178,6 +201,7 @@
+@@ -178,6 +202,7 @@
  
    updateFuncTable = function()
    {
@@ -140,7 +142,7 @@
      colorFilterBtns(fltFN);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -188,8 +212,13 @@
+@@ -188,8 +213,13 @@
        else
        {
          show(arItems[i]['trid']);
@@ -164,19 +166,51 @@
                          Write("tmp['name'] = '"#room.Name()#"';");
                          Write("tmp['trid'] = '"#trId#"';");
                          Write("arItems[arItems.length] = tmp;");
-@@ -153,7 +154,10 @@
+@@ -131,29 +132,35 @@
+   }
+   
+   // Beim laden der Seite ersten Raum anzeigen
+-  
+   <%
+     if( system.GetSessionVar("sessionTAB1") == "" )
+     {
+       system.SetSessionVar("sessionTAB1",sLoadId);
+     }
+-    else {
+-      !Fehlerhaftes Laden umgehen
+-     
++    else
++    {
+       string tmpID = system.GetSessionVar("sessionTAB1");
+       string tmp = "";
+       boolean bFound = false;
+-      foreach (tmp, sEnumRoomIds) {
+-        if (tmp == tmpID) {
++      foreach (tmp, sEnumRoomIds)
++      {
++        if (tmp == tmpID)
++        {
+           bFound = true;
++          break;
+         }
+       }
+-      if (!bFound) {
++      if (bFound == false)
++      {
+         system.SetSessionVar("sessionTAB1",sLoadId);
        }
      }
    %>
 -  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  // to avoid a double channelload, perform only initial load if no room-filter is set
-+  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == "") {
++  var filterItem = localStorage.getItem('iseSFilters_fltRM');
++  if(!filterItem || JSON.parse(filterItem).ftRoom == "") {
 +    loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
 +  }
    
    filterOptions = new iseFilter();
    translatePage("#tblRoomNames");
-@@ -202,6 +206,7 @@
+@@ -202,6 +209,7 @@
  
    updateRoomTable = function()
    {
@@ -184,7 +218,7 @@
      colorFilterBtns(fltRM);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -212,8 +217,13 @@
+@@ -212,8 +220,13 @@
        else
        {
          show(arItems[i]['trid']);

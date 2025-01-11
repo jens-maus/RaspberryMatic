@@ -198,7 +198,8 @@
     }
   %>
   // to avoid a double channelload, perform only initial load if no room-filter is set
-  if(JSON.parse(localStorage.getItem('iseSFilters_fltDL')).ftDevName == "") {
+  var filterItem = localStorage.getItem('iseSFilters_fltDL');
+  if(!filterItem || JSON.parse(filterItem).ftDevName == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

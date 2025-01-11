@@ -132,30 +132,33 @@
   }
   
   // Beim laden der Seite ersten Raum anzeigen
-  
   <%
     if( system.GetSessionVar("sessionTAB1") == "" )
     {
       system.SetSessionVar("sessionTAB1",sLoadId);
     }
-    else {
-      !Fehlerhaftes Laden umgehen
-     
+    else
+    {
       string tmpID = system.GetSessionVar("sessionTAB1");
       string tmp = "";
       boolean bFound = false;
-      foreach (tmp, sEnumRoomIds) {
-        if (tmp == tmpID) {
+      foreach (tmp, sEnumRoomIds)
+      {
+        if (tmp == tmpID)
+        {
           bFound = true;
+          break;
         }
       }
-      if (!bFound) {
+      if (bFound == false)
+      {
         system.SetSessionVar("sessionTAB1",sLoadId);
       }
     }
   %>
   // to avoid a double channelload, perform only initial load if no room-filter is set
-  if(JSON.parse(localStorage.getItem('iseSFilters_fltRM')).ftRoom == "") {
+  var filterItem = localStorage.getItem('iseSFilters_fltRM');
+  if(!filterItem || JSON.parse(filterItem).ftRoom == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

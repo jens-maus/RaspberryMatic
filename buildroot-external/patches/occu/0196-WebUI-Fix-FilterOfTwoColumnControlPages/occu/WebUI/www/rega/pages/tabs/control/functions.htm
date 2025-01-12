@@ -151,7 +151,7 @@
     }
   %>
   // to avoid a double channelload, perform only initial load if no room-filter is set
-  if(document.getElementById("ftFunc").value == "") {
+  if(document.getElementById("ftFunc") && document.getElementById("ftFunc").value == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

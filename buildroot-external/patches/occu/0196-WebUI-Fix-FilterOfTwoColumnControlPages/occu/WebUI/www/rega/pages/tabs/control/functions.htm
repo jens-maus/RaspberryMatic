@@ -148,10 +148,10 @@
       {
         system.SetSessionVar("sessionTAB1", sLoadId);
       }
+    }
   %>
   // to avoid a double channelload, perform only initial load if no room-filter is set
-  var filterItem = localStorage.getItem('iseSFilters_fltFN');
-  if(!filterItem || JSON.parse(filterItem).ftFunc == "") {
+  if(document.getElementById("ftFunc").value == "") {
     loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
   }
   

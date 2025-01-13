@@ -45,6 +45,7 @@ if [[ -f /var/status/hasIP ]] &&
   # if not required
   case "${IFACE}" in
     wlan*)
+      /usr/sbin/iw dev "${IFACE}" set power_save on
       /usr/sbin/rfkill block wlan
     ;;
   esac
@@ -115,6 +116,8 @@ case "${IFACE}" in
     # if /etc/config/wpa_supplicant.conf exists, bring up
     # the WiFi connection.
     if [[ -s /etc/config/wpa_supplicant.conf ]]; then
+      # turn power save off and set link up
+      /usr/sbin/iw dev "${IFACE}" set power_save off
       /sbin/ip link set "${IFACE}" up
       sleep 5
       /usr/sbin/rfkill unblock wlan
@@ -124,6 +127,7 @@ case "${IFACE}" in
       echo -n " no config, "
       # make sure that the wifi power is disabled
       # if not required
+      /usr/sbin/iw dev "${IFACE}" set power_save on
       /usr/sbin/rfkill block wlan
       exit 1
     fi

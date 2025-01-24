@@ -142,7 +142,7 @@
 -  if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
 -    file copy -force -- "/var/server.pem" "/etc/config/server.pem"
 -    file delete "/var/server.pem"
-+  if { [string last " PRIVATE KEY-----" $line] != -1 } {
++  if { [string first "-----BEGIN " $line] != -1 } {
 +    catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
 +    file rename -force -- $filename "/etc/config/server.pem"
      

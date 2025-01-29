@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JAVA_AZUL_VERSION = 11.76.21-ca-jre11.0.25
+JAVA_AZUL_VERSION = 11.78.15-ca-jre11.0.26
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
 JAVA_AZUL_VERSION = 11.70.15-ca-hl-jre11.0.22
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz

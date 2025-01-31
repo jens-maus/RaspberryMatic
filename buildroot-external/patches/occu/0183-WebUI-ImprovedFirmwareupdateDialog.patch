@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -633,9 +633,14 @@
+@@ -642,9 +642,14 @@
      "dialogRenameVirtualGroupDeviceTitle" : "Umbenennung des virtuellen Ger%E4tes",
      "dialogVirtualGroupDeviceContent" : "M%F6chten Sie das virtuelle Ger%e4t der Gruppe sowie die entsprechenden Kan%E4le mit dem Gruppennamen %FCberschreiben?",
      "dialogShowDeviceFirmwareTitle" : "Es stehen Ger%E4te-Firmware-Updates zur Verf%FCgung",
@@ -20,7 +20,7 @@
        "Die aktuellste Firmware des Ger%E4tes befindet sich bereits auf der " + HMIdentifier.de.CCUShortName + ".\n"+
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -633,9 +633,14 @@
+@@ -642,9 +642,14 @@
      "dialogRenameVirtualGroupDeviceTitle" : "Rename the virtual device",
      "dialogVirtualGroupDeviceContent" : "Would you like to rename the virtual device of the group and its channels to the group name?",
      "dialogShowDeviceFirmwareTitle" : "There are new device firmware updates available",

@@ -75,7 +75,7 @@
    };
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -702,7 +702,7 @@
+@@ -711,7 +711,7 @@
      "channelModeHumidityLimiter" :  "Feuchtigkeitsbegrenzer",
      "channelModeTactileSwitch" :  "Taster",
      "channelModeTemperatureLimiter" : "Temperaturbegrenzer",
@@ -103,7 +103,7 @@
      "dialogQuestionRestart" : "Best%E4tigen Sie hier, um den Neustart durchzuf%FChren.",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -702,7 +702,7 @@
+@@ -711,7 +711,7 @@
      "channelModeHumidityLimiter" :  "Humidity limiter",
      "channelModeTactileSwitch" :  "Push-button",
      "channelModeTemperatureLimiter" : "Temperature limiter",

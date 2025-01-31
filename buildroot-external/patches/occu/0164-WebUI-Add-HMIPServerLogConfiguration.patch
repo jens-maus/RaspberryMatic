@@ -175,7 +175,7 @@
    }
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -362,7 +362,7 @@
+@@ -371,7 +371,7 @@
      "sysVarRainYesterdayDescr" : "Regenmenge vorheriger Tag",
      "actionStatusControlActivate" : "Bet%E4tigen",
      "transferConfigData" : "Ger%E4te-/Kanaleinstellungen werden an Komponenten %FCbertragen...",
@@ -212,7 +212,7 @@
      "dialogSettingsSecurityTitle" : HMIdentifier.de.CCUShortName + "-Sicherheit",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -362,7 +362,7 @@
+@@ -371,7 +371,7 @@
      "sysVarRainYesterdayDescr" : "Rainfall previous day",
      "actionStatusControlActivate" : "Operate",
      "transferConfigData" : "Device/channel settings will be transmitted to devices.",

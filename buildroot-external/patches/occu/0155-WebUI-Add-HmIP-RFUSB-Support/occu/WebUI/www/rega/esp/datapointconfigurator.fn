@@ -1608,7 +1608,7 @@ function ::CreateUnknown()
                     tbWrite = false;
                   }
 
-                  WriteLine( '<span class="CLASS02535" style="color:white">' );
+                  WriteLine( '<span class="CLASS02535 j_translate" style="color:white">' );
 
                   if( !tbWrite )
                   {
@@ -1617,7 +1617,7 @@ function ::CreateUnknown()
                     {
                       Call("/esp/datapointconfigurator.fn::ConvWindDir()");
                     }
-                    WriteLine(sValueh#" "#sValue#sSpace#sValueUnit );
+                    WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
                   }
                   else
                   {
@@ -1696,47 +1696,41 @@ function ::ConvWindDir() {
 
  integer iValue = sValue.ToInteger() ; 
  
- sValueh = "no value";
- 
  if ( (iValue >= 346) || (iValue <= 15) ) 
  { 
-  sValueh = "N";
-  return;
+  sValueh = "windDirectionAbbrevNorth";
  }
- if ( (iValue >= 16) && (iValue <= 75) )
+ elseif ( (iValue >= 16) && (iValue <= 75) )
  {
-  sValueh = "NO";
-  return;
+  sValueh = "windDirectionAbbrevNorthEast";
  }
- if ( (iValue >= 76) && (iValue <= 105) )
+ elseif ( (iValue >= 76) && (iValue <= 105) )
  {
-  sValueh = "O";
-  return;
+  sValueh = "windDirectionAbbrevEast";
  }
- if ( (iValue >= 106) && (iValue <= 165) )
+ elseif ( (iValue >= 106) && (iValue <= 165) )
  {
-  sValueh = "SO";
-  return;
+  sValueh = "windDirectionAbbrevSouthEast";
  }
- if ( (iValue >= 166) && (iValue <= 195) )
+ elseif ( (iValue >= 166) && (iValue <= 195) )
  {
-  sValueh = "S";
-  return;
+  sValueh = "windDirectionAbbrevSouth";
  }
- if ( (iValue >= 196) && (iValue <= 255) )
+ elseif ( (iValue >= 196) && (iValue <= 255) )
  {
-  sValueh = "SW";
-  return;
+  sValueh = "windDirectionAbbrevSouthWest";
  }
- if ( (iValue >= 256) && (iValue <= 285) )
+ elseif ( (iValue >= 256) && (iValue <= 285) )
  {
-  sValueh = "W";
-  return;
+  sValueh = "windDirectionAbbrevWest";
  }
- if ( (iValue >= 286) && (iValue <= 345) )
+ elseif ( (iValue >= 286) && (iValue <= 345) )
  {
-  sValueh = "NW";
-  return;
+  sValueh = "windDirectionAbbrevNorthWest";
+ }
+ else
+ {
+  sValueh = "windDirectionNoValue";
  }
 
  return;

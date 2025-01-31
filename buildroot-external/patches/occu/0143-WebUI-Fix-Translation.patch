@@ -1,3 +1,108 @@
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -1602,7 +1602,7 @@
+                     tbWrite = false;
+                   }
+ 
+-                  WriteLine( '<span class="CLASS02535" style="color:white">' );
++                  WriteLine( '<span class="CLASS02535 j_translate" style="color:white">' );
+ 
+                   if( !tbWrite )
+                   {
+@@ -1611,7 +1611,7 @@
+                     {
+                       Call("/esp/datapointconfigurator.fn::ConvWindDir()");
+                     }
+-                    WriteLine(sValueh#" "#sValue#sSpace#sValueUnit );
++                    WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
+                   }
+                   else
+                   {
+@@ -1690,47 +1690,41 @@
+ 
+  integer iValue = sValue.ToInteger() ; 
+  
+- sValueh = "no value";
+- 
+  if ( (iValue >= 346) || (iValue <= 15) ) 
+  { 
+-  sValueh = "N";
+-  return;
++  sValueh = "windDirectionAbbrevNorth";
+  }
+- if ( (iValue >= 16) && (iValue <= 75) )
++ elseif ( (iValue >= 16) && (iValue <= 75) )
+  {
+-  sValueh = "NO";
+-  return;
++  sValueh = "windDirectionAbbrevNorthEast";
+  }
+- if ( (iValue >= 76) && (iValue <= 105) )
++ elseif ( (iValue >= 76) && (iValue <= 105) )
+  {
+-  sValueh = "O";
+-  return;
++  sValueh = "windDirectionAbbrevEast";
+  }
+- if ( (iValue >= 106) && (iValue <= 165) )
++ elseif ( (iValue >= 106) && (iValue <= 165) )
+  {
+-  sValueh = "SO";
+-  return;
++  sValueh = "windDirectionAbbrevSouthEast";
+  }
+- if ( (iValue >= 166) && (iValue <= 195) )
++ elseif ( (iValue >= 166) && (iValue <= 195) )
+  {
+-  sValueh = "S";
+-  return;
++  sValueh = "windDirectionAbbrevSouth";
+  }
+- if ( (iValue >= 196) && (iValue <= 255) )
++ elseif ( (iValue >= 196) && (iValue <= 255) )
+  {
+-  sValueh = "SW";
+-  return;
++  sValueh = "windDirectionAbbrevSouthWest";
+  }
+- if ( (iValue >= 256) && (iValue <= 285) )
++ elseif ( (iValue >= 256) && (iValue <= 285) )
+  {
+-  sValueh = "W";
+-  return;
++  sValueh = "windDirectionAbbrevWest";
+  }
+- if ( (iValue >= 286) && (iValue <= 345) )
++ elseif ( (iValue >= 286) && (iValue <= 345) )
+  {
+-  sValueh = "NW";
+-  return;
++  sValueh = "windDirectionAbbrevNorthWest";
++ }
++ else
++ {
++  sValueh = "windDirectionNoValue";
+  }
+ 
+  return;
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -353,6 +353,15 @@
+     "actionStatusControlLocked" : "Ver-<br/>riegelt",
+     "actionStatusControlLockedA" : "Verriegelt",
+     "actionStatusControlLockedB" : "Geschlossen",
++    "windDirectionNoValue" : "Kein Wert",
++    "windDirectionAbbrevNorth" : "N",
++    "windDirectionAbbrevNorthEast" : "NO",
++    "windDirectionAbbrevEast" : "O",
++    "windDirectionAbbrevSouthEast" : "SO",
++    "windDirectionAbbrevSouth" : "S",
++    "windDirectionAbbrevSouthWest" : "SW",
++    "windDirectionAbbrevWest" : "W",
++    "windDirectionAbbrevNorthWest" : "NW",
+     "infoStatusControlStateUnknown" : "Zustand<br/>unbestimmt",
+     "infoStatusControlCalculateFillingLevel" : "F&uuml;llmenge wird berechnet...",
+     "infoStatusControlFillingLevel" : "F&uuml;llmenge:",
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.label.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.label.js
 @@ -149,8 +149,8 @@
@@ -11,6 +116,24 @@
      "lblInfoStatusControlFrequency" : "Netzfrequenz",
      "lblInfoStatusControlGas" : "Verbrauch",
      "lblInfoStatusControlGasFlow" : "Gasdurchfluss",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -353,6 +353,15 @@
+     "actionStatusControlLocked" : "Locked",
+     "actionStatusControlLockedA" : "Locked",
+     "actionStatusControlLockedB" : "Closed",
++    "windDirectionNoValue" : "No Value",
++    "windDirectionAbbrevNorth" : "N",
++    "windDirectionAbbrevNorthEast" : "NE",
++    "windDirectionAbbrevEast" : "E",
++    "windDirectionAbbrevSouthEast" : "SE",
++    "windDirectionAbbrevSouth" : "S",
++    "windDirectionAbbrevSouthWest" : "SW",
++    "windDirectionAbbrevWest" : "W",
++    "windDirectionAbbrevNorthWest" : "NW",
+     "infoStatusControlStateUnknown" : "Status unknown",
+     "infoStatusControlCalculateFillingLevel" : "Filling level is being calculated",
+     "infoStatusControlFillingLevel" : "Filling level:",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.label.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.label.js
 @@ -149,8 +149,8 @@

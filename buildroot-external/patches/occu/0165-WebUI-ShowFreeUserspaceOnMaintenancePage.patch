@@ -88,7 +88,7 @@
      puts "translatePage('#messagebox');"
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -1005,8 +1005,8 @@
+@@ -1014,8 +1014,8 @@
      "drapRescueIntroText" : "Dieser HmIP-DRAP mit der Firmware Version 2.0.16 erfordert ein Zwischenupdate, bevor das eigentliche Update ausgef%FChrt werden kann.</br>Geben Sie hierf%FCr das auf dem HmIP-DRAP aufgedruckte Passwort (PW) ein und klicken Sie anschlie%DFend auf &bdquo;OK&ldquo;",
      "drapRescueUpdateSuccessful" : "Das Zwischenupdate wurde erfolgreich abgeschlossen.</br>Warten Sie, bis die LED des HmIP-DRAP blau blinkt, bzw. t%FCrkis leuchtet. Starten Sie dann das eigentliche Update, indem Sie erneut den &ldquo;Update&rdquo; Button klicken.",
      "hintSetReadyWeeklyProgram" : "Zum Konfigurieren des Wochenprogramms bitte den Fertig Button bet%E4tigen und das Ger%E4t anschlie%DFend in der Ger%E4teliste aufrufen.",
@@ -112,7 +112,7 @@
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -1001,8 +1001,8 @@
+@@ -1010,8 +1010,8 @@
      "drapRescueIntroText" : "This HmIP-DRAP with firmware version 2.0.16 requires an intermediate update before the actual update can be carried out.</br>For this purpose, enter the password (PW) printed on the HmIP-DRAP and click &ldquo;OK&rdquo;.",
      "drapRescueUpdateSuccessful" : "The intermediate update was completed successfully.</br>Wait until the LED of the HmIP-DRAP flashes blue or shines turquoise. Start the actual update by clicking the &ldquo;Update&rdquo; button again.",
      "hintSetReadyWeeklyProgram" : "Please press the Finish button to configure the week program and then access the device in the device list.",

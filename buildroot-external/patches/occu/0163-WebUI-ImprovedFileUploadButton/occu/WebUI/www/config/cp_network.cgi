@@ -156,7 +156,7 @@ proc action_cert_upload {} {
   gets $fp line
   close $fp
   #puts $line;
-  if { [string last " PRIVATE KEY-----" $line] != -1 } {
+  if { [string first "-----BEGIN " $line] != -1 } {
     catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
     file rename -force -- $filename "/etc/config/server.pem"
     

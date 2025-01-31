@@ -10,7 +10,6 @@
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 start() {
-  waitForIP
   if waitForIP; then
     echo -n "."
     updateCopro
@@ -39,21 +38,21 @@ waitForIP() {
 updateCopro() {
   if grep -q "^\[Interface .\]" /etc/config/rfd.conf 2>/dev/null; then
     echo "Updating RF Lan Gateway Coprocessor Firmware" | logger -p user.info
-    /bin/eq3configcmd update-coprocessor -lgw -u -rfdconf /etc/config/rfd.conf -l 1
+    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -lgw -u -rfdconf /etc/config/rfd.conf -l 1
   fi
 }
 
 updateRFFirmware() {
   if grep -q "^\[Interface .\]" /etc/config/rfd.conf 2>/dev/null; then
     echo "Updating RF Lan Gateway Firmware" | logger -p user.info
-    /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/rfd.conf -l 1
+    /usr/bin/timeout 120 /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/rfd.conf -l 1
   fi
 }
 
 updateWiredFirmware() {
   if grep -q "^\[Interface .\]" /etc/config/hs485d.conf 2>/dev/null; then
     echo "Updating Wired Lan Gateway Firmware" | logger -p user.info
-    /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/hs485d.conf -l 1
+    /usr/bin/timeout 120 /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/hs485d.conf -l 1
   fi
 }
 

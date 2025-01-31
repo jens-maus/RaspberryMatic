@@ -36,7 +36,10 @@ jobs:
 
   build:
     permissions:
-      contents: write  # actions/upload-artifact
+      contents: write     # actions/upload-artifact
+      id-token: write     # actions/attest-build-provenance
+      attestations: write # actions/attest-build-provenance
+      contents: read      # actions/attest-build-provenance
     name: Snapshot build [${{ matrix.platform }}]
     if: ${{ github.repository == 'jens-maus/RaspberryMatic' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
     runs-on: self-hosted
@@ -276,6 +279,7 @@ jobs:
       ########################
       # upload build artifacts (oci only)
       - name: Upload build artifact [oci]
+        id: upload-oci
         if: |
           startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
@@ -284,19 +288,39 @@ jobs:
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
+      - name: Attest artifact provenance [oci]
+        if: |
+          startsWith(matrix.platform, 'oci_')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+          subject-digest: sha256:${{ steps.upload-oci.outputs.artifact-digest }}
+        continue-on-error: true
+
       #######################
       # manifest file artifact upload
       - name: Upload manifest artifact
+        id: upload-manifest
         uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
+      - name: Attest artifact provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          subject-digest: sha256:${{ steps.upload-manifest.outputs.artifact-digest }}
+        continue-on-error: true
+
   ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     permissions:
-      packages: write  # docker/build-push-action
+      packages: write     # docker/build-push-action
+      id-token: write     # actions/attest-build-provenance
+      attestations: write # actions/attest-build-provenance
+      contents: read      # actions/attest-build-provenance
     name: OCI/Docker Build+Push
     runs-on: ubuntu-24.04
     needs: build
@@ -440,8 +464,16 @@ jobs:
           annotations: |
             ${{ steps.meta.outputs.annotations }}
 
-      - name: Image digest
+      - name: Container image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Attest container provenance
+        uses: actions/attest-build-provenance@v2
+        id: attest
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/raspberrymatic
+          subject-digest: ${{ steps.docker_build.outputs.digest }}
+          push-to-registry: true
 
       - name: Cleanup oci_build dir
         run: |

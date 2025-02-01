@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # Starts rfd.
 #
@@ -30,6 +30,7 @@ init() {
   fi
 
   # Cleanup rfd.conf (e.g. remove double newlines)
+  # shellcheck disable=SC2002
   cat /etc/config/rfd.conf | uniq | tee /etc/config/rfd.conf >/dev/null
 
   # only modify if real rf module found

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
-@@ -1602,7 +1602,7 @@
+@@ -1602,16 +1602,20 @@
                      tbWrite = false;
                    }
  
@@ -9,16 +9,22 @@
  
                    if( !tbWrite )
                    {
-@@ -1611,7 +1611,7 @@
+-                    string sValueh = "";
+                     if (oDP.HssType() == "WIND_DIRECTION")
                      {
++                      string sValueh = "";
                        Call("/esp/datapointconfigurator.fn::ConvWindDir()");
++                      WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
++                    }
++                    else
++                    {
++                      WriteLine(sValue#sSpace#sValueUnit );
                      }
 -                    WriteLine(sValueh#" "#sValue#sSpace#sValueUnit );
-+                    WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
                    }
                    else
                    {
-@@ -1690,47 +1690,41 @@
+@@ -1690,47 +1694,41 @@
  
   integer iValue = sValue.ToInteger() ; 
   

@@ -1606,12 +1606,16 @@ function ::CreateUnknown()
 
                   if( !tbWrite )
                   {
-                    string sValueh = "";
                     if (oDP.HssType() == "WIND_DIRECTION")
                     {
+                      string sValueh = "";
                       Call("/esp/datapointconfigurator.fn::ConvWindDir()");
+                      WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
                     }
-                    WriteLine("${"#sValueh#"} "#sValue#sSpace#sValueUnit );
+                    else
+                    {
+                      WriteLine(sValue#sSpace#sValueUnit );
+                    }
                   }
                   else
                   {

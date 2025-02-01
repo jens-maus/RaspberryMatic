@@ -29,6 +29,9 @@ init() {
     cp -a ${CFG_TEMPLATE_DIR}/rfd.conf /etc/config/rfd.conf
   fi
 
+  # Cleanup rfd.conf (e.g. remove double newlines)
+  cat /etc/config/rfd.conf | uniq | tee /etc/config/rfd.conf >/dev/null
+
   # only modify if real rf module found
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
      [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||

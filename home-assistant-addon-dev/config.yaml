@@ -82,6 +82,7 @@ ports:
   2110/tcp: null
   8911/tcp: null
   5855/udp: null
+  2812/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -125,6 +126,7 @@ ports_description:
   2110/tcp: homeputer CL Exec-Engine (Extern)
   8911/tcp: Haus-Bus WebUI (Extern)
   5855/udp: Haus-Bus communication (Extern)
+  2812/tcp: Monit Monitoring WebUI (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

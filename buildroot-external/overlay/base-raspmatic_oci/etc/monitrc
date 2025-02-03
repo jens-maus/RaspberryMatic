@@ -78,13 +78,13 @@ check process lighttpd with pidfile /var/run/lighttpd-angel.pid
     if failed port 1999 for 5 cycles then restart
     if failed port 2000 for 5 cycles then restart
     if failed port 2001 for 5 cycles then restart
-    if failed port 2010 protocol http for 5 cycles then restart
+    if failed port 2010 for 5 cycles then restart
     if failed port 8181 protocol http for 5 cycles then restart
     if failed port 9292 for 5 cycles then restart
     if failed port 41999 for 5 cycles then restart
     if failed port 42000 for 5 cycles then restart
     if failed port 42001 for 5 cycles then restart
-    if failed port 42010 protocol https for 5 cycles then restart
+    if failed port 42010 for 5 cycles then restart
     if failed port 48181 protocol https for 5 cycles then restart
     if failed port 49292 for 5 cycles then restart
     depends hmlangwDisabled
@@ -201,6 +201,7 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     #if failed port 32010 for 20 cycles then restart
     if failed port 39292 for 20 cycles then restart
     #if failed port 43438 type udp for 20 cycles then restart
+    #if failed port 54841 type udp for 20 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'HMIPServer restarted' 'WatchDog: hmipserver-restart' true"
     if filedescriptors > 95% for 5 cycles then

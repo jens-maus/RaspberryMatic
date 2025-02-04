@@ -90,11 +90,7 @@ handle_renew() {
   fi
 
   # check internet connection
-  if /usr/bin/wget -q --spider http://google.com/; then
-    touch /var/status/hasInternet
-  elif /bin/ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
-    touch /var/status/hasInternet
-  fi
+  /bin/checkInternet
 }
 
 handle_bound() {

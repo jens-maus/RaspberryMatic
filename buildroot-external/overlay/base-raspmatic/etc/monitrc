@@ -194,7 +194,7 @@ check process lighttpd with pidfile /var/run/lighttpd-angel.pid
     if failed port 42000 for 5 cycles then restart
     if failed port 42001 for 5 cycles then restart
     if failed port 42010 for 5 cycles then restart
-    if failed port 48181 https for 5 cycles then restart
+    if failed port 48181 for 5 cycles then restart
     if failed port 49292 for 5 cycles then restart
     depends hmlangwDisabled
 

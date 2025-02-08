@@ -7,7 +7,7 @@
 +#define POKY_IMG_WIDTH (425)
 +#define POKY_IMG_HEIGHT (106)
 +#define POKY_IMG_BYTES_PER_PIXEL (4) /* 3:RGB, 4:RGBA */
-+#define POKY_IMG_RLE_PIXEL_DATA ((uint8*) \
++#define POKY_IMG_RLE_PIXEL_DATA ((uint8_t*) \
 +  "\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0" \
 +  "\0\252\0\0\0\0\7u\304N\4~\327Wk~\330X\300\177\330W\323~\330W\264~\330" \
 +  "Xeu\304N\4\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\244\0\0\0\0\11w\334S\16" \

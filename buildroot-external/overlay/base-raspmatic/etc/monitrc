@@ -307,7 +307,7 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     restart = "/etc/init.d/S62HMServer restart"
     if not exist for 1 cycles then restart
     #if failed port 9293 for 20 cycles then restart
-    if failed port 32010 for 20 cycles then restart
+    #if failed port 32010 for 20 cycles then restart
     if failed port 39292 for 20 cycles then restart
     #if failed port 43438 type udp for 20 cycles then restart
     #if failed port 54841 type udp for 20 cycles then restart

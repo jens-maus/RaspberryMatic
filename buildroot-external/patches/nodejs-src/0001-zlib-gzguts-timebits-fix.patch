@@ -1,0 +1,18 @@
+diff --git a/deps/v8/third_party/zlib/gzguts.h b/deps/v8/third_party/zlib/gzguts.h
+index 57faf371..76bcd229 100644
+--- a/deps/v8/third_party/zlib/gzguts.h
++++ b/deps/v8/third_party/zlib/gzguts.h
+@@ -7,8 +7,10 @@
+ #  ifndef _LARGEFILE_SOURCE
+ #    define _LARGEFILE_SOURCE 1
+ #  endif
+-#  ifdef _FILE_OFFSET_BITS
+-#    undef _FILE_OFFSET_BITS
++#  if ! defined (_TIME_BITS) || (_TIME_BITS != 64)
++#    ifdef _FILE_OFFSET_BITS
++#      undef _FILE_OFFSET_BITS
++#    endif
+ #  endif
+ #endif
+ 
+

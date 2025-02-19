@@ -3184,7 +3184,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
         append html "<tr>"
           append html "<td>\${lblAcousticAlarmSignal}</td>"
           append html "<td>"
-          append html "[getCheckBox $CHANNEL '$param' $ps($param) $prn]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.5]]"
+          append html "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.5]]"
           append html "</td>"
         append html "</tr>"
       }

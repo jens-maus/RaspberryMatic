@@ -226,6 +226,15 @@
    append html "</table>"
  
    if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {
+@@ -3035,7 +3184,7 @@
+         append html "<tr>"
+           append html "<td>\${lblAcousticAlarmSignal}</td>"
+           append html "<td>"
+-          append html "[getCheckBox $CHANNEL '$param' $ps($param) $prn]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.5]]"
++          append html "[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param $hlpBoxWidth [expr $hlpBoxHeight * 0.5]]"
+           append html "</td>"
+         append html "</tr>"
+       }
 --- occu/WebUI/www/config/easymodes/hmip/hmip-etrv-b1_1_master.tcl.orig
 +++ occu/WebUI/www/config/easymodes/hmip/hmip-etrv-b1_1_master.tcl
 @@ -1,502 +0,0 @@

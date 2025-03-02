@@ -113,10 +113,3 @@
            }
            
            if( bProgram )
-@@ -1112,4 +1112,4 @@
-   {
-     iseFavorites.FavNamePosition( <% Write( oFav.ID() ); %>, idx );
-   }
--</script>
-\ No newline at end of file
-+</script>

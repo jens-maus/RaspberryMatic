@@ -20,6 +20,20 @@ proc getMaintenance {chn p descr address} {
 
   set cyclicInfo false
 
+  set deviceIsHAP false
+  set deviceIsDRAP false
+  set deviceIsDrapOrHap false
+
+  if { [string first "HmIP-HAP" $devType] != -1 } {
+    set deviceIsHAP true
+  }
+
+  if { [string first "HmIPW-DRAP" $devType] != -1 } {
+    set deviceIsDRAP true
+  }
+
+  if {$deviceIsHAP || $deviceIsDRAP} { set deviceIsDrapOrHap true}
+
   set specialID "[getSpecialID $special_input_id]"
   set html ""
 
@@ -147,7 +161,6 @@ proc getMaintenance {chn p descr address} {
       append html "[getHorizontalLine]"
     }
   }
-
   set param LOW_BAT_LIMIT
   if { [info exists ps($param)] == 1  } {
     # SPHM-875
@@ -178,7 +191,7 @@ proc getMaintenance {chn p descr address} {
      append html "</tr>"
   }
 
-  if {([string equal $devType "HmIPW-DRAP"] != 1) && ([string equal $devType "HmIP-HAP"] != 1) && ([string equal $devType "HmIP-HAP-A"] != 1) && ([string equal $devType "HmIP-HAP-B1"] != 1) && ([string equal $devType "HmIP-HAP JS1"] != 1)} {
+  if {$deviceIsDrapOrHap} {
     set param ROUTER_MODULE_ENABLED
     if { [info exists ps($param)] == 1  } {
        incr prn
@@ -207,6 +220,48 @@ proc getMaintenance {chn p descr address} {
          append html  "<td>[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param]</td>"
        append html "</tr>"
     }
+  }
+
+  # HmIP-WGS and HmIP-WGS-A
+  set param DEVICE_INPUT_LAYOUT_MODE
+  if {[info exists ps($param)] == 1} {
+      incr prn
+      append html "[getHorizontalLine]"
+      append html "<tr>"
+        append html "<td>\${lblDisplayLayoutMode}</td>"
+          array_clear options
+          set options(0) "\${optionOneBtn}"
+          set options(1) "\${optionTwoBtnLeftRRight}"
+          set options(2) "\${optionTwoBtnUpDDown}"
+          set options(3) "\${optionFourBtn}"
+        append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]&nbsp;[getHelpIcon $param\_WGS]</td>"
+
+      append html "</tr>"
+  }
+
+set comment {
+  # Currently not in use. Parameter is replaced by the next parameter BUTTON_RESPONSE_WITHOUT_BACKLIGHT
+  set param DEVICE_SWITCH_TRIGGERING_MODE
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    array_clear options
+    set options(0) "\${optionBacklightFirst}"
+    set options(1) "\${optionDirect}"
+    append html "<tr><td>\${stringTableButtonResponseWithoutBacklight}</td><td>"
+    append html "[get_ComboBox options $param separate_$special_input_id\_$prn ps $param]&nbsp;[getHelpIcon $param]"
+    append html "</td></tr>"
+  }
+}
+
+  set param BUTTON_RESPONSE_WITHOUT_BACKLIGHT
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+    append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableButtonResponseWithoutBacklight}</td>"
+    append html "<td name=\"expertParam\" class=\"hidden\">"
+    append html  "[getCheckBox '$param' $ps($param) $chn $prn]"
+    append html "</td>"
+    append html "</tr>"
   }
 
   # INPUT_1_COPRO_ENABLED - INPUT_X_COPRO_ENABLED
@@ -280,24 +335,32 @@ set comment {
   set param DISPLAY_CONTRAST
   if { [info exists ps($param)] == 1  } {
     incr prn
-    array_clear options
-    if {([string equal $devType "HmIP-eTRV-3"] == 1) || ([string equal $devType "HmIP-eTRV-E"] == 1) || ([string equal $devType "HmIP-eTRV-E-S"] == 1) || ([string equal $devType "HmIP-eTRV-E-A"] == 1) } {
-      set optVal 0
-      for {set val 1} {$val <= 16} {incr val} {
-          if {$val < 7} {incr optVal 5} elseif {$val < 14} {incr optVal 10} else {incr optVal 20}
-          set options($optVal) "$val"
+    if {[string equal $devType "HmIP-DRG-DALI"] != 1} {
+      array_clear options
+      if {([string equal $devType "HmIP-eTRV-3"] == 1) || ([string equal $devType "HmIP-eTRV-E"] == 1) || ([string equal $devType "HmIP-eTRV-E-S"] == 1) || ([string equal $devType "HmIP-eTRV-E-A"] == 1) } {
+        set optVal 0
+        for {set val 1} {$val <= 16} {incr val} {
+            if {$val < 7} {incr optVal 5} elseif {$val < 14} {incr optVal 10} else {incr optVal 20}
+            set options($optVal) "$val"
+        }
+      } else {
+        # This is currently in use for the HmIPW-DRAP
+        for {set val 0} {$val <= 31} {incr val} {
+            set options($val) "$val"
+        }
       }
-    } else {
-      # This is currently in use for the HmIPW-DRAP
-      for {set val 0} {$val <= 31} {incr val} {
-          set options($val) "$val"
-      }
-    }
 
-    append html "<tr>"
-      append html "<td>\${stringTableDisplayContrast}</td>"
-      append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
-    append html "</tr>"
+      append html "<tr>"
+        append html "<td>\${stringTableDisplayContrast}</td>"
+        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
+      append html "</tr>"
+    } else {
+      # HmIP-DRG-DALI
+      append html "<tr>"
+        append html "<td>\${stringTableDisplayContrast}</td>"
+      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+      append html "</tr>"
+    }
   }
 
   set param BACKLIGHT_ON_TIME
@@ -305,6 +368,15 @@ set comment {
     incr prn
     append html "<tr>"
       append html "<td>\${stringTableDisplayLightingDuration}</td>"
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+    append html "</tr>"
+  }
+
+  set param ALTITUDE
+  if { [info exists ps($param)] == 1 } {
+    incr prn
+    append html "<tr>"
+      append html "<td>\${stringTableAltitude}</td>"
     append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
     append html "</tr>"
   }
@@ -452,7 +524,7 @@ set comment {
   }
 
   # DRAP/HAP Integration #
-  if {([string equal $devType "HmIPW-DRAP"] == 1) || ([string equal $devType "HmIP-HAP"] == 1) || ([string equal $devType "HmIP-HAP-A"] == 1) || ([string equal $devType "HmIP-HAP-B1"] == 1) || ([string equal $devType "HmIP-HAP JS1"] == 1)} {
+  if {([string equal $devType "HmIPW-DRAP"] == 1) || ([string equal $devType "HmIP-HAP"] == 1) || ([string equal $devType "HmIP-HAP2"] == 1) || ([string equal $devType "HmIP-HAP2-A"] == 1) || ([string equal $devType "HmIP-HAP-A"] == 1) || ([string equal $devType "HmIP-HAP-B1"] == 1) || ([string equal $devType "HmIP-HAP JS1"] == 1)} {
     append html "[getDRAP_HAPMaintenance $chn ps psDescr]"
   }
   # End DRAP/HAP Integration #
@@ -462,6 +534,7 @@ set comment {
     set param LONGITUDE
     if { [info exists ps($param)] == 1  } {
       incr prn
+      append html "[getHorizontalLine]"
       append html "<tr name='positionFixing'>"
        append html "<td>\${lblLocation} - \${dialogSettingsTimePositionLblLongtitude}</td>"
       append html  "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
@@ -473,6 +546,7 @@ set comment {
        append html "<td>\${lblLocation} - \${dialogSettingsTimePositionLblLatitude}</td>"
       append html  "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
       append html "</tr>"
+      append html "[getHorizontalLine]"
     }
   }
 
@@ -2687,12 +2761,13 @@ proc getHeatingClimateControlSwitchTransmitter {chn p descr {extraparam ""}} {
 }
 
 proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
-  global iface
+  global iface dev_descr
   upvar $p ps
   upvar $descr psDescr
   upvar prn prn
   upvar special_input_id special_input_id
 
+  set devType $dev_descr(TYPE)
   set specialID "[getSpecialID $special_input_id]"
 
   set hlpBoxWidth 450
@@ -2830,6 +2905,28 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
           }
         append html "</tr>"
       }
+
+      set param CLIMATE_CONTROL_DISPLAY
+      if {[info exists ps($param)] == 1} {
+        incr prn
+        array_clear options
+        if {[string first "HmIP-WGTC" $devType ] != -1} {
+          set options(0) "\${optionActual}"
+          set options(1) "\${optionSetpoint}"
+          set options(2) "\${optionActualHumidity}"
+          set options(3) "\${optionCO2}"
+          set options(4) "\${optionActualHimidityCO2}"
+          set options(5) "\${optionHumidity}"
+        } else {
+          set options(0) "\${optionActual}"
+          set options(1) "\${optionSetpoint}"
+          set options(2) "\${optionActualHumidity}"
+          set options(3) "\${optionHumidity}"
+        }
+
+        append html "<tr><td>\${stringTableClimateControlRegDisplayTempInfo}</td><td>"
+        append html "[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]"
+       }
 
       # left
       set comment {
@@ -3800,7 +3897,7 @@ proc getCondSwitchTransmitter {chn p descr} {
       incr prn
       append html "<tr>"
         append html "<td>\${stringTableCondThresholdLo}</td>"
-        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getCondTXThresholdUnit $devType $chn]&nbsp;&nbsp;[getMinMaxValueDescr $param]</td>"
+        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getCondTXThresholdUnit $devType $chn]&nbsp;&nbsp;[getMinMaxValueDescr $param $chn]</td>"
       append html "</tr>"
     }
 
@@ -3809,7 +3906,7 @@ proc getCondSwitchTransmitter {chn p descr} {
       incr prn
       append html "<tr>"
         append html "<td>\${stringTableCondThresholdHi}</td>"
-       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getCondTXThresholdUnit $devType $chn]&nbsp;&nbsp;[getMinMaxValueDescr $param]</td>"
+       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getCondTXThresholdUnit $devType $chn]&nbsp;&nbsp;[getMinMaxValueDescr $param $chn]</td>"
       append html "</tr>"
     }
 
@@ -4097,7 +4194,7 @@ proc getAccelerationTransceiver {chn p descr address} {
 
   set devType $dev_descr(TYPE)
 
-  if {($fwMajor > 1 || ($fwMajor == 1 && $fwMinor >= 2) ) || ([string equal $devType "ELV-SH-TACO"] == 1)} {
+  if {($fwMajor > 1 || ($fwMajor == 1 && $fwMinor >= 2) ) || ([string equal $devType "ELV-SH-TACO"] == 1) || ([string equal $devType "ELV-SH-CTV"] == 1)} {
     set newFw true
   }
 
@@ -4177,10 +4274,12 @@ proc getAccelerationTransceiver {chn p descr address} {
           append html "\}"
 
           # SPHM-1343
-          append html "if (value == 2) \{"
+          append html "if (([string equal $devType "HmIP-STV"] == 1) && (value == 2)) \{"
               append html "var min = 10, max = 45,"
               append html "triggerAngleElm = jQuery(\"\[name='TRIGGER_ANGLE'\]\").first(),"
               append html "triggerAngleMinMaxElm = jQuery('\#triggerAngleMinMax');"
+
+              append html "jQuery('#lbltriggerAngleHysteresis').text(translateKey('motionDetectorTriggerAngleHysteresis'));"
 
               append html "triggerAngleMinMaxElm.text('(10 - 45)');"
 
@@ -4194,6 +4293,8 @@ proc getAccelerationTransceiver {chn p descr address} {
               append html "var min = 1, max = 180,"
               append html "triggerAngleElm = jQuery(\"\[name='TRIGGER_ANGLE'\]\").first(),"
               append html "triggerAngleMinMaxElm = jQuery('\#triggerAngleMinMax');"
+
+              append html "jQuery('#lbltriggerAngleHysteresis').text(translateKey('motionDetectorTriggerAngleHysteresisA'));"
 
               append html "triggerAngleMinMaxElm.text('(1 - 180)');"
 
@@ -4365,7 +4466,7 @@ proc getAccelerationTransceiver {chn p descr address} {
 
     incr prn
     append html "<tr id='triggerAngleHysteresis'>"
-      append html "<td>\${motionDetectorTriggerAngleHysteresis}</td>"
+      append html "<td id='lbltriggerAngleHysteresis'>\${motionDetectorTriggerAngleHysteresis}</td>"
       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param 320 100]</td>"
     append html "</tr>"
   }
@@ -6587,6 +6688,230 @@ proc getGenericMeasuringTransmitter {chn p descr address} {
   append html "</script>"
   return $html
 }
+
+proc getBacklightingReceiver {chn p descr} {
+  upvar $p ps
+  upvar $descr psDescr
+  upvar prn prn
+  upvar special_input_id special_input_id
+  set specialID "[getSpecialID $special_input_id]"
+  set html ""
+  set prn 0
+
+  set activateLevelMode 0
+  set feedbackLevelMode 0
+
+  set param _POWERUP_JUMPTARGET
+  if { [info exists ps($param)] == 1  } {
+    append html [getPowerUpSelector $chn ps $special_input_id]
+  }
+
+  set param EVENT_DELAY_UNIT
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+    append html "<td>\${stringTableEventDelay}</td>"
+    append html [getComboBox $chn $prn "$specialID" "eventDelay"]
+    append html "</tr>"
+
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
+
+    incr prn
+    set param EVENT_DELAY_VALUE
+    append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+    append html "<td>\${stringTableEventDelayValue}</td>"
+
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+    append html "</tr>"
+    append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+  }
+
+  set param EVENT_RANDOMTIME_UNIT
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+    append html "<td>\${stringTableRandomTime}</td>"
+    append html [getComboBox $chn $prn "$specialID" "eventRandomTime"]
+    append html "</tr>"
+
+    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+
+    incr prn
+    set param EVENT_RANDOMTIME_VALUE
+    append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+    append html "<td>\${stringTableRamdomTimeValue}</td>"
+
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+    append html "</tr>"
+    append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+  }
+
+  set param LED_DISABLE_CHANNELSTATE
+  if { [info exists ps($param)] == 1 } {
+    incr prn
+    append html "<tr>"
+      append html "<td>\${stringTableLEDDisableChannelState}</td>"
+      append html  "<td>[getCheckBox '$param' $ps($param) $chn $prn]</td>"
+    append html "</tr>"
+    set specialParam 1
+  }
+
+  append html "[getHorizontalLine]"
+
+  set param POWERUP_ON_LEVEL
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+      append html "<td>\${stringTableDimmerLevel}</td>"
+      array_clear options
+      for {set val 0} {$val <= 100} {incr val 5} {
+        set options($val) "$val%"
+      }
+      append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]</td>"
+    append html "</tr>"
+  }
+
+  append html "[getHorizontalLine]"
+
+  set param _FEEDBACK_LEVEL_MODE; # Don't show this parameter
+  if { [info exists ps($param)] == 1  } {
+
+    append html "<tr><td colspan='2'><b>\${lblHeaderFeedbackLevelMode}<b/><br/></td></tr>"
+
+    incr prn
+    set feedbackLevelMode $ps($param)
+   array_clear options
+    set options(0) "\${optionAbsolut}"
+   set options(1) "\${optionRelativ}"
+    append html "<tr><td>\${lblFeedbackLevelMode}</td><td>"
+    append html "[get_ComboBox options $param separate_$special_input_id\_$prn ps $param onchange=changeFeedbackLevelOptions(this.value)]&nbsp;[getHelpIcon $param]"
+    append html "</td></tr>"
+
+    append html "<script type=\"text/javascript\">"
+      append html "changeFeedbackLevelOptions = function(value) \{"
+        append html "var feedbckLvlElm = jQuery('\[name=\"FEEDBACK_LEVEL_VALUE\"\]').first();"
+        append html "feedbckLvlElm.empty();"
+        append html "var min =  (value == 0) ? 0 : -100;"
+        append html "for (var loop = min; loop <= 100; loop += 5) \{"
+          append html "feedbckLvlElm.append(new Option(loop+'%', loop));"
+        append html "\}"
+      append html "\};"
+   append html "</script>"
+  }
+
+  set param FEEDBACK_LEVEL_VALUE
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    set min [expr {int([expr [getMinValue $param]])}]
+    set max [expr {int([expr [getMaxValue $param]])}]
+
+    if {$feedbackLevelMode == 0} {
+      set min 0
+    }
+    array_clear options
+    for {set val $min} {$val <= $max} {incr val 5} {
+        set options($val) "$val%"
+    }
+
+    append html "<tr>"
+      append html "<td>\${lblFeedbackLevelValue}</td>"
+    append html "<td>[get_ComboBox options $param separate_$special_input_id\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+    append html "</tr>"
+    # append html "[getHorizontalLine]"
+  }
+
+  set param _ACTIVATE_LEVEL_MODE; # Don't show this parameter
+  if { [info exists ps($param)] == 1  } {
+    append html "<tr><td colspan='2'><b>\${lblHeaderActivateLevelMode}&nbsp;[getHelpIcon helpAcitveLevelMode]<b/><br/></td></tr>"
+
+    incr prn
+    set activateLevelMode $ps($param)
+    array_clear options
+    set options(0) "\${optionAbsolut}"
+    set options(1) "\${optionRelativ}"
+    append html "<tr><td>\${lblActivateLevelMode}</td><td>"
+    append html "[get_ComboBox options $param separate_$special_input_id\_$prn ps $param onchange=changeActivateLevelOptions(this.value)]&nbsp;[getHelpIcon $param]"
+    append html "</td></tr>"
+
+    append html "<script type=\"text/javascript\">"
+      append html "changeActivateLevelOptions = function(value) \{"
+        append html "var activateLvlElm = jQuery('\[name=\"ACTIVATE_LEVEL_VALUE\"\]').first();"
+        append html "activateLvlElm.empty();"
+        append html "var min =  (value == 0) ? 0 : -100;"
+        append html "for (var loop = min; loop <= 100; loop += 5) \{"
+          append html "activateLvlElm.append(new Option(loop+'%', loop));"
+        append html "\}"
+      append html "\};"
+    append html "</script>"
+  }
+
+  set param ACTIVATE_LEVEL_VALUE
+  if { [info exists ps($param)] == 1  } {
+    append html "[getHorizontalLine]"
+
+    incr prn
+
+    set min [expr {int([expr [getMinValue $param]])}]
+    set max [expr {int([expr [getMaxValue $param]])}]
+
+    if {$min < 0} {
+      set min 0
+    }
+    array_clear options
+    for {set val $min} {$val <= $max} {incr val 5} {
+        set options($val) "$val%"
+    }
+    append html "<tr>"
+      append html "<td>\${lblActivateLevelValue}</td>"
+    append html "<td>[get_ComboBox options $param separate_$special_input_id\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+    append html "</tr>"
+  }
+
+set comment {
+    # Currently not in use
+    set param _ACTIVATE_LEVEL_ONTIME_UNIT
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      append html "<tr>"
+      append html "<td>\${stringTableActivateLevelOnTime}</td>"
+      append html "[getComboBox $chn $prn "$specialID" "timeOnOffShort"]<td>[getHelpIcon $param 320 170]</td>"
+      append html "</tr>"
+
+      append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
+
+      incr prn
+      set param ACTIVATE_LEVEL_ONTIME_VALUE
+      append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+      append html "<td>\${stringTableOnTimeValue}</td>"
+
+      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+      append html "</tr>"
+      append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeShortOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    }
+}
+    set param ACTIVATE_LEVEL_ONTIME_VALUE
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      array_clear options
+      for {set val 0} {$val <= 30} {incr val} {
+          set options($val) "$val \${optionUnitS}"
+      }
+      append html "<tr>"
+        append html "<td>\${lblOnTime}</td>"
+        append html "<td>[get_ComboBox options $param separate_$special_input_id\_$prn ps $param]</td>"
+      append html "</tr>"
+    }
+  return $html
+}
+
+
+
 
 proc getNoParametersToSet {} {
   set html "<tr><td name=\"noParamElm\" class=\"CLASS22003\"><div class=\"CLASS22004\">\${deviceAndChannelParamsLblNoParamsToSet}</div></td></tr>"

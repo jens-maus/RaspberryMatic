@@ -47,7 +47,7 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
 
 }
 
-proc getMinMaxValueDescr {param} {
+proc getMinMaxValueDescr {param {extraparam ""}} {
   global psDescr dev_descr ps
   upvar psDescr descr
   upvar ps PS
@@ -100,9 +100,6 @@ proc getMinMaxValueDescr {param} {
     }
   }
 
-
-
-
   # SPHM-118 / SPHM-410 (the max value of the DRBL4 = autoconfig which isn't supported by this device)
   if {([string equal $dev_descr(TYPE) "HmIPW-DRBL4"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-DRBLI4"] == 1)} {
     if {($param == "REFERENCE_RUNNING_TIME_TOP_BOTTOM_VALUE") || ($param == "REFERENCE_RUNNING_TIME_BOTTOM_TOP_VALUE")} {
@@ -136,8 +133,8 @@ proc getMinMaxValueDescr {param} {
       set min [format {%1.1f} $min]
       set max [format {%1.1f} $max]
     } else {
-      set min [format {%1.2f} $min]
-      set max [format {%1.2f} $max]
+      set min [format {%1.3f} $min]
+      set max [format {%1.3f} $max]
     }
   }
 
@@ -145,6 +142,16 @@ proc getMinMaxValueDescr {param} {
     if {([string equal $param "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $param "COND_TX_THRESHOLD_HI"] == 1)} {
       append min "V"
       append max "V"
+    }
+  }
+
+  if {[string equal $dev_descr(TYPE) "ELV-SH-CAP"] == 1} {
+    # In this case extraparam should be the channel of the device
+    if {$extraparam == "3"} {
+      if {([string equal $param "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $param "COND_TX_THRESHOLD_HI"] == 1)} {
+        set min [format {%1.2f} [expr $min / 100]]
+        set max [format {%1.2f} [expr $max / 100]]
+      }
     }
   }
 
@@ -199,6 +206,9 @@ proc getUnit {param} {
      set unit "Imp/kWh"
   }
 
+  if {[string equal $param "ALTITUDE"] == 1} {
+     set unit "\${lblMeter}"
+  }
   return "$unit"
 }
 
@@ -209,6 +219,10 @@ proc getCondTXThresholdUnit {devType chn} {
         elv-sh-cth {
           if {$chn == "2"} {return "°C"}
           if {$chn == "3"} {return "%"}
+        }
+        elv-sh-cap {
+          if {$chn == "2"} {return "°C"}
+          if {$chn == "3"} {return "hPa"}
         }
         hmip-slo {return "Lux"}
         hmip-scth230 {
@@ -312,7 +326,9 @@ set comment {
     if {$param != "METER_CONSTANT_VOLUME"} {
       catch {set value [format {%1.1f} $value]}
     } else {
-      catch {set value [format {%1.2f} $value]}
+      catch {set value [format {%1.3f} $value]}
+      catch {set minValue [format {%1.3f} $param_descr(MIN)]}
+      catch {set maxValue [format {%1.3f} $param_descr(MAX)]}
     }
   }
 
@@ -324,6 +340,17 @@ set comment {
   if {$param == "TRIGGER_ANGLE_2"} {
     upvar valTriggerAngle triggerAngle
     set minValue $triggerAngle
+  }
+
+  if {[string equal $dev_descr(TYPE) "ELV-SH-CAP"] == 1} {
+    if {$chn == 3} {
+      if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {
+        set value [expr $value * 1.0]
+        set value [expr $value / 100]
+        set minValue [format {%1.2f} [expr $minValue / 100]]
+        set maxValue [format {%1.2f} [expr $maxValue / 100]]
+      }
+    }
   }
 
   if {$param == "TRIGGER_ANGLE" && [info exists descr(TRIGGER_ANGLE_2)] == 1} {
@@ -550,6 +577,7 @@ proc getHelpIcon {topic {x 0} {y 0}} {
   switch $topic {
    "ABORT_EVENT_SENDING_CHANNELS" {set x 500; set y 140}
    "ABORT_EVENT_SENDING_CHANNELS_ACCESS_TRANSCEIVER" {set x 500; set y 160}
+   "ACTIVATE_LEVEL_VALUE" {set x 500; set y 80}
    "AUTO_HYDRAULIC_ADJUSTMENT" {set x 500; set y 75}
    "BLIND_AUTOCALIBRATION" {set x 450; set y 75}
    "BLIND_REFERENCE_RUNNING_TIME" {set x 450; set y 160}
@@ -580,6 +608,9 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "EVENT_FILTER_NUMBER_motionDetect" {set x 400; set y 60}
    "EVENT_FILTER_PERIOD" {set x 450; set y 120}
    "EVENT_FILTER_TIME" {set x 400; set y 90}
+
+   "FEEDBACK_LEVEL_VALUE" {set x 450; set y 55}
+
    "HEATING_COOLING" {set x 450; set y 160}
    "HUMIDITY_LIMIT_DISABLE" {set x 500; set y 200}
    "HUMIDITY_LIMIT_VALUE" {set x 450; set y 85}
@@ -1906,6 +1937,7 @@ proc getPowerUpSelectorUniversalLightReceiver {chn p special_input_id mode {isDA
 
   return $html
 }
+
 
 proc addHintHeatingGroupDevice {address} {
     append html "<script type='text/javascript'>"

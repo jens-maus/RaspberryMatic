@@ -186,7 +186,7 @@ function ::WriteDPText()
           }
           if( (!bBinary) && (!bFloat) )
           {
-            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP") && (toCH.Label() != "HmIP-HAP-A") && (toCH.Label() != "HmIP-HAP-B1") && (toCH.Label() != "HmIP-HAP JS1")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
+            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP") && (toCH.Label() != "HmIP-HAP-A") && (toCH.Label() != "HmIP-HAP2") && (toCH.Label() != "HmIP-HAP2-A") && (toCH.Label() != "HmIP-HAP-B1") && (toCH.Label() != "HmIP-HAP JS1")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
               sValue = sValue.ToInteger();
               sValue = sValue.ToString(0);
             }
@@ -381,6 +381,8 @@ function ::showHideHmIPChannel() {
       && (oDevHssType != "HmIPW-WRC2-A")
       && (oDevHssType != "HmIPW-BRC2")
       && (oDevHssType != "HmIP-RCV-50")
+      && (oDevHssType != "ELV-SH-KRCO")
+      && (oDevHssType != "ELV-SH-CRC")
       )
     )
   {
@@ -421,7 +423,7 @@ function ::showHideHmIPChannel() {
           bShowChannel = false;
         }
       } else {
-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP")  && (oDevHssType != "HmIP-HAP-A") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
+        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP")  && (oDevHssType != "HmIP-HAP-A")  && (oDevHssType != "HmIP-HAP2") && (oDevHssType != "HmIP-HAP2-A") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
           bShowChannel = false;
         }
       }
@@ -438,7 +440,38 @@ function ::showHideHmIPChannel() {
       if (oDevHssType == "HmIP-SWSD-2") {
         bShowChannel = true;
       }
+
+      if ((oDevHssType.Find("HmIP-WGS") != -1 ) || (oDevHssType.Find("HmIP-WGT") != -1)) {
+        bShowChannel = true;
+      }
+
       return;
+    }
+
+    if (oDevHssType.Find("HmIP-WGT") != -1) {
+      if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1)) {
+        string wgtChMode = chn.MetaData("channelMode");
+
+        if (chNumber > 4) {
+          if (wgtChMode == "modeBWTH") {
+            bShowChannel = false;
+          }
+        }
+
+      }
+
+      if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {
+        string chnAddress = chn.Address();
+        integer devAddress = chnAddress.StrValueByIndex(":",0);
+        integer chnNumber = chnAddress.StrValueByIndex(":",1).ToInteger();
+        object oFirstVirtualChn = dom.GetObject(chn.Label() #" "#devAddress#":"#(chnNumber + 1));
+        string chnMode = oFirstVirtualChn.MetaData("channelMode");
+
+        if (chnMode == "modeBWTH") {
+          bShowChannel = false;
+        }
+        return;
+      }
     }
 
     ! SPHM-495
@@ -467,6 +500,12 @@ function ::showHideHmIPChannel() {
       bShowChannel = false;
       return;
     }
+
+    ! HmIP-WGS(-A)
+ !   if ((chn.HssType().Find("BACKLIGHTING_RECEIVER") != -1) )  {
+ !     bShowChannel = false;
+ !     return;
+ !   }
 
     if (user.UserEasyLinkMode() == true) {
       if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)
@@ -529,7 +568,7 @@ function ::conditionIsParameterVisible() {
     excludeParams = excludeParams#"RSSI_DEVICE,RSSI_PEER,SECTION,SMOKE_DETECTOR_TEST_RESULT=NONE,STATUS_FLAG_,ABSOLUTE_ANGLE_STATUS,WP_OPTIONS,LOCK_STATE_STATUS,LOCK_TARGET_LEVEL,";
     excludeParams = excludeParams#"TIME_OF_OPERATION,TIME_OF_OPERATION_STATUS,COLOR_TEMPERATURE_STATUS,HUE_STATUS,SATURATION_STATUS,DIM2WARM_STATE,HUMAN_CENTRIC_LIGHT_STATE,INCLUSION_UNSUPPORTED_DEVICE,";
     excludeParams = excludeParams#"ERROR_CONTROL_GEAR_FAILURE,ERROR_LAMP_FAILURE,ERROR_LIMIT,ERROR_DALI_BUS,GAS_FLOW_STATUS,GAS_VOLUME_STATUS,POWER_STATUS,ENERGY_COUNTER_STATUS,SELF_CALIBRATION_RESULT,";
-    excludeParams = excludeParams#"ENERGY_COUNTER_FEED_IN_OVERFLOW";
+    excludeParams = excludeParams#"ENERGY_COUNTER_FEED_IN_OVERFLOW,ERROR_MOUNTING_MODULE,WATER_FLOW_STATUS,WATER_VOLUME_OVERFLOW,WATER_VOLUME_SINCE_OPEN_OVERFLOW";
 
     if ((oCC.HssType().Find("DIMMER_TRANSMITTER") != -1)
     || (oCC.HssType().Find("DIMMER_VIRTUAL_RECEIVER")!= -1)
@@ -877,6 +916,15 @@ function ::destinationIsParameterVisible() {
       }
     }
 
+    !HmIP-WGS(-A) etc.
+    ! Hide all parameters except COMBINED_PARAMETER
+    if ( oCH.HssType().Find("BACKLIGHTING_RECEIVER") != -1) {
+        if ( oDP.HSSID().Find("COMBINED_PARAMETER") != -1 ) {
+            showChannelParam = true;
+        } else {
+          showChannelParam = false;
+        }
+    }
 
   if ( oCH.HssType().Find("UNIVERSAL_LIGHT_RECEIVER") != -1) {
     if ((oCH.Label() == "HmIP-RGBW") || (oCH.Label() == "HmIP-DRG-DALI") || (oCH.Label() == "HmIP-LSC")) {
@@ -900,6 +948,14 @@ function ::destinationIsParameterVisible() {
         ) {
         showChannelParam = false;
       }
+    }
+  }
+
+  !HmIP-WSM
+  ! Hide all parameters of the channel WATER_SWITCH_VIRTUAL_RECEIVER except COMBINED_PARAMETER
+  if ( oCH.HssType().Find("WATER_SWITCH_VIRTUAL_RECEIVER") != -1) {
+    if ( (oDP.HSSID().Find("COMBINED_PARAMETER") == -1)) {
+      showChannelParam = false;
     }
   }
 

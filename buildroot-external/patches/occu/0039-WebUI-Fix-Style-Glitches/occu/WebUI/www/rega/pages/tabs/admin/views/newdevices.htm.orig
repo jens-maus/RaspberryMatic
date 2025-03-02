@@ -826,6 +826,26 @@ CreateMetaEnergyCounter = function(chn, feed) {
   homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "energy30" + feedIn,"value" : 0}); // 1 Month
 };
 
+CreateMeta30DayCounter = function(chn, extraParam) {
+  /*
+    initialVal
+    Values for the last 30 days. The first 0 is yesterdy......
+    This is being used to store the values of the last 30 days.
+  */
+  var initialVal = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+    extra = ((typeof extraParam == "undefined") || (!extraParam)) ? "" : extraParam;
+
+  homematic("Interface.setMetadata", {
+    "objectId" : chn.id,
+    "dataId" : "counter30Days" + extra,
+    "value" : initialVal
+  });
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "counter0" + extra,"value" : 0}); // Today
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "counter1" + extra,"value" : 0}); // Yesterday
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "counter7" + extra,"value" : 0}); // 1 Week
+  homematic("Interface.setMetadata", {"objectId" : chn.id, "dataId" : "counter30" + extra,"value" : 0}); // 1 Month
+};
+
 //Standard EnergyCounter
 CreateSysVarEnergyCounterScript = function(chn) {
 
@@ -1044,6 +1064,110 @@ CreateSysVarEnergyCounterScriptIGL = function (chn, channelType, sensorType) {
   homematic("ReGa.runScript", {"script": script});
 };
 
+
+//HmIP-WSM FlowCounter
+CreateSysVarFlowCounterScript = function(chn) {
+  var sysVarIds = getSysVarCounterIds(chn);
+  var sysVarId = sysVarIds.counterId,
+    sysVarOldValId = sysVarIds.tmpCounterId;
+
+  var updateScript =
+  "object chn = dom.GetObject('"+chn.id+"');\n" +
+  "object oOverflow = chn.DPByControl('FLOW_METER_TRANSMITTER.WATER_VOLUME_OVERFLOW');\n" +
+  "object oCounter = chn.DPByControl('FLOW_METER_TRANSMITTER.WATER_VOLUME');\n" +
+  "object oSysVarCounter = dom.GetObject('"+sysVarId+"');\n" +
+  "object oSysVarCounterOldVal = dom.GetObject('"+sysVarOldValId+"');\n" +
+
+  "boolean overFlowFlag = oOverflow.Value();\n" +
+  "real devVal = oCounter.Value();\n" +
+  "real devValMax = oCounter.ValueMax();\n" +
+  "real oldDevVal = oSysVarCounterOldVal.Value();\n" +
+  "real diffVal = 0.0;\n" +
+  "real sysVarVal = oSysVarCounter.Value();\n" +
+  "integer tmp_devVal = (devVal.ToString().ToFloat() * 1000).ToInteger();\n" +
+  "integer tmp_oldDevVal = (oldDevVal.ToString().ToFloat() * 1000).ToInteger();\n" +
+
+  "real counter0 = chn.MetaData('counter0').ToFloat();\n" +
+
+  "if (overFlowFlag == false) {\n" +
+    "! Normal conditions\n" +
+    "if (tmp_oldDevVal <= tmp_devVal) {\n" +
+       "diffVal = devVal - oldDevVal;\n" +
+    "}\n" +
+
+    "! Device has rebooted\n" +
+    "if (tmp_oldDevVal > tmp_devVal) {\n" +
+       "diffVal = devVal;\n" +
+    "}\n"+
+
+  "} else {\n" +
+    "!overFlow is true\n" +
+    "if (tmp_oldDevVal > tmp_devVal) {\n" +
+      "! An device overflow has occured\n" +
+      "diffVal = (devVal + devValMax) - oldDevVal;\n" +
+    "} else {\n" +
+      "! Once the overflow flag has been set it will only be false when the device reboots\n"+
+      "! Therefore this is the normal condition after an device overflow\n" +
+      "diffVal = devVal - oldDevVal;\n" +
+    "}\n" +
+  "}\n" +
+
+  "if (tmp_devVal != 0) {" +
+    "oSysVarCounterOldVal.State(devVal);\n" +
+    "oSysVarCounter.State(sysVarVal + diffVal);\n" +
+
+    "! Save todays consumption\n" +
+    "chn.MetaData('counter0',counter0 + diffVal);\n" +
+
+  "}";
+
+  var script =
+  "var sysVarId = '"+sysVarId+"';\n" +
+  "var channel = dom.GetObject('"+chn.id+"');\n" +
+  "var channelId = channel.ID();\n" +
+  "var paramId = channel.DPByControl('FLOW_METER_TRANSMITTER.WATER_VOLUME').ID();\n"+
+  "var _script = \""+updateScript+"\";\n" +
+
+  "var DP_VALUE_CHECK_UPDATE = 13;"+
+
+  "var programs = dom.GetObject(ID_PROGRAMS);"+
+  "var program  = dom.CreateObject(OT_PROGRAM);"+
+  "program.Name('prgFlowCounter_"+ chn.id +"_"+chn.address+"');"+
+
+  "program.Internal(true);"+
+  "programs.Add(program.ID());"+
+
+
+  "var rule = program.Rule();"+
+  "rule.RuleOperatorType(OPERATOR_NONE);"+
+
+  "var condition = rule.RuleAddCondition();"+
+  "condition.CndOperatorType(OPERATOR_NONE);"+
+
+  "var singleCondition = condition.CndAddSingle();"+
+  "singleCondition.OperatorType(OPERATOR_NONE);"+
+  "singleCondition.ConditionType(9);"+
+  "singleCondition.ConditionType2(DP_VALUE_CHECK_UPDATE);"+
+  "singleCondition.LeftValType(ivtObjectId);"+
+  "singleCondition.LeftVal(paramId);"+
+  "singleCondition.RightVal1ValType(ivtFloat);"+
+  "singleCondition.RightVal1(0.0);"+
+  "singleCondition.RightVal2ValType(ivtFloat);"+
+  "singleCondition.RightVal2(0.0);"+
+
+  "singleCondition.ConditionChannel(channelId);"+
+
+  "var destination = rule.RuleDestination();"+
+  "var action = destination.DestAddSingle();"+
+  "action.DestinationParam(ivtString);"+
+  "action.DestinationValueType(ivtString);"+
+  "action.DestinationValue(_script);"+
+
+  "program.Active(true);"+
+  "dom.RTUpdate(0);";
+
+  homematic("ReGa.runScript", {"script": script});
+};
 
 //HmIP-PSM EnergyCounter
 CreateSysVarEnergyCounterScriptPSM = function(chn) {
@@ -1846,6 +1970,11 @@ CreateHmIPSunRainTodayYesterdayScript = function(chn) {
   homematic("ReGa.runScript", {"script": script});
 };
 
+getSysVarCounterIds = function (chn, extraParm) {
+  var extra = ((typeof extraParm == "undefined") || (!extraParm)) ? "" : extraParm;
+  return {"counterId": "svCounter"+extra+ "_" + chn.id + "_" + chn.address, "tmpCounterId": "svCounterOldVal"+extra+ "_" + chn.id};
+};
+
 getSysVarEnergyCounterIds = function (chn, feed) {
   var feedIn = ((typeof feed == "undefined") || (!feed)) ? "" : "FeedIn";
   return {"counterId": "svEnergyCounter"+feedIn+ "_" + chn.id + "_" + chn.address, "tmpCounterId": "svEnergyCounterOldVal"+feedIn+ "_" + chn.id};
@@ -1987,6 +2116,30 @@ CheckAndCreateSysVarEnergyCounterIEC = function(chn) {
     CreateSysVarEnergyCounterScriptIEC(chn);
     readEnergyCounter = true; // sorgt dafür, daß die Liste der EnergyCounter aktualisiert wird.
   }
+};
+
+CheckAndCreateSysVarWaterFlowCounter = function(chn) {
+  conInfo("CheckAndCreateSysVarWaterFlowCounter");
+  var sysVarIds = getSysVarCounterIds(chn),
+    SysVarCounterId = sysVarIds.counterId,
+    SysVarCounterOldValId = sysVarIds.tmpCounterId,
+    oSysVarCounter = homematic("SysVar.get", {"id" : SysVarCounterId});
+
+  if (!oSysVarCounter) {
+    conInfo("create system variable: " + SysVarCounterId);
+    CreateSysVar(SysVarCounterId, "float");
+    CreateSysVar(SysVarCounterOldValId, "float");
+
+    conInfo("CreateSysVarSysVarWaterFlowCounter");
+    CreateMeta30DayCounter(chn);
+    CreateSysVarFlowCounterScript(chn);
+
+    //Set the values of the last 31 days at midnight (00:00).
+    storeValuesAtMidnight(chn);
+    readEnergyCounter = true; // sorgt dafür, daß die Liste der EnergyCounter aktualisiert wird.
+  }
+
+
 };
 
 //***
@@ -2201,6 +2354,125 @@ storeEnergyValuesAtMidnight = function(chn, feed) {
   homematic("ReGa.runScript", {"script": script});
 };
 
+
+storeValuesAtMidnight = function(chn, extraParam) {
+
+  var extra = ((typeof extraParam == "undefined") || (!extraParam)) ? "" : extraParam;
+
+  var destinationScript =
+
+    "integer loop = 0;\n" +
+    "string last30Days = '';\n" +
+    "string val;\n" +
+
+    "real counter7 = 0.0;\n" +
+    "real counter30 = 0.0;\n" +
+
+    "object chn = dom.GetObject('"+chn.id+"');\n" +
+
+    "! Retrieve counter30Days\n" +
+    "string counter30Days = chn.MetaData('counter30Days"+extra+"');\n" +
+
+    "! Retrieve todays value\n" +
+    "real counter0 = chn.MetaData('counter0"+extra+"').ToFloat();\n" +
+
+    "! Move the values of the array counterounter30Days one position to the right\n" +
+    "foreach (val, counter30Days.Split(',')) {\n" +
+
+    "if (loop <= 28 ) {\n" +
+    "last30Days = last30Days + val + ',';\n" +
+    "} else {\n" +
+    "if (loop == 29) {\n" +
+    "last30Days = last30Days + val;\n" +
+    "}\n" +
+    "}\n" +
+
+    "loop = loop + 1;\n" +
+    "}\n" +
+
+    "! Set the first position of the array counter30Days to todays value.\n" +
+    "last30Days = counter0.ToString(1) + ',' + last30Days;\n" +
+
+    "!Store counter30Days as meta data\n" +
+    "chn.MetaData('counter30Days"+extra+"', last30Days);\n" +
+
+    "! Set the meta data of counter1 (yesterday), counter7 (week) and counter30 (months)\n" +
+    "loop = 0;\n" +
+    "foreach (val, last30Days.Split(',')) {\n" +
+    "val = val.ToFloat();\n" +
+    "if (loop == 0) {chn.MetaData('counter1"+extra+"', val);}\n" +
+    "if (loop <= 6) {\n" +
+    "counter7 = counter7 + val;\n" +
+    "}\n" +
+
+    "counter30 = counter30 + val;\n" +
+
+    "loop = loop +1;\n" +
+    "}\n" +
+
+    "chn.MetaData('counter7"+extra+"', counter7);\n" +
+    "chn.MetaData('counter30"+extra+"', counter30);\n" +
+
+    "! Reset counter0 (today) - a new day begins\n" +
+    "chn.MetaData('counter0"+extra+"', 0.0);\n" ;
+
+
+  var script =
+
+    "var _script = \""+destinationScript+"\";" +
+
+    "var DP_VALUE_CHECK_UPDATE = 13;"+
+    "var TIMER_DAILY           = 9;"+
+    "var NOT_SET               = 0;"+
+
+    "var programs = dom.GetObject(ID_PROGRAMS);"+
+    "var program  = dom.CreateObject(OT_PROGRAM);"+
+    "program.Name('prgSetCounterAtMidnight"+ chn.id +"_"+chn.address+"');"+
+    "program.Internal(true);"+
+    "programs.Add(program.ID());"+
+
+    "var rule = program.Rule();"+
+    "rule.RuleOperatorType(OPERATOR_NONE);"+
+
+    "var condition = rule.RuleAddCondition();"+
+    "condition.CndOperatorType(OPERATOR_NONE);"+
+
+    "var timeModule = dom.CreateObject(OT_CALENDARDP);"+
+    "dom.GetObject(ID_CALENDARDPS).Add(timeModule);"+
+    "timeModule.TimerType(TIMER_DAILY);"+
+    "timeModule.Time('2000-01-01 00:00:00');"+
+    "timeModule.CalDuration(NOT_SET);"+
+    "timeModule.CalRepeatTime(NOT_SET);"+
+    "timeModule.Weekdays(NOT_SET);"+
+    "timeModule.Period(NOT_SET);"+
+    "timeModule.CalRepetitionValue(NOT_SET);"+
+    "timeModule.Begin('2000-01-01 00:00:00');"+
+    "timeModule.End(NOT_SET);"+
+    "timeModule.CalRepetitionCount(NOT_SET);"+
+    "timeModule.SunOffsetType(NOT_SET);"+
+
+    "var singleCondition = condition.CndAddSingle();"+
+    "singleCondition.OperatorType(OPERATOR_NONE);"+
+    "singleCondition.ConditionType(3);"+
+    "singleCondition.ConditionType2(DP_VALUE_CHECK_UPDATE);"+
+    "singleCondition.LeftValType(ivtCurrentDate);"+
+    "singleCondition.RightVal1ValType(ivtObjectId);"+
+    "singleCondition.RightVal1(timeModule.ID());"+
+
+    "var destination = rule.RuleDestination();"+
+    "var action = destination.DestAddSingle();"+
+    "action.DestinationParam(ivtString);"+
+    "action.DestinationValueType(ivtString);"+
+    "action.DestinationValue(_script);"+
+
+    "program.Active(true);"+
+
+    "dom.RTUpdate(0);";
+
+  homematic("ReGa.runScript", {"script": script});
+};
+
+
 CreateSysVarHmIPModRC8 = function(channel) {
 
   var sysVarID =  "svHmIPModRC8ChnMode_" + channel.id + "_" + channel.address;
@@ -2214,6 +2486,11 @@ createNecessarySysVarsAndPrograms = function (oDevice) {
     ShowWaitAnim();
     jQuery.each(oDevice.channels, function (index, channel) {
       var channelType = GetChannelType(channel);
+
+      if (channelType == "FLOW_METER_TRANSMITTER") {
+        CheckAndCreateSysVarWaterFlowCounter(channel);
+      }
+
       if (channelType == "POWERMETER") {
         CheckAndCreateSysVarEnergyCounter(channel);
       }
@@ -2341,6 +2618,18 @@ createNecessarySysVarsAndPrograms = function (oDevice) {
         }
       }
 
+      if (oDevice.type.includes("HmIP-WGT")) {
+        if (channelType == "SWITCH_VIRTUAL_RECEIVER") {
+          homematic("Interface.setMetadata", {
+            "objectId" : channel.id,
+            "dataId" : "channelMode",
+            "value" : 'modeBWTH'
+          }, function(result) {
+            channel.channelMode = "modeBWTH";
+          });
+        }
+      }
+
     });
     HideWaitAnim();
   }
@@ -2381,7 +2670,6 @@ changeBlind2Shutter = function(oDevice) {
 
 SetReadyConfigAndHideImgs = function (devId) {
   var _devId_ = devId;
-
   var oDevice = homematic("Device.get", {"id": devId});
 
   //setDevicePos2SystemPos(oDevice);

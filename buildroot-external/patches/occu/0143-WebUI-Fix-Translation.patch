@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
-@@ -1602,16 +1602,20 @@
+@@ -1643,16 +1643,20 @@
                      tbWrite = false;
                    }
  
@@ -24,7 +24,7 @@
                    }
                    else
                    {
-@@ -1690,47 +1694,41 @@
+@@ -1731,47 +1735,41 @@
  
   integer iValue = sValue.ToInteger() ; 
   

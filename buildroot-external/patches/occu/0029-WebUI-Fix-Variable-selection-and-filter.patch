@@ -100,7 +100,7 @@
    background-color: $_(white); /* white */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -34932,6 +34932,7 @@
+@@ -35233,6 +35233,7 @@
      this.bTypeValueList = false;
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
@@ -108,7 +108,7 @@
      this.bColLeft = false;
      this.bColCenter = false;
      this.bNameLeft = false;
-@@ -35178,6 +35179,12 @@
+@@ -35479,6 +35480,12 @@
              if (!bRet) { bRet = true; }
            }
          }
@@ -121,7 +121,7 @@
          return bRet;
        }
      }
-@@ -35231,6 +35238,7 @@
+@@ -35532,6 +35539,7 @@
      if (this.bTypeValueList) return true;
      if (this.bTypeNumber) return true;
      if (this.bTypeAlarm) return true;
@@ -129,7 +129,7 @@
      return false; 
    },
      
-@@ -35307,6 +35315,7 @@
+@@ -35608,6 +35616,7 @@
      this.bTypeValueList = false;
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
@@ -137,7 +137,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -35339,6 +35348,7 @@
+@@ -35640,6 +35649,7 @@
        $("cbValueList").checked = fltObj.bTypeValueList;
        $("cbNumber").checked = fltObj.bTypeNumber;
        $("cbAlarm").checked = fltObj.bTypeAlarm;
@@ -145,7 +145,7 @@
        break;
      case "btnFilterIfaceSub":
        $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
-@@ -35465,7 +35475,8 @@
+@@ -35766,7 +35776,8 @@
        fltObj.bTypeLogic = $("cbLogic").checked;
        fltObj.bTypeValueList = $("cbValueList").checked;
        fltObj.bTypeNumber = $("cbNumber").checked;
@@ -155,7 +155,7 @@
        break;
      case "colPos":
        fltObj.bColLeft = $("cbColLeft").checked; 
-@@ -38694,25 +38705,25 @@
+@@ -39320,25 +39331,25 @@
        IseSort(arSysVars,this.colName,false,true);
        for (var i = 0; i < arSysVars.length; i++) 
        {

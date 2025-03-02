@@ -996,6 +996,13 @@ CCU.getAddress {
   ARGUMENTS {_session_id_}
 }
 
+CCU.getHmIPAddress {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/gethmipaddress.tcl
+  INFO {Liefert die HmIP-Adresse der HomeMatic Zentrale}
+  ARGUMENTS {_session_id_}
+}
+
 CCU.getVersion {
   LEVEL ADMIN
   SCRIPT_FILE ccu/getversion.tcl

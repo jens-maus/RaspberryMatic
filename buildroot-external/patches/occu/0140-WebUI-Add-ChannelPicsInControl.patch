@@ -142,7 +142,7 @@
      <div id="btnFilterFunc" class="FilterBtn">${thFilter}</div>
      <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
        <% 
-@@ -168,6 +172,18 @@
+@@ -169,6 +173,18 @@
  
              Write("</td>");
              Write("<td class='GrayBkg'>");

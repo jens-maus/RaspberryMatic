@@ -282,7 +282,8 @@ proc treatSpecialValue {devType param} {
 }
 
 proc check_RF_links {device iface address channel ch_type name} {
-  if {($device == "HM-MOD-EM-8") || ($ch_type == "MULTI_MODE_INPUT_TRANSMITTER")} {
+  if {(($device == "HM-MOD-EM-8") || (([string first HmIP-WGT $device] != -1) && ($ch_type == "SWITCH_VIRTUAL_RECEIVER"))) || ($ch_type == "MULTI_MODE_INPUT_TRANSMITTER")} {
+
     puts "<script type=\"text/javascript\">arChnHasLinks\[parseInt($channel)\] = false;ShowHintIfProgramExists('$name', '$channel')</script>"
     global iface_url
     set links ""
@@ -585,19 +586,9 @@ proc isExpertChannel {devType chType chNr} {
   set devType [string tolower $devType]
 
   set arChType [list "DIMMER_TRANSMITTER" "SWITCH_TRANSMITTER" "BLIND_TRANSMITTER" "SHUTTER_TRANSMITTER" "ACOUSTIC_SIGNAL_TRANSMITTER"]
-  set arChVirtType [list "DIMMER_VIRTUAL_RECEIVER" "SWITCH_VIRTUAL_RECEIVER" "BLIND_VIRTUAL_RECEIVER" "SHUTTER_VIRTUAL_RECEIVER" "ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER" "SERVO_VIRTUAL_RECEIVER"]
+  set arChVirtType [list "DIMMER_VIRTUAL_RECEIVER" "SWITCH_VIRTUAL_RECEIVER" "WATER_SWITCH_VIRTUAL_RECEIVER" "BLIND_VIRTUAL_RECEIVER" "SHUTTER_VIRTUAL_RECEIVER" "ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER" "SERVO_VIRTUAL_RECEIVER"]
 
   set result "false"
-
-set comment {
-  This hides the real channel. Not necessary anymore
-  foreach val $arChType {
-    if {$chType == $val} {
-      set result "true"
-      break
-    }
-  }
-}
 
   if {($devType!= "hmip-miob") && ($devType != "hmip-whs2")} {
     foreach val $arChVirtType {
@@ -1137,10 +1128,15 @@ proc put_channel_parameters {} {
 
     incr tr_count
 
-    # Due to performance reasons we spare the MULTI_MODE_INPUT_TRANSMITTER
-    if {(! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]) || ([string equal $dev_descr(TYPE) "HmIP-FLC"]) || ([string equal $dev_descr(TYPE) "HmIP-FDC"])  } {
+    # Due to performance reasons we spare the MULTI_MODE_INPUT_TRANSMITTER at this point
+    if {(! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]) } {
       puts "<script type='text/javascript'>"
         puts "var ext = getExtendedDescription(\{\"deviceType\" : \"$ch_descr(PARENT_TYPE)\", \"channelType\" : \"$ch_descr(TYPE)\" ,\"channelIndex\" : \"$ch_descr(INDEX)\", \"channelAddress\" : \"$ch_descr(ADDRESS)\" \});"
+        puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
+      puts "</script>"
+    } else {
+      puts "<script type='text/javascript'>"
+        puts "var ext = translateKey('chType_MULTI_MODE_INPUT_TRANSMITTER');";
         puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
       puts "</script>"
     }

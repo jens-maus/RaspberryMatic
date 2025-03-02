@@ -131,7 +131,7 @@
     integer userID = oUser.ID();
     object user = dom.GetObject(userID);
     integer virtChnCounter = 0;
-    
+
     object device = dom.GetObject(system.GetVar("id"));
     if (device) {
       if (device.Visible()) {

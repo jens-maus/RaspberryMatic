@@ -1185,7 +1185,7 @@ function ::CreatePowermeterESIControl_CurConsumption() {
       oEnergyStatus = cObj.DPByControl("POWERMETER_PSM.GAS_FLOW_STATUS");
       unit = "m<sup>3</sup>/h";
       lblHeader = "${powerMeasurementA}";
-      if (oEnergy) {curConsumption = oEnergy.State().ToString(2);}
+      if (oEnergy) {curConsumption = oEnergy.State().ToString(3);}
       if (oEnergyStatus) {
         curStatus = arDeviceState.StrValueByIndex(',',oEnergyStatus.Value());
         if (oEnergyStatus.Value() > 0) {

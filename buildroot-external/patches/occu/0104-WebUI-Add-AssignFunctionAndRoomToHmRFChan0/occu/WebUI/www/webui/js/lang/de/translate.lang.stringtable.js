@@ -1425,6 +1425,8 @@ jQuery.extend(true,langJSON, {
     "stringTableSensorError" : "Kein Sensor erkannt",
     "stringTableMeterObisSearchString" : "OBIS String",
 
+    "stringTableButtonResponseWithoutBacklight" : "Sofortige Reaktion auf Tastendruck<br/>ohne vorherige Hintergrundbeleuchtung",
+
     "noMoreKeys" : ""
   }
 });

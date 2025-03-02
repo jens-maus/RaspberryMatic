@@ -57,16 +57,7 @@
  
      "chType_ACCELERATION_TRANSCEIVER" : "Lage-/Beschleunigungssensor",
      "chType_ACCESS_RECEIVER" : "Benutzer",
-@@ -86,7 +137,7 @@
-     "chType_JALOUSIE" : "Jalousieaktor",
-     "chType_KEY" : "Taster",
-     "chType_KEY_TRANSCEIVER" : "Taster",
--    "chType_KWL_CONTROLLER_TRANSMITTER" : "",
-+    "chType_KWL_CONTROLLER_TRANSMITTER" : "KWL Controller Sender",
-     "chType_LEVEL_COMMAND_TRANSMITTER_CO2" : "Entscheidungswert CO2",
-     "chType_LEVEL_COMMAND_TRANSMITTER_HUMIDITY" : "Entscheidungswert Feuchtigkeit",
-     "chType_LEVEL_COMMAND_TRANSMITTER_TEMPERATURE" : "Entscheidungswert Temperatur",
-@@ -108,7 +159,7 @@
+@@ -114,7 +165,7 @@
      "chType_MULTI_MODE_INPUT_TRANSMITTER_4" : "Level",
      "chType_MULTI_MODE_INPUT_TRANSMITTER_5" : "Bedingung",
      "chType_OPTICAL_SIGNAL_RECEIVER" : "Farbsignal",
@@ -75,7 +66,7 @@
      "chType_OPTICAL_SIGNAL_RECEIVERB" : "Statusmitteilung Farbsignal",
      "chType_PASSAGE_DETECTOR_COUNTER_TRANSMITTER" : "Durchgangsz%E4hler",
      "chType_PASSAGE_DETECTOR_DIRECTION_TRANSMITTER_LR" : "Durchgangserkennung<br/>Links nach Rechts",
-@@ -175,7 +226,7 @@
+@@ -185,7 +236,7 @@
      "SENSOR_WINDOW" : "Homematic IP Fenster Zustandserkennung",
      "SWITCH_ACTUATOR" : "Homematic IP Schaltaktor",
      "WALLMOUNTED_THERMOSTAT" : "Homematic IP Wandthermostat",
@@ -143,16 +134,7 @@
      "chType_ACCELERATION_TRANSCEIVER" : "Position/Acceleration sensor",
      "chType_ACCESS_RECEIVER" : "User",
      "chType_ACCESSPOINT_GENERIC_RECEIVER_1" : "Homematic IP Wired Bus Channel 1",
-@@ -83,7 +134,7 @@
-     "chType_JALOUSIE" : "Jalousie actuator",
-     "chType_KEY" : "Push button",
-     "chType_KEY_TRANSCEIVER" : "Push button",
--    "chType_KWL_CONTROLLER_TRANSMITTER" : "",
-+    "chType_KWL_CONTROLLER_TRANSMITTER" : "Controlled Ventilation System Controller",
-     "chType_LEVEL_COMMAND_TRANSMITTER_CO2" : "Condition CO2",
-     "chType_LEVEL_COMMAND_TRANSMITTER_HUMIDITY" : "Condition humidity",
-     "chType_LEVEL_COMMAND_TRANSMITTER_TEMPERATURE" : "Condition temperature",
-@@ -105,7 +156,7 @@
+@@ -109,7 +160,7 @@
      "chType_MULTI_MODE_INPUT_TRANSMITTER_4" : "Level",
      "chType_MULTI_MODE_INPUT_TRANSMITTER_5" : "Condition",
      "chType_OPTICAL_SIGNAL_RECEIVER" : "Colour signal",

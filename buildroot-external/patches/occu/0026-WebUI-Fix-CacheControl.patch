@@ -91,7 +91,7 @@
    upvar $ps_arr ps
 --- occu/WebUI/www/config/ic_ifacecmd.cgi.orig
 +++ occu/WebUI/www/config/ic_ifacecmd.cgi
-@@ -810,7 +810,6 @@
+@@ -815,7 +815,6 @@
  
      html {
        head {
@@ -248,7 +248,7 @@
      request.done(function(result) {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7047,21 +7047,10 @@
+@@ -7149,21 +7149,10 @@
    /*####################*/
    
    /**
@@ -270,7 +270,7 @@
      var xhr = XMLHttpRequest_create();
      
      if (null !== xhr)
-@@ -23022,7 +23011,6 @@
+@@ -23289,7 +23278,6 @@
      url: "/ise/htm/header.htm",
      dataType: "html",
      async: false,
@@ -278,7 +278,7 @@
      context: document.body
      }).done(function(response) {
        jQuery("#header").html(response);
-@@ -27601,7 +27589,7 @@
+@@ -27868,7 +27856,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
@@ -287,7 +287,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -27616,9 +27604,9 @@
+@@ -27883,9 +27871,9 @@
        // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
  
        if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
@@ -299,7 +299,7 @@
        }
        $("body").appendChild(script);
        homematic.com.callback = callback;
-@@ -43192,9 +43180,6 @@
+@@ -43832,9 +43820,6 @@
    scriptname = Get_ReGa_Path(scriptname);
    var params = poststr;
  

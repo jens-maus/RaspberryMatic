@@ -24,7 +24,7 @@
        puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonTake' class='FooterButton' onclick='goBack=true; SaveDeviceParameters();'>\"+translateKey('footerBtnTransfer')+\"</div></td>\";"
        puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonOK' class='FooterButton' onclick='goBack=false; SaveDeviceParameters();'>\"+translateKey('footerBtnOk')+\"</div></td>\";"
        puts "  s += \"</tr>\";"
-@@ -1367,7 +1367,7 @@
+@@ -1363,7 +1363,7 @@
    
    puts "<TR>"
    puts "<td class=\"CLASS22012\" onclick=\"SaveDeviceParameters();\"><div class=\"CLASS21000\">OK</div></td>"
@@ -121,7 +121,7 @@
  
 --- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
-@@ -153,7 +153,11 @@
+@@ -154,7 +154,11 @@
              string trId = room.ID()#tmp;
              boolean showExtDesc = false;
              Write("<tr id='"#trId#"'>");
@@ -187,7 +187,7 @@
  .CLASS05005 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -30423,7 +30423,7 @@
+@@ -30690,7 +30690,7 @@
      };
      new Ajax.Request(url,opts);
    },
@@ -196,7 +196,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -30435,12 +30435,12 @@
+@@ -30702,12 +30702,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -211,7 +211,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -30453,12 +30453,12 @@
+@@ -30720,12 +30720,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -226,7 +226,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -30470,7 +30470,7 @@
+@@ -30737,7 +30737,7 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}

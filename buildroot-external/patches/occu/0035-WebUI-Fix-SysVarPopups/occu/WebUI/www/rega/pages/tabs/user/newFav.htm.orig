@@ -1023,7 +1023,7 @@ arChSv = new Array();
     };
   
     ChannelChooser.show(callback, ChannelChooser.SHOW_ALL);
-  }  
+  };
   
   ShowSysVarChooser = function(id)
   {
@@ -1037,7 +1037,7 @@ arChSv = new Array();
         iseFavorites.AddToList(id,dlgResult);
       }
     }
-  }
+  };
   
   ShowProgramChooser = function(id)
   {
@@ -1051,12 +1051,12 @@ arChSv = new Array();
         iseFavorites.AddToList(id,dlgResult);
       }
     }
-  }
+  };
   
   AddSeparator = function(id)
   {
     iseFavorites.AddSeparator(id);
-  }
+  };
   SaveFavoriteList = function()
   {
     var sArr = new Array();
@@ -1076,7 +1076,7 @@ arChSv = new Array();
       }
     %>    
     iseFavorites.SaveFavoriteList(<% Write( oFav.ID() ); %>, $('cbIsPC').checked, $('cbIsPDA').checked, $('cbIsCENTRAL').checked, sArr.join("\t") );
-  }
+  };
   
   CopyFavoriteList = function()
   {
@@ -1097,19 +1097,19 @@ arChSv = new Array();
       }
     %>    
     iseFavorites.CopyToNew(<% Write( oFav.ID() ); %>, $('cbIsPC').checked, $('cbIsPDA').checked, $('cbIsCENTRAL').checked, sArr.join("\t") );
-  }
+  };
   
   FavColCountSelect = function(idx)
   {
     iseFavorites.FavColumnCount( <% Write( oFav.ID() ); %>, idx );
-  }
+  };
   FavColAlignSelect = function(idx)
   {
     iseFavorites.FavColumnAlign( <% Write( oFav.ID() ); %>, idx );
-  }
+  };
   
   FavNamePosSelect = function(idx)
   {
     iseFavorites.FavNamePosition( <% Write( oFav.ID() ); %>, idx );
-  }
+  };
 </script>

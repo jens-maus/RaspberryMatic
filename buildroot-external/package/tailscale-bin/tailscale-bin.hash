@@ -1,6 +1,6 @@
 # Locally computed
 sha256  3227488750adebf5a8b33cc4105a109ae3d3267191c2a9ac7a2ecc38805ad4e8  LICENSE
-sha256  083b1fccbc7c34a6e284ada8b28cb6e832669b9f86cfe1efc31cb2530cff016b  tailscale_1.80.0_amd64.tgz
-sha256  05caac1fdcfd4e40feef8039c6b93660b2256dc9f1c1e9313cef4688afc58742  tailscale_1.80.0_386.tgz
-sha256  b96637ebd3f9c3096a84b7e0061a0a618f6328087f7df03c49b247142cf49a4b  tailscale_1.80.0_arm.tgz
-sha256  5ccafccbb8c25cfb3c5ef8b16334952a8eef63f1f2d759da719e725a885d2c1e  tailscale_1.80.0_arm64.tgz
+sha256  24e370743442297e54f7b3eeef1e0644ddfd58fd62e17a45e0b3caf47aa420a0  tailscale_1.80.2_amd64.tgz
+sha256  57b70486db74fca8ee8cf7b12d5c80daf17ba6fdf64472d8f1be00dd5e2ba0e4  tailscale_1.80.2_386.tgz
+sha256  2809d165f7d35ded18f561793ee1013690f4f5606acdc5b9e52ce0fcdb21cd6f  tailscale_1.80.2_arm.tgz
+sha256  4f1cb13ff91529d8074524966d4eada3a9a412c8995ab6b66b8eb637017211c8  tailscale_1.80.2_arm64.tgz

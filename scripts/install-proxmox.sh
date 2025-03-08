@@ -6,7 +6,7 @@
 #
 # Inspired by https://github.com/whiskerz007/proxmox_hassos_install
 #
-# Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2022-2025 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.14"
+VERSION="3.15"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -200,7 +200,7 @@ update() {
   done < <(pct list)
 
   if [[ -z "${CONTAINER_MENU[*]}" ]]; then
-    die "No RaspberryMatic container identified."
+    die "No installed RaspberryMatic container (CT) identified. The 'update' procedure is only for CT-based installations of RaspberryMatic!"
   fi
 
   CONTAINER=

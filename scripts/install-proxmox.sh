@@ -287,7 +287,7 @@ update() {
 select_version() {
 
   # define the download archive end pattern
-  if [[ ${VMTYPE} == "VM" ]]; then
+  if [[ "${VMTYPE}" == "VM" ]]; then
 
     case "${PLATFORM}" in
       x86_64)
@@ -407,7 +407,7 @@ EOF
 }
 
 msg "RaspberryMatic Proxmox installation script v${VERSION}"
-msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
+msg "Copyright (c) 2022-2025 Jens Maus <mail@jens-maus.de>"
 msg ""
 
 # create temp dir
@@ -452,7 +452,7 @@ VMTYPE=$(whiptail --title "Virtual machine type selection" \
 
 info "Using ${VMTYPE} as target virtual machine type"
 
-if [[ ${VMTYPE} == "CT" ]]; then
+if [[ "${VMTYPE}" == "CT" ]]; then
 
   text=$(cat <<EOF
 When running RaspberryMatic as a LXC container, the Proxmox host system
@@ -652,6 +652,13 @@ select_version RELEASE URL
 # Select storage location
 info "Selecting storage location"
 MSG_MAX_LENGTH=0
+
+if [[ "${VMTYPE}" == "CT" ]]; then
+  CONTENT_TYPE="rootdir"
+else
+  CONTENT_TYPE="images"
+fi
+
 while read -r line; do
   TAG=$(echo "${line}" | awk '{print $1}')
   TYPE=$(echo "${line}" | awk '{printf "%-10s", $2}')
@@ -662,7 +669,7 @@ while read -r line; do
     MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
   fi
   STORAGE_MENU+=( "${TAG}" "${ITEM}" "OFF" )
-done < <(pvesm status -content images | awk 'NR>1')
+done < <(pvesm status -content ${CONTENT_TYPE} | awk 'NR>1')
 if [ $((${#STORAGE_MENU[@]}/3)) -eq 0 ]; then
   warn "'Disk image' needs to be selected for at least one storage location."
   die "Unable to detect valid storage location."

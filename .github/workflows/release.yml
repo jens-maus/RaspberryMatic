@@ -106,7 +106,10 @@ jobs:
 
   build:
     permissions:
-      contents: write  # shogo82148/actions-upload-release-asset
+      contents: write     # actions/upload-artifact, shogo82148/actions-upload-release-asset
+      id-token: write     # actions/attest-build-provenance
+      attestations: write # actions/attest-build-provenance
+      contents: read      # actions/attest-build-provenance
     name: Release build [${{ matrix.platform }}]
     if: github.repository == 'jens-maus/RaspberryMatic'
     runs-on: self-hosted
@@ -284,6 +287,7 @@ jobs:
       ########################
       # upload build artifacts
       - name: Upload build artifact [oci]
+        id: upload-oci
         if: |
           startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
@@ -292,13 +296,30 @@ jobs:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
+      - name: Attest build artifact provenance [oci]
+        if: |
+          startsWith(matrix.platform, 'oci_')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
+          subject-digest: sha256:${{ steps.upload-oci.outputs.artifact-digest }}
+        continue-on-error: true
+
       #######################
       # manifest file artifact upload
       - name: Upload manifest artifact
+        id: upload-manifest
         uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+
+      - name: Attest manifest artifact provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+          subject-digest: sha256:${{ steps.upload-manifest.outputs.artifact-digest }}
+        continue-on-error: true
 
   ##########################################
   # Update checksums in release draft
@@ -346,8 +367,10 @@ jobs:
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     permissions:
-      contents: write  # ncipollo/release-action
-      packages: write  # docker/build-push-action
+      contents: write     # ncipollo/release-action
+      packages: write     # docker/build-push-action
+      id-token: write     # actions/attest-build-provenance
+      attestations: write # actions/attest-build-provenance
     name: OCI/Docker Build+Push
     runs-on: ubuntu-24.04
     needs: [release_draft, build]
@@ -480,8 +503,16 @@ jobs:
           annotations: |
             ${{ steps.meta.outputs.annotations }}
 
-      - name: Image digest
+      - name: Container image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Attest container provenance
+        uses: actions/attest-build-provenance@v2
+        id: attest
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/raspberrymatic
+          subject-digest: ${{ steps.docker_build.outputs.digest }}
+          push-to-registry: true
 
       - name: Cleanup oci_build dir
         run: |

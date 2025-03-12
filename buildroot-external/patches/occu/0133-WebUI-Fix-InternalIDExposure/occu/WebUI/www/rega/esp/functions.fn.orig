@@ -501,12 +501,6 @@ function ::showHideHmIPChannel() {
       return;
     }
 
-    ! HmIP-WGS(-A)
- !   if ((chn.HssType().Find("BACKLIGHTING_RECEIVER") != -1) )  {
- !     bShowChannel = false;
- !     return;
- !   }
-
     if (user.UserEasyLinkMode() == true) {
       if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)
       || ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1) && (chn.HssType().Find("COND_") == -1))

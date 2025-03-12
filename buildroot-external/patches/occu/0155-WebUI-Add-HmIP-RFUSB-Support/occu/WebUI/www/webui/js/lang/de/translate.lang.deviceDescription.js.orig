@@ -33,6 +33,7 @@ jQuery.extend(true,langJSON, {
     "ELV-SH-KRCO" : "ELV Smart Home Taster Kompakt - Outdoor",
     "ELV-SH-SB8" : "ELV Smart Home<br/>Status-Board",
     "ELV-SH-TACO" : "ELV Smart Home<br/>Temperatur- und Beschleunigungssensor<br/>Au%DFen",
+    "ELV-SH-WSM" : "ELV Smart Home<br/>Bew%E4sserungsaktor",
     "FDT": "Homematic IP Dimmaktor, Unterputzmontage",
     "FSM": "Homematic IP Schaltaktor mit Leistungsmessung, Unterputzmontage",
     "FSM16": "Homematic IP Schaltaktor mit Leistungsmessung, Unterputzmontage",
@@ -252,6 +253,7 @@ jQuery.extend(true,langJSON, {
     "HmIP-SWO-PR": "Homematic IP Wettersensor - pro",
     "HmIP-USBSM" : "Homematic IP Schalt-Mess-Aktor f%FCr USB",
     "HmIP-WGC": "Homematic IP Garagentortaster",
+    "HmIP-WGS": "Homematic IP Glastaster",
     "HmIP-WGT": "Homematic IP Glasthermostat - 230 V",
     "HmIP-WHS2": "Homematic IP Schaltaktor f%FCr Heiz-Systeme - 2 Kanal",
     "HmIP-WKP": "Homematic IP Keypad",
@@ -260,6 +262,9 @@ jQuery.extend(true,langJSON, {
     "HmIP-WRC2": "Homematic IP Wandtaster 2-fach",
     "HmIP-WRCC2": "Homematic IP Wandtaster - flach",
     "HmIP-WSC" : "Homematic IP Servosteuerung",
+
+    "HmIP-WSM" : "Homematic IP Bew%E4sserungsaktor",
+
     "HmIP-WTH": "Homematic IP Wandthermostat",
     "HmIP-WTH-B": "Homematic IP Wandthermostat - basic",
     "HmIP-WTH-2": "Homematic IP Wandthermostat mit Luftfeuchtigkeitssensor",

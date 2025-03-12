@@ -3763,7 +3763,7 @@ DEV_PATHS["ZEL STG RM FSA"]["50"] = "/config/img/devices/50/43_hm-cc-vd_thumb.pn
 DEV_PATHS["ZEL STG RM FSA"]["250"] = "/config/img/devices/250/43_hm-cc-vd.png";
 DEV_HIGHLIGHT["ZEL STG RM FSA"] = new Object();
 DEV_LIST.push('ELV-SH-WSM');
-DEV_DESCRIPTION["ELV-SH-WSM"] = "HmIP-WSM";
+DEV_DESCRIPTION["ELV-SH-WSM"] = "ELV-SH-WSM";
 DEV_PATHS["ELV-SH-WSM"] = new Object();
 DEV_PATHS["ELV-SH-WSM"]["50"] = "/config/img/devices/50/246_elv-sh-wsm_thumb.png";
 DEV_PATHS["ELV-SH-WSM"]["250"] = "/config/img/devices/250/246_elv-sh-wsm.png";
@@ -5458,6 +5458,7 @@ elvST['ERROR_DALI_BUS=FALSE'] = '${stringTableErrorDaliBusFalse}';
 elvST['ERROR_DALI_BUS=TRUE'] = '${stringTableErrorDaliBusTrue}';
 elvST['ERROR_DEGRADED_CHAMBER'] = '${stringTableErrorDegradedChamber}';
 elvST['ERROR_DEGRADED_CHAMBER=FALSE'] = '${stringTableErrorDegradedChamberFalse}';
+elvST['ERROR_FROST_PROTECTION'] = '${stringTableErrorErrorFrostProtection}';
 elvST['ERROR_FROST_PROTECTION=FALSE'] = '${stringTableErrorErrorFrostProtectionFalse}';
 elvST['ERROR_FROST_PROTECTION=TRUE'] = '${stringTableErrorErrorFrostProtectionTrue}';
 elvST['ERROR_MOUNTING_MODULE=FALSE'] = '${stringTableErrorMountingModuleFalse}';
@@ -11000,17 +11001,22 @@ Device = Class.create({
       }
       // End debugging
 
+
       this.interfaceName = data["interface"];
       this.isReadyConfig = data["isReady"];
-      this.thumbnailHTML = deviceType.getThumbnailHTML();
-      this.imageHTML = deviceType.getImageHTML();
       this.deviceType = deviceType;
       this.typeName = deviceType.name;
       this.typeDescription = deviceType.description;
       this.isDeletable = deviceType.isDeletable();
       this.isOperateGroupOnly = (data["operateGroupOnly"] == "true") ? true : false;
       this.deviceInputCheck = false;
-    
+
+      if (this.typeName.indexOf("HmIP-WGS") != -1) {
+        this.setPrevPic("HmIP-WGS");
+      }
+      this.thumbnailHTML = deviceType.getThumbnailHTML();
+      this.imageHTML = deviceType.getImageHTML();
+
       this.channels = new Array();
       this.groups = new Array();
       this.singles = new Array();
@@ -11058,7 +11064,36 @@ Device = Class.create({
     this.rooms       = this.rooms.uniq().ex_sortBy("name");
     this.subsections = this.subsections.uniq().ex_sortBy("name");
   },
-  
+
+  /**
+   * Ändert das Default Vorschaubild eines Gerätes
+   * @param pic
+   */
+  setPrevPic: function(dev) {
+    if (dev == "HmIP-WGS") {
+      var chnDescription = homematic("Interface.getParamset", {
+        "interface": "HmIP-RF",
+        "address": this.address + ":0",
+        "paramsetKey": "MASTER"
+      });
+      var mode = parseInt(chnDescription["DEVICE_INPUT_LAYOUT_MODE"]);
+
+      if (mode == 0) {
+        DEV_PATHS[this.typeName][50] = "/config/img/devices/50/239_hmip-wgs-f_thumb_0.png";
+        DEV_PATHS[this.typeName][250] = "/config/img/devices/250/239_hmip-wgs-f_0.png";
+      } else if (mode == 1) {
+        DEV_PATHS[this.typeName][50] = "/config/img/devices/50/239_hmip-wgs-f_thumb_v-2.png";
+        DEV_PATHS[this.typeName][250] = "/config/img/devices/250/239_hmip-wgs-f_v-2.png";
+      } else if (mode == 2) {
+        DEV_PATHS[this.typeName][50] = "/config/img/devices/50/239_hmip-wgs-f_thumb_h-2.png";
+        DEV_PATHS[this.typeName][250] = "/config/img/devices/250/239_hmip-wgs-f_h-2.png";
+      } else if (mode == 3) {
+        DEV_PATHS[this.typeName][50] = "/config/img/devices/50/239_hmip-wgs-f_thumb_1-4.png";
+        DEV_PATHS[this.typeName][250] = "/config/img/devices/250/239_hmip-wgs-f_1-4.png";
+      }
+    }
+  },
+
   /**
    * Legt den Namen des Geräts fest.
    **/
@@ -11481,6 +11516,21 @@ DeviceList = Singleton.create({
     
     return undefined;
   },
+
+  // Returns an array of devices matching typeName - typeName is something like 'HmIP-WGS-A"
+  getDevicesByTypeName: function(typeName) {
+    var arDevices = [];
+    for (var id in this.devices)
+    {
+      var device = this.devices[id];
+      if (device.typeName == typeName)
+      {
+        arDevices.push(device);
+      }
+    }
+    return arDevices;
+  },
+
 
   /**
    * Liefert eine Kanalgruppe anhand ihrer Id
@@ -12687,6 +12737,7 @@ ChannelChooser = Singleton.create({
       && (channelTypeName != "hmip-pdt")
       && (channelTypeName != "hmip-pdt-uk")
       && (channelTypeName != "hmip-pcbs")
+      && ((channelTypeName != "hmip-wgs") && (channelTypeName != "hmip-wgs-a")) // the wgs gets a special treatment further down
     ) {
       arChannels.push(channel);
     }
@@ -12828,9 +12879,32 @@ ChannelChooser = Singleton.create({
       } else {
         arChannels.push(channel);
       }
-      return arChannels;
     }
 
+    // Depending on the selected layout mode (1, 2 or 4 buttons) we have to filter some channels
+    if ((channel.channelType == "KEY_TRANSCEIVER") && ((channelTypeName == "hmip-wgs") || (channelTypeName == "hmip-wgs-a"))) {
+      var curDevice, chnDescription, mode;
+      curDevice = channel.device.address;
+      chnDescription = homematic("Interface.getParamset", {
+        "interface": "HmIP-RF",
+        "address": curDevice + ":0",
+        "paramsetKey": "MASTER"
+      });
+      mode = parseInt(chnDescription["DEVICE_INPUT_LAYOUT_MODE"]);
+
+      if (mode == 0) {
+        if (channel.index == 1 || channel.index == 5) {
+          arChannels.push(channel);
+        }
+      } else if (mode == 1 || mode == 2) {
+        if (channel.index == 1 || channel.index == 2 || channel.index == 5) {
+          arChannels.push(channel);
+        }
+      } else {
+        arChannels.push(channel);
+      }
+    }
+    return arChannels;
   },
 
   filterHmIPChannels4ProgramActivities: function(channel, arChannels) {

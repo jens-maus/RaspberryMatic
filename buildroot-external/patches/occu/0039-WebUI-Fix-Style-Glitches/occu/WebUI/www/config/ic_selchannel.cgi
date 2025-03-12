@@ -887,6 +887,20 @@ proc showHmIPChannel {devType direction address chType} {
     }
   }
 
+  if {(($devType == "HMIP-WGS") || ($devType == "HMIP-WGS-A")) && ($chType == "KEY_TRANSCEIVER")} {
+    # Determine the selected layout mode of the device
+    set devAddress [lindex [split $address ":"] 0]
+    set url $iface_url(HmIP-RF)
+    array set ch_ps [xmlrpc $url getParamset [list string $devAddress:0] [list string MASTER]]
+    set mode $ch_ps(DEVICE_INPUT_LAYOUT_MODE)
+
+    if {$mode == 0} {
+      if {($ch == 2) || ($ch == 3) || ($ch == 4) } {return 0} ;# hide chn 2, 3 and 4
+    }
+    if {($mode == 1) || ($mode == 2)} {
+      if {($ch == 3) || ($ch == 4)} {return 0} ;# hide chn 3 and 4
+    }
+  }
 
   # Hide the virtual channel 2 and 3 of HmIP devices when the expert mode is not activated.
   if {! [session_is_expert]} {

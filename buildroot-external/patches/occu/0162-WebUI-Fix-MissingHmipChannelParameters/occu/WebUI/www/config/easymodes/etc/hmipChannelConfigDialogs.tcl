@@ -225,18 +225,47 @@ proc getMaintenance {chn p descr address} {
   # HmIP-WGS and HmIP-WGS-A
   set param DEVICE_INPUT_LAYOUT_MODE
   if {[info exists ps($param)] == 1} {
-      incr prn
-      append html "[getHorizontalLine]"
-      append html "<tr>"
-        append html "<td>\${lblDisplayLayoutMode}</td>"
-          array_clear options
-          set options(0) "\${optionOneBtn}"
-          set options(1) "\${optionTwoBtnLeftRRight}"
-          set options(2) "\${optionTwoBtnUpDDown}"
-          set options(3) "\${optionFourBtn}"
-        append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]&nbsp;[getHelpIcon $param\_WGS]</td>"
+    incr prn
+    append html "[getHorizontalLine]"
+    append html "<tr>"
+      append html "<td>\${lblDisplayLayoutMode}</td>"
+        array_clear options
+        set options(0) "\${optionOneBtn}"
+        set options(1) "\${optionTwoBtnLeftRRight}"
+        set options(2) "\${optionTwoBtnUpDDown}"
+        set options(3) "\${optionFourBtn}"
+      append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]&nbsp;[getHelpIcon $param\_WGS 450 50] </td>"
 
-      append html "</tr>"
+      append html "<tr><td colspan='3'>"
+        append html "<span id='hintLinksPrograms' class='attention hidden'></span>"
+      append html "</td></tr>"
+
+      # Check if links or programs exist
+      set linksAvailable 0
+      set parentAddress $dev_descr(ADDRESS)
+
+      for {set loop 1} {$loop <= 4} {incr loop} {
+        set chnAddress "$parentAddress:[expr $chn + $loop]"
+        if {[getLinkCountByAddress $iface $chnAddress] > 0} {
+          set linksAvailable 1
+          break;
+        }
+      }
+
+      append html "<script type=\"text/javascript\">"
+        append html "var hint = '';"
+        append html "var hasLinks = ($linksAvailable == 1) ? true : false;"
+        append html "var oDevice = DeviceList.getDeviceByAddress('$parentAddress');"
+        append html "var hasPrograms = homematic('Device.hasPrograms', {'id': oDevice.id});"
+
+        append html "if (hasPrograms || hasLinks) \{"
+          append html "jQuery('\[name=\"DEVICE_INPUT_LAYOUT_MODE\"\]').first().prop('disabled', true);"
+          append html "hint = (hasPrograms && hasLinks) ? translateKey('hintLayoutModeLinksAndProgramsAvailable') : (hasPrograms)  ? translateKey('hintLayoutModeProgramsAvailable') : (hasLinks)  ? translateKey('hintLayoutModeLinksAvailable') : '';"
+          append html "jQuery('#hintLinksPrograms').html(hint).show();"
+        append html "\}"
+
+      append html "</script>"
+    append html "</tr>"
   }
 
 set comment {

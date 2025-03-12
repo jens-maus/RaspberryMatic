@@ -113,20 +113,35 @@ proc set_htmlParams {iface address pps pps_descr special_input_id peer_type} {
   set hlpBoxWidth 450
   set hlpBoxHeight 160
 
-  foreach val [array names psDescr] {
-    #puts "$val: $psDescr($val)\n"
+  set isGroup ""
+
+  if {[string equal [string range $address 0 2] "INT"] == 1} {
+    set isGroup "_group"
+  }
+
+  set weeklyPrograms 3
+
+  set param P6_TEMPERATURE_MONDAY_1
+  if { [info exists ps($param)] == 1  } {
+      set weeklyPrograms 6
   }
 
   puts "<script type=\"text/javascript\">"
     puts "ShowActiveWeeklyProgram = function(activePrg) {"
-      puts " for (var i = 1; i <= 3; i++) {"
+      puts " for (var i = 1; i <= $weeklyPrograms; i++) {"
         puts "jQuery('#P' + i + '_Timeouts_Area').hide();"
       puts " }"
       puts " jQuery('#P' + activePrg + '_Timeouts_Area').show();"
     puts "};"
+
+    puts "setDisplayMode = function(elem) {"
+      puts "var mode = jQuery(elem).val();"
+      puts "modeElem = jQuery(\".j_showHumidity\");"
+      puts "if (mode == 0) {"
+        puts "jQuery(modeElem).show();"
+      puts "} else {jQuery(modeElem).hide();}"
+    puts "};"
   puts "</script>"
-
-
   append HTML_PARAMS(separate_1) "<script type=\"text/javascript\">load_JSFunc('/config/easymodes/js/CC.js');load_JSFunc('/config/easymodes/MASTER_LANG/HEATINGTHERMOSTATE_2ND_GEN.js');load_JSFunc('/config/easymodes/MASTER_LANG/HEATINGTHERMOSTATE_2ND_GEN_HELP.js');</script>"
 
   append HTML_PARAMS(separate_1) "[addHintHeatingGroupDevice $address]"
@@ -135,26 +150,32 @@ proc set_htmlParams {iface address pps pps_descr special_input_id peer_type} {
 
   set param WEEK_PROGRAM_POINTER
   append HTML_PARAMS(separate_1) "<table class=\"ProfileTbl\">"
-    append HTML_PARAMS(separate_1) "<td class='hidden'><input type='text' id='separate_$CHANNEL\_$prn' name='$param'></td>"
+    append HTML_PARAMS(separate_1) "<tr>"
+      append HTML_PARAMS(separate_1) "<td class='hidden'><input type='text' id='separate_$CHANNEL\_$prn' name='$param'></td>"
     append HTML_PARAMS(separate_1) "</tr>"
 
     # left
     append HTML_PARAMS(separate_1) "<tr>"
       append HTML_PARAMS(separate_1) "<td name=\"_expertParam\" class=\"_hidden\">\${stringTableWeekProgramToEdit}</td>"
-      #append HTML_PARAMS(separate_1) "<td name=\"_expertParam\" class=\"_hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param "onchange=\"ShowActiveWeeklyProgram(parseInt(\$(this).value)+1);\""][getHelpIcon $param [expr $hlpBoxWidth * 0.8] [expr $hlpBoxHeight / 2]]</td>"
       append HTML_PARAMS(separate_1) "<td name=\"_expertParam\" class=\"_hidden\">"
         append HTML_PARAMS(separate_1) "<select id=\"editProgram\" onchange=\"ShowActiveWeeklyProgram(parseInt(\$(this).value)+1);\">"
           append HTML_PARAMS(separate_1) "<option value='0'>\${stringTableWeekProgram1}</option>"
           append HTML_PARAMS(separate_1) "<option value='1'>\${stringTableWeekProgram2}</option>"
           append HTML_PARAMS(separate_1) "<option value='2'>\${stringTableWeekProgram3}</option>"
-      append HTML_PARAMS(separate_1) "</select>[getHelpIcon $param [expr $hlpBoxWidth * 0.8] [expr $hlpBoxHeight / 2]]"
+          if {$weeklyPrograms > 3} {
+            append HTML_PARAMS(separate_1) "<option value='3'>\${stringTableWeekProgram4}</option>"
+            append HTML_PARAMS(separate_1) "<option value='4'>\${stringTableWeekProgram5}</option>"
+            append HTML_PARAMS(separate_1) "<option value='5'>\${stringTableWeekProgram6}</option>"
+          }
+      append HTML_PARAMS(separate_1) "</select>&nbsp;[getHelpIcon $param$isGroup 400 100]"
       append HTML_PARAMS(separate_1) "</td>"
     append HTML_PARAMS(separate_1) "</tr>"
   append HTML_PARAMS(separate_1) "</table>"
 
-  ## Create 3 Weekly Programs ##
 
-  for {set loop 1} {$loop <=3} {incr loop} {
+  ## Create the weekly Programs ##
+
+  for {set loop 1} {$loop <=$weeklyPrograms} {incr loop} {
     set pNr "P$loop";
     append HTML_PARAMS(separate_1) "<div id=\"$pNr\_Timeouts_Area\" style=\"display:none\">"
     foreach day {SATURDAY SUNDAY MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY} {

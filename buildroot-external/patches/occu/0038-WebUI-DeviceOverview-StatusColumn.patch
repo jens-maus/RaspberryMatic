@@ -178,9 +178,9 @@
        <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
      <\/tr>  \n
    <\/tfoot>\n
-@@ -11825,6 +11833,162 @@
+@@ -11860,6 +11868,162 @@
    },
-   
+ 
    /**
 +   * Startet die Aktualisierung der Werte des Gerätestatus
 +   **/
@@ -341,7 +341,7 @@
     * Legt den Namen des Geräts fest.
     **/
    setName: function(name)
-@@ -12212,6 +12376,36 @@
+@@ -12247,6 +12411,36 @@
    },
    
    /**
@@ -378,7 +378,7 @@
     * Startet die Akualisierung eines Geräts.
     **/
    beginUpdateDevice:function(id, callback)
-@@ -13952,6 +14146,8 @@
+@@ -14026,6 +14220,8 @@
          conInfo(e);
        }
      });
@@ -387,7 +387,7 @@
    }
  });
  /**
-@@ -14409,6 +14605,8 @@
+@@ -14483,6 +14679,8 @@
  
      translateJSTemplate("#MultiChannelChooserDialog");
      translatePage(".MultiChannelChooserRow");
@@ -396,7 +396,7 @@
    }
      
  });
-@@ -25738,6 +25936,8 @@
+@@ -25812,6 +26010,8 @@
      translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
      jQuery("#DeviceListPage_RoomFilter").draggable();
      jQuery("#DeviceListPage_FuncFilter").draggable();

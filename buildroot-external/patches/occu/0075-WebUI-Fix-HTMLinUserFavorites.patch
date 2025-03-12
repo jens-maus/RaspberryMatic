@@ -18,7 +18,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32397,23 +32397,6 @@
+@@ -32470,23 +32470,6 @@
    new Ajax.Request(url,opt);
  };
  

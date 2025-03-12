@@ -55,7 +55,7 @@
  }
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -769,7 +769,7 @@
+@@ -798,7 +798,7 @@
          # append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
  
          append html "<td>"
@@ -64,7 +64,7 @@
            append html "<input id='separate_CHANNEL_$chn\_$prn' name='$param' type='text' class='hidden'>"
          append html "</td>"
        append html "</tr>"
-@@ -3871,7 +3871,7 @@
+@@ -3900,7 +3900,7 @@
          append html "<td>\${stringTableCondThresholdLo}</td>"
          append html "<td>"
  
@@ -73,7 +73,7 @@
            append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
  
          append html "</td>"
-@@ -3885,7 +3885,7 @@
+@@ -3914,7 +3914,7 @@
          append html "<td>\${stringTableCondThresholdHi}</td>"
          append html "<td>"
  
@@ -545,7 +545,7 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -46155,50 +46155,65 @@
+@@ -46228,50 +46228,65 @@
      srcElm.value = value;
    }
  
@@ -625,7 +625,7 @@
      }
      srcElm.setAttribute("valvalid", "true");
    }
-@@ -46206,9 +46221,9 @@
+@@ -46279,9 +46294,9 @@
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";

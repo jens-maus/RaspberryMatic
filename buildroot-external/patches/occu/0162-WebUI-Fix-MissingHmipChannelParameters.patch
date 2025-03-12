@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -4204,6 +4204,7 @@
+@@ -4233,6 +4233,7 @@
    set html ""
    set param EVENT_DELAY_UNIT
    if { [info exists ps($param)] == 1 } {

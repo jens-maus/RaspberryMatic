@@ -803,6 +803,7 @@ ERROR_DALI_BUS=FALSE	${stringTableErrorDaliBusFalse}
 ERROR_DALI_BUS=TRUE	${stringTableErrorDaliBusTrue}
 ERROR_DEGRADED_CHAMBER	${stringTableErrorDegradedChamber}
 ERROR_DEGRADED_CHAMBER=FALSE	${stringTableErrorDegradedChamberFalse}
+ERROR_FROST_PROTECTION	${stringTableErrorErrorFrostProtection}
 ERROR_FROST_PROTECTION=FALSE	${stringTableErrorErrorFrostProtectionFalse}
 ERROR_FROST_PROTECTION=TRUE	${stringTableErrorErrorFrostProtectionTrue}
 ERROR_MOUNTING_MODULE=FALSE	${stringTableErrorMountingModuleFalse}

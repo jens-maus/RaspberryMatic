@@ -506,6 +506,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Attest container provenance
+        if: github.event.inputs.test_workflow != 'true'
         uses: actions/attest-build-provenance@v2
         id: attest
         with:

@@ -40,53 +40,83 @@
  set PROFILE_2(SHORT_OFF_TIME_FACTOR) {31 range 0 - 31}
 --- occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_COUNTER_TRANSMITTER.tcl.orig
 +++ occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_COUNTER_TRANSMITTER.tcl
-@@ -34,6 +34,7 @@
- set PROFILE_1(SHORT_JT_RAMPOFF)   6
- set PROFILE_1(SHORT_JT_RAMPON)    3
- set PROFILE_1(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-+set PROFILE_1(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
- set PROFILE_1(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
- set PROFILE_1(SHORT_OFFDELAY_TIME_BASE)       {0 range 0 - 7}
- set PROFILE_1(SHORT_OFFDELAY_TIME_FACTOR)     {0 range 0 - 31}
-@@ -70,6 +71,7 @@
- set PROFILE_2(SHORT_JT_RAMPOFF)             3
- set PROFILE_2(SHORT_JT_RAMPON)              6
- set PROFILE_2(SHORT_ON_LEVEL)               {1.0 range 0.0 - 1.005}
+@@ -44,6 +44,7 @@
+ set PROFILE_1(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_1(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_1(SHORT_ON_TIME_MODE)             0
++set PROFILE_1(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_1(SHORT_OFF_TIME_MODE)            0
+ set PROFILE_1(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_1(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+@@ -80,6 +81,7 @@
+ set PROFILE_2(SHORT_ON_TIME_BASE)           {7 range 0 - 7}
+ set PROFILE_2(SHORT_ON_TIME_FACTOR)         {31 range 0 - 31}
+ set PROFILE_2(SHORT_ON_TIME_MODE)           0
 +set PROFILE_2(SHORT_ON_MIN_LEVEL)           {0.1 range 0.0 - 1.0}
- set PROFILE_2(SHORT_OFF_LEVEL)              {0.0 range 0.0 - 1.005}
- set PROFILE_2(SHORT_OFFDELAY_TIME_BASE)     {0 range 0 - 7}
- set PROFILE_2(SHORT_OFFDELAY_TIME_FACTOR)   {0 range 0 - 31}
-@@ -105,6 +107,7 @@
- set PROFILE_3(SHORT_JT_RAMPOFF)               2
- set PROFILE_3(SHORT_JT_RAMPON)                2
- set PROFILE_3(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-+set PROFILE_3(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
- set PROFILE_3(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
- set PROFILE_3(SHORT_MULTIEXECUTE)             0
- set PROFILE_3(SHORT_OFFDELAY_TIME_BASE)       0
-@@ -142,6 +145,7 @@
- set PROFILE_4(SHORT_JT_RAMPON)                6
- set PROFILE_4(SHORT_JT_RAMPOFF)               6
- set PROFILE_4(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-+set PROFILE_4(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
- set PROFILE_4(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
- set PROFILE_4(SHORT_MULTIEXECUTE)             0
- set PROFILE_4(SHORT_OFFDELAY_TIME_BASE)       0
+ set PROFILE_2(SHORT_OFF_TIME_MODE)          0
+ set PROFILE_2(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_2(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+@@ -117,6 +119,7 @@
+ set PROFILE_3(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_3(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_3(SHORT_ON_TIME_MODE)             0
++set PROFILE_3(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_3(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_3(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+ set PROFILE_3(SHORT_OPTICAL_SIGNAL_BEHAVIOUR) {1 range 0 - 12}
+@@ -154,6 +157,7 @@
+ set PROFILE_4(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_4(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_4(SHORT_ON_TIME_MODE)             0
++set PROFILE_4(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_4(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_4(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+ set PROFILE_4(SHORT_OPTICAL_SIGNAL_BEHAVIOUR) {1 range 0 - 12}
 --- occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_DIRECTION_TRANSMITTER.tcl.orig
 +++ occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_DIRECTION_TRANSMITTER.tcl
-@@ -30,6 +30,7 @@
- set PROFILE_1(SHORT_JT_RAMPOFF)   6
- set PROFILE_1(SHORT_JT_RAMPON)    3
- set PROFILE_1(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-+set PROFILE_1(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
- set PROFILE_1(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
- set PROFILE_1(SHORT_OFFDELAY_TIME_BASE)       {0 range 0 - 7}
- set PROFILE_1(SHORT_OFFDELAY_TIME_FACTOR)     {0 range 0 - 31}
-@@ -63,6 +64,7 @@
- set PROFILE_2(SHORT_JT_RAMPOFF)   2
- set PROFILE_2(SHORT_JT_RAMPON)    2
- set PROFILE_2(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-+set PROFILE_2(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
+@@ -40,6 +40,7 @@
+ set PROFILE_1(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_1(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_1(SHORT_ON_TIME_MODE)             0
++set PROFILE_1(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_1(SHORT_OFF_TIME_MODE)            0
+ set PROFILE_1(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_1(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+@@ -72,6 +73,7 @@
+ set PROFILE_2(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_2(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_2(SHORT_ON_TIME_MODE)             0
++set PROFILE_2(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_2(SHORT_OFF_TIME_MODE)            0
+ set PROFILE_2(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_2(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+@@ -105,6 +107,7 @@
+ set PROFILE_3(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_3(SHORT_ON_TIME_MODE)             0
+ set PROFILE_3(SHORT_OFF_TIME_MODE)            0
++set PROFILE_3(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_3(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_3(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+ set PROFILE_3(SHORT_OPTICAL_SIGNAL_BEHAVIOUR) {1 range 0 - 12}
+--- occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/ROTARY_HANDLE_TRANSCEIVER.tcl.orig
++++ occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/ROTARY_HANDLE_TRANSCEIVER.tcl
+@@ -35,6 +35,7 @@
+ set PROFILE_1(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
+ set PROFILE_1(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
+ set PROFILE_1(SHORT_ON_TIME_MODE)  0
++set PROFILE_1(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+ set PROFILE_1(SHORT_OFF_TIME_MODE)  0
+ set PROFILE_1(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
+ set PROFILE_1(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
+@@ -71,8 +72,9 @@
+ set PROFILE_2(SHORT_JT_ONDELAY)    0
+ set PROFILE_2(SHORT_JT_RAMPOFF) 2
+ set PROFILE_2(SHORT_JT_RAMPON)  0
+-set PROFILE_2(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
+-set PROFILE_2(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
++set PROFILE_2(SHORT_ON_LEVEL)                 {1.0 range 0.0 - 1.005}
++set PROFILE_2(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
++set PROFILE_2(SHORT_OFF_LEVEL)                {0.0 range 0.0 - 1.005}
  set PROFILE_2(SHORT_OFFDELAY_TIME_BASE)       {0 range 0 - 7}
  set PROFILE_2(SHORT_OFFDELAY_TIME_FACTOR)     {0 range 0 - 31}
  set PROFILE_2(SHORT_OFF_TIME_BASE)            {7 range 0 - 7}

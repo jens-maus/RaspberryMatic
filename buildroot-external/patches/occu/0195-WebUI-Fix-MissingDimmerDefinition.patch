@@ -134,7 +134,7 @@
    }
 --- occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_DIRECTION_TRANSMITTER.tcl.orig
 +++ occu/WebUI/www/config/easymodes/DIMMER_VIRTUAL_RECEIVER/PASSAGE_DETECTOR_DIRECTION_TRANSMITTER.tcl
-@@ -136,6 +136,8 @@
+@@ -137,6 +137,8 @@
    upvar $pps          ps
    upvar $pps_descr    ps_descr
  

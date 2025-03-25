@@ -30,7 +30,6 @@ set PROFILE_1(SHORT_JT_ONDELAY)   2
 set PROFILE_1(SHORT_JT_RAMPOFF)   6
 set PROFILE_1(SHORT_JT_RAMPON)    3
 set PROFILE_1(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-set PROFILE_1(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
 set PROFILE_1(SHORT_OFF_LEVEL) {0.0 range 0.0 - 1.005}
 set PROFILE_1(SHORT_OFFDELAY_TIME_BASE)       {0 range 0 - 7}
 set PROFILE_1(SHORT_OFFDELAY_TIME_FACTOR)     {0 range 0 - 31}
@@ -64,7 +63,6 @@ set PROFILE_2(SHORT_JT_ONDELAY)   1
 set PROFILE_2(SHORT_JT_RAMPOFF)   2
 set PROFILE_2(SHORT_JT_RAMPON)    2
 set PROFILE_2(SHORT_ON_LEVEL) {1.0 range 0.0 - 1.005}
-set PROFILE_2(SHORT_ON_MIN_LEVEL) {0.1 range 0.0 - 1.0}
 set PROFILE_2(SHORT_OFFDELAY_TIME_BASE)       {0 range 0 - 7}
 set PROFILE_2(SHORT_OFFDELAY_TIME_FACTOR)     {0 range 0 - 31}
 set PROFILE_2(SHORT_OFF_TIME_BASE)            {7 range 0 - 7}
@@ -135,8 +133,6 @@ proc set_htmlParams {iface address pps pps_descr special_input_id peer_type} {
   upvar PROFILE_PNAME PROFILE_PNAME
   upvar $pps          ps
   upvar $pps_descr    ps_descr
-
-  set ch $dev_descr_sender(INDEX)
 
   foreach pro [array names PROFILES_MAP] {
     upvar PROFILE_$pro PROFILE_$pro

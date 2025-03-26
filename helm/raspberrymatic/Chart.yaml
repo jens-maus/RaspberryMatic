@@ -29,11 +29,11 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 3.79.6
+version: 3.81.5
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.79.6.20250220
+appVersion: 3.81.5.20250326
 
 dependencies:
   - name: common
@@ -42,7 +42,7 @@ dependencies:
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.79.6.20250220 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.79.6.20250220)
+    - Release of 3.81.5.20250326 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.81.5.20250326)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

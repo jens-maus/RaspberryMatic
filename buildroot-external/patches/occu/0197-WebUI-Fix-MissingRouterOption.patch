@@ -1,0 +1,11 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -191,7 +191,7 @@
+      append html "</tr>"
+   }
+ 
+-  if {$deviceIsDrapOrHap} {
++  if { $deviceIsDrapOrHap == false } {
+     set param ROUTER_MODULE_ENABLED
+     if { [info exists ps($param)] == 1  } {
+        incr prn

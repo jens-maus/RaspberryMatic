@@ -40,6 +40,6 @@ support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
 OVADIR=$(mktemp -d)
 cp -a "${BINARIES_DIR}/sdcard.vmdk" "${OVADIR}/RaspberryMatic.vmdk"
 cp -a "${BOARD_DIR}/template.ovf" "${OVADIR}/RaspberryMatic.ovf"
-(cd "${OVADIR}" && "${HOST_DIR}/bin/openssl" sha256 RaspberryMatic.* >RaspberryMatic.mf)
+(cd "${OVADIR}" && "${HOST_DIR}/bin/openssl" sha256 RaspberryMatic.* | sed 's/SHA2-256/SHA256/' >RaspberryMatic.mf)
 tar -C "${OVADIR}" --owner=root --group=root -cf "${BINARIES_DIR}/RaspberryMatic.ova" RaspberryMatic.ovf RaspberryMatic.vmdk RaspberryMatic.mf
 rm -rf "${OVADIR}"

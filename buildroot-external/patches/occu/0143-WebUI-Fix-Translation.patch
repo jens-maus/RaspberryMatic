@@ -1,3 +1,14 @@
+--- occu/WebUI/www/rega/esp/controls/weather_sensor.fn.orig
++++ occu/WebUI/www/rega/esp/controls/weather_sensor.fn
+@@ -98,7 +98,7 @@
+                    if (bErrorWindNorth) {
+                     WriteLine("<br/><span "#errorWindNorth#">${stringTableWeatherWindDir}: </span><img src='/ise/img/help.png' alt='help' style='cursor: pointer; width:18px; height:18px; vertical-align:middle;' onclick=alert(translateKey('stringTableErrorWindNorthTrue'));> ");
+                    } else {
+-                    WriteLine("<br/><span "#errorWindNorth#">${stringTableWeatherWindDir}: </span><span class='CLASS02535A' style='color:white'>"#sValueh#"  "#oActualWindDirection.Value().ToString(0)#oActualWindDirection.ValueUnit()#"</span>");
++                    WriteLine("<br/><span "#errorWindNorth#">${stringTableWeatherWindDir}: </span><span class='CLASS02535A j_translate' style='color:white'>${"#sValueh#"}  "#oActualWindDirection.Value().ToString(0)#oActualWindDirection.ValueUnit()#"</span>");
+                    }
+                 }
+ 
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -1643,16 +1643,20 @@

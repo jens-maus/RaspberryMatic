@@ -1,75 +1,75 @@
 {
   "os_list": [
     {
-      "name": "RaspberryMatic 3.81.5.20250330-6fb9bb (Pi 5)",
+      "name": "RaspberryMatic 3.81.5.20250401-f390fc (Pi 5)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250330-6fb9bb-rpi5.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250401-f390fc-rpi5.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "release_date": "2025-03-30",
+      "release_date": "2025-04-01",
       "extract_size": 1345249792,
-      "extract_sha256": "551a734084bb5b64ce64303573c1d26334d085ace597fb75dd88786883bf9a10",
-      "image_download_size": 339694549,
-      "image_download_sha256": "4babb9eb068f49a77bdeb2da7f88375990c296952584bfe740987fa11924d6d4",
+      "extract_sha256": "a261f9abc952463c1bd4e380e1a4be5ad983e508095e6be515502d57c4319ac9",
+      "image_download_size": 339179235,
+      "image_download_sha256": "a96a3f7be44809fa45c3ec81ad02194953a9334e69b65607377923817230148e",
       "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
       "devices": [
         "pi5-64bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.81.5.20250330-6fb9bb (Pi 4, Pi 400)",
+      "name": "RaspberryMatic 3.81.5.20250401-f390fc (Pi 4, Pi 400)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250330-6fb9bb-rpi4.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250401-f390fc-rpi4.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "release_date": "2025-03-30",
+      "release_date": "2025-04-01",
       "extract_size": 1345249792,
-      "extract_sha256": "3d7a6bb03c1061f0f7cf8411373690a5154901bfa00aea558ad247b9932803f6",
-      "image_download_size": 340534253,
-      "image_download_sha256": "76ecb754a5f717fa2799a7c0b83782217793e3cf2b002434079373623f3952d1",
+      "extract_sha256": "74700f1514a5109d57a58964bee875223f381b580ad33b665393029f2eb168d3",
+      "image_download_size": 340013415,
+      "image_download_sha256": "4ba3509c8ba0621f37a753a12a6011842143889d6aa6d2cc6dbbe601cdddb8bf",
       "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
       "devices": [
         "pi4-64bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.81.5.20250330-6fb9bb (Pi 3, Pi Zero 2, ELV-Charly, CCU3)",
+      "name": "RaspberryMatic 3.81.5.20250401-f390fc (Pi 3, Pi Zero 2, ELV-Charly, CCU3)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250330-6fb9bb-rpi3.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250401-f390fc-rpi3.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "release_date": "2025-03-30",
+      "release_date": "2025-04-01",
       "extract_size": 1345249792,
-      "extract_sha256": "8e8393659394d614a94a444fe69d35a905dc5a04655bf8ab581d53a238a71ce1",
-      "image_download_size": 335748941,
-      "image_download_sha256": "6b0d89774d0c1a40e56fcd6692ca4adfaca334384fa20822a18a04bf20d7d2bf",
+      "extract_sha256": "f56be610e55dc8c7d67ee1f9f8215008945e4807e7b9ba864848a5504e07bda3",
+      "image_download_size": 335284287,
+      "image_download_sha256": "8374a4b65d68c848668b30dcb372c703962cd8ce7c6aa17647c4e73ab2c660ab",
       "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
       "devices": [
         "pi3-64bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.81.5.20250330-6fb9bb (Pi 2)",
+      "name": "RaspberryMatic 3.81.5.20250401-f390fc (Pi 2)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250330-6fb9bb-rpi2.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250401-f390fc-rpi2.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "release_date": "2025-03-30",
+      "release_date": "2025-04-01",
       "extract_size": 1345249792,
-      "extract_sha256": "4776dc3c9f085aafd5c9110b8da61f242214bce5f6a6eae8f2555871f9184f42",
-      "image_download_size": 308306187,
-      "image_download_sha256": "0aa217a0609f4e4c4b6bc77ed63965738824f061cef6a54f5fc6b86f47f7016e",
+      "extract_sha256": "cb640c01c53d3688651bd41edd3e2e570fce4ab3c0d44ce5541371b9a2a5ad96",
+      "image_download_size": 307868405,
+      "image_download_sha256": "23d74972574f36c223b2f09b54618f8fe84b8755d3a318654cdd95279a2fb6e2",
       "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
       "devices": [
         "pi2-32bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.81.5.20250330-6fb9bb (Pi Zero, Pi 1)",
+      "name": "RaspberryMatic 3.81.5.20250401-f390fc (Pi Zero, Pi 1)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250330-6fb9bb-rpi0.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.81.5.20250401-f390fc-rpi0.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "release_date": "2025-03-30",
+      "release_date": "2025-04-01",
       "extract_size": 1345249792,
-      "extract_sha256": "269fda99cbbd3834ed673728563393629177b59d0ca71345dae1851c6f37cb6d",
-      "image_download_size": 307896829,
-      "image_download_sha256": "4b5f0161a9da28eb78a7205aa0d1b0da9e260a35198b380a9a09c65f1c36146a",
+      "extract_sha256": "982a54ca07ce2be098d87ef46902160c433ecd6af3cc543ccbdd65314eb0e9ca",
+      "image_download_size": 307334664,
+      "image_download_sha256": "c9c3993efe9da753c1e7eb50d6ed5cd49341a4b71de8601641e7b267cb05d87a",
       "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
       "devices": [
         "pi1-32bit"

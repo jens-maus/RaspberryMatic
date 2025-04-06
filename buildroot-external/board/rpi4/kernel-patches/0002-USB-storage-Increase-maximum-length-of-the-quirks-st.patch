@@ -16,12 +16,11 @@ Signed-off-by: Jan Čermák <sairon@sairon.cz>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index 7b36a3334fb34..9691e6b9fe5aa 100644
 --- a/drivers/usb/storage/usb.c
 +++ b/drivers/usb/storage/usb.c
-@@ -71,7 +71,7 @@ static unsigned int delay_use = 1;
- module_param(delay_use, uint, S_IRUGO | S_IWUSR);
- MODULE_PARM_DESC(delay_use, "seconds to delay before using a new device");
+@@ -165,7 +165,7 @@
+ module_param_cb(delay_use, &delay_use_ops, &delay_use, 0644);
+ MODULE_PARM_DESC(delay_use, "time to delay before using a new device");
  
 -static char quirks[128];
 +static char quirks[256];

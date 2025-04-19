@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TAILSCALE_BIN_VERSION = 1.82.0
+TAILSCALE_BIN_VERSION = 1.82.5
 TAILSCALE_BIN_SITE = https://pkgs.tailscale.com/stable
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
 TAILSCALE_BIN_SOURCE = tailscale_$(TAILSCALE_BIN_VERSION)_arm.tgz

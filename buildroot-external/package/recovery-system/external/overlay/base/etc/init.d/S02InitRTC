@@ -86,7 +86,7 @@ init_rtc_device() {
     if modprobe i2c:ds3231; then
       HM_RTC="mcp7941x"
       [[ -c /dev/rtc0 ]] && return 0
-      echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      echo ds3231 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
       [[ -c /dev/rtc0 ]] && return 0
       echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi
@@ -95,7 +95,7 @@ init_rtc_device() {
     if modprobe i2c:ds1307; then
       HM_RTC="ds1307"
       [[ -c /dev/rtc0 ]] && return 0
-      echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      echo ds1307 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
       [[ -c /dev/rtc0 ]] && return 0
       echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi
@@ -108,7 +108,7 @@ init_rtc_device() {
     if modprobe i2c:pcf8563; then
       HM_RTC="pcf8563"
       [[ -c /dev/rtc0 ]] && return 0
-      echo pcf8563 0x51 >/sys/class/i2c-adapter/i2c-1/new_device
+      echo pcf8563 0x51 >/sys/class/i2c-dev/i2c-1/device/new_device
       [[ -c /dev/rtc0 ]] && return 0
       echo 0x51 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi

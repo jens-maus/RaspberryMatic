@@ -18,7 +18,7 @@ else
 endif
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
-.PHONY: all build release clean clean-all distclean help updatePkg
+.PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg
 
 all: help
 
@@ -167,6 +167,9 @@ linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig legal-info:
 	@echo "[$@ $(PRODUCT)]"
 	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $@
+
+buildroot-help:
+	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) help
 
 help:
 	@echo "HomeMatic/CCU Build Environment"

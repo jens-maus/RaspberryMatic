@@ -14,6 +14,9 @@ echo "PLATFORM=generic-aarch64" >>"${TARGET_DIR}/VERSION"
 # fix some permissions
 [ -e "${TARGET_DIR}/etc/monitrc" ] && chmod 600 "${TARGET_DIR}/etc/monitrc"
 
+# rename some stuff buildroot introduced but we need differently
+[ -e "${TARGET_DIR}/etc/init.d/S10udev" ] && mv -f "${TARGET_DIR}/etc/init.d/S10udev" "${TARGET_DIR}/etc/init.d/S00udev"
+
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S50crond"
 

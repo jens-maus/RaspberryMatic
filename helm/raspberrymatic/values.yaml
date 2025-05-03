@@ -3,7 +3,7 @@
 # IMPORTANT NOTE
 #
 # This chart inherits from bjw-s common library chart. You can check the default values/options here:
-# https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+# https://github.com/bjw-s-labs/helm-charts/blob/main/charts/library/common/values.yaml
 #
 
 image:
@@ -15,7 +15,7 @@ image:
 
 persistence:
   data:
-    # -- enabling persistent data. See options at https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage/
+    # -- enabling persistent data. See options at https://github.com/bjw-s-labs/helm-charts/tree/main/docs/common-library/storage/
     enabled: false
     mountPath: /usr/local
   sys:

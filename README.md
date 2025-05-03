@@ -1,6 +1,6 @@
 # RaspberryMatic Kubernetes Helm Charts
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![Helm chart - build development version](https://github.com/jens-maus/RaspberryMatic/workflows/Helm%20chart%20-%20build%20development%20version/badge.svg) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/raspberrymatic)](https://artifacthub.io/packages/search?repo=raspberrymatic)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![pages-build-deployment](https://github.com/jens-maus/RaspberryMatic/actions/workflows/pages/pages-build-deployment/badge.svg)](https://jens-maus.github.io/RaspberryMatic/) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/raspberrymatic)](https://artifacthub.io/packages/search?repo=raspberrymatic)
 
 This functionality is in beta and is subject to change. The code is provided as-is with no warranties.
 
@@ -38,4 +38,4 @@ We'd love to have you contribute! Please refer to our [contribution guidelines](
 
 ## Helm charts build status
 
-![Helm chart - build development version](https://github.com/jens-maus/RaspberryMatic/workflows/Helm%20chart%20-%20build%20development%20version/badge.svg)
+[![pages-build-deployment](https://github.com/jens-maus/RaspberryMatic/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/jens-maus/RaspberryMatic/actions/workflows/pages/pages-build-deployment)

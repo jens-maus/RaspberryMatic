@@ -33,11 +33,6 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
-  # create /media/usbX directories for automounting USB devices
-  for i in $(seq 1 8); do
-    mkdir -p "/media/usb${i}"
-  done
-
   # /usr/local/etc setup
   mkdir -p /usr/local/etc
   chmod 0755 /usr/local/etc

@@ -103,6 +103,7 @@ if [ "$1" = add ]; then
     if in_list "$fstype" "$FILESYSTEMS"; then
       # Search an available mountpoint.
       for v in $MOUNTPOINTS; do
+        mkdir -p "$v"
         if [ -d "$v" ] && ! grep -q "^[^ ][^ ]*  *$v " /proc/mounts; then
           mountpoint="$v"
           log debug "mountpoint $mountpoint is available for $DEVNAME"

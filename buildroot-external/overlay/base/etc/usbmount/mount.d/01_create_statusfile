@@ -1,4 +1,5 @@
 #!/bin/sh
+mkdir -p /var/status
 touch /var/status/hasUSB
 # CCU2 compatibility 
 touch /var/status/hasSD

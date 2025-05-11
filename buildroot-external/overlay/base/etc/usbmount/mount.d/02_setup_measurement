@@ -30,6 +30,7 @@ if /bin/mountpoint -q "${UM_MOUNTPOINT}"; then
     cp -a "${UM_MOUNTPOINT}/measurement" /tmp/
 
     if [ ${RET} -eq 1 ]; then
+      mkdir -p /var/status
       touch "/var/status/USBinitialised"
       # CCU2 compatibility
       touch "/var/status/SDinitialised"

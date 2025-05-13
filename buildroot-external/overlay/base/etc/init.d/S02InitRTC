@@ -124,13 +124,17 @@ start() {
   # run init RTC method and set RTC name
   # if functions runs throw
   if init_rtc_device; then
-    HM_RTC=$(cat /sys/class/rtc/rtc0/device/name 2>/dev/null)
+    if [[ -e /sys/class/rtc/rtc0/device/name ]]; then
+      HM_RTC=$(cat /sys/class/rtc/rtc0/device/name)
+    elif [[ -e /sys/class/rtc/rtc0/name ]]; then
+      HM_RTC=$(cat /sys/class/rtc/rtc0/name)
+    fi
   fi
 
   # save all HM_ env variables
   set | grep '^HM_' >/var/hm_mode
 
-  if [[ -c /dev/rtc0 ]]; then
+  if [[ -n "${HM_RTC}" ]]; then
     echo "${HM_RTC}, OK"
   else
     echo "no hardware found"

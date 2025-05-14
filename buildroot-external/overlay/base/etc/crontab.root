@@ -1,2 +1,2 @@
 14 4 * * * /bin/SetInterfaceClock
-0 4,10,16,22 * * * /usr/sbin/logrotate /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"
+*/15 * * * * /usr/sbin/logrotate /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"

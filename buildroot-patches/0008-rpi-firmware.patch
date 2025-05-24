@@ -13,10 +13,10 @@
  	help
 --- buildroot/package/rpi-firmware/rpi-firmware.mk.orig
 +++ buildroot/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
+@@ -5,7 +5,7 @@
  ################################################################################
  
+ # Please keep in sync with configs/raspberrypi*_deconfig
 -RPI_FIRMWARE_VERSION = 5476720d52cf579dc1627715262b30ba1242525e
 +RPI_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))

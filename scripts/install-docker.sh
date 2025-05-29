@@ -214,6 +214,8 @@ msg "RaspberryMatic Docker installation script v${VERSION}"
 msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
 msg ""
 
+echo no
+exit 0
 # check if this is a Proxmox system and if so
 # request to use install-proxmox.sh instead
 if [[ -d /etc/pve ]]; then

@@ -66,7 +66,7 @@ proc set_htmlParams {iface address pps pps_descr special_input_id peer_type} {
   set wgtFirstVirtCh false
   set wgtChnMode "--"
 
-  if {($chn == 4) && ($isWGT != -1)} {set wgtFirstVirtCh true}
+  if {($isWGT != -1) && ($chn == 4)} {set wgtFirstVirtCh true}
 
   # HmIP-WGT(-A) Get the selected mode (modeBWTH or modeSWITCH) of the first virtual switch actor (wtc chn. 4)
   # The next virtual switch actor channels are using the global variable wgtChnMode to determine their mode.

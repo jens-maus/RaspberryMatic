@@ -98,7 +98,9 @@ proc action_put_page {} {
     }
   }
 
-  execCmd CPUMODEL {exec lscpu | grep -m1 "^Model name:" | cut -d: -f2 | xargs echo -n}
+  execCmd CPUMODEL {exec /usr/bin/lscpu --all --parse=MODELNAME | grep -m1 -ve "^#"}
+  execCmd CPUMHZ {exec /usr/bin/lscpu --all --parse=MHZ | grep -m1 -ve "^#" | xargs printf "%.0f"}
+  execCmd CPUSCALMHZ {exec /usr/bin/lscpu --all --parse=SCALMHZ% | grep -m1 -ve "^#"}
   execCmd NUMCPU {exec nproc}
   execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
   execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}
@@ -225,7 +227,7 @@ proc action_put_page {} {
         puts "<div style='display: table; width: 100%;'>"
           putsVar "OS Type (Kernel)" "$OSTYPE ($OSKERNEL)"
           putsVar "Uptime" $UPTIME
-          putsVar "Load Average" $LOADAVG
+          putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
           putsVar "System Temperature" $TEMP
           putsVar "Memory, Swap Utilization" "$MEMUSE, $SWAPUSE"
           putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"

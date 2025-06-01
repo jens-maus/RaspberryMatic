@@ -227,7 +227,7 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -19,13 +19,145 @@
+@@ -19,13 +19,147 @@
  set LANGUAGE "de"
  set CUR_YEAR [clock format [clock seconds] -format %Y]
  
@@ -313,7 +313,9 @@
 +    }
 +  }
 +
-+  execCmd CPUMODEL {exec lscpu | grep -m1 "^Model name:" | cut -d: -f2 | xargs echo -n}
++  execCmd CPUMODEL {exec /usr/bin/lscpu --all --parse=MODELNAME | grep -m1 -ve "^#"}
++  execCmd CPUMHZ {exec /usr/bin/lscpu --all --parse=MHZ | grep -m1 -ve "^#" | xargs printf "%.0f"}
++  execCmd CPUSCALMHZ {exec /usr/bin/lscpu --all --parse=SCALMHZ% | grep -m1 -ve "^#"}
 +  execCmd NUMCPU {exec nproc}
 +  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
 +  execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}
@@ -376,7 +378,7 @@
  
    set sid ""
    catch {import sid}
-@@ -43,47 +175,86 @@
+@@ -43,47 +177,86 @@
        </script>
      }
    }
@@ -463,7 +465,7 @@
 +        puts "<div style='display: table; width: 100%;'>"
 +          putsVar "OS Type (Kernel)" "$OSTYPE ($OSKERNEL)"
 +          putsVar "Uptime" $UPTIME
-+          putsVar "Load Average" $LOADAVG
++          putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
 +          putsVar "System Temperature" $TEMP
 +          putsVar "Memory, Swap Utilization" "$MEMUSE, $SWAPUSE"
 +          putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
@@ -496,7 +498,7 @@
  
    puts "</table>"
  
-@@ -124,7 +295,7 @@
+@@ -124,7 +297,7 @@
      puts "\}"
  
      puts "loadExtHelp = function()\{"

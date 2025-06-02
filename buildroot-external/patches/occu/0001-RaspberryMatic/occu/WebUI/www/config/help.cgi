@@ -227,7 +227,11 @@ proc action_put_page {} {
         puts "<div style='display: table; width: 100%;'>"
           putsVar "OS Type (Kernel)" "$OSTYPE ($OSKERNEL)"
           putsVar "Uptime" $UPTIME
-          putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
+          if {$CPUSCALMHZ != ""} {
+            putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
+          } else {
+            putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz"
+          }
           putsVar "System Temperature" $TEMP
           putsVar "Memory, Swap Utilization" "$MEMUSE, $SWAPUSE"
           putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"

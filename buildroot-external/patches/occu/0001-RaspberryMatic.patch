@@ -378,7 +378,7 @@
  
    set sid ""
    catch {import sid}
-@@ -43,47 +177,86 @@
+@@ -43,47 +177,90 @@
        </script>
      }
    }
@@ -465,7 +465,11 @@
 +        puts "<div style='display: table; width: 100%;'>"
 +          putsVar "OS Type (Kernel)" "$OSTYPE ($OSKERNEL)"
 +          putsVar "Uptime" $UPTIME
-+          putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
++          if {$CPUSCALMHZ != ""} {
++            putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz ($CPUSCALMHZ)"
++          } else {
++            putsVar "Load Average @ CPU Speed" "$LOADAVG @ $CPUMHZ MHz"
++          }
 +          putsVar "System Temperature" $TEMP
 +          putsVar "Memory, Swap Utilization" "$MEMUSE, $SWAPUSE"
 +          putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
@@ -498,7 +502,7 @@
  
    puts "</table>"
  
-@@ -124,7 +297,7 @@
+@@ -124,7 +301,7 @@
      puts "\}"
  
      puts "loadExtHelp = function()\{"

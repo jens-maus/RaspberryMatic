@@ -11,8 +11,6 @@ install:
 	chmod 755 $(TARGET_DIR)/bin/SetInterfaceClock
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/bin/crypttool $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/crypttool
-	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/bin/crypttool $(TARGET_DIR)/bin/
-	chmod 755 $(TARGET_DIR)/bin/crypttool
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/multimacd
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/bin/rfd $(TARGET_DIR)/bin/
@@ -36,13 +34,44 @@ install:
 	cp -Rv firmware/* $(TARGET_DIR)/firmware/
 ifneq ($(OCCU_ARCH32), )
 	# collect modern binaries (32bit)
-	#cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libelvutils.so $(TARGET_DIR)/$(OCCU_LIB32)/
-	#chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libelvutils.so
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/bin/SetInterfaceClock $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/SetInterfaceClock
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/bin/crypttool $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/crypttool
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/bin/multimacd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/multimacd
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/bin/rfd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/rfd
+	# collect modern libraries (32bit)
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libLanDeviceUtils.so $(TARGET_DIR)/$(OCCU_LIB32)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libLanDeviceUtils.so
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libUnifiedLanComm.so $(TARGET_DIR)/$(OCCU_LIB32)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libUnifiedLanComm.so
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libelvutils.so $(TARGET_DIR)/$(OCCU_LIB32)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libelvutils.so
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libhsscomm.so $(TARGET_DIR)/$(OCCU_LIB32)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libhsscomm.so
 endif
 ifneq ($(OCCU_ARCH64), )
 	# collect modern binaries (64bit)
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/bin/SetInterfaceClock $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/SetInterfaceClock
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/bin/crypttool $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/crypttool
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/bin/multimacd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/multimacd
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/bin/rfd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/rfd
+	# collect modern libraries (64bit)
+	mkdir -p $(TARGET_DIR)/$(OCCU_LIB64)
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/lib/libLanDeviceUtils.so $(TARGET_DIR)/$(OCCU_LIB64)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB64)/libLanDeviceUtils.so
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/lib/libUnifiedLanComm.so $(TARGET_DIR)/$(OCCU_LIB64)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB64)/libUnifiedLanComm.so
 	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/lib/libelvutils.so $(TARGET_DIR)/$(OCCU_LIB64)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB64)/libelvutils.so
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/RFD-Beta/lib/libhsscomm.so $(TARGET_DIR)/$(OCCU_LIB64)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB64)/libhsscomm.so
 endif
 
 	#################################
@@ -53,6 +82,20 @@ endif
 	chmod 755 $(TARGET_DIR)/bin/hs485d
 	cp -av $(OCCU_COMMON)/packages-eQ-3/HS485D/bin/hs485dLoader $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/hs485dLoader
+ifneq ($(OCCU_ARCH32), )
+	# collect modern binaries (32bit)
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/HS485D-Beta/bin/hs485d $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/hs485d
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/HS485D-Beta/bin/hs485dLoader $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/hs485dLoader
+endif
+ifneq ($(OCCU_ARCH64), )
+	# collect modern binaries (64bit)
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/HS485D-Beta/bin/hs485d $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/hs485d
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/HS485D-Beta/bin/hs485dLoader $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/hs485dLoader
+endif
 
 	#################################
 	# WebUI
@@ -95,21 +138,31 @@ endif
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libeq3config.so
 ifneq ($(OCCU_ARCH32), )
 	# collect modern binaries (32bit)
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/eq3configcmd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/eq3configcmd
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/eq3configd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/eq3configd
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/hss_led $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/hss_led
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/ssdpd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/ssdpd
+	# collect modern libraries (32bit)
+	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/lib/libeq3config.so $(TARGET_DIR)/$(OCCU_LIB32)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libeq3config.so
 endif
 ifneq ($(OCCU_ARCH64), )
 	# collect modern binaries (64bit)
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/eq3configcmd $(TARGET_DIR)/bin/
+	chmod 755 $(TARGET_DIR)/bin/eq3configcmd
 	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/eq3configd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/eq3configd
 	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/hss_led $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/hss_led
 	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/bin/ssdpd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/ssdpd
+	# collect modern libraries (64bit)
+	cp -av $(OCCU_ARCH64)/packages-eQ-3/LinuxBasis-Beta/lib/libeq3config.so $(TARGET_DIR)/$(OCCU_LIB64)/
+	chmod 755 $(TARGET_DIR)/$(OCCU_LIB64)/libeq3config.so
 endif
 
 	#################################

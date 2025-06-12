@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
-@@ -1303,7 +1303,7 @@
+@@ -1315,7 +1315,7 @@
          Call("/esp/datapointconfigurator.fn::CreateUnknown()");
        }
      }

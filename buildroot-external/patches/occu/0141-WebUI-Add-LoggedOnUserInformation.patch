@@ -13,7 +13,7 @@
    if (getUPL() != UPL_GUEST) {
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -143,7 +143,13 @@
+@@ -144,7 +144,13 @@
          object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
          string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
          if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }

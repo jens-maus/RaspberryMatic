@@ -2630,6 +2630,12 @@ createNecessarySysVarsAndPrograms = function (oDevice) {
         }
       }
 
+      if (oDevice.type.includes("-FALMOT")) {
+        if (channelType == "CLIMATECONTROL_FLOOR_TRANSCEIVER") {
+          var res = homematic('Interface.suppressServiceMessages', {'interface':'HmIP-RF','channelAddress': channel.address, 'parameterId': '', 'suppress': true});
+        }
+      }
+
     });
     HideWaitAnim();
   }

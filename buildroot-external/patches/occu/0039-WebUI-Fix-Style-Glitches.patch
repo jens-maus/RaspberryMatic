@@ -751,7 +751,7 @@
            WriteLine("</table>")
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
-@@ -1429,7 +1429,7 @@
+@@ -1441,7 +1441,7 @@
    string showParam = true;
  
    WriteLine( '<td class="CLASS02519">' );
@@ -1899,7 +1899,7 @@
  </tr>
  <tr id="trFlt">
    <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
-@@ -294,13 +306,13 @@
+@@ -297,13 +309,13 @@
              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sFirstTimestamp#'</td>' );
              Write( '<td id="sla'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastTimestamp#'</td>' );
              Write( '<td id="n'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;"class="CLASS02606">'#sAlarmName#'</td>' );
@@ -1915,7 +1915,7 @@
                Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
                Write(" onmouseout='picDivHide(jg_250);'");
                Write("></div>");
-@@ -317,12 +329,12 @@
+@@ -320,12 +332,12 @@
              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sSerialNumber#'</td>' );
              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sFunction#'</td>' );
              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sRoom#'</td>' );
@@ -1930,7 +1930,7 @@
  
                if (oLastTrigger.HSSID() == "STICKY_UNREACH") {
                    Write( '<script type="text/javascript">' );
-@@ -333,7 +345,7 @@
+@@ -336,7 +348,7 @@
              }
              else
              {
@@ -3655,7 +3655,7 @@
    <\/colgroup>\n
    <thead>\n
      <tr>\n
-@@ -25339,7 +25339,7 @@
+@@ -25477,7 +25477,7 @@
    TREE_EXPANDED_FOOTER_HTML: "" +
      "<table border='0' cellspacing='8'>" +
        "<tr>" + 
@@ -3664,7 +3664,7 @@
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
        "</tr>" +
-@@ -25347,7 +25347,7 @@
+@@ -25485,7 +25485,7 @@
    FLAT_FOOTER_HTML: "" +
      "<table border='0' cellspacing='8'>" +
        "<tr>" + 
@@ -3673,7 +3673,7 @@
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
          "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
        "</tr>" +
-@@ -26861,7 +26861,7 @@
+@@ -26999,7 +26999,7 @@
      FOOTER_HTML= "" +
        "<table border='0' cellspacing='8'>" +
          "<tr>" +
@@ -3682,7 +3682,7 @@
          "</tr>" +
        "</table>";
  
-@@ -31174,13 +31174,11 @@
+@@ -31312,13 +31312,11 @@
        case ID_ROOMS:
          this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
          this.setWidth75Perc();
@@ -3696,7 +3696,7 @@
          this.setFile( "/pages/msg/popupPropEditor.htm" );
          break;
        case ID_TRANSFER_PARAMETERS:
-@@ -32755,7 +32753,7 @@
+@@ -32893,7 +32891,7 @@
    var opts = {
      evalScripts: true,
      onComplete: function(trans) {
@@ -3705,7 +3705,7 @@
      }
    };
    var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
-@@ -44609,7 +44607,7 @@
+@@ -44751,7 +44749,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3714,7 +3714,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -44661,8 +44659,8 @@
+@@ -44803,8 +44801,8 @@
    
    if (!form) return;
  
@@ -3725,7 +3725,7 @@
  
    switch (form[gd_type])
    {
-@@ -44758,7 +44756,7 @@
+@@ -44900,7 +44898,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

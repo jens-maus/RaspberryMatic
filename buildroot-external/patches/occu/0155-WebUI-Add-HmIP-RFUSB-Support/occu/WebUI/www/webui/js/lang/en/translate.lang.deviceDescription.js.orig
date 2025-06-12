@@ -32,6 +32,8 @@ jQuery.extend(true,langJSON, {
     "ELV-SH-CTV" : "ELV Smart Home<br/>Tilt and Vibration Sensor<br/>Compact",
     "ELV-SH-KRCO" : "ELV smart home key ring remote control outdoor",
     "ELV-SH-SB8" : "ELV Smart Home<br/>Status Board",
+    "ELV-SH-SMSI" : "ELV Smart Home<br/>Soil moisture sensor",
+    "ELV-SH-SPS25" : "ELV smart home<br/>Switched power supply",
     "ELV-SH-TACO" : "ELV Smart Home<br/>Temperature and Acceleration Sensor<br/>Outdoor",
     "ELV-SH-WSM" : "ELV Smart Home<br/>Watering Actuator",
     "FDT": "Homematic IP Dimming Actuator, flush-mount",
@@ -202,13 +204,12 @@ jQuery.extend(true,langJSON, {
     "HmIP-FAL230-C6": "Homematic IP<br/>Floor Heating Actuator - 6 channels 230 V",
     "HmIP-FAL24-C10": "Homematic IP<br/>Floor Heating Actuator - 10 channels 24 V",
     "HmIP-FAL24-C6": "Homematic IP<br/>Floor Heating Actuator - 6 channels 24 V",
+    "HmIP-FALMOT-C8" : "Homematic IP Floor Heating Actuator - 8 channels, motorised",
     "HmIP-FALMOT-C12" : "Homematic IP Floor Heating Actuator - 12 channels, motorised",
     "HmIP-FBL": "Homematic IP Blinds Actuator - flush-mount",
     "HmIP-FCI1": "Homematic IP Contact Interface flush-mount - 1 channel",
     "HmIP-FCI6": "Homematic IP Contact Interface flush-mount - 6 channels",
-
     "HmIP-FLC" : "Homematic IP Universal Lock Controller",
-
     "HmIP-FROLL": "Homematic IP Blind Actuator, flush-mount",
     "HmIP-FSI16" : "Homematic IP Switch Actuator with Push-button Input (16 A) - flush-mount",
     "HmIP-FWI" : "Homematic IP Wiegand Interface",
@@ -340,6 +341,9 @@ jQuery.extend(true,langJSON, {
     "VIR-OL-GTW": "OSRAM-Lightify<br/>Gateway",
     "Wired-LAN-Sniffer" : "Wired-LAN-Sniffer",
     "WRC6": "Homematic IP Wall-mount Remote Control 6 buttons",
+
+    "WRC6-230": "Homematic IP Wall-mount Remote Control 6 buttons, 230V",
+
     "WS888": "Wireless Weather Data Center",
     "WT": "Homematic IP Wall Thermostat",
     "ZEL_STG_RM_DWT_10": "Wireless Display Push-button 2-channel, surface-mount",

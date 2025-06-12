@@ -1,6 +1,6 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -1031,6 +1031,13 @@
+@@ -1047,6 +1047,13 @@
    ARGUMENTS {_session_id_}
  }
  
@@ -131,7 +131,7 @@
      "btnSelectRoomOrFunctionClose": "Close",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25232,6 +25232,44 @@
+@@ -25370,6 +25370,44 @@
      msgBoxHeight
      );
    },

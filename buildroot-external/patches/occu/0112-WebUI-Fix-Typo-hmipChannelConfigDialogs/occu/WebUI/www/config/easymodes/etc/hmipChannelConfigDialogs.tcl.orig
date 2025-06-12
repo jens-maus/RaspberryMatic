@@ -191,7 +191,8 @@ proc getMaintenance {chn p descr address} {
      append html "</tr>"
   }
 
-  if {$deviceIsDrapOrHap} {
+  # SPHM-590
+  if {[string is false $deviceIsDrapOrHap]} {
     set param ROUTER_MODULE_ENABLED
     if { [info exists ps($param)] == 1  } {
        incr prn
@@ -424,7 +425,7 @@ set comment {
   if { [info exists ps($param)] == 1 } {
     incr prn
     if {
-      ([string first "HmIP-BBL" $devType] == -1)
+      (([string first "HmIP-BBL" $devType] == -1) && ([string first "HmIP-BRC2-2" $devType] == -1))
       && ([string first "HmIP-BROLL" $devType] == -1)
       && ([string first "HmIP-BDT" $devType] == -1)
       && ([string first "HmIP-eTRV-F" $devType] == -1)
@@ -3787,13 +3788,25 @@ proc getCondSwitchTransmitter {chn p descr} {
 
   set html ""
 
+  set smsiSpecificText 0
+
   puts "<script type=\"text/javascript\">load_JSFunc('/config/easymodes/MASTER_LANG/HM_ES_PMSw.js')</script>"
+
+  if {[string equal $devType "ELV-SH-SMSI"] == 1} {
+    if {($chn == 4) || ($chn == 5)} {
+      set smsiSpecificText 1
+    }
+  }
 
   set param COND_TX_FALLING
   if { [info exists ps($param)] == 1 } {
     incr prn
     append html "<tr>"
-      append html "<td>\${stringTableCondTxFalling}</td>"
+      if {$smsiSpecificText == 0} {
+        append html "<td>\${stringTableCondTxFalling}</td>"
+      } else {
+        append html "<td>\${stringTableCondTxFallingC}</td>"
+      }
       append html  "<td>[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param $helpDlgWidth $helpDlgHeight]</td>"
     append html "</tr>"
 
@@ -3835,7 +3848,11 @@ proc getCondSwitchTransmitter {chn p descr} {
   if { [info exists ps($param)] == 1 } {
     incr prn
     append html "<tr>"
-      append html "<td>\${stringTableCondTxRising}</td>"
+      if {$smsiSpecificText == 0} {
+        append html "<td>\${stringTableCondTxRising}</td>"
+      } else {
+        append html "<td>\${stringTableCondTxRisingC}</td>"
+      }
       append html  "<td>[getCheckBox '$param' $ps($param) $chn $prn]&nbsp;[getHelpIcon $param  $helpDlgWidth $helpDlgHeight]</td>"
     append html "</tr>"
 
@@ -3877,7 +3894,11 @@ proc getCondSwitchTransmitter {chn p descr} {
   if { [info exists ps($param)] == 1 } {
     incr prn
     append html "<tr>"
+    if {$smsiSpecificText == 0} {
       append html "<td>\${stringTableCondTxDecisionBelow}</td>"
+    } else {
+      append html "<td>\${stringTableCondTxDecisionBelowA}</td>"
+    }
       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon COND_TX_DECISION_ABOVE_BELOW]</td>"
     append html "</tr>"
   }
@@ -3886,7 +3907,11 @@ proc getCondSwitchTransmitter {chn p descr} {
   if { [info exists ps($param)] == 1 } {
     incr prn;
     append html "<tr>"
-      append html "<td>\${stringTableCondTxDecisionAbove}</td>"
+     if {$smsiSpecificText == 0} {
+       append html "<td>\${stringTableCondTxDecisionAbove}</td>"
+     } else {
+       append html "<td>\${stringTableCondTxDecisionAboveA}</td>"
+     }
       append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon COND_TX_DECISION_ABOVE_BELOW]</td>"
     append html "</tr>"
   }
@@ -3941,45 +3966,48 @@ proc getCondSwitchTransmitter {chn p descr} {
 
   }
   set param EVENT_DELAY_UNIT
-  incr prn
-  append html "<tr>"
-  append html "<td>\${stringTableEventDelay}</td>"
-  append html [getComboBox $chn $prn "$specialID" "eventDelay"]
-  append html "</tr>"
+  if { [info exists ps($param)] == 1 } {
+    incr prn
+    append html "<tr>"
+    append html "<td>\${stringTableEventDelay}</td>"
+    append html [getComboBox $chn $prn "$specialID" "eventDelay"]
+    append html "</tr>"
 
-  append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
+    append html [getTimeUnitComboBoxShortwoHour $param $ps($param) $chn $prn $special_input_id]
 
-  incr prn
-  set param EVENT_DELAY_VALUE
-  append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
-  append html "<td>\${stringTableEventDelayValue}</td>"
+    incr prn
+    set param EVENT_DELAY_VALUE
+    append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+    append html "<td>\${stringTableEventDelayValue}</td>"
 
-  append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
 
-  append html "</tr>"
-  append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-  append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    append html "</tr>"
+    append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelB($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
 
-  incr prn
-  append html "<tr>"
-  append html "<td>\${stringTableRandomTime}</td>"
-  append html [getComboBox $chn $prn "$specialID" "eventRandomTime"]
-  append html "</tr>"
+    incr prn
+    append html "<tr>"
+    append html "<td>\${stringTableRandomTime}</td>"
+    append html [getComboBox $chn $prn "$specialID" "eventRandomTime"]
+    append html "</tr>"
 
-  set param EVENT_RANDOMTIME_UNIT
-  append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+    set param EVENT_RANDOMTIME_UNIT
+    append html [getTimeUnitComboBoxShort $param $ps($param) $chn $prn $special_input_id]
+  }
 
-  incr prn
   set param EVENT_RANDOMTIME_VALUE
-  append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
-  append html "<td>\${stringTableRamdomTimeValue}</td>"
+  if { [info exists ps($param)] == 1 } {
+    incr prn
+    append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+    append html "<td>\${stringTableRamdomTimeValue}</td>"
 
-  append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
 
-  append html "</tr>"
-  append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-  append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
-
+    append html "</tr>"
+    append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOptionPanelA($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+  }
   return $html
 }
 
@@ -6939,7 +6967,77 @@ set comment {
   return $html
 }
 
+proc getSoilMoistureTransmitter {chn p descr} {
+  upvar $p ps
+  upvar $descr psDescr
+  upvar prn prn
+  upvar special_input_id special_input_id
 
+  set specialID "[getSpecialID $special_input_id]"
+
+  set html ""
+
+  set prn 0
+  set param FILTER_SIZE
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    set min [expr {int([expr [getMinValue $param]])}]
+    set max [expr {int([expr [getMaxValue $param]])}]
+    array_clear options
+    for {set val $min} {$val <= $max} {incr val} {
+        set options($val) "$val"
+    }
+
+    append html "<tr>"
+      append html "<td>\${stringTableSoilMoistureTransmitterFilterSize}</td>"
+      append html "<td>[get_ComboBox options $param separate_$special_input_id\_$prn ps $param]&nbsp;[getHelpIcon $param\_SOIL_MOISTURE 400 120]</td>"
+    append html "</tr>"
+  }
+
+
+  set param INTERVAL_UNIT
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+    append html "<td>\${stringTableMeasurementInterval}</td>"
+    append html [getComboBox $chn $prn "$specialID" "autoIntervalA" "helpSoilMoisture"]
+    append html "</tr>"
+
+    append html [getTimeUnitComboBoxC $param $ps($param) $chn $prn $special_input_id 'measurementInterval']
+
+    incr prn
+    set param INTERVAL_VALUE
+    append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+    append html "<td>\${stringTableMeasurementIntervalValue}</td>"
+
+    append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+    append html "</tr>"
+    append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+    append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentAutoIntervalAOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+  }
+
+  set param REFERENCE_16BIT_MIN
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+      append html "<td>\${stringTableRefMin0}</td>"
+      append html  "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param\_SOIL_MOISTURE 320 170]</td>"
+    append html "</tr>"
+  }
+
+  set param REFERENCE_16BIT_MAX
+  if { [info exists ps($param)] == 1  } {
+    incr prn
+    append html "<tr>"
+      append html "<td>\${stringTableRefMax100}</td>"
+      append html  "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param\_SOIL_MOISTURE 320 170]</td>"
+    append html "</tr>"
+  }
+
+
+  return $html
+}
 
 
 proc getNoParametersToSet {} {

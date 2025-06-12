@@ -1,6 +1,6 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -583,6 +583,13 @@
+@@ -599,6 +599,13 @@
    ARGUMENTS {_session_id_ id isVisible}
  }
  
@@ -196,7 +196,7 @@
        <\/table>\n
      <\/div>\n
      \n
-@@ -12067,6 +12068,23 @@
+@@ -12205,6 +12206,23 @@
    {
    },  
  
@@ -220,7 +220,7 @@
    setDeviceInputCheck: function() {
      this.deviceInputCheck = true;
    },
-@@ -14937,6 +14955,7 @@
+@@ -15075,6 +15093,7 @@
    USABLE_ID: "DeviceConfigDialog_isUsable",
    VISIBLE_ID: "DeviceConfigDialog_isVisible",
    LOGGED_ID: "DeviceConfigDialog_isLogged",
@@ -228,7 +228,7 @@
    TEST_RESULT_ID: "DeviceConfigDialogTestResult",
    RESULT_OK: 1,
    RESULT_ABORT: 0,
-@@ -14962,6 +14981,7 @@
+@@ -15100,6 +15119,7 @@
      this.isVisibilityChanged = false;
      this.isUsabilityChanged = false;
      this.isLoggingChanged = false;   
@@ -236,7 +236,7 @@
      this.callback = callback;
      this.layer = document.createElement("div");
      this.layer.id = this.LAYER_ID;
-@@ -15028,6 +15048,8 @@
+@@ -15166,6 +15186,8 @@
          if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
          if (this.isLoggingChanged) { channel.setLogging(isLogged); }
        }, this);

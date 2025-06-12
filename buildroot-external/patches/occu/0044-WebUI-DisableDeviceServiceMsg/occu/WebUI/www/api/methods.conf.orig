@@ -198,6 +198,14 @@ Interface.getServiceMessageCount {
   ARGUMENTS {_session_id_ interface}
 }
 
+Interface.getSuppressedServiceMessages {
+  LEVEL USER
+  SCRIPT_FILE interface/dispatch.tcl
+  METHOD_FILE interface/getsuppressedservicemessages.tcl
+  INFO {Liefert ein Array mit Kanalparametern, deren Service Nachrichten unterdrückt werden.}
+  ARGUMENTS {_session_id_ interface channelAddress}
+}
+
 Interface.getValue {
   LEVEL GUEST
   SCRIPT_FILE interface/dispatch.tcl
@@ -379,6 +387,14 @@ Interface.searchDaliDevices {
   METHOD_FILE interface/searchdalidevices.tcl
   INFO {Setzt einen einzelnen Wert im Parameterset "Values"}
   ARGUMENTS {_session_id_ interface address valueKey type value}
+}
+
+Interface.suppressServiceMessages {
+  LEVEL ADMIN
+  SCRIPT_FILE interface/dispatch.tcl
+  METHOD_FILE interface/suppressservicemessages.tcl
+  INFO {Unterdrückt Service Nachrichten für einen Kanal oder Kanalparameter. Wird für parameterId ein leerer String übergeben, gilt der Aufruf für alle Service Parameter.}
+  ARGUMENTS {_session_id_ interface channelAddress parameterId suppress}
 }
 
 Interface.updateFirmware {

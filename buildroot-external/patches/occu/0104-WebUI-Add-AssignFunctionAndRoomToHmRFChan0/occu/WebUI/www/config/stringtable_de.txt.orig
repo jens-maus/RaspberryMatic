@@ -857,8 +857,10 @@ ERROR_UNDERVOLTAGE=TRUE	${stringTableErrorUndervoltageTrue}
 ERROR_UPDATE	${stringTableErrorUpdateTrue}
 ERROR_UPDATE=TRUE	${stringTableErrorUpdateTrue}
 ERROR_UPDATE=FALSE	${stringTableErrorUpdateFalse}
+ERROR_VALVE_FAILURE	${stringTableErrorValveFailure}
 ERROR_VALVE_FAILURE=FALSE	${stringTableErrorValveFailureFalse}
 ERROR_VALVE_FAILURE=TRUE	${stringTableErrorValveFailureTrue}
+ERROR_WATER_FAILURE	${stringTableErrorWaterFailure}
 ERROR_WATER_FAILURE=FALSE	${stringTableErrorWaterFailureFalse}
 ERROR_WATER_FAILURE=TRUE	${stringTableErrorWaterFailureTrue}
 ERROR_WIND_COMMUNICATION=FALSE	${stringTableErrorWindCommunicationFalse}
@@ -1793,6 +1795,28 @@ SMOKE_DETECTOR|REPEAT_ENABLE	${stringTableSmokeDetectorRepeatEnable}
 SMOKE_DETECTOR|STATE=FALSE	${stringTableSmokeDetectorStateFalse}
 SMOKE_DETECTOR|STATE=TRUE	${stringTableSmokeDetectorStateTrue}
 SOFTONOFF	${stringTableSoftOnOff}
+
+SOIL_MOISTURE	${stringTableSoilMoisture}
+SOIL_MOISTURE_STATUS	${stringTableSoilMoisture}
+SOIL_MOISTURE_STATUS=NORMAL	${lblValue} ${stringTableSoilMoisture}: ${lblNormal}
+SOIL_MOISTURE_STATUS=OVERFLOW	${lblValue} ${stringTableSoilMoisture}: ${lblOverflow}
+SOIL_MOISTURE_STATUS=UNDERFLOW	${lblValue} ${stringTableSoilMoisture}: ${lblUnderflow}
+SOIL_MOISTURE_STATUS=UNKNOWN	${lblValue} ${stringTableSoilMoisture}: ${lblUnknown}
+
+SOIL_MOISTURE_RAW_VALUE	${stringTableSoilMoistureRaw}
+SOIL_MOISTURE_RAW_VALUE_STATUS	${stringTableSoilMoistureRaw}
+SOIL_MOISTURE_RAW_VALUE_STATUS=NORMAL	${lblValue} ${stringTableSoilMoistureRaw}: ${lblNormal}
+SOIL_MOISTURE_RAW_VALUE_STATUS=OVERFLOW	${lblValue} ${stringTableSoilMoistureRaw}: ${lblOverflow}
+SOIL_MOISTURE_RAW_VALUE_STATUS=UNDERFLOW	${lblValue} ${stringTableSoilMoistureRaw}: ${lblUnderflow}
+SOIL_MOISTURE_RAW_VALUE_STATUS=UNKNOWN	${lblValue} ${stringTableSoilMoistureRaw}: ${lblUnknown}
+
+SOIL_TEMPERATURE	${stringTableSoilTemperature}
+SOIL_TEMPERATURE_STATUS	${stringTableSoilTemperature}
+SOIL_TEMPERATURE_STATUS=NORMAL	${lblValue} ${stringTableSoilTemperature}: ${lblNormal}
+SOIL_TEMPERATURE_STATUS=OVERFLOW	${lblValue} ${stringTableSoilTemperature}: ${lblOverflow}
+SOIL_TEMPERATURE_STATUS=UNDERFLOW	${lblValue} ${stringTableSoilTemperature}: ${lblUnderflow}
+SOIL_TEMPERATURE_STATUS=UNKNOWN	${lblValue} ${stringTableSoilTemperature}: ${lblUnknown}
+
 SOUND_ID	${stringTableSoundID}
 SMOKE_LEVEL	${stringTableSmokeLevel}
 SOUND_LONG	${stringTableSoundLong}
@@ -1921,12 +1945,16 @@ VALVE_STATE=RUN_TO_START	${stringTableValveStateRunToStart}
 VALVE_STATE=STATE_NOT_AVAILABLE	${stringTableValveStateNotAvailable}
 VALVE_STATE=TOO_TIGHT	${stringTableValveStateToTight}
 VALVE_STATE=WAIT_FOR_ADAPTION	${stringTableValveStateWaitForAdaption}
+VALVE_STATE_ERROR_POSITION	${stringTableValveStateErrorPosition}
 VALVE_STATE_ERROR_POSITION=FALSE	${stringTableValveStateErrorPositionFalse}
 VALVE_STATE_ERROR_POSITION=TRUE	${stringTableValveStateErrorPositionTrue}
+VALVE_STATE_TOO_TIGHT	${stringTableValveStateTooTight}
 VALVE_STATE_TOO_TIGHT=FALSE	${stringTableValveStateTooTightFalse}
 VALVE_STATE_TOO_TIGHT=TRUE	${stringTableValveStateTooTightTrue}
+VALVE_STATE_ADJUSTMENT_TOO_BIG	${stringTableValveStateAdjTooBig}
 VALVE_STATE_ADJUSTMENT_TOO_BIG=FALSE	${stringTableValveStateAdjTooBigFalse}
 VALVE_STATE_ADJUSTMENT_TOO_BIG=TRUE	${stringTableValveStateAdjTooBigTrue}
+VALVE_STATE_ADJUSTMENT_TOO_SMALL	${stringTableValveStateAdjTooSmall}
 VALVE_STATE_ADJUSTMENT_TOO_SMALL=FALSE	${stringTableValveStateAdjTooSmallFalse}
 VALVE_STATE_ADJUSTMENT_TOO_SMALL=TRUE	${stringTableValveStateAdjTooSmallTrue}
 VENT_CLOSED	${stringTableVentClosed}

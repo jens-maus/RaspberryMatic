@@ -44,6 +44,11 @@ jQuery.extend(true,langJSON, {
     "chType_COND_CO2" : "Condition CO2",
     "chType_COND_SWITCH_TRANSMITTER" : "Condition switch",
     "chType_COND_HUMIDITY" : "Condition humidity",
+
+    "chType_SOIL_MOISTURE_TRANSMITTER" : "Status report</br/>Soil moisture/Soil temperature",
+    "chType_COND_SOIL_MOISTURE" : "Condition soil moisture",
+    "chType_COND_SOIL_TEMPERATURE" : "Condition soil temperature",
+
     "chType_COND_TEMPERATURE" : "Condition temperature",
     "chType_COND_SWITCH_TRANSMITTER_BRIGHTNESS" : "Connection partner<br/>Brightness",
     "chType_COND_SWITCH_TRANSMITTER_HUMIDITY" : "Connection partner<br/>Humidity",

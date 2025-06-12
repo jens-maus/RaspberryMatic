@@ -32,6 +32,8 @@ jQuery.extend(true,langJSON, {
     "ELV-SH-CTV" : "ELV Smart Home<br/>Neigungs- und Ersch%FCtterungssensor<br/>Kompakt",
     "ELV-SH-KRCO" : "ELV Smart Home Taster Kompakt - Outdoor",
     "ELV-SH-SB8" : "ELV Smart Home<br/>Status-Board",
+    "ELV-SH-SMSI" : "ELV Smart Home<br/>Bodenfeuchtesensor",
+    "ELV-SH-SPS25" : "ELV Smart Home<br/>Spannungsversorgung, schaltbar",
     "ELV-SH-TACO" : "ELV Smart Home<br/>Temperatur- und Beschleunigungssensor<br/>Au%DFen",
     "ELV-SH-WSM" : "ELV Smart Home<br/>Bew%E4sserungsaktor",
     "FDT": "Homematic IP Dimmaktor, Unterputzmontage",
@@ -202,6 +204,7 @@ jQuery.extend(true,langJSON, {
     "HmIP-FAL230-C6": "Homematic IP<br/>Fu%DFbodenheizungsaktor - 6-fach, 230 V",
     "HmIP-FAL24-C10": "Homematic IP<br/>Fu%DFbodenheizungsaktor - 10-fach, 24 V",
     "HmIP-FAL24-C6": "Homematic IP<br/>Fu%DFbodenheizungsaktor - 6-fach, 24 V",
+    "HmIP-FALMOT-C8" : "Homematic IP Fu%DFbodenheizungsaktor - 8-fach, motorisch",
     "HmIP-FALMOT-C12" : "Homematic IP Fu%DFbodenheizungsaktor - 12-fach, motorisch",
     "HmIP-FBL": "Homematic IP Jalousieaktor, Unterputzmontage",
     "HmIP-FCI1": "Homematic IP Kontakt-Schnittstelle Unterputz - 1-fach",
@@ -340,6 +343,9 @@ jQuery.extend(true,langJSON, {
     "VIR-OL-GTW": "OSRAM-Lightify<br/>Gateway",
     "Wired-LAN-Sniffer" : "Wired-LAN-Sniffer",
     "WRC6": "Homematic IP Wandtaster 6-fach",
+
+    "WRC6-230": "Homematic IP Wandtaster 6-fach, 230V",
+
     "WS888": "Funk-Wetterstation",
     "WT": "Homematic IP Wandthermostat",
     "ZEL_STG_RM_DWT_10": "Funk-Display-Wandtaster 2-fach, Aufputzmontage",

@@ -155,6 +155,7 @@ function ::dcCreate()
     var CN_SHUTTER_VIRTUAL_RECEIVER = "SHUTTER_VIRTUAL_RECEIVER.";
     var CN_SIMPLE_SWITCH_RECEIVER = "SIMPLE_SWITCH_RECEIVER.";
     var CN_SMOKE_DETECTOR  = "SMOKE_DETECTOR.";
+    var CN_SOIL_MOISTURE_TRANSMITTER = "SOIL_MOISTURE_TRANSMITTER.";
     var CN_SWITCH          = "SWITCH.";
     var CN_SWITCH_TRANSM   = "SWITCH_TRANSMITTER.";
     var CN_TEMP_HUMIDITY_PARTICULATE_MATTER_TRANSMITTER = "TEMP_HUM_PARTICLE_MATTER_TRANSMITTER.";
@@ -1057,6 +1058,17 @@ function ::dcCreate()
             sLastControlName = CN_SIMPLE_SWITCH_RECEIVER;
             Call("/esp/controls/door_opener.fn::CreateSimpleSwitchReceiver()");
           }
+
+          !# CN_SOIL_MOISTURE_TRANSMITTER
+          bIsControl = ( sControlName.Find(CN_SOIL_MOISTURE_TRANSMITTER) > -1 );
+          if( bIsControl && (sLastControlName != CN_SOIL_MOISTURE_TRANSMITTER))
+          {
+            WriteLine( "<script>conInfo('Control CN_SOIL_MOISTURE_TRANSMITTER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_SOIL_MOISTURE_TRANSMITTER;
+            Call("/esp/controls/climate_transceiver.fn::CreateSoilMoistureTransmitter()");
+          }
+
 
           !# CN_SMOKE_DETECTOR
           bIsControl = ( sControlName.Find(CN_SMOKE_DETECTOR) > -1 );

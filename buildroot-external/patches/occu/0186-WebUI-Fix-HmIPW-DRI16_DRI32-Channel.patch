@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -1222,7 +1222,11 @@
+@@ -1223,7 +1223,11 @@
      append html "};"
  
      append html "window.setTimeout(function() {"

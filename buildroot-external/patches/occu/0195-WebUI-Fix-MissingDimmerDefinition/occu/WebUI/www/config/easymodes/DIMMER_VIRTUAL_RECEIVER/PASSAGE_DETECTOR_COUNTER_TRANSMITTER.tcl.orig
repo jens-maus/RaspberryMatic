@@ -119,7 +119,7 @@ set PROFILE_3(SHORT_ONDELAY_TIME_FACTOR)      {0 range 0 - 31}
 set PROFILE_3(SHORT_ON_TIME_BASE)             {7 range 0 - 7}
 set PROFILE_3(SHORT_ON_TIME_FACTOR)           {31 range 0 - 31}
 set PROFILE_3(SHORT_ON_TIME_MODE)             0
-set PROFILE_3(SHORT_ON_MIN_LEVEL)             {0.1 range 0.0 - 1.0}
+set PROFILE_3(SHORT_ON_MIN_LEVEL)           {0.1 range 0.0 - 1.0}
 set PROFILE_3(SHORT_OUTPUT_BEHAVIOUR) {7 range 0 - 7}
 set PROFILE_3(SHORT_OPTICAL_SIGNAL_COLOR) {7 range 0 - 7}
 set PROFILE_3(SHORT_OPTICAL_SIGNAL_BEHAVIOUR) {1 range 0 - 12}

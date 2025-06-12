@@ -115,6 +115,7 @@
       createNewProgram = false;
       showAPITools = jQuery.url().param('showAPITools');
       showRFAddress = (jQuery.url().param('showRFAddress') == "true") ? true : false;
+      invisibleServiceMessages = 0;
       //measureLoadingConfigData = true;
 
       /**

@@ -51,6 +51,31 @@ DEV_PATHS["HmIP-STE2-PCB"] = new Object();
 DEV_PATHS["HmIP-STE2-PCB"]["50"] = "/config/img/devices/50/210_hmip-ste2-pcb_thumb.png";
 DEV_PATHS["HmIP-STE2-PCB"]["250"] = "/config/img/devices/250/210_hmip-ste2-pcb.png";
 DEV_HIGHLIGHT["HmIP-STE2-PCB"] = new Object();
+DEV_LIST.push('HmIP-WRC6-230-A');
+DEV_DESCRIPTION["HmIP-WRC6-230-A"] = "WRC6-230";
+DEV_PATHS["HmIP-WRC6-230-A"] = new Object();
+DEV_PATHS["HmIP-WRC6-230-A"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIP-WRC6-230-A"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["7"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["8"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["9"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["10"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["11"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["12"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["13"] = [5, '1', '2', '3', '4', '5', '6'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["5+6"] = [5, '5', '6'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["7+8"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["9+10"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-230-A"]["11+12"] = [5, '5', '6'];
 DEV_LIST.push('HmIPW-STH-A');
 DEV_DESCRIPTION["HmIPW-STH-A"] = "HmIPW-STH";
 DEV_PATHS["HmIPW-STH-A"] = new Object();
@@ -140,7 +165,7 @@ DEV_HIGHLIGHT["HmIP-BSM"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
 DEV_HIGHLIGHT["HmIP-BSM"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["HmIP-BSM"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('HMIP-WRC2');
-DEV_DESCRIPTION["HMIP-WRC2"] = "WRC2";
+DEV_DESCRIPTION["HMIP-WRC2"] = "HmIP-WRC2";
 DEV_PATHS["HMIP-WRC2"] = new Object();
 DEV_PATHS["HMIP-WRC2"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
 DEV_PATHS["HMIP-WRC2"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
@@ -527,6 +552,12 @@ DEV_HIGHLIGHT["HM-LC-Sw1-FM-2"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Sw1-FM-2"]["1_AUS"] = [2, 0.288, 0.66, 0.068, 0.152];
 DEV_HIGHLIGHT["HM-LC-Sw1-FM-2"]["1_EIN"] = [2, 0.548, 0.66, 0.068, 0.152];
 DEV_HIGHLIGHT["HM-LC-Sw1-FM-2"]["1"] = [5, '1_AUS', '1_EIN'];
+DEV_LIST.push('HmIP-FALMOT-C8');
+DEV_DESCRIPTION["HmIP-FALMOT-C8"] = "HmIP-FALMOT-C8";
+DEV_PATHS["HmIP-FALMOT-C8"] = new Object();
+DEV_PATHS["HmIP-FALMOT-C8"]["50"] = "/config/img/devices/50/245_hmip-falmot-c8_thumb.png";
+DEV_PATHS["HmIP-FALMOT-C8"]["250"] = "/config/img/devices/250/245_hmip-falmot-c8.png";
+DEV_HIGHLIGHT["HmIP-FALMOT-C8"] = new Object();
 DEV_LIST.push('HM-WDS30-T-O');
 DEV_DESCRIPTION["HM-WDS30-T-O"] = "HM-WDS30-T-O";
 DEV_PATHS["HM-WDS30-T-O"] = new Object();
@@ -976,6 +1007,12 @@ DEV_HIGHLIGHT["HM-RC-19"]["9+10"] = [5, '9', '10'];
 DEV_HIGHLIGHT["HM-RC-19"]["11+12"] = [5, '11', '12'];
 DEV_HIGHLIGHT["HM-RC-19"]["13+14"] = [5, '13', '14'];
 DEV_HIGHLIGHT["HM-RC-19"]["15+16"] = [5, '15', '16'];
+DEV_LIST.push('ELV-SH-SMSI');
+DEV_DESCRIPTION["ELV-SH-SMSI"] = "ELV-SH-SMSI";
+DEV_PATHS["ELV-SH-SMSI"] = new Object();
+DEV_PATHS["ELV-SH-SMSI"]["50"] = "/config/img/devices/50/242_elv-sh-smsi_thumb.png";
+DEV_PATHS["ELV-SH-SMSI"]["250"] = "/config/img/devices/250/242_elv-sh-smsi.png";
+DEV_HIGHLIGHT["ELV-SH-SMSI"] = new Object();
 DEV_LIST.push('HmIP-eTRV-F');
 DEV_DESCRIPTION["HmIP-eTRV-F"] = "TRV";
 DEV_PATHS["HmIP-eTRV-F"] = new Object();
@@ -1124,6 +1161,31 @@ DEV_PATHS["HmIP-WRC2-A"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
 DEV_HIGHLIGHT["HmIP-WRC2-A"] = new Object();
 DEV_HIGHLIGHT["HmIP-WRC2-A"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
 DEV_HIGHLIGHT["HmIP-WRC2-A"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
+DEV_LIST.push('HmIP-WRC6-230');
+DEV_DESCRIPTION["HmIP-WRC6-230"] = "WRC6-230";
+DEV_PATHS["HmIP-WRC6-230"] = new Object();
+DEV_PATHS["HmIP-WRC6-230"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIP-WRC6-230"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIP-WRC6-230"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["7"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["8"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["9"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["10"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["11"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["12"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["13"] = [5, '1', '2', '3', '4', '5', '6'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["5+6"] = [5, '5', '6'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["7+8"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["9+10"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-230"]["11+12"] = [5, '5', '6'];
 DEV_LIST.push('HmIP-STHD');
 DEV_DESCRIPTION["HmIP-STHD"] = "HmIP-STHD";
 DEV_PATHS["HmIP-STHD"] = new Object();
@@ -1190,6 +1252,14 @@ DEV_HIGHLIGHT["HmIP-WRC6-A"]["6"] = [1, 0.705, 0.671, 0.025];
 DEV_HIGHLIGHT["HmIP-WRC6-A"]["1+2"] = [5, '1', '2'];
 DEV_HIGHLIGHT["HmIP-WRC6-A"]["3+4"] = [5, '3', '4'];
 DEV_HIGHLIGHT["HmIP-WRC6-A"]["5+6"] = [5, '5', '6'];
+DEV_LIST.push('HmIP-WRC2-A-2');
+DEV_DESCRIPTION["HmIP-WRC2-A-2"] = "HmIP-WRC2";
+DEV_PATHS["HmIP-WRC2-A-2"] = new Object();
+DEV_PATHS["HmIP-WRC2-A-2"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIP-WRC2-A-2"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIP-WRC2-A-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC2-A-2"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-WRC2-A-2"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HmIP-SWDO-PL');
 DEV_DESCRIPTION["HmIP-SWDO-PL"] = "HmIP-SWDO-PL";
 DEV_PATHS["HmIP-SWDO-PL"] = new Object();
@@ -1474,6 +1544,12 @@ DEV_PATHS["HmIP-HAP-B1"] = new Object();
 DEV_PATHS["HmIP-HAP-B1"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
 DEV_PATHS["HmIP-HAP-B1"]["250"] = "/config/img/devices/250/CCU3.png";
 DEV_HIGHLIGHT["HmIP-HAP-B1"] = new Object();
+DEV_LIST.push('ELV-SH-SPS25');
+DEV_DESCRIPTION["ELV-SH-SPS25"] = "ELV-SH-SPS25";
+DEV_PATHS["ELV-SH-SPS25"] = new Object();
+DEV_PATHS["ELV-SH-SPS25"]["50"] = "/config/img/devices/50/250_elv-sh-sps25_thumb.png";
+DEV_PATHS["ELV-SH-SPS25"]["250"] = "/config/img/devices/250/250_elv-sh-sps25.png";
+DEV_HIGHLIGHT["ELV-SH-SPS25"] = new Object();
 DEV_LIST.push('VIR-LG-RGBW-DIM');
 DEV_DESCRIPTION["VIR-LG-RGBW-DIM"] = "VIR-LG-RGBW-DIM";
 DEV_PATHS["VIR-LG-RGBW-DIM"] = new Object();
@@ -1509,6 +1585,12 @@ DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-2"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-2"]["1_part1"] = [2, 0.548, 0.468, 0.072, 0.052];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-2"]["1_part2"] = [2, 0.612, 0.452, 0.028, 0.056];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-2"]["1"] = [5, '1_part1', '1_part2'];
+DEV_LIST.push('HmIP-FSI16-2');
+DEV_DESCRIPTION["HmIP-FSI16-2"] = "HmIP-FSI16";
+DEV_PATHS["HmIP-FSI16-2"] = new Object();
+DEV_PATHS["HmIP-FSI16-2"]["50"] = "/config/img/devices/50/203_hmip-fsi16_thumb.png";
+DEV_PATHS["HmIP-FSI16-2"]["250"] = "/config/img/devices/250/203_hmip-fsi16.png";
+DEV_HIGHLIGHT["HmIP-FSI16-2"] = new Object();
 DEV_LIST.push('HmIP-BWTH-A');
 DEV_DESCRIPTION["HmIP-BWTH-A"] = "HmIP-WTH";
 DEV_PATHS["HmIP-BWTH-A"] = new Object();
@@ -1903,6 +1985,15 @@ DEV_PATHS["HmIP-SPDR"] = new Object();
 DEV_PATHS["HmIP-SPDR"]["50"] = "/config/img/devices/50/154_hmip-spdr_thumb.png";
 DEV_PATHS["HmIP-SPDR"]["250"] = "/config/img/devices/250/154_hmip-spdr.png";
 DEV_HIGHLIGHT["HmIP-SPDR"] = new Object();
+DEV_LIST.push('HmIP-BRC2-2');
+DEV_DESCRIPTION["HmIP-BRC2-2"] = "HmIP-BRC2";
+DEV_PATHS["HmIP-BRC2-2"] = new Object();
+DEV_PATHS["HmIP-BRC2-2"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
+DEV_PATHS["HmIP-BRC2-2"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
+DEV_HIGHLIGHT["HmIP-BRC2-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-BRC2-2"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BRC2-2"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BRC2-2"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('HmIP-STHO');
 DEV_DESCRIPTION["HmIP-STHO"] = "HmIP-STHO";
 DEV_PATHS["HmIP-STHO"] = new Object();
@@ -1951,6 +2042,12 @@ DEV_PATHS["HmIP-RCB1"] = new Object();
 DEV_PATHS["HmIP-RCB1"]["50"] = "/config/img/devices/50/187_hmip-rcb1_thumb.png";
 DEV_PATHS["HmIP-RCB1"]["250"] = "/config/img/devices/250/187_hmip-rcb1.png";
 DEV_HIGHLIGHT["HmIP-RCB1"] = new Object();
+DEV_LIST.push('HmIP-SWSD-2-NL');
+DEV_DESCRIPTION["HmIP-SWSD-2-NL"] = "SWSD";
+DEV_PATHS["HmIP-SWSD-2-NL"] = new Object();
+DEV_PATHS["HmIP-SWSD-2-NL"]["50"] = "/config/img/devices/50/104_hm-sec-sd-2_thumb.png";
+DEV_PATHS["HmIP-SWSD-2-NL"]["250"] = "/config/img/devices/250/104_hm-sec-sd-2.png";
+DEV_HIGHLIGHT["HmIP-SWSD-2-NL"] = new Object();
 DEV_LIST.push('HM-ES-PMSw1-Pl-DN-R2');
 DEV_DESCRIPTION["HM-ES-PMSw1-Pl-DN-R2"] = "HM-ES-PMSw1-Pl-DN-R2";
 DEV_PATHS["HM-ES-PMSw1-Pl-DN-R2"] = new Object();
@@ -3601,6 +3698,14 @@ DEV_HIGHLIGHT["HM-LC-Sw4-PCB"]["1"] = [5, 'Channel1', '1_val', 'Circle1'];
 DEV_HIGHLIGHT["HM-LC-Sw4-PCB"]["2"] = [5, 'Channel2', '2_val', 'Circle2'];
 DEV_HIGHLIGHT["HM-LC-Sw4-PCB"]["3"] = [5, 'Channel3', '3_val', 'Circle3'];
 DEV_HIGHLIGHT["HM-LC-Sw4-PCB"]["4"] = [5, 'Channel4', '4_val', 'Circle4'];
+DEV_LIST.push('HmIP-WRC2-2');
+DEV_DESCRIPTION["HmIP-WRC2-2"] = "HmIP-WRC2";
+DEV_PATHS["HmIP-WRC2-2"] = new Object();
+DEV_PATHS["HmIP-WRC2-2"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIP-WRC2-2"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIP-WRC2-2"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC2-2"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-WRC2-2"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HM-LC-Sw1-FM');
 DEV_DESCRIPTION["HM-LC-Sw1-FM"] = "HM-LC-Sw1-FM";
 DEV_PATHS["HM-LC-Sw1-FM"] = new Object();
@@ -5512,8 +5617,10 @@ elvST['ERROR_UNDERVOLTAGE=TRUE'] = '${stringTableErrorUndervoltageTrue}';
 elvST['ERROR_UPDATE'] = '${stringTableErrorUpdateTrue}';
 elvST['ERROR_UPDATE=TRUE'] = '${stringTableErrorUpdateTrue}';
 elvST['ERROR_UPDATE=FALSE'] = '${stringTableErrorUpdateFalse}';
+elvST['ERROR_VALVE_FAILURE'] = '${stringTableErrorValveFailure}';
 elvST['ERROR_VALVE_FAILURE=FALSE'] = '${stringTableErrorValveFailureFalse}';
 elvST['ERROR_VALVE_FAILURE=TRUE'] = '${stringTableErrorValveFailureTrue}';
+elvST['ERROR_WATER_FAILURE'] = '${stringTableErrorWaterFailure}';
 elvST['ERROR_WATER_FAILURE=FALSE'] = '${stringTableErrorWaterFailureFalse}';
 elvST['ERROR_WATER_FAILURE=TRUE'] = '${stringTableErrorWaterFailureTrue}';
 elvST['ERROR_WIND_COMMUNICATION=FALSE'] = '${stringTableErrorWindCommunicationFalse}';
@@ -6417,6 +6524,24 @@ elvST['SMOKE_DETECTOR|REPEAT_ENABLE'] = '${stringTableSmokeDetectorRepeatEnable}
 elvST['SMOKE_DETECTOR|STATE=FALSE'] = '${stringTableSmokeDetectorStateFalse}';
 elvST['SMOKE_DETECTOR|STATE=TRUE'] = '${stringTableSmokeDetectorStateTrue}';
 elvST['SOFTONOFF'] = '${stringTableSoftOnOff}';
+elvST['SOIL_MOISTURE'] = '${stringTableSoilMoisture}';
+elvST['SOIL_MOISTURE_STATUS'] = '${stringTableSoilMoisture}';
+elvST['SOIL_MOISTURE_STATUS=NORMAL'] = '${lblValue} ${stringTableSoilMoisture}: ${lblNormal}';
+elvST['SOIL_MOISTURE_STATUS=OVERFLOW'] = '${lblValue} ${stringTableSoilMoisture}: ${lblOverflow}';
+elvST['SOIL_MOISTURE_STATUS=UNDERFLOW'] = '${lblValue} ${stringTableSoilMoisture}: ${lblUnderflow}';
+elvST['SOIL_MOISTURE_STATUS=UNKNOWN'] = '${lblValue} ${stringTableSoilMoisture}: ${lblUnknown}';
+elvST['SOIL_MOISTURE_RAW_VALUE'] = '${stringTableSoilMoistureRaw}';
+elvST['SOIL_MOISTURE_RAW_VALUE_STATUS'] = '${stringTableSoilMoistureRaw}';
+elvST['SOIL_MOISTURE_RAW_VALUE_STATUS=NORMAL'] = '${lblValue} ${stringTableSoilMoistureRaw}: ${lblNormal}';
+elvST['SOIL_MOISTURE_RAW_VALUE_STATUS=OVERFLOW'] = '${lblValue} ${stringTableSoilMoistureRaw}: ${lblOverflow}';
+elvST['SOIL_MOISTURE_RAW_VALUE_STATUS=UNDERFLOW'] = '${lblValue} ${stringTableSoilMoistureRaw}: ${lblUnderflow}';
+elvST['SOIL_MOISTURE_RAW_VALUE_STATUS=UNKNOWN'] = '${lblValue} ${stringTableSoilMoistureRaw}: ${lblUnknown}';
+elvST['SOIL_TEMPERATURE'] = '${stringTableSoilTemperature}';
+elvST['SOIL_TEMPERATURE_STATUS'] = '${stringTableSoilTemperature}';
+elvST['SOIL_TEMPERATURE_STATUS=NORMAL'] = '${lblValue} ${stringTableSoilTemperature}: ${lblNormal}';
+elvST['SOIL_TEMPERATURE_STATUS=OVERFLOW'] = '${lblValue} ${stringTableSoilTemperature}: ${lblOverflow}';
+elvST['SOIL_TEMPERATURE_STATUS=UNDERFLOW'] = '${lblValue} ${stringTableSoilTemperature}: ${lblUnderflow}';
+elvST['SOIL_TEMPERATURE_STATUS=UNKNOWN'] = '${lblValue} ${stringTableSoilTemperature}: ${lblUnknown}';
 elvST['SOUND_ID'] = '${stringTableSoundID}';
 elvST['SMOKE_LEVEL'] = '${stringTableSmokeLevel}';
 elvST['SOUND_LONG'] = '${stringTableSoundLong}';
@@ -6536,12 +6661,16 @@ elvST['VALVE_STATE=RUN_TO_START'] = '${stringTableValveStateRunToStart}';
 elvST['VALVE_STATE=STATE_NOT_AVAILABLE'] = '${stringTableValveStateNotAvailable}';
 elvST['VALVE_STATE=TOO_TIGHT'] = '${stringTableValveStateToTight}';
 elvST['VALVE_STATE=WAIT_FOR_ADAPTION'] = '${stringTableValveStateWaitForAdaption}';
+elvST['VALVE_STATE_ERROR_POSITION'] = '${stringTableValveStateErrorPosition}';
 elvST['VALVE_STATE_ERROR_POSITION=FALSE'] = '${stringTableValveStateErrorPositionFalse}';
 elvST['VALVE_STATE_ERROR_POSITION=TRUE'] = '${stringTableValveStateErrorPositionTrue}';
+elvST['VALVE_STATE_TOO_TIGHT'] = '${stringTableValveStateTooTight}';
 elvST['VALVE_STATE_TOO_TIGHT=FALSE'] = '${stringTableValveStateTooTightFalse}';
 elvST['VALVE_STATE_TOO_TIGHT=TRUE'] = '${stringTableValveStateTooTightTrue}';
+elvST['VALVE_STATE_ADJUSTMENT_TOO_BIG'] = '${stringTableValveStateAdjTooBig}';
 elvST['VALVE_STATE_ADJUSTMENT_TOO_BIG=FALSE'] = '${stringTableValveStateAdjTooBigFalse}';
 elvST['VALVE_STATE_ADJUSTMENT_TOO_BIG=TRUE'] = '${stringTableValveStateAdjTooBigTrue}';
+elvST['VALVE_STATE_ADJUSTMENT_TOO_SMALL'] = '${stringTableValveStateAdjTooSmall}';
 elvST['VALVE_STATE_ADJUSTMENT_TOO_SMALL=FALSE'] = '${stringTableValveStateAdjTooSmallFalse}';
 elvST['VALVE_STATE_ADJUSTMENT_TOO_SMALL=TRUE'] = '${stringTableValveStateAdjTooSmallTrue}';
 elvST['VENT_CLOSED'] = '${stringTableVentClosed}';
@@ -10325,6 +10454,15 @@ Channel = Class.create({
       }
     }
 
+    if (data.channelType == "CLIMATECONTROL_FLOOR_TRANSCEIVER") {
+      homematic("Interface.getMetadata", {
+        "interface" : "HmIP-RF",
+        "objectId" : data["id"],
+        "dataId" :  "chnActive"
+      }, function(result) {
+        self.isActive = (result != "null") ? (result == "true") ? true : "unknown" : false;
+      });
+    }
 
     this.updateEvent = new eQ3.Event();
 
@@ -20258,9 +20396,9 @@ DimmerCombinedParamDialog = Class.create({
     this.isWGS = ((this.deviceType == "HmIP-WGS") || (this.deviceType == "HmIP-WGS-A")) ? true : false;
     this.arNoOntimeAvailable = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
     this.arNoRamptimeAvailable = ["HmIP-WGS", "HmIP-WGS-A"];
-    this.showRampTimeOffElm = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
-    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
-    this.showBehaviourElms = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showRampTimeOffElm = ["HmIPW-WRC6", "HmIPW-WRC6-A", "HmIP-WRC6-230", "HmIP-WRC6-230-A"];
+    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A", "HmIP-WRC6-230", "HmIP-WRC6-230-A"];
+    this.showBehaviourElms = ["HmIPW-WRC6", "HmIPW-WRC6-A", "HmIP-WRC6-230", "HmIP-WRC6-230-A"];
 
     // SPHM-1268
     if ((this.deviceType == "HmIP-BSL") && (this.fwMajor >= 2)) {
@@ -34287,7 +34425,7 @@ setBtnPress = function(elmId, time) {
   window.setTimeout(function() {elm.removeClass("ControlBtnOn").addClass("ControlBtnOff");},onTime);
 };
 
-getExtendedDescription = function(oChannelDescr) {
+getExtendedDescription = function(oChannelDescr)  {
   var result = "";
   var noDescrNecessary = "noDescrNecessary";
   var chType = "unknown";
@@ -34437,6 +34575,10 @@ getExtendedDescription = function(oChannelDescr) {
       case "elv-sh-cap":
         if (channelIndex == 2) result = translateKey("chType_COND_TEMPERATURE");
         if (channelIndex == 3) result = translateKey("chType_COND_AIR_PRESSURE");
+        break;
+      case "elv-sh-smsi":
+        if (channelIndex == 2 || channelIndex == 3) result = translateKey("chType_COND_SOIL_TEMPERATURE");
+        if (channelIndex == 4 || channelIndex == 5) result = translateKey("chType_COND_SOIL_MOISTURE");
         break;
     }
   }
@@ -50205,7 +50347,7 @@ RF_existsLink = function(deviceType, ch, ch_type, internalLinkOnly) {
 
   switch(ch_type) {
     case "MULTI_MODE_INPUT_TRANSMITTER":
-      arDevMultiModeException = ["HmIP-FSI16", "HmIP-DRDI3", "HmIP-BDT-I"];
+      arDevMultiModeException = ["HmIP-FSI16", "HmIP-FSI16-2", "HmIP-DRDI3", "HmIP-BDT-I"];
       if ((arDevMultiModeException.indexOf(deviceType) == -1) || (internalLinkOnly == 0)) {
         showHintPrgLink(ch, false);
       } else {

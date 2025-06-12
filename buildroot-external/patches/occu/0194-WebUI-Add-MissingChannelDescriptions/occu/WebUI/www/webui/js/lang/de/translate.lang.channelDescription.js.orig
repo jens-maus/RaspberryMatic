@@ -1,6 +1,5 @@
 jQuery.extend(true,langJSON, {
   "de" : {
-
     "chType_ACCELERATION_TRANSCEIVER" : "Lage-/Beschleunigungssensor",
     "chType_ACCESS_RECEIVER" : "Benutzer",
     "chType_ACCESSPOINT_GENERIC_RECEIVER_1" : "Homematic IP Wired Bus Kanal 1",
@@ -45,6 +44,11 @@ jQuery.extend(true,langJSON, {
     "chType_COND_CO2" : "Entscheidungswert CO2",
     "chType_COND_SWITCH_TRANSMITTER" : "Konfiguration Entscheidungswert",
     "chType_COND_HUMIDITY" : "Entscheidungswert Feuchtigkeit",
+
+    "chType_SOIL_MOISTURE_TRANSMITTER" : "Statusmitteilung</br/>Bodenfeuchte / Bodentemperatur",
+    "chType_COND_SOIL_MOISTURE" : "Entscheidungswert Bodenfeuchte",
+    "chType_COND_SOIL_TEMPERATURE" : "Entscheidungswert Bodentemperatur",
+
     "chType_COND_TEMPERATURE" : "Entscheidungswert Temperatur",
     "chType_COND_SWITCH_TRANSMITTER_BRIGHTNESS" : "Verkn%FCpfungspartner<br/>Helligkeit",
     "chType_COND_SWITCH_TRANSMITTER_HUMIDITY" : "Verkn%FCpfungspartner<br/>Luftfeuchtigkeit",

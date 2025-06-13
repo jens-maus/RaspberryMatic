@@ -16,6 +16,9 @@ OPENVMTOOLS_CPE_ID_PRODUCT = tools
 # 0013-Properly-check-authorization-on-incoming-guestOps-re.patch
 OPENVMTOOLS_IGNORE_CVES += CVE-2022-31676
 
+# 0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
+OPENVMTOOLS_IGNORE_CVES += CVE-2025-22247
+
 # configure.ac is patched
 OPENVMTOOLS_AUTORECONF = YES
 OPENVMTOOLS_CONF_OPTS = --with-dnet \
@@ -33,6 +36,10 @@ OPENVMTOOLS_DEPENDENCIES = \
 
 ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
 OPENVMTOOLS_DEPENDENCIES += libtirpc
+endif
+
+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+OPENVMTOOLS_DEPENDENCIES += libxcrypt
 endif
 
 # When libfuse is available, openvmtools can build vmblock-fuse, so

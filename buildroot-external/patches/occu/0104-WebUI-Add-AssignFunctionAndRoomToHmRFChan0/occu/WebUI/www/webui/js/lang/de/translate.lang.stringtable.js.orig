@@ -1453,3 +1453,13 @@ langJSON.de.stringTableValveState_5 = langJSON.de.stringTableValveStateToTight;
 langJSON.de.stringTableValveState_6 = langJSON.de.stringTableValveStateAdjTooBig;
 langJSON.de.stringTableValveState_7 = langJSON.de.stringTableValveStateAdjToSmall;
 langJSON.de.stringTableValveState_8 = langJSON.de.stringTableValveStateErrorPosition;
+
+langJSON.de.stringTableValveState_STATE_NOT_AVAILABLE = langJSON.de.stringTableValveStateNotAvailable;
+langJSON.de.stringTableValveState_RUN_TO_START = langJSON.de.stringTableValveStateRunToStart;
+langJSON.de.stringTableValveState_WAIT_FOR_ADAPTION = langJSON.de.stringTableValveStateWaitForAdaption;
+langJSON.de.stringTableValveState_ADAPTION_IN_PROGRESS = langJSON.de.stringTableValveStateAdaptionInProgress;
+langJSON.de.stringTableValveState_ADAPTION_DONE = langJSON.de.stringTableValveStateAdaptionDone;
+langJSON.de.stringTableValveState_TOO_TIGHT = langJSON.de.stringTableValveStateToTight;
+langJSON.de.stringTableValveState_ADJUSTMENT_TOO_BIG = langJSON.de.stringTableValveStateAdjTooBig;
+langJSON.de.stringTableValveState_ADJUSTMENT_TOO_SMALL = langJSON.de.stringTableValveStateAdjToSmall;
+langJSON.de.stringTableValveState_ERROR_POSITION = langJSON.de.stringTableValveStateErrorPosition;

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -30245,7 +30245,7 @@
+@@ -30253,7 +30253,7 @@
    
    setVisible: function(id, ctrlId, mode) {
      var url = "/esp/devices.htm?sid="+SessionId;

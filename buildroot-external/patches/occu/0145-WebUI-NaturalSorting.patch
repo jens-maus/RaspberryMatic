@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -8053,8 +8053,7 @@
+@@ -8059,8 +8059,7 @@
      var strA = this.toLowerCase();
      var strB = other.toLowerCase();
    
@@ -10,7 +10,7 @@
    }
    
    return 0;
-@@ -34556,52 +34555,12 @@
+@@ -34566,52 +34565,12 @@
  
  iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
  {

@@ -70,7 +70,7 @@
          Write(" CHANNEL_TYPE {" # chnType # "}");
          Write(" CHANNEL_NAME {" # channel.Label() # "}");
  
-@@ -251,6 +258,7 @@
+@@ -263,6 +270,7 @@
      append result ",\"isEventable\":$channel(EVENTABLE)"
      append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
      append result ",\"isVirtual\":$channel(VIRTUAL)"
@@ -272,7 +272,7 @@
            {var virtualChannel = \"\"}\n
            {var classExpertOnly = \"hidden j_expertChannel\"}\n
            {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
-@@ -6074,6 +6072,8 @@
+@@ -6080,6 +6078,8 @@
  elvST['COND_TX_THRESHOLD_LO_POWER'] = '${stringTableCondThresholdLoPower}';
  elvST['CONFIG_PENDING=FALSE'] = '${stringTableConfigPendingFalse}';
  elvST['CONFIG_PENDING=TRUE'] = '${stringTableConfigPendingTrue}';
@@ -281,15 +281,15 @@
  elvST['CONF_BUTTON_TIME'] = '${stringTableConfButtonTime}';
  elvST['CONF_BUTTON_TIME=PERMANENT'] = '${stringTableConfButtonTimePermanent}';
  elvST['CONTROL_MODE=AUTO-MODE'] = '${stringTableClimateControlRTTransceiverAutoMode}';
-@@ -11493,6 +11493,7 @@
-       this.isReadable = data["isReadable"];      
+@@ -11501,6 +11501,7 @@
        this.isWritable = data["isWritable"];      
        this.isEventable = data["isEventable"];
+       this.isActive = data["isChannelActive"];
 +      this.isInternal = data["isInternal"]
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
-@@ -14700,9 +14701,7 @@
+@@ -14708,9 +14709,7 @@
        var self = this;
        if (this.match(channel)) {
          if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
@@ -300,7 +300,7 @@
          } else {
            result.push(channel);
          }
-@@ -25992,7 +25991,6 @@
+@@ -26000,7 +25999,6 @@
      var result = true;
      switch (channel.channelType) {
        case "ALARM_COND_SWITCH_TRANSMITTER":

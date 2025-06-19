@@ -957,7 +957,7 @@
  .CLASS06200 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -24690,19 +24690,19 @@
+@@ -24698,19 +24698,19 @@
      var _submenuItem_ = submenuItem;
      var _menuItem_ = menuItem;
      
@@ -983,7 +983,7 @@
    },
    
    /**
-@@ -24738,12 +24738,11 @@
+@@ -24746,12 +24746,11 @@
        submenuElement.className = "MainMenuSubMenu";
        Element.setStyle(submenuElement, {display: "none"});
        

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -27610,7 +27610,7 @@
+@@ -27618,7 +27618,7 @@
      var i, len, device;
      this.m_devices = [];
      

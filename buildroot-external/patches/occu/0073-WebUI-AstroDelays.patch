@@ -166,7 +166,7 @@
        string sCalRep = tmObj.CalRepeatTime();  
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -852,8 +852,10 @@
+@@ -853,8 +853,10 @@
      "timeModuleLblStart" : "Beginn:",
      "timeModuleLblEnd" : "Ende:",
      "timeModuleLblAllDay" : "Ganzt%E4gig",
@@ -181,7 +181,7 @@
      "timeModuleLblSerialPatternOnce" : "Einmalig",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -898,8 +898,10 @@
+@@ -899,8 +899,10 @@
      "timeModuleLblStart" : "Beginning:",
      "timeModuleLblEnd" : "End:",
      "timeModuleLblAllDay" : "All-day",

@@ -59,7 +59,7 @@
      Write(" CHANNELS {");
  
      var first = true;
-@@ -208,6 +217,7 @@
+@@ -220,6 +229,7 @@
    append result ",\"type\":[json_toString $device(DEVICE_TYPE)]"
    append result ",\"operateGroupOnly\":[json_toString $device(GROUP_ONLY)]"
    append result ",\"isReady\":[json_toString $device(READY_CONFIG)]"
@@ -196,7 +196,7 @@
        <\/table>\n
      <\/div>\n
      \n
-@@ -12205,6 +12206,23 @@
+@@ -12213,6 +12214,23 @@
    {
    },  
  
@@ -220,7 +220,7 @@
    setDeviceInputCheck: function() {
      this.deviceInputCheck = true;
    },
-@@ -15075,6 +15093,7 @@
+@@ -15083,6 +15101,7 @@
    USABLE_ID: "DeviceConfigDialog_isUsable",
    VISIBLE_ID: "DeviceConfigDialog_isVisible",
    LOGGED_ID: "DeviceConfigDialog_isLogged",
@@ -228,7 +228,7 @@
    TEST_RESULT_ID: "DeviceConfigDialogTestResult",
    RESULT_OK: 1,
    RESULT_ABORT: 0,
-@@ -15100,6 +15119,7 @@
+@@ -15108,6 +15127,7 @@
      this.isVisibilityChanged = false;
      this.isUsabilityChanged = false;
      this.isLoggingChanged = false;   
@@ -236,7 +236,7 @@
      this.callback = callback;
      this.layer = document.createElement("div");
      this.layer.id = this.LAYER_ID;
-@@ -15166,6 +15186,8 @@
+@@ -15174,6 +15194,8 @@
          if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
          if (this.isLoggingChanged) { channel.setLogging(isLogged); }
        }, this);

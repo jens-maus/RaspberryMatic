@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -51977,6 +51977,7 @@
+@@ -51991,6 +51991,7 @@
      } else {
        if((arChnHasLinks[parseInt(ch)] != true) && (! wgtHasLinksOrPrograms)) {
          var elm = jQuery(".j_multiMode_" + ch).find("[name='CHANNEL_OPERATION_MODE']")[0];

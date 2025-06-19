@@ -773,6 +773,7 @@ jQuery.extend(true,langJSON, {
     "ruleConditionLblWithinValueRange" : "im Wertebereich",
     "ruleConditionLblRangeFrom" : "von",
     "ruleConditionLblRangeLessThan" : "bis kleiner",
+    "ruleConditionLblRangeGreaterThan" : "und gr%F6%DFer",
     "ruleConditionLblGreaterThan" : "gr%F6%DFer als",
     "ruleConditionLblLessThan" : "kleiner als",
     "ruleConditionLblGreaterOrEqualThan" : "gr%F6%DFer oder gleich",

@@ -825,7 +825,7 @@ set comment {
 
    append html "[getHorizontalLine]"
 
-   append html "<tr>"
+   append html "<tr name='abortEventSendingChannels'>"
      append html "<td colspan='2'  style='text-align:center;'>\${stringTableAbortEventSendingChannels}&nbsp;[getHelpIcon $param]</td>"
    append html "</tr>"
 
@@ -1139,7 +1139,7 @@ proc getMultiModeInputTransmitter {chn p descr address} {
 
     append html "[getHorizontalLine]"
 
-    append html "<tr>"
+    append html "<tr name='abortEventSendingChannels'>"
       append html "<td colspan='3'  style='text-align:center;'>\${stringTableAbortEventSendingChannels}&nbsp;[getHelpIcon $param]</td>"
     append html "</tr>"
 

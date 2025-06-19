@@ -170,7 +170,7 @@
  # establish a per-file limit for uploads
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -1059,6 +1059,8 @@
+@@ -1060,6 +1060,8 @@
      "btnSysConfAdditionalSoft" : "Zusatzsoftware",
      "lblSysConfAdditionalSoft1" : "Zusatzsoftware verwalten",
      "lblSysConfAdditionalSoft2" : "Zusatzsoftware installieren",
@@ -181,7 +181,7 @@
      "Belgium" : "Belgien",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -1136,6 +1136,9 @@
+@@ -1137,6 +1137,9 @@
      "lblSysConfAdditionalSoft1" : "Manage additional software",
      "lblSysConfAdditionalSoft2" : "Install additional software",
  

@@ -1273,7 +1273,7 @@ CreateSysVarEnergyCounterScriptPSM = function(chn) {
   homematic("ReGa.runScript", {"script": script});
 };
 
-//HmIP-PSM Feed In EnergyCounter (e. g. HmIP-PSMCO)
+//HmIP-PSM Feed In EnergyCounter (e. g. HmIP-PSMCO or ELV-SH-PSMCI)
 CreateSysVarEnergyCounterScriptPSMFeedIn = function(chn) {
 
   var sysVarIds = getSysVarEnergyCounterIds(chn, true);
@@ -2029,7 +2029,7 @@ CheckAndCreateSysVarEnergyCounter = function(chn) {
   var hasFeedIn = false,
   chnLabel = getChnLabel(chn.id);
 
-  if (chnLabel.indexOf('HmIP-PSMCO') != -1) {
+  if ((chnLabel.indexOf('HmIP-PSMCO') != -1) || ((chnLabel.indexOf('ELV-SH-PSMCI') != -1))) {
     hasFeedIn = true;
   }
 
@@ -2633,6 +2633,7 @@ createNecessarySysVarsAndPrograms = function (oDevice) {
       if (oDevice.type.includes("-FALMOT")) {
         if (channelType == "CLIMATECONTROL_FLOOR_TRANSCEIVER") {
           var res = homematic('Interface.suppressServiceMessages', {'interface':'HmIP-RF','channelAddress': channel.address, 'parameterId': '', 'suppress': true});
+          homematic("Interface.setMetadata", {"objectId" : channel.id, "dataId" : "chnActive", "value" : "false"});
         }
       }
 

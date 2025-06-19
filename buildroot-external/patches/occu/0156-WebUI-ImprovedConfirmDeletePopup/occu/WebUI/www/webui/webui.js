@@ -5163,6 +5163,12 @@ DEV_PATHS["ELV-SH-SW1-BAT"] = new Object();
 DEV_PATHS["ELV-SH-SW1-BAT"]["50"] = "/config/img/devices/50/228_elv-sh-sw1-bat_thumb.png";
 DEV_PATHS["ELV-SH-SW1-BAT"]["250"] = "/config/img/devices/250/228_elv-sh-sw1-bat.png";
 DEV_HIGHLIGHT["ELV-SH-SW1-BAT"] = new Object();
+DEV_LIST.push('ELV-SH-PSMCI');
+DEV_DESCRIPTION["ELV-SH-PSMCI"] = "PSMCO";
+DEV_PATHS["ELV-SH-PSMCI"] = new Object();
+DEV_PATHS["ELV-SH-PSMCI"]["50"] = "/config/img/devices/50/249_elv-sh-psmci_thumb.png";
+DEV_PATHS["ELV-SH-PSMCI"]["250"] = "/config/img/devices/250/249_elv-sh-psmci.png";
+DEV_HIGHLIGHT["ELV-SH-PSMCI"] = new Object();
 DEV_LIST.push('BRC-H');
 DEV_DESCRIPTION["BRC-H"] = "BRC-H";
 DEV_PATHS["BRC-H"] = new Object();
@@ -11368,7 +11374,8 @@ Channel = Class.create({
         "objectId" : data["id"],
         "dataId" :  "chnActive"
       }, function(result) {
-        self.isActive = (result != "null") ? (result == "true") ? true : "unknown" : false;
+        self.isActive = (result == "true") ? true : false;
+        homematic('Interface.suppressServiceMessages', {'interface':'HmIP-RF','channelAddress': data.address, 'parameterId': '', 'suppress': !self.isActive});
       });
     }
 
@@ -11518,6 +11525,7 @@ Channel = Class.create({
       this.isReadable = data["isReadable"];      
       this.isWritable = data["isWritable"];      
       this.isEventable = data["isEventable"];
+      this.isActive = data["isChannelActive"];
       this.isInternal = data["isInternal"]
 
       if (typeof data["mode_multi_mode"] != "undefined") {
@@ -15425,7 +15433,7 @@ deleteProgSysvarPOWERMETER = function(chId, chAddress, devLabel) {
             homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
               homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chId + "_" + chAddress}, function () {
                 homematic("Program.deleteProgramByName", {"name": "prgSetEnergyValuesAtMidnight" + chId}, function () {
-                  if ((typeof devLabel == "undefined") || (devLabel != "hmip-psmco")) {
+                  if ((typeof devLabel == "undefined") || (devLabel != "hmip-psmco" && (devLabel != "elv-sh-psmci"))) {
                     conInfo(chAddress + " ProgSysvarPOWERMETER deleted - next: save ObjectModel");
                     window.setTimeout(function () {
                       saveObjectModel();
@@ -33495,6 +33503,8 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
     && (obj['type'] != "HmIPW-WGD-PL")
     && (obj['type'] != "HmIP-ESI")
     && (obj['type'] != "HmIP-DRG-DALI")
+    && (obj['type'] != "HmIP-FALMOT-C8")
+    && (obj['type'] != "HmIP-FALMOT-C12")
   ) {
 
     if (bIsDev) {
@@ -35938,7 +35948,11 @@ getExtendedDescription = function(oChannelDescr)  {
 
   if (chType == "OPTICAL_SIGNAL_RECEIVER") {
     //HmIPW-WRC6 - ch. 13 activates all keys
-    result = (channelIndex < 13) ? translateKey("chType_OPTICAL_SIGNAL_RECEIVER") : translateKey("chType_OPTICAL_SIGNAL_RECEIVERA");
+    //HmIP-WRC6-230 - ch 18 activates all keys
+    var maxSingleChn = -1;
+    if (deviceType.toLowerCase() == "hmipw-wrc6") {maxSingleChn = 12;}
+    else if (deviceType.toLowerCase() == "hmip-wrc6-230") {maxSingleChn = 17;}
+    result = (channelIndex <= maxSingleChn) ? translateKey("chType_OPTICAL_SIGNAL_RECEIVER") : translateKey("chType_OPTICAL_SIGNAL_RECEIVERA");
   }
 
   if (chType == "ACCESS_RECEIVER") {
@@ -41232,7 +41246,7 @@ isePowerMeter.prototype = {
     this.sensorTypeID.iec = "IEC";
     this.sensorTypeID.unknown = "Unknown";
     this.kiloPrefix = "";
-    this.hasFeedIn = (this.opts.chLabel == "HmIP-PSMCO") ? true : false;
+    this.hasFeedIn = ((this.opts.chLabel == "HmIP-PSMCO") || (this.opts.chLabel == "ELV-SH-PSMCI" )) ? true : false;
 
     this.id = id;
     this.summedUpEnergy = 0.0;

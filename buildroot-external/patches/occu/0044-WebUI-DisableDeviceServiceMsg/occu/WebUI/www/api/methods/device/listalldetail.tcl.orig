@@ -148,6 +148,18 @@ set deviceDescrScript {
             Write(" DALI_MAX_CAPABILITIES {--}");
           }
         }
+
+        if (((channel.Label() == "HmIP-FALMOT-C8") || (channel.Label() == "HmIP-FALMOT-C12")) && (chnType == "CLIMATECONTROL_FLOOR_TRANSCEIVER")) {
+          integer chnActive = channel.MetaData('chnActive');
+
+          if (chnActive) {
+            Write(" FALMOT_CHN_ACTIVE {" # chnActive # "}");
+          } else {
+            channel.AddMetaData("chnActive", "false");
+            Write(" FALMOT_CHN_ACTIVE {false}");
+          }
+        }
+
         Write("}");
       }
     }
@@ -247,11 +259,16 @@ foreach id $deviceIds {
      append result ",\"mode_multi_mode\":[json_toString $channel(MODE_MULTI_MODE_CHANNEL)]"
     }
 
-   if {($channel(CHANNEL_NAME) == "HmIP-DRG-DALI") && ($channel(CHANNEL_TYPE) == "UNIVERSAL_LIGHT_RECEIVER")} {
+    if {($channel(CHANNEL_NAME) == "HmIP-DRG-DALI") && ($channel(CHANNEL_TYPE) == "UNIVERSAL_LIGHT_RECEIVER")} {
       if {[info exists channel(DALI_MAX_CAPABILITIES)] == 1} {
        append result ",\"daliMaxCapabilities\":[json_toString $channel(DALI_MAX_CAPABILITIES)]"
       }
     }
+
+    if {([string first "HmIP-FALMOT" $channel(CHANNEL_NAME)] != -1) && ($channel(CHANNEL_TYPE) == "CLIMATECONTROL_FLOOR_TRANSCEIVER")} {
+      append result ",\"isChannelActive\":$channel(FALMOT_CHN_ACTIVE)"
+    }
+
     append result "\}"
 
     array_clear channel

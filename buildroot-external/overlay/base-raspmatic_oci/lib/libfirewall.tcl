@@ -56,7 +56,7 @@ set Firewall_MODE $Firewall_MODE_RESTRICTIVE
 # @var Firewall_LOG_ENABLED
 # Aktiviert Logging über syslog, default ist 'aus'.
 ##
-set Firewall_LOG_ENABLED 0
+set Firewall_LOG_ENABLED 1
 
 ##
 # @var Firewall_IPS
@@ -443,8 +443,9 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
   # allow all established and related packets to pass  
   try_exec_cmd "/usr/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT" 
-  # tcp port for hmip wired gateways
+  # tcp ports for internal hmip update server (9293: HmIP-HAP, HmIPW-DRAP, 9294: HmIP-HAP2)
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 9294 -m state --state NEW -j ACCEPT"
   # ssh
   if { [FirewallInternal::sshEnabled] == 1 } {
     try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT"  
@@ -481,8 +482,9 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -i lo -j ACCEPT"
     # allow all established and related packets to pass  
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT"
-    # tcp port for hmip wired gateways
+    # tcp ports for internal hmip update server (9293: HmIP-HAP, HmIPW-DRAP, 9294: HmIP-HAP2)
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 9294 -m state --state NEW -j ACCEPT"
     # ssh
     if { [FirewallInternal::sshEnabled] == 1 } {
       try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT" 
@@ -616,7 +618,7 @@ proc try_exec_cmd {cmdline} {
   } err ] } {
     catch { close $fd }
     if { $Firewall_LOG_ENABLED == 1 } {
-      catch { [exec logger -t firewall -p user.info $err] } 
+      catch { [exec logger -t firewall -p user.err $err] }
     }
   }
 }

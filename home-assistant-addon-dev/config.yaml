@@ -56,6 +56,7 @@ ports:
   41999/tcp: null
   48181/tcp: null
   9293/tcp: null
+  9294/tcp: null
   43438/udp: null
   1900/udp: null
   43439/udp: null
@@ -99,8 +100,9 @@ ports_description:
   49292/tcp: HomeMatic+homematicIP VirtualDevices XMLRPC-SSL (Extern)
   41999/tcp: ReGaHss XMLRPC-SSL (Extern)
   48181/tcp: ReGaHss HTTPS scripting (Extern)
-  9293/tcp: homematicIP-RF LAN-Gateway communication (Extern)
-  43438/udp: homematicIP-Wired DRAP-Gateway communication (Extern)
+  9293/tcp: HmIP-HAP/HmIPW-DRAP update server communication (Extern)
+  9294/tcp: HmIP-HAP2 update server communication (Extern)
+  43438/udp: HmIPW-DRAP Gateway communication (Extern)
   1900/udp: ssdpd auto-discovery (Extern)
   43439/udp: eq3configd NetFinder (Extern)
   161/udp: SNMP monitoring (Extern)

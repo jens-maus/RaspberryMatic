@@ -171,7 +171,7 @@ jobs:
         timeout-minutes: 300
         run: |
           rm -rf release/RaspberryMatic-* buildroot-????.*
-          sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} clean-all raspmatic_${{ matrix.platform }}-release
+          sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} clean-all release
 
       # cleanup
       - name: Cleanup

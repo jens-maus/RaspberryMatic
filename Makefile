@@ -18,7 +18,6 @@ else
 endif
 
 PRODUCT_PLATFORM:=$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//')
-BOARD_DIR:=$(BUILDROOT_EXTERNAL)/board/$(PRODUCT_PLATFORM)
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
 .PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg
@@ -90,6 +89,7 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//'))
 	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) $(PRODUCT) $(PRODUCT_VERSION); fi
 
 check-all: $(addsuffix -check, $(PRODUCTS))

@@ -23,3 +23,6 @@ fi
  
 # rename some stuff buildroot introduced but we need differently
 [ -e "${TARGET_DIR}/etc/init.d/S10udev" ] && mv -f "${TARGET_DIR}/etc/init.d/S10udev" "${TARGET_DIR}/etc/init.d/S00udev"
+
+# remove unnecessary stuff from TARGET_DIR
+rm -f "${TARGET_DIR}/etc/init.d/S35iptables"

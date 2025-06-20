@@ -19,6 +19,7 @@ echo "PLATFORM=generic-x86_64" >>"${TARGET_DIR}/VERSION"
 
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S50crond"
+rm -f "${TARGET_DIR}/etc/init.d/S35iptables"
 
 # link VERSION in /boot on rootfs
 mkdir -p "${TARGET_DIR}/boot"

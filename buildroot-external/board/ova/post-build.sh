@@ -19,6 +19,7 @@ echo "PLATFORM=ova" >>"${TARGET_DIR}/VERSION"
 
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S50crond"
+rm -f "${TARGET_DIR}/etc/init.d/S35iptables"
 
 # copy grub boot.img to binaries dir
 cp -f "${HOST_DIR}"/../build/grub2-2.??/build-i386-pc/grub-core/boot.img "${BINARIES_DIR}/"

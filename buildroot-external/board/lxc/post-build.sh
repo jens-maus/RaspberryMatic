@@ -13,6 +13,7 @@ echo "PLATFORM=lxc" >>"${TARGET_DIR}/VERSION"
 
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S50crond"
+rm -f "${TARGET_DIR}/etc/init.d/S35iptables"
 rm -f "${TARGET_DIR}/etc/init.d/S01InitZRAMSwap"
 rm -f "${TARGET_DIR}/etc/init.d/S01USBGadgetMode"
 rm -f "${TARGET_DIR}/etc/init.d/S03InitURandom"

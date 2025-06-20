@@ -10467,7 +10467,7 @@ Channel = Class.create({
         "dataId" :  "chnActive"
       }, function(result) {
         self.isActive = (result == "true") ? true : false;
-        homematic('Interface.suppressServiceMessages', {'interface':'HmIP-RF','channelAddress': data.address, 'parameterId': '', 'suppress': !self.isActive});
+        //homematic('Interface.suppressServiceMessages', {'interface':'HmIP-RF','channelAddress': data.address, 'parameterId': '', 'suppress': !self.isActive});
       });
     }
 

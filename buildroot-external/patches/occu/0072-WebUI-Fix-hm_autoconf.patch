@@ -288,15 +288,15 @@
  	          if { [string equal $ch_descr(PARENT_TYPE) "HmIP-RCV-50"] == 1 } {
 --- occu/WebUI/bin/hm_startup.orig
 +++ occu/WebUI/bin/hm_startup
-@@ -1,27 +1,7 @@
+@@ -1,28 +1,8 @@
  #!/bin/tclsh
  
 -#*******************************************************************************
 -#* hm_startup
--#* Wird beim Starten von ise ReGa ausgeführt. 
+-#* Wird beim Starten von ise ReGa ausgeführt.
 -#*
 -#* Aufgaben:
--#*   - sucht fertig konfigurierte Geräte und setzt deren Kanäle ebenfalls auf 
+-#*   - sucht fertig konfigurierte Geräte und setzt deren Kanäle ebenfalls auf
 -#*     "fertig konfiguriert"
 -#*
 -#* Autor      : Falk Werner
@@ -308,18 +308,38 @@
 -################################################################################
 -
  load tclrega.so
+ load tclrpc.so
  
 -################################################################################
 -# Prozeduren                                                                   #
 -################################################################################
 -
  #*******************************************************************************
- #* Sucht fertig konfigurierte Geräte und setzt deren Kanäle auf "fertig 
+ #* Sucht fertig konfigurierte Geräte und setzt deren Kanäle auf "fertig
  #* konfiguriert".
-@@ -37,8 +17,207 @@
+@@ -58,24 +38,224 @@
    }
  }
  
++proc fixFalmotActive {} {
++  array set _result [checkFalmotActive]
++  set result $_result(STDOUT)
++  set addressList [split $result "\n"]
++
++  set url "xmlrpc://127.0.0.1:32010"
++
++  foreach chnAddress $addressList {
++    if {$chnAddress != ""} {
++    #  exec echo "chn:  - $chnAddress" >> /tmp/1_hm_startup.log
++      catch {xmlrpc $url suppressServiceMessages [list string $chnAddress] [list string ""] [list boolean 1] } e
++    #  exec echo "xmlrpc error code: $e" >> /tmp/2_xmlerror.log
++    }
++  }
++}
+ 
+-################################################################################
+-# Einsprungpunkt                                                               #
+-################################################################################
 +# List of default functions (german "Gewerke") that will be automatically generated
 +set FUNCTIONLIST {
 +  "funcLight"
@@ -333,7 +353,8 @@
 +  "funcCentral"
 +  "funcEnergy"
 +}
-+
+ 
+-checkDevices
 +# List of default rooms that will be automatically generated
 +set ROOMLIST {
 +  "roomLivingRoom"
@@ -348,7 +369,18 @@
 +  "roomGarden"
 +  "roomTerrace"
 +}
-+
+ 
+-array set _result [checkFalmotActive]
+-set result $_result(STDOUT)
+-set addressList [split $result "\n"]
+-
+-set url "xmlrpc://127.0.0.1:32010"
+-
+-foreach chnAddress $addressList {
+-  if {$chnAddress != ""} {
+-  #  exec echo "chn:  - $chnAddress" >> /tmp/1_hm_startup.log
+-    catch {xmlrpc $url suppressServiceMessages [list string $chnAddress] [list string ""] [list boolean 1] } e
+-  #  exec echo "xmlrpc error code: $e" >> /tmp/2_xmlerror.log
 +proc create_objects {collection enum_type names} {
 +  set ids [rega "dom.GetObject($collection).EnumIDs()"]
 +  set i 0
@@ -381,11 +413,11 @@
 +    rega "dom.GetObject($id).Name(\"[lindex $names $i]\")"
 +    rega "dom.GetObject($id).Enabled(true)"
 +    incr i
-+  }
+   }
 +
 +  return [lsort [rega "dom.GetObject($collection).EnumUsedIDs()"]]
-+}
-+
+ }
+ 
 +proc create_default_functions {} {
 +  global FUNCTIONLIST
 +  return [create_objects ID_FUNCTIONS etFunction $FUNCTIONLIST]
@@ -515,12 +547,13 @@
 +  }
 +}
 +
- ################################################################################
- # Einsprungpunkt                                                               #
- ################################################################################
- 
- checkDevices
++################################################################################
++# Einsprungpunkt                                                               #
++################################################################################
++
++checkDevices
 +create_default_objects
 +convert_byte2int_HSSDPs
 +fix_alarmDPs
 +clear_sysvars
++fixFalmotActive

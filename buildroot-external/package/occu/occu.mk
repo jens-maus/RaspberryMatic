@@ -119,9 +119,9 @@ endif
 
 ifeq ($(BR2_aarch64),y)
   OCCU_COMMON=arm-gnueabihf-gcc8
-  OCCU_ARCH32=arm-linux-gnueabihf
+  OCCU_ARCH32=
   OCCU_ARCH64=aarch64-linux-gnu
-  OCCU_LIB32=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_LIB32=
   OCCU_LIB64=$(BR2_ROOTFS_LIB_DIR)
 endif
 
@@ -135,9 +135,9 @@ endif
 
 ifeq ($(BR2_x86_64),y)
   OCCU_COMMON=X86_32_GCC8
-  OCCU_ARCH32=i686-linux-gnu
+  OCCU_ARCH32=
   OCCU_ARCH64=x86_64-linux-gnu
-  OCCU_LIB32=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_LIB32=
   OCCU_LIB64=$(BR2_ROOTFS_LIB_DIR)
 endif
 

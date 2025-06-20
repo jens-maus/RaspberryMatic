@@ -16,6 +16,7 @@ install:
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/bin/rfd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/rfd
 	# collect legacy libraries (32bit)
+ifneq ($(OCCU_LIB32), )
 	mkdir -p $(TARGET_DIR)/$(OCCU_LIB32)
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/lib/libLanDeviceUtils.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libLanDeviceUtils.so
@@ -25,6 +26,7 @@ install:
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libelvutils.so
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/lib/libhsscomm.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libhsscomm.so
+endif
 	# collect legacy config templates
 	mkdir -p $(TARGET_DIR)/etc/config_templates
 	cp -av $(OCCU_COMMON)/packages-eQ-3/RFD/etc/crRFD_ccu3.conf $(TARGET_DIR)/etc/config_templates/crRFD.conf
@@ -43,6 +45,7 @@ ifneq ($(OCCU_ARCH32), )
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/bin/rfd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/rfd
 	# collect modern libraries (32bit)
+ifneq ($(OCCU_LIB32), )
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libLanDeviceUtils.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libLanDeviceUtils.so
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libUnifiedLanComm.so $(TARGET_DIR)/$(OCCU_LIB32)/
@@ -51,6 +54,7 @@ ifneq ($(OCCU_ARCH32), )
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libelvutils.so
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/RFD-Beta/lib/libhsscomm.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libhsscomm.so
+endif
 endif
 ifneq ($(OCCU_ARCH64), )
 	# collect modern binaries (64bit)
@@ -134,8 +138,10 @@ endif
 	cp -av $(OCCU_COMMON)/packages-eQ-3/LinuxBasis/bin/ssdpd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/ssdpd
 	# collect legacy libraries (32bit)
+ifneq ($(OCCU_LIB32), )
 	cp -av $(OCCU_COMMON)/packages-eQ-3/LinuxBasis/lib/libeq3config.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libeq3config.so
+endif
 ifneq ($(OCCU_ARCH32), )
 	# collect modern binaries (32bit)
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/eq3configcmd $(TARGET_DIR)/bin/
@@ -147,8 +153,10 @@ ifneq ($(OCCU_ARCH32), )
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/bin/ssdpd $(TARGET_DIR)/bin/
 	chmod 755 $(TARGET_DIR)/bin/ssdpd
 	# collect modern libraries (32bit)
+ifneq ($(OCCU_LIB32), )
 	cp -av $(OCCU_ARCH32)/packages-eQ-3/LinuxBasis-Beta/lib/libeq3config.so $(TARGET_DIR)/$(OCCU_LIB32)/
 	chmod 755 $(TARGET_DIR)/$(OCCU_LIB32)/libeq3config.so
+endif
 endif
 ifneq ($(OCCU_ARCH64), )
 	# collect modern binaries (64bit)

@@ -1,14 +1,16 @@
 #!/bin/sh
 # shellcheck source=/dev/null
+#
+# post-build.sh script with common stuff todo for all platforms
+#
 
 # Stop on error
 set -e
 
 # make sure VERSION exists in root of recoveryfs
-VERSION="${BR2_RECOVERY_SYSTEM_VERSION}"
-echo "VERSION=${VERSION}" >"${TARGET_DIR}/VERSION"
+echo "VERSION=${BR2_RECOVERY_SYSTEM_VERSION}" >"${TARGET_DIR}/VERSION"
 echo "PRODUCT=${PRODUCT}" >>"${TARGET_DIR}/VERSION"
-echo "PLATFORM=odroid-c2" >>"${TARGET_DIR}/VERSION"
+echo "PLATFORM=${PRODUCT_PLATFORM}" >>"${TARGET_DIR}/VERSION"
 
 # Define parameters with default values
 DHCP_VENDOR_ID=eQ3-CCU3

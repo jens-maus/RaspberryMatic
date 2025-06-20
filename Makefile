@@ -5,7 +5,7 @@ DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
-PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
+PRODUCT_VERSION:=$(OCCU_VERSION).$(DATE)
 PRODUCTS:=$(sort $(notdir $(patsubst %.config,%,$(wildcard $(DEFCONFIG_DIR)/*.config))))
 BR2_DL_DIR=$(shell pwd)/download
 BR2_CCACHE_DIR=${HOME}/.buildroot-ccache
@@ -16,6 +16,9 @@ ifneq ($(PRODUCT),)
 else
 	PRODUCT:=$(firstword $(PRODUCTS))
 endif
+
+PRODUCT_PLATFORM:=$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//')
+BOARD_DIR:=$(BUILDROOT_EXTERNAL)/board/$(PRODUCT_PLATFORM)
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
 .PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg
@@ -45,18 +48,18 @@ $(BR2_CCACHE_DIR):
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT) $(BR2_CCACHE_DIR)
 	@echo "[config $@]"
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) alldefconfig
-	cd $(shell pwd)/build-$(PRODUCT) && BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) alldefconfig
+	cd $(shell pwd)/build-$(PRODUCT) && BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config
 
 build-all: $(PRODUCTS)
 $(PRODUCTS): %:
 	@echo "[build: $@]"
-	@$(MAKE) PRODUCT=$@ PRODUCT_VERSION=$(PRODUCT_VERSION) build
+	@$(MAKE) PRODUCT=$@ PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) build
 
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
 ifneq ($(FAKE_BUILD),true)
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM)
 else
 	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
 	# Dummy build - mainly for testing CI
@@ -83,16 +86,15 @@ endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))
 $(addsuffix -release, $(PRODUCTS)): %:
-	@$(MAKE) PRODUCT=$(subst -release,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) release
+	@$(MAKE) PRODUCT=$(subst -release,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) release
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//'))
-	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) ${PRODUCT} ${PRODUCT_VERSION}; fi
+	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) $(PRODUCT) $(PRODUCT_VERSION); fi
 
 check-all: $(addsuffix -check, $(PRODUCTS))
 $(addsuffix -check, $(PRODUCTS)): %:
-	@$(MAKE) PRODUCT=$(subst -check,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) check
+	@$(MAKE) PRODUCT=$(subst -check,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) check
 
 check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking: $(PRODUCT)]"
@@ -108,7 +110,7 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:
-	@$(MAKE) PRODUCT=$(subst -clean,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) clean
+	@$(MAKE) PRODUCT=$(subst -clean,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) clean
 
 clean:
 	@echo "[clean $(PRODUCT)]"
@@ -122,19 +124,19 @@ distclean: clean-all
 
 .PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) menuconfig
 
 .PHONY: xconfig
 xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) xconfig
 
 .PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config
 
 .PHONY: toolchain
 toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) toolchain
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) toolchain
 
 .PHONY: recovery-menuconfig
 recovery-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
@@ -154,7 +156,7 @@ multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.confi
 
 .PHONY: linux-check-dotconfig
 linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) linux-check-dotconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config BR2_CHECK_DOTCONFIG_OPTS="--github-format --strip-path-prefix=$(PWD)/"
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) linux-check-dotconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config BR2_CHECK_DOTCONFIG_OPTS="--github-format --strip-path-prefix=$(PWD)/"
 
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
@@ -166,10 +168,10 @@ linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 #   uboot-update-defconfig
 linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig legal-info:
 	@echo "[$@ $(PRODUCT)]"
-	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $@
+	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) $@
 
 buildroot-help:
-	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) help
+	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PRODUCT_PLATFORM) help
 
 help:
 	@echo "HomeMatic/CCU Build Environment"

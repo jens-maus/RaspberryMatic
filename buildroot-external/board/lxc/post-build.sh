@@ -3,17 +3,7 @@
 # Stop on error
 set -e
 
-# create VERSION file
-echo "VERSION=${PRODUCT_VERSION}" >"${TARGET_DIR}/VERSION"
-echo "PRODUCT=${PRODUCT}" >>"${TARGET_DIR}/VERSION"
-echo "PLATFORM=lxc" >>"${TARGET_DIR}/VERSION"
-
-# fix some permissions
-[ -e "${TARGET_DIR}/etc/monitrc" ] && chmod 600 "${TARGET_DIR}/etc/monitrc"
-
 # remove unnecessary stuff from TARGET_DIR
-rm -f "${TARGET_DIR}/etc/init.d/S50crond"
-rm -f "${TARGET_DIR}/etc/init.d/S35iptables"
 rm -f "${TARGET_DIR}/etc/init.d/S01InitZRAMSwap"
 rm -f "${TARGET_DIR}/etc/init.d/S01USBGadgetMode"
 rm -f "${TARGET_DIR}/etc/init.d/S03InitURandom"
@@ -34,7 +24,3 @@ rm -rf "${TARGET_DIR}/etc/usb_modeswitch.d"
 #rm -f "${TARGET_DIR}/bin/dhcp.script"
 rm -f "${TARGET_DIR}/bin/checkBadBlocks.sh"
 rm -f "${TARGET_DIR}/etc/sysctl.conf"
-
-# link VERSION in /boot on rootfs
-mkdir -p "${TARGET_DIR}/boot"
-ln -sf ../VERSION "${TARGET_DIR}/boot/VERSION"

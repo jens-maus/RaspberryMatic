@@ -10,14 +10,21 @@
 +    "dialogShowDeviceFirmwareTHDevice": "Ger%E4tetyp",
 +    "dialogShowDeviceFirmwareTHSerials": "Seriennummern",
 +    "dialogShowDeviceFirmwareTHCurFw": "Aktuelle Version",
-+    "dialogShowDeviceFirmwareTHNewFw": "Kompatible Version",
++    "dialogShowDeviceFirmwareTHNewFw": "Empfohlene Version",
 +    "dialogShowDeviceFirmwareDescription": "Ausf%FChrung",
-+    "dialogShowDeviceFirmwareDownloadInfo1": "1. Kompatible Firmwareversion herunterladen",
++    "dialogShowDeviceFirmwareDownloadInfo1": "1. Empfohlene Firmwareversion herunterladen",
 +    "dialogShowDeviceFirmwareDownloadInfo2": "2. Firmwaredatei unter",
 +    "dialogShowDeviceFirmwareDownloadInfo3": "hochladen",
      "dialogShowDeviceFirmwareLinkDownload": "Zum Downloadbereich",
      "hintDevFwAlreadyUploaded" : "" +
        "Die aktuellste Firmware des Ger%E4tes befindet sich bereits auf der " + HMIdentifier.de.CCUShortName + ".\n"+
+@@ -1100,4 +1105,4 @@
+ });
+ 
+ langJSON.de.hintActivateDetectorSelfTest += langJSON.de.checkSmokeDetectorSelfTest;
+-langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
+\ No newline at end of file
++langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
 @@ -642,9 +642,14 @@
@@ -30,9 +37,9 @@
 +    "dialogShowDeviceFirmwareTHDevice": "Devicetype",
 +    "dialogShowDeviceFirmwareTHSerials": "Serial numbers",
 +    "dialogShowDeviceFirmwareTHCurFw": "Current Version",
-+    "dialogShowDeviceFirmwareTHNewFw": "Compatible Version",
++    "dialogShowDeviceFirmwareTHNewFw": "Recommended Version",
 +    "dialogShowDeviceFirmwareDescription": "Instruction",
-+    "dialogShowDeviceFirmwareDownloadInfo1": "1. Download compatible version",
++    "dialogShowDeviceFirmwareDownloadInfo1": "1. Download recommended version",
 +    "dialogShowDeviceFirmwareDownloadInfo2": "2. Upload firmware file via",
 +    "dialogShowDeviceFirmwareDownloadInfo3": "",
      "dialogShowDeviceFirmwareLinkDownload": "To download area",

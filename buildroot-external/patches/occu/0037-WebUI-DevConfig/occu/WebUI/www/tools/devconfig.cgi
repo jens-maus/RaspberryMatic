@@ -650,6 +650,7 @@ proc cmd_device_status {} {
                 #catch {
                     set url $interfaces($iface)
                     set devlist [xmlrpc $url listDevices [list bool 0]]
+                    set mode [expr {$iface == "HmIP-RF" || $iface == "BidCos-RF"}]
                     foreach dev $devlist {
                         array_clear dev_descr
                         array set dev_descr $dev
@@ -659,18 +660,42 @@ proc cmd_device_status {} {
                                 table_data {
                                     h3 "$dev_descr(PARENT)"
                                 }
-                                array set valueset [xmlrpc $url getParamset [list string $dev_descr(ADDRESS)] [list string VALUES]]
+
+				array_clear valueset
+				if { $mode } {
+				    array set valueset [xmlrpc $url getParamset [list string $dev_descr(ADDRESS)] [list string VALUES] [list int $mode]]
+				} else {
+				    array set valueset [xmlrpc $url getParamset [list string $dev_descr(ADDRESS)] [list string VALUES]]
+				}
+
+				#parray valueset
+
                                 foreach name [array names MAINTENANCE_VALUES] {
                                     set type $MAINTENANCE_VALUES($name)
                                     table_data {
                                         if { [info exist valueset($name)] } {
+					    set status ""
+					    set val ""
+					    if { [string first "UNDEFINED" $valueset($name)] != -1 } {
+						array_clear value
+						array set value $valueset($name)
+						if { $value(UNDEFINED) } {
+							set status "(?)"
+						}
+						set val $value(VALUE)
+					    } else {
+						set val $valueset($name)
+					    }
                                             if { "$type" == "flag" } {
-                                                if { $valueset($name) } {
-                                                    h3 $name
-                                                }
+						if { $val } {
+							set val "true"
+						} else {
+							set val "false"
+						}
                                             } elseif { "$type" == "value" } {
-                                                puts "$valueset($name)"
+                                                set val "$val"
                                             }
+					    h4 "$val $status"
                                         }
                                     }
                                 }

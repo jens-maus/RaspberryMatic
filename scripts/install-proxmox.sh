@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.15"
+VERSION="3.16"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -606,8 +606,8 @@ EOF
   # check if cgroup cpuset and memory is enabled and if not try
   # to enable them (if this is a RaspberryPi system)
   info "Checking correct cgroup kernel settings..."
-  CGROUP_CPU=$(grep ^cpuset /proc/cgroups | cut -f4)
-  CGROUP_MEM=$(grep ^memory /proc/cgroups | cut -f4)
+  CGROUP_CPU=$( (grep -m1 ^cpuset /proc/cgroups 2>/dev/null || true) | cut -f4)
+  CGROUP_MEM=$( (grep -m1 ^memory /proc/cgroups 2>/dev/null || true) | cut -f4)
   if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
     # check if this is a RaspberryPi system and try to enable
     # all necessary cgroup sets

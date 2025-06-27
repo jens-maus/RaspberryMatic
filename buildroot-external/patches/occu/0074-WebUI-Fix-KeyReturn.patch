@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32195,18 +32195,11 @@
+@@ -32203,18 +32203,11 @@
        // Namen im DOM ändern beim Verlassen des Textfeldes
        var changeListener = this.saveNameToDom.bindAsEventListener(this);
        Event.observe($(inputId), 'blur', changeListener);

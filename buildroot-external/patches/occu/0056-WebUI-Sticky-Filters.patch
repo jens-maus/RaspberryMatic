@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
 +++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
-@@ -316,6 +316,9 @@
+@@ -320,6 +320,9 @@
  
        puts "resetFilter = function() {"
          puts "jQuery(\"\[name='invisible'\]\").show().attr(\"name\", \"\");"
@@ -10,7 +10,7 @@
        puts "};"
  
        puts "setFilter = function(filter) {"
-@@ -324,6 +327,14 @@
+@@ -328,6 +331,14 @@
          # searchFilter = NAME, TYPE or ADDRESS
          puts "var searchFilter = filter.split(\"_\")\[1\];"
          puts "var searchText = jQuery(\"#searchText_\" + searchFilter).val().toLowerCase();"
@@ -25,7 +25,7 @@
  
          # filterElem = NAME, TYPE or ADDRESS
          puts "arElements = jQuery(\"\[name='\"+searchFilter+\"'\]\");"
-@@ -339,6 +350,14 @@
+@@ -343,6 +354,14 @@
  
        puts "};"
  
@@ -55,7 +55,7 @@
    color: $_(textColorA); /* white */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -9339,10 +9339,10 @@
+@@ -9347,10 +9347,10 @@
    
    
    var m_name     = name;
@@ -67,7 +67,7 @@
    var m_textId = m_id + "Text";
  
    var isSet = function()
-@@ -9447,6 +9447,7 @@
+@@ -9455,6 +9455,7 @@
        }
      }
      if ($(m_id))     { $(m_id).hide(); }
@@ -75,7 +75,7 @@
      if (m_callback)  { m_callback(); }
    };
    
-@@ -9465,6 +9466,7 @@
+@@ -9473,6 +9474,7 @@
    this.reset = function()
    {
      m_value = "";
@@ -83,7 +83,7 @@
      this.close();
    };
  
-@@ -9487,7 +9489,6 @@
+@@ -9495,7 +9497,6 @@
    /*# Initialisierung #*/
    /*###################*/
    
@@ -91,7 +91,7 @@
    
  };
  
-@@ -9511,7 +9512,28 @@
+@@ -9519,7 +9520,28 @@
      this.callback = callback;
      this.id       = name.replace(/\./g, "_");
      this.formId   = this.id + "Form";
@@ -121,7 +121,7 @@
    },
  
    /**
-@@ -9622,16 +9644,20 @@
+@@ -9630,16 +9652,20 @@
      if ($(this.formId))
      {
        var values = $(this.formId).values;
@@ -142,7 +142,7 @@
        if (this.callback) { this.callback(); }
      }
    },
-@@ -9667,7 +9693,8 @@
+@@ -9675,7 +9701,8 @@
      {
        this.list[i]._selected = false;
      }
@@ -152,7 +152,7 @@
      this.close();
    }
    
-@@ -26312,6 +26339,7 @@
+@@ -26320,6 +26347,7 @@
      jQuery("#DeviceListPage_FuncFilter").draggable();
  
      DeviceList.updateDeviceStatus();
@@ -160,7 +160,7 @@
    },
    
    onRemoveDevice: function(whatEver)
-@@ -31820,6 +31848,9 @@
+@@ -31828,6 +31856,9 @@
    },  
    ShowPopup: function() {
      this.show();
@@ -170,7 +170,7 @@
    },
    
    restorePrevious: function() {
-@@ -32747,11 +32778,31 @@
+@@ -32755,11 +32786,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -204,7 +204,7 @@
      }
      /* ELV --> */
      
-@@ -36663,6 +36714,28 @@
+@@ -36671,6 +36722,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -233,7 +233,7 @@
    },
    
  
-@@ -37034,6 +37107,15 @@
+@@ -37042,6 +37115,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -249,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -37143,6 +37225,12 @@
+@@ -37151,6 +37233,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -49991,6 +50079,9 @@
+@@ -49999,6 +50087,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -50118,6 +50209,9 @@
+@@ -50126,6 +50217,9 @@
    ShowPopup: function()
    {
      this.show();

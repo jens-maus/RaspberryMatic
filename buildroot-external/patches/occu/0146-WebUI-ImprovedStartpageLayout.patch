@@ -154,7 +154,7 @@
    margin:0;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25421,14 +25421,18 @@
+@@ -25429,14 +25429,18 @@
    showUpdate: function() {
      var fn = function() {
        var result = homematic.com.isUpdateAvailable();

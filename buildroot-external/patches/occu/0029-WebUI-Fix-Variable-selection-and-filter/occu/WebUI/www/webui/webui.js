@@ -6748,6 +6748,14 @@ elvST['WATER_DETECTION_TRANSMITTER'] = '${stringTableWaterDetectionTransmitterTi
 elvST['WATER_DETECTION_TRANSMITTER|ALARMSTATE=FALSE'] = '${stringTableWeatherTransmitAlarmEventFalse}';
 elvST['WATER_DETECTION_TRANSMITTER|ALARMSTATE=TRUE'] = '${stringTableWeatherTransmitAlarmEventTrue}';
 elvST['WATER_FLOW'] = '${stringTableWaterFlow}';
+elvST['WATER_FLOW_STATUS=NORMAL'] = '${lblValue} ${stringTableWaterFlowStatus}: ${lblNormal}';
+elvST['WATER_FLOW_STATUS=UNKNOWN'] = '${lblValue} ${stringTableWaterFlowStatus}: ${lblUnknown}';
+elvST['WATER_FLOW_STATUS=OVERFLOW'] = '${lblValue} ${stringTableWaterFlowStatus}: ${lblOverflow}';
+elvST['WATER_FLOW_STATUS=UNDERFLOW'] = '${lblValue} ${stringTableWaterFlowStatus}: ${lblUnderflow}';
+elvST['WATER_VOLUME_OVERFLOW=FALSE'] = '${stringTableWaterFlowOverflowFalse}';
+elvST['WATER_VOLUME_OVERFLOW=TRUE'] = '${stringTableWaterFlowOverflowTrue}';
+elvST['WATER_VOLUME_SINCE_OPEN_OVERFLOW=FALSE'] = '${stringTableWaterVolumeSinceOpenOverflowFalse}';
+elvST['WATER_VOLUME_SINCE_OPEN_OVERFLOW=TRUE'] = '${stringTableWaterVolumeSinceOpenOverflowTrue}';
 elvST['WATER_VOLUME'] = '${stringTableWaterVolume}';
 elvST['WATER_VOLUME_SINCE_OPEN'] = '${stringTableWaterVolumeSinceOpen}';
 elvST['WATERDETECTIONSENSOR|STATE=WET'] = '${stringTableWDSStateWet}';

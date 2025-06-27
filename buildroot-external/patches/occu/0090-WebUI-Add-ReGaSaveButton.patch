@@ -60,7 +60,7 @@
    text-align: center;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32576,6 +32576,11 @@
+@@ -32584,6 +32584,11 @@
    if ($("maindate")) { $("maindate").innerHTML = date; }
  };
  
@@ -72,7 +72,7 @@
  setAlarmMessageCount = function (count) {
  
    if ($("msgAlarms")) {
-@@ -34609,6 +34614,9 @@
+@@ -34617,6 +34622,9 @@
  
  LogoClick = function()
  {

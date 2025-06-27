@@ -170,15 +170,19 @@ proc getActionPanel {} {
             #i.e. hap and drap versions smaller than 2.1 do not support it, so we check that here
             if { (([string compare "HmIPW-DRAP" $dev_descr(TYPE)] == 0)
             || ([string compare "HmIP-HAP" $dev_descr(TYPE)] == 0)
-            || ([string compare "HmIP-HAP2" $dev_descr(TYPE)] == 0)
-            || ([string compare "HmIP-HAP2-A" $dev_descr(TYPE)] == 0)
             || ([string compare "HmIP-HAP-A" $dev_descr(TYPE)] == 0)
             || ([string compare "HmIP-HAP-B1" $dev_descr(TYPE)] == 0)
             || ([string compare "HmIP-HAP JS1" $dev_descr(TYPE)] == 0))
             && ([regexp {[0-1]\.[0-9]*\.[0-9]*} $dev_descr(FIRMWARE)] || [regexp {2\.0\.[0-9]*} $dev_descr(FIRMWARE)]) } {
               append fw_update_rows "<tr><td colspan=\"2\" class=\"_CLASS22007 noBorder\"><span onclick=\"ShowInfoMsg(translateKey('hintDeviceDoesNotSupportAction'))\" class=\"CLASS21000\">\${lblUpdate}</span></td></tr>"
             } else {
-              append fw_update_rows "<tr><td colspan=\"2\" class=\"_CLASS22007 noBorder\"><span onclick=\"setGlobalIfaceAddress('$iface', '$dev_descr(ADDRESS)');FirmwareUpdate('$dev_descr(TYPE)');\" class=\"CLASS21000\">\${lblUpdate}</span></td></tr>"
+              if {([string compare "HmIP-HAP2" $dev_descr(TYPE)] == 0)
+              || ([string compare "HmIP-HAP2-A" $dev_descr(TYPE)] == 0)
+              } {
+                append fw_update_rows "<tr><td colspan=\"2\" class=\"_CLASS22007 noBorder\"><span onclick=\"ShowInfoMsg(translateKey('hintAutomaticDeviceUpdate'))\" class=\"CLASS21000\">\${lblUpdate}</span></td></tr>"
+              } else {
+                append fw_update_rows "<tr><td colspan=\"2\" class=\"_CLASS22007 noBorder\"><span onclick=\"setGlobalIfaceAddress('$iface', '$dev_descr(ADDRESS)');FirmwareUpdate('$dev_descr(TYPE)');\" class=\"CLASS21000\">\${lblUpdate}</span></td></tr>"
+              }
             }
            
           }

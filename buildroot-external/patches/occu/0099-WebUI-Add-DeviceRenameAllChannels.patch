@@ -124,7 +124,7 @@
        <\/div>\n
      <\/div>\n
  \n
-@@ -15157,11 +15187,13 @@
+@@ -15165,11 +15195,13 @@
  DeviceConfigDialog = Singleton.create({
    LAYER_ID: "DeviceConfigDialogLayer",
    NAME_ID: "DeviceConfigDialog_DeviceName",
@@ -138,7 +138,7 @@
    RESULT_OK: 1,
    RESULT_ABORT: 0,
    POLL_INTERVAL: 3,
-@@ -15209,6 +15241,9 @@
+@@ -15217,6 +15249,9 @@
        this.__hideLogging();
      }
      translateJSTemplate("#DeviceConfigDialog");
@@ -148,7 +148,7 @@
    },
  
    __hideFunctionTest: function() {
-@@ -15269,6 +15304,34 @@
+@@ -15277,6 +15312,34 @@
    },
    
    /**

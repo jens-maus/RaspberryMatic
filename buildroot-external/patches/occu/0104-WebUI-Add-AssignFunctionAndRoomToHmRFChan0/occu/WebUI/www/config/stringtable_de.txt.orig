@@ -2029,6 +2029,18 @@ WATER_DETECTION_TRANSMITTER|ALARMSTATE=FALSE	${stringTableWeatherTransmitAlarmEv
 WATER_DETECTION_TRANSMITTER|ALARMSTATE=TRUE	${stringTableWeatherTransmitAlarmEventTrue}
 
 WATER_FLOW	${stringTableWaterFlow}
+
+WATER_FLOW_STATUS=NORMAL	${lblValue} ${stringTableWaterFlowStatus}: ${lblNormal}
+WATER_FLOW_STATUS=UNKNOWN	${lblValue} ${stringTableWaterFlowStatus}: ${lblUnknown}
+WATER_FLOW_STATUS=OVERFLOW	${lblValue} ${stringTableWaterFlowStatus}: ${lblOverflow}
+WATER_FLOW_STATUS=UNDERFLOW	${lblValue} ${stringTableWaterFlowStatus}: ${lblUnderflow}
+
+WATER_VOLUME_OVERFLOW=FALSE	${stringTableWaterFlowOverflowFalse}
+WATER_VOLUME_OVERFLOW=TRUE	${stringTableWaterFlowOverflowTrue}
+
+WATER_VOLUME_SINCE_OPEN_OVERFLOW=FALSE	${stringTableWaterVolumeSinceOpenOverflowFalse}
+WATER_VOLUME_SINCE_OPEN_OVERFLOW=TRUE	${stringTableWaterVolumeSinceOpenOverflowTrue}
+
 WATER_VOLUME	${stringTableWaterVolume}
 WATER_VOLUME_SINCE_OPEN	${stringTableWaterVolumeSinceOpen}
 

@@ -97,7 +97,7 @@
    puts "</TBODY>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -48847,6 +48847,19 @@
+@@ -48848,6 +48848,19 @@
    return false;
  };
  

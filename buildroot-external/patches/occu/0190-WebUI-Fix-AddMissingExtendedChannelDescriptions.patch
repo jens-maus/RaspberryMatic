@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -35937,15 +35937,15 @@
+@@ -35938,15 +35938,15 @@
      multiMode = oChannelDescr.multiMode;
    var tmpDev;
  
@@ -20,7 +20,7 @@
  
    if (chType == "KEY_TRANSCEIVER") {
      if (deviceType.toLowerCase().indexOf("hmip-asir") != -1) {
-@@ -36144,13 +36144,15 @@
+@@ -36145,13 +36145,15 @@
          typeExt = "_" + multiMode;
        } else {
          if (channelAddress != "undefined") {

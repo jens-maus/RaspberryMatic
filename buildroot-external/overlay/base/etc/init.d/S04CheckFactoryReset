@@ -18,11 +18,20 @@ check_factory_reset() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   if [[ ! "${HM_HOST}" =~ oci\|lxc ]]; then
-    # extract device name
+    # extract device name and dev
+    DEVNODE=$(mountpoint -d /usr/local)
     DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
+    DEV="/dev/$(readlink "/sys/dev/block/${DEVNODE}" | awk -F/ '{print $(NF-1)}')"
 
     # umount /usr/local to regenerate it
     umount -f /usr/local
+
+    # force PARTUUID to 0xDEEDBEEF because due to some tools the
+    # correct partuuid might have been lost
+    PARTUUID=$(/sbin/blkid -o export "${DEVNAME}" | grep -m1 PARTUUID | cut -d= -f2)
+    if [[ "${PARTUUID}" != "deedbeef-03" ]]; then
+      echo -en '\xEF\xBE\xED\xDE' | dd of="${DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
+    fi
 
     # we create a clean ext4 partition now
     /sbin/mkfs.ext4 -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${DEVNAME}"

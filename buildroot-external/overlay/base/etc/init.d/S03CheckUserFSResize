@@ -34,8 +34,7 @@ check_userfs_resize() {
       # the disk
       /usr/sbin/parted -s -f "${DEV}" resizepart "${PARTNUM}" 100%
 
-      # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid) even
-      # if no repartitioning was performed.
+      # force PARTUUID to 0xDEEDBEEF because parted changes partuuid
       echo -en '\xEF\xBE\xED\xDE' | dd of="${DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
 
       # check if we need to resize the filesystem as well or if we skip it

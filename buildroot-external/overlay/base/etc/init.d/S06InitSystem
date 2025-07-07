@@ -56,6 +56,7 @@ init_system() {
   # /usr/local/etc/config/firmware exists
   mkdir -p /usr/local/etc/config/firmware
   chmod 0775 /usr/local/etc/config
+  chown root:root /usr/local/etc/config
 
   # make sure the timezone setup is fine
   if [[ ! -e /etc/config/TZ ]]; then
@@ -86,6 +87,7 @@ init_system() {
     cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
   fi
   chmod 0640 /etc/config/shadow
+  chown root:root /etc/config/shadow
 
   # load bcm2835 watchdog kernel module if this is
   # a raspberrypi

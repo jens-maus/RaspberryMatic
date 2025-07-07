@@ -10,6 +10,10 @@ check_userfs_resize() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # remove obsolete /usr/local/.doResizeLocalFS
+  [[ -f "/usr/local/.doResizeLocalFS" ]] && rm -f /usr/local/.doResizeLocalFS
+
+  # skip execution on OCI or LXC-based systems
   if [[ ! "${HM_HOST}" =~ oci\|lxc ]]; then
 
     # extract partition number and device name

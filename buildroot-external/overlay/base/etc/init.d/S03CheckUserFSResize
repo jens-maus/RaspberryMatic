@@ -27,6 +27,14 @@ check_userfs_resize() {
     if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
       echo -n "resizepart, "
 
+      # check if we should do resizefs afterwards before we umount
+      # the userfs
+      if [[ ! -r /usr/local/.doFactoryReset ]]; then
+        RESIZEFS=1
+      else
+        RESIZEFS=0
+      fi
+
       # umount /usr/local to resize it
       umount -f /usr/local
 
@@ -39,7 +47,7 @@ check_userfs_resize() {
 
       # check if we need to resize the filesystem as well or if we skip it
       # since a factory reset is anyway done in the next step
-      if [[ ! -r /usr/local/.doFactoryReset ]]; then
+      if [[ ${RESIZEFS} -eq 1 ]]; then
         echo -n "resizefs, "
 
         # check the filesystem first
@@ -47,10 +55,10 @@ check_userfs_resize() {
 
         # resize userfs
         /sbin/resize2fs "${DEVNAME}" >/dev/null 2>&1
-
-        # mount /usr/local again
-        mount /usr/local
       fi
+
+      # mount /usr/local again
+      mount /usr/local
 
       return 0
     fi

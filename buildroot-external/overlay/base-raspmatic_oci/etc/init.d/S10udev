@@ -21,6 +21,14 @@
 # a home assistant add-on
 [ -n "${HM_RUNNING_IN_HA}" ] && exit 0
 
+DAEMON="udevd"
+
+SETTLE_TIMEOUT=30
+UDEVD_ARGS="-d"
+
+# shellcheck source=/dev/null
+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+
 # Check for config file and read it
 UDEV_CONFIG=/etc/udev/udev.conf
 test -r $UDEV_CONFIG || exit 6
@@ -30,16 +38,16 @@ case "$1" in
     start)
         printf "Populating %s using udev: " "${udev_root:-/dev}"
         #[ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-        /sbin/udevd -d || { echo "FAIL"; exit 1; }
+        /sbin/udevd $UDEVD_ARGS || { echo "FAIL"; exit 1; }
         udevadm trigger --type=subsystems --action=add
         udevadm trigger --type=devices --action=add
-        udevadm settle --timeout=30 || echo "udevadm settle failed"
+        udevadm settle --timeout=$SETTLE_TIMEOUT || echo "udevadm settle failed"
         echo "done"
         ;;
     stop)
         # Stop execution of events
         udevadm control --stop-exec-queue
-        killall -q udevd
+        killall udevd
         ;;
     *)
         echo "Usage: $0 {start|stop}"

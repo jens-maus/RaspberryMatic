@@ -181,9 +181,9 @@ check process lighttpd with pidfile /var/run/lighttpd-angel.pid
       exec "/bin/triggerAlarm.tcl 'lighttpd restarted' 'WatchDog: lighttpd-restart' true"
     if filedescriptors > 95% for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'lighttpd: high filedescriptor usage (>95%)' 'WatchDog: lighttpd-highfd' true"
-    if failed port 443 and certificate valid > 30 days for 5 cycles then
+    if failed port 443 protocol https and certificate valid > 30 days for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'HTTPS certificate expiring in < 30 days' 'WatchDog: lighttpd-expired-sslcert' true"
-    if failed port 80 for 5 cycles then restart
+    if failed port 80 protocol http for 5 cycles then restart
     if failed port 1999 for 5 cycles then restart
     if failed port 2000 for 5 cycles then restart
     if failed port 2001 for 5 cycles then restart

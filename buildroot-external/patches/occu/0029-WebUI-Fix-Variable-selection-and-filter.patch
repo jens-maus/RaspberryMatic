@@ -30,11 +30,11 @@
 -      <col style="width:20%;"/>
 -      <col style="width:10%;"/>
 -      <col style="width:15%;"/>
-+      <col />
-+      <col />
-+      <col />
-+      <col />
-+      <col />
++      <col style="width: 10%;"/>
++      <col style="width: 50%;"/>
++      <col style="width: 5%;"/>
++      <col style="width: 30%;"/>
++      <col style="width: 5%;"/>
      </colgroup>
      <thead id="svsBody">
      <tr id="rowhead">
@@ -79,7 +79,7 @@
          <div class='FilterSetButton' onclick="$('btnFilterVarTypeSub').hide();">${filterClose}</div>
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -1141,10 +1141,18 @@
+@@ -1141,10 +1141,20 @@
    text-align:center;
  }
  .SysVarsTblPopup{
@@ -88,6 +88,7 @@
 +  height:60px;
 +  text-align:center;
 +  cursor:pointer;
++  word-break: break-word;
 +}
 +.SysVarsTblPopup_Highlight{
    background-color:$_(inactiveBackground);
@@ -95,6 +96,7 @@
    height:60px;
    text-align:center;
 +  cursor:pointer;
++  word-break: break-word;
  }
  .WhiteBkgChannelPopup {
    background-color: $_(white); /* white */

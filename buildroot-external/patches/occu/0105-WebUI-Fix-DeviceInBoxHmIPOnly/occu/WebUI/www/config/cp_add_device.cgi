@@ -105,7 +105,7 @@ proc putSectionBidCosRF {} {
           append html "<tr>"
             append html "<td>\${dialogNewDevicesBidCosRFLbl4}</td>"
             append html "<td>"
-              append html "<input id='text_serial' size='28' name='serial' oninput='this.value=this.value.toUpperCase()'>"
+              append html "<input id='text_serial' size='28' name='serial' oninput='let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);'>"
             append html "</td>"
 
             append html "<td>"
@@ -224,7 +224,7 @@ proc putSectionHMIP {} {
                   append html "<span>\${lblTeachInKEY}</span>"
                 append html "</td>"
                 append html "<td>"
-                  append html "<input id='keyHmIPLocal_$iFace' type='text' style='width:390px' oninput='this.value=this.value.toUpperCase()'>"
+                  append html "<input id='keyHmIPLocal_$iFace' type='text' style='width:390px' oninput='let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);'>"
                 append html "</td>"
               append html "</tr>"
 
@@ -233,7 +233,7 @@ proc putSectionHMIP {} {
                   append html "<span>\${lblTeachInSGTIN}</span>"
                 append html "</td>"
                 append html "<td>"
-                  append html "<input id='serialHmIPLocal_$iFace' type='text' style='width:390px' oninput='this.value=this.value.toUpperCase()'>"
+                  append html "<input id='serialHmIPLocal_$iFace' type='text' style='width:390px' oninput='let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);'>"
                 append html "</td>"
               append html "</tr>"
 

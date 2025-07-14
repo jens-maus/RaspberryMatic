@@ -68,7 +68,7 @@
    if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -1450,6 +1450,30 @@
+@@ -1452,6 +1452,30 @@
    cursor:pointer;
  }
  

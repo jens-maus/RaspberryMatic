@@ -177,7 +177,7 @@
                  integer iStatusOnly = 1;
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -6843,6 +6843,7 @@
+@@ -6845,6 +6845,7 @@
  
  .CLASS05004 {
  	background-color:$_(white); /* white */

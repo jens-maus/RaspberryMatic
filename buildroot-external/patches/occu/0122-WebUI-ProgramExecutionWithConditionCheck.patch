@@ -94,7 +94,7 @@
      "actionStatusControlLblShortKeyPress" : "Short<br/>button press",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -5108,9 +5108,11 @@
+@@ -5110,9 +5110,11 @@
  
  .CLASS02104 {
  	cursor:pointer;

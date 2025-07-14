@@ -314,7 +314,7 @@
      "footerBtnTransfer" : "Apply",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -1557,6 +1557,10 @@
+@@ -1559,6 +1559,10 @@
    color: $_(textColorB); /* black */
  }
  
@@ -325,7 +325,7 @@
  
  .OUCFMprop {
    text-align:left;
-@@ -6976,6 +6980,7 @@
+@@ -6978,6 +6982,7 @@
  	height:20px ! important;
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -333,7 +333,7 @@
  }
  
  .CLASS05203 {
-@@ -6989,6 +6994,7 @@
+@@ -6991,6 +6996,7 @@
  .CLASS05205 {
  	height:20px ! important;
  	background-color:$_(clickable);
@@ -341,7 +341,7 @@
  }
  
  .CLASS05206 {
-@@ -7004,7 +7010,7 @@
+@@ -7006,7 +7012,7 @@
  }
  
  .CLASS05209 {

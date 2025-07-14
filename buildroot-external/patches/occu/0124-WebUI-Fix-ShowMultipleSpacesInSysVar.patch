@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -5473,6 +5473,7 @@
+@@ -5475,6 +5475,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;

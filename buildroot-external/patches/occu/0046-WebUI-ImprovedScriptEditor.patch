@@ -262,7 +262,7 @@
    padding-top: 5px;
    padding-bottom: 5px;
  }
-@@ -3643,7 +3637,14 @@
+@@ -3645,7 +3639,14 @@
    border: 0 none;
    margin: 0;
    padding: 0;
@@ -278,7 +278,7 @@
  }
  
  application {
-@@ -3842,11 +3843,6 @@
+@@ -3844,11 +3845,6 @@
  	cursor: pointer;
  }
  
@@ -290,7 +290,7 @@
  /* rega\pages\msg\editScript.htm */
  
  .CLASS00001 {
-@@ -3869,7 +3865,6 @@
+@@ -3871,7 +3867,6 @@
  
  .CLASS00004 {
  	width:75%;
@@ -298,7 +298,7 @@
  	background-color: $_(activeBackground); /* #dcdcdc */
  	text-align:left;
  }
-@@ -3908,7 +3903,6 @@
+@@ -3910,7 +3905,6 @@
  
  .CLASS00011 {
  	width:25%;
@@ -306,7 +306,7 @@
  	background-color: $_(white); /* white */
  }
  
-@@ -4140,7 +4134,6 @@
+@@ -4142,7 +4136,6 @@
  
  .CLASS00314 {
  	line-height:15px;
@@ -314,7 +314,7 @@
  	text-align:center
  }
  
-@@ -4330,7 +4323,6 @@
+@@ -4332,7 +4325,6 @@
  	text-align:left;
  	color: $_(textColorA) ! important; /* white */
  	font-weight:bold;
@@ -322,7 +322,7 @@
  }
  
  .CLASS00716 {
-@@ -4736,7 +4728,6 @@
+@@ -4738,7 +4730,6 @@
  	font-weight:bold;
  	color: $_(textColorB); /* black */
  	cursor:pointer;
@@ -330,7 +330,7 @@
  }
  
  .CLASS01217 {
-@@ -5135,7 +5126,6 @@
+@@ -5137,7 +5128,6 @@
  /* rega\esp\rule.inc */
  
  .CLASS02300 {
@@ -338,7 +338,7 @@
  	font-weight: bold;
  }
  
-@@ -5169,7 +5159,6 @@
+@@ -5171,7 +5161,6 @@
  
  .CLASS02501 {
  	background-color:$_(clickable);
@@ -346,7 +346,7 @@
  	padding:4px;
  	border:solid 1px $_(black); /* black */
  	text-align:center;
-@@ -5208,7 +5197,6 @@
+@@ -5210,7 +5199,6 @@
  
  .CLASS02507 {
  	background-color:$_(activeBackground);
@@ -354,7 +354,7 @@
  	padding:4px;
  	color: $_(textColorB); /* black */
  	height:30px;
-@@ -5390,7 +5378,6 @@
+@@ -5392,7 +5380,6 @@
  }
  
  .CLASS02532 {
@@ -362,7 +362,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
-@@ -5401,14 +5388,12 @@
+@@ -5403,14 +5390,12 @@
  }
  
  .CLASS02532a {
@@ -377,7 +377,7 @@
  	width:220px;
  	height:30px;
    color: $_(white) ! important;
-@@ -5501,13 +5486,11 @@
+@@ -5503,13 +5488,11 @@
  
  .CLASS02542 {
  	border:solid 1px $_(black); /* black */
@@ -391,7 +391,7 @@
  	text-align:right;
  }
  
-@@ -6120,7 +6103,6 @@
+@@ -6122,7 +6105,6 @@
  
  .CLASS03306 {
  	line-height:15px;
@@ -399,7 +399,7 @@
  }
  
  .CLASS03307 {
-@@ -6256,7 +6238,6 @@
+@@ -6258,7 +6240,6 @@
  
  .CLASS03703 {
  	line-height:15px;
@@ -407,7 +407,7 @@
  }
  
  .CLASS03704 {
-@@ -6391,7 +6372,6 @@
+@@ -6393,7 +6374,6 @@
  
  .CLASS03911 {
  	line-height:15px;
@@ -415,7 +415,7 @@
  }
  
  /* rega\pages\tabs\handling\rooms.htm */
-@@ -6425,7 +6405,6 @@
+@@ -6427,7 +6407,6 @@
  
  .CLASS04005 {
  	line-height:15px;
@@ -423,7 +423,7 @@
  }
  
  .CLASS04006 {
-@@ -6476,7 +6455,6 @@
+@@ -6478,7 +6457,6 @@
  
  .CLASS04107 {
  	line-height:15px;
@@ -431,7 +431,7 @@
  }
  
  .CLASS04108 {
-@@ -6524,12 +6502,10 @@
+@@ -6526,12 +6504,10 @@
  }
  
  .CLASS04203 {
@@ -444,7 +444,7 @@
  }
  
  .CLASS04205 {
-@@ -6552,7 +6528,6 @@
+@@ -6554,7 +6530,6 @@
  
  .CLASS04209 {
  	line-height:15px;
@@ -452,7 +452,7 @@
  }
  
  .CLASS04210 {
-@@ -6606,7 +6581,6 @@
+@@ -6608,7 +6583,6 @@
  }
  
  .CLASS04304 {
@@ -460,7 +460,7 @@
  	height:40px;
  }
  
-@@ -6647,7 +6621,6 @@
+@@ -6649,7 +6623,6 @@
  
  .CLASS04312 {
  	line-height:15px;
@@ -468,7 +468,7 @@
  }
  
  .CLASS04313 {
-@@ -6748,7 +6721,6 @@
+@@ -6750,7 +6723,6 @@
  
  .CLASS04800 {
  	line-height:14px;
@@ -476,7 +476,7 @@
  	width:200px;
  }
  
-@@ -6789,12 +6761,10 @@
+@@ -6791,12 +6763,10 @@
  
  .CLASS04904 {
  	color: $_(textColorB); /* black */
@@ -489,7 +489,7 @@
  	width:180px;
  }
  
-@@ -6848,7 +6818,6 @@
+@@ -6850,7 +6820,6 @@
  
  .CLASS05007 {
  	color: $_(textColorB); /* black */
@@ -497,7 +497,7 @@
  }
  
  .CLASS05008 {
-@@ -6871,7 +6840,6 @@
+@@ -6873,7 +6842,6 @@
  
  .CLASS05010 {
  	color: $_(textColorB); /* black */
@@ -505,7 +505,7 @@
  	width:100%;
  }
  
-@@ -6881,7 +6849,6 @@
+@@ -6883,7 +6851,6 @@
  
  .CLASS05012 {
  	color: $_(textColorB); /* black */
@@ -513,7 +513,7 @@
  	width:100%;
  }
  
-@@ -6995,7 +6962,6 @@
+@@ -6997,7 +6964,6 @@
  
  .CLASS05207 {
  	line-height:15px;
@@ -521,7 +521,7 @@
  }
  
  .CLASS05208 {
-@@ -7048,7 +7014,6 @@
+@@ -7050,7 +7016,6 @@
  
  .CLASS05305 {
  	line-height:15px;
@@ -529,7 +529,7 @@
  }
  
  /* rega\pages\tabs\admin\linkprog.htm */
-@@ -7186,7 +7151,6 @@
+@@ -7188,7 +7153,6 @@
  
  .CLASS05705 {
  	width:572px;
@@ -537,7 +537,7 @@
  }
  
  .CLASS05706 {
-@@ -7199,7 +7163,6 @@
+@@ -7201,7 +7165,6 @@
  
  .CLASS05707 {
  	width:570px;
@@ -545,7 +545,7 @@
  }
  
  /* rega\pages\tabs\favViewer.htm  */
-@@ -7649,7 +7612,6 @@
+@@ -7651,7 +7614,6 @@
  
  .CLASS06413 {
    line-height:15px;
@@ -553,7 +553,7 @@
  }
  
  .CLASS06414 {
-@@ -8061,7 +8023,6 @@
+@@ -8063,7 +8025,6 @@
  }
  
  .CLASS20801 {
@@ -561,7 +561,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8082,7 +8043,6 @@
+@@ -8084,7 +8045,6 @@
  }
  
  .CLASS20805 {
@@ -569,7 +569,7 @@
  }
  
  .CLASS20806 {
-@@ -8093,7 +8053,6 @@
+@@ -8095,7 +8055,6 @@
    background-color:$_(clickable);
   color: $_(textColorA); /* white */
    vertical-align: middle;
@@ -577,7 +577,7 @@
  }
  
  .CLASS20808 {
-@@ -8109,7 +8068,6 @@
+@@ -8111,7 +8070,6 @@
  .CLASS20810 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -585,7 +585,7 @@
  }
  
  .CLASS20811 {
-@@ -8144,7 +8102,6 @@
+@@ -8146,7 +8104,6 @@
  .CLASS20817 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -593,7 +593,7 @@
  }
  
  .CLASS20818 {
-@@ -8170,7 +8127,6 @@
+@@ -8172,7 +8129,6 @@
  }
  
  .CLASS20901 {
@@ -601,7 +601,7 @@
  }
  
  .CLASS20902 {
-@@ -8212,7 +8168,6 @@
+@@ -8214,7 +8170,6 @@
    color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
    width: 100%;
@@ -609,7 +609,7 @@
  }
  
  .CLASS20910 {
-@@ -8232,7 +8187,6 @@
+@@ -8234,7 +8189,6 @@
  .CLASS20913 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -617,7 +617,7 @@
    width: 100%;
  }
  
-@@ -8245,7 +8199,6 @@
+@@ -8247,7 +8201,6 @@
  }
  
  .CLASS20916 {
@@ -625,7 +625,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8308,7 +8261,6 @@
+@@ -8310,7 +8263,6 @@
  }
  
  .CLASS21101 {
@@ -633,7 +633,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8330,13 +8282,11 @@
+@@ -8332,13 +8284,11 @@
  }
  
  .CLASS21105 {
@@ -647,7 +647,7 @@
    width: 100%;
  }
  
-@@ -8368,7 +8318,6 @@
+@@ -8370,7 +8320,6 @@
  .CLASS21111 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -655,7 +655,7 @@
  }
  
  .CLASS21112 {
-@@ -8423,7 +8372,6 @@
+@@ -8425,7 +8374,6 @@
  }
  
  .CLASS21201 {
@@ -663,7 +663,7 @@
  }
  
  .CLASS21202 {
-@@ -8437,7 +8385,6 @@
+@@ -8439,7 +8387,6 @@
  }
  
  .CLASS21204 {
@@ -671,7 +671,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8536,7 +8483,6 @@
+@@ -8538,7 +8485,6 @@
  
  .CLASS21302 {
   	color: $_(textColorB); /* black */
@@ -679,7 +679,7 @@
    text-align:center;
    margin: 5px;
  }
-@@ -8576,7 +8522,6 @@
+@@ -8578,7 +8524,6 @@
  }
  
  .CLASS21401 {
@@ -687,7 +687,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8598,7 +8543,6 @@
+@@ -8600,7 +8545,6 @@
  }
  
  .CLASS21405 {
@@ -695,7 +695,7 @@
  }
  
  .CLASS21406 {
-@@ -8627,7 +8571,6 @@
+@@ -8629,7 +8573,6 @@
  .CLASS21410 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -703,7 +703,7 @@
  }
  
  .CLASS21411 {
-@@ -8654,7 +8597,6 @@
+@@ -8656,7 +8599,6 @@
  }
  
  .CLASS21501 {
@@ -711,7 +711,7 @@
  }
  
  .CLASS21502 {
-@@ -8676,7 +8618,6 @@
+@@ -8678,7 +8620,6 @@
  .CLASS21505 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -719,7 +719,7 @@
  }
  
  .CLASS21506 {
-@@ -8712,7 +8653,6 @@
+@@ -8714,7 +8655,6 @@
  }
  
  .CLASS21601 {
@@ -727,7 +727,7 @@
  }
  
  .CLASS21602 {
-@@ -8726,7 +8666,6 @@
+@@ -8728,7 +8668,6 @@
  }
  
  .CLASS21604 {
@@ -735,7 +735,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8779,7 +8718,6 @@
+@@ -8781,7 +8720,6 @@
  .CLASS21800 {
    width: 100%;
    font-weight: bold;
@@ -743,7 +743,7 @@
    cursor: pointer;
  }
  
-@@ -8828,7 +8766,6 @@
+@@ -8830,7 +8768,6 @@
  
  .CLASS21901 {
    line-height:15px;
@@ -751,7 +751,7 @@
  }
  
  .CLASS21902 {
-@@ -8861,7 +8798,7 @@
+@@ -8863,7 +8800,7 @@
  
  .CLASS21906 {
    color: $_(red);
@@ -760,7 +760,7 @@
    font-weight: bold;
  }
  
-@@ -9015,7 +8952,6 @@
+@@ -9017,7 +8954,6 @@
  
  .CLASS22100 {
    line-height:14px;
@@ -768,7 +768,7 @@
  }
  
  .CLASS22101 {
-@@ -9209,3 +9145,14 @@
+@@ -9211,3 +9147,14 @@
    border:solid 1px $_(black);
  }
  

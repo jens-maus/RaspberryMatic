@@ -363,7 +363,7 @@
  }
  
  #separator {
-@@ -2604,7 +2637,7 @@
+@@ -2606,7 +2639,7 @@
  }
  #menubar {
    height: 34px;
@@ -372,7 +372,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6362,6 +6395,16 @@
+@@ -6364,6 +6397,16 @@
  
  /* rega\pages\tabs\handling\devices.htm */
  
@@ -389,7 +389,7 @@
  .CLASS03900 {
  	height:100%;
  	overflow:hidden;
-@@ -6370,6 +6413,7 @@
+@@ -6372,6 +6415,7 @@
  }
  
  .CLASS03901 {
@@ -397,7 +397,7 @@
  	width:100%;
  }
  
-@@ -6429,12 +6473,25 @@
+@@ -6431,12 +6475,25 @@
  /* rega\pages\tabs\handling\rooms.htm */
  /* rega\pages\tabs\handling\rooms.htm */
  

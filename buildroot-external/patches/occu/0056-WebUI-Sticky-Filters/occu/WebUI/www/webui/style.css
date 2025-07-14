@@ -1175,6 +1175,7 @@ a img {
   height:60px;
   text-align:center;
   cursor:pointer;
+  word-break: break-word;
 }
 .SysVarsTblPopup_Highlight{
   background-color:$_(inactiveBackground);
@@ -1182,6 +1183,7 @@ a img {
   height:60px;
   text-align:center;
   cursor:pointer;
+  word-break: break-word;
 }
 .WhiteBkgChannelPopup {
   background-color: $_(white); /* white */

@@ -244,7 +244,7 @@
 +}
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -2380,27 +2380,6 @@
+@@ -2382,27 +2382,6 @@
  progress::-moz-progress-bar { background: #3678c9; }
  progress::-webkit-progress-value { background: #3678c9; }
  
@@ -272,7 +272,7 @@
  .Filter {
    margin:0;
    border:1px solid $_(black); /* black */
-@@ -5022,9 +5001,13 @@
+@@ -5024,9 +5003,13 @@
  	height:50%;
  }
  

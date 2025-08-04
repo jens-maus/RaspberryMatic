@@ -39,7 +39,7 @@
 # set default values
 MAXBACKUPS=30
 if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
-  BACKUPDIR=/backup/raspberrymatic
+  BACKUPDIR=/backup/openccu
 else
   BACKUPDIR=/media/usb0/backup
 fi

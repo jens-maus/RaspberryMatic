@@ -81,16 +81,16 @@ shift $((OPTIND-1))
 TARGET_VERSION="$*"
 
 # public URLs
-LATEST_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/latest"
-SNAPSHOT_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
-TARGET_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/${TARGET_VERSION}"
+LATEST_URL="https://api.github.com/repos/openccu/openccu/releases/latest"
+SNAPSHOT_URL="https://api.github.com/repos/openccu/openccu/releases/tags/snapshots"
+TARGET_URL="https://api.github.com/repos/openccu/openccu/releases/tags/${TARGET_VERSION}"
 
 # if oci platform found we need to reuse the PRODUCT information instead
 if [[ "${PLATFORM}" == "oci" ]]; then
-  PLATFORM=$(echo "${PRODUCT}" | sed 's/raspmatic_//')
+  PLATFORM=$(echo "${PRODUCT}" | sed 's/openccu_//')
   EXTENSION="tgz"
 elif [[ "${PLATFORM}" == "lxc" ]]; then
-  PLATFORM=$(echo "${PRODUCT}" | sed 's/raspmatic_//')
+  PLATFORM=$(echo "${PRODUCT}" | sed 's/openccu_//')
   EXTENSION="tar.xz"
 else
   EXTENSION="zip"

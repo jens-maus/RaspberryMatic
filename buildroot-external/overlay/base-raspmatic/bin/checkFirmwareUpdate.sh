@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3015 source=/dev/null
 #
 # firmware update check script v1.4
 # Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>

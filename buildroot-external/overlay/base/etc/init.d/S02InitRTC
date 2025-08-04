@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3015 source=/dev/null
 #
 # Startup script to identify and setup RTC clocks
 #

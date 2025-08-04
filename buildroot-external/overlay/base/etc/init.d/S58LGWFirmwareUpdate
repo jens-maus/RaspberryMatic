@@ -15,7 +15,7 @@ waitForIP() {
   # shellcheck disable=SC2034
   for i in $(seq 1 5); do
     gw=$(ip -4 route get 1 2>/dev/null | head -1 | cut -d' ' -f3 | tr -d '\n')
-    if [[ ! ${gw} == "" ]] && [[ ! $(ping -W 5 -c 1 "${gw}" 2>/dev/null >/dev/null) ]]; then
+    if [[ -n "${gw}" ]] && /bin/ping -q -W 5 -c 1 "${gw}" 2>/dev/null >/dev/null; then
       return 0
     fi
     echo -n "."

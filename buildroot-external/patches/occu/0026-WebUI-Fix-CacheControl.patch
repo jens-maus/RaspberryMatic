@@ -159,13 +159,6 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
      <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
      <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
-@@ -195,4 +195,4 @@
-       translateAttribute("#WebUIorPDA", "title", "tooltipWebUIorPDA");
-     </script>
-   </body>
--</html>
-\ No newline at end of file
-+</html>
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
 @@ -2,7 +2,7 @@

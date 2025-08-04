@@ -187,9 +187,9 @@
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -3,6 +3,7 @@
-     "CCUFullNameHeader" : "RaspberryMatic",
-     "CCUFullNameText" : "RaspberryMatic",
-     "CCUShortName" : "RaspMatic",
+     "CCUFullNameHeader" : "OpenCCU",
+     "CCUFullNameText" : "OpenCCU",
+     "CCUShortName" : "OpenCCU",
 +    "HomematicIP" : "Homematic IP",
      "BidCosRF" : "Homematic Funk",
      "BidCosWired" : "Homematic Wired",
@@ -224,9 +224,9 @@
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -3,6 +3,7 @@
-     "CCUFullNameHeader" : "RaspberryMatic",
-     "CCUFullNameText" : "RaspberryMatic",
-     "CCUShortName" : "RaspMatic",
+     "CCUFullNameHeader" : "OpenCCU",
+     "CCUFullNameText" : "OpenCCU",
+     "CCUShortName" : "OpenCCU",
 +    "HomematicIP" : "Homematic IP",
      "BidCosRF" : "Homematic RF",
      "BidCosWired" : "BidCos-Wired",

@@ -75,12 +75,12 @@ else
 	echo DUMMY >$(TMPDIR)/LICENSE
 	tar -C $(TMPDIR) -cvf $(TMPDIR)/oci/layer.tar LICENSE sbin/init var/status/startupFinished
 	echo '[{"Layers":["oci/layer.tar"]}]' >$(TMPDIR)/manifest.json
-	tar -C $(TMPDIR) -cvf $(TMPDIR)/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar oci manifest.json
-	mv $(TMPDIR)/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
+	tar -C $(TMPDIR) -cvf $(TMPDIR)/OpenCCU-$(PRODUCT_VERSION)-$(BOARD).tar oci manifest.json
+	mv $(TMPDIR)/OpenCCU-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
 	rm -rf $(TMPDIR)
 	# create fake sdcard.img and ova
 	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
-	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova
+	echo DUMMY >build-$(PRODUCT)/images/OpenCCU.ova
 endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))

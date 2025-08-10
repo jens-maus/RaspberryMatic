@@ -1,4 +1,4 @@
-# RaspberryMatic Release build
+# OpenCCU Release build
 # yamllint disable rule:truthy
 ---
 name: Release Build
@@ -91,7 +91,7 @@ jobs:
         uses: ncipollo/release-action@v1.18.0
         with:
           tag: ${{ steps.env.outputs.tag }}
-          name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
+          name: 'OpenCCU ${{ steps.env.outputs.version }}'
           bodyFile: /tmp/release-template.md
           draft: true
           prerelease: false
@@ -170,8 +170,8 @@ jobs:
       - name: Build
         timeout-minutes: 300
         run: |
-          rm -rf release/RaspberryMatic-* buildroot-????.*
-          sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} clean-all release
+          rm -rf release/OpenCCU-* buildroot-????.*
+          sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=${{ matrix.platform }} clean-all release
 
       # cleanup
       - name: Cleanup
@@ -188,7 +188,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip
           asset_content_type: application/zip
           overwrite: true
 
@@ -199,7 +199,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip.sha256
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip.sha256
           asset_content_type: text/plain
           overwrite: true
 
@@ -209,7 +209,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-ccu3.tgz
           asset_content_type: application/gzip
           overwrite: true
 
@@ -219,7 +219,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz.sha256
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-ccu3.tgz.sha256
           asset_content_type: text/plain
           overwrite: true
 
@@ -229,7 +229,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}.ova
           asset_content_type: application/gzip
           overwrite: true
 
@@ -239,7 +239,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova.sha256
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}.ova.sha256
           asset_content_type: text/plain
           overwrite: true
 
@@ -249,7 +249,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
           asset_content_type: application/gzip
           overwrite: true
 
@@ -259,7 +259,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz.sha256
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz.sha256
           asset_content_type: text/plain
           overwrite: true
 
@@ -269,7 +269,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz
           asset_content_type: application/x-xz
           overwrite: true
 
@@ -279,7 +279,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz.sha256
+          asset_path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz.sha256
           asset_content_type: text/plain
           overwrite: true
 
@@ -291,8 +291,8 @@ jobs:
           startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz*
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
+          path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz*
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
       - name: Attest build artifact provenance [oci]
@@ -300,7 +300,7 @@ jobs:
           startsWith(matrix.platform, 'oci_')
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
+          subject-name: OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
           subject-digest: sha256:${{ steps.upload-oci.outputs.artifact-digest }}
         continue-on-error: true
 
@@ -310,13 +310,13 @@ jobs:
         id: upload-manifest
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+          path: release/OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
 
       - name: Attest manifest artifact provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+          subject-name: OpenCCU-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
           subject-digest: sha256:${{ steps.upload-manifest.outputs.artifact-digest }}
         continue-on-error: true
 
@@ -390,22 +390,22 @@ jobs:
       - name: Download oci_amd64 artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_amd64.tgz
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-oci_amd64.tgz
       - name: Download oci_arm64 artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm64.tgz
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-oci_arm64.tgz
       - name: Download oci_arm artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm.tgz
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-oci_arm.tgz
 
       - name: Extract OCI artifacts
         run: |
           rm -rf oci_build
           mkdir -p oci_build
           cd oci_build || exit 1
-          for f in ../RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_*.tgz; do
+          for f in ../OpenCCU-${{ needs.release_draft.outputs.version }}-oci_*.tgz; do
             echo "extracting ${f}..."
             DIR=$(basename "${f}" .tgz)
             mkdir -p "${DIR}"
@@ -452,14 +452,14 @@ jobs:
           labels: |
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
           annotations: |
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
@@ -476,12 +476,12 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           build-args: |
-            tar_prefix=RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_
+            tar_prefix=OpenCCU-${{ needs.release_draft.outputs.version }}-oci_
           labels: |
-            org.opencontainers.image.title=RaspberryMatic
+            org.opencontainers.image.title=OpenCCU
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
@@ -490,8 +490,8 @@ jobs:
             org.opencontainers.image.ref.name=${{ env.GIT_REF }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
-            io.hass.name=RaspberryMatic CCU
-            io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+            io.hass.name=OpenCCU
+            io.hass.description=HomeMatic/homematicIP CCU central based on OpenCCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ needs.release_draft.outputs.version }}
             io.hass.type=addon
@@ -538,33 +538,33 @@ jobs:
       - name: Download rpi0 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-rpi0.mf
       - name: Download rpi2 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-rpi2.mf
       - name: Download rpi3 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-rpi3.mf
       - name: Download rpi4 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-rpi4.mf
       - name: Download rpi5 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi5.mf
+          name: OpenCCU-${{ needs.release_draft.outputs.version }}-rpi5.mf
 
 
       - name: Bump rpi-imager version
         run: |
           release/rpi-imager-update.sh release/rpi-imager.json \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi5.mf
+            OpenCCU-${{ needs.release_draft.outputs.version }}-rpi0.mf \
+            OpenCCU-${{ needs.release_draft.outputs.version }}-rpi2.mf \
+            OpenCCU-${{ needs.release_draft.outputs.version }}-rpi3.mf \
+            OpenCCU-${{ needs.release_draft.outputs.version }}-rpi4.mf \
+            OpenCCU-${{ needs.release_draft.outputs.version }}-rpi5.mf
 
       - name: Bump LATEST-VERSION.js
         run: |
@@ -576,7 +576,7 @@ jobs:
           VERSION=${{ needs.release_draft.outputs.version }}
           sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION::-9}/" helm/raspberrymatic/Chart.yaml
           sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/raspberrymatic/Chart.yaml
-          sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/jens-maus/RaspberryMatic/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
+          sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/OpenCCU/OpenCCU/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
 
       - name: Show git diffs
         shell: bash

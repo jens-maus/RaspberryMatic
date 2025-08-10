@@ -4,7 +4,7 @@ Requirements for Contributing
 =============================
 
 * Fill out the template below. Any pull request that does not include enough information to be reviewed in a timely manner may be closed at the maintainers' discretion.
-* Make sure you have read and understood the CONTRIBUTING.md file in the top-level directory with information related to licensing requirments, etc. In sort: Everything you contribute have to be able to be (re)licensed under the Apache 2.0 license to be able to be contributed to RaspberryMatic
+* Make sure you have read and understood the CONTRIBUTING.md file in the top-level directory with information related to licensing requirments, etc. In sort: Everything you contribute have to be able to be (re)licensed under the Apache 2.0 license to be able to be contributed to OpenCCU
 
 -->
 
@@ -50,7 +50,7 @@ What process did you follow to verify that the change has not introduced any reg
 <!--
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in RaspberryMatic's release notes.
+terms that a user can understand.  This text will be used in OpenCCU's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.

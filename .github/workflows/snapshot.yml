@@ -1,4 +1,4 @@
-# RaspberryMatic Snapshot build
+# OpenCCU Snapshot build
 # yamllint disable rule:truthy
 ---
 name: Snapshot Build
@@ -100,8 +100,8 @@ jobs:
 
       - name: Switch to experimental EULA files
         run: |
-          mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
-          mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
+          mv -f release/updatepkg/${{ matrix.platform }}/EULA.de_nightly release/updatepkg/${{ matrix.platform }}/EULA.de
+          mv -f release/updatepkg/${{ matrix.platform }}/EULA.en_nightly release/updatepkg/${{ matrix.platform }}/EULA.en
 
       # - name: remote debug tmate session
       #   uses: mxschmitt/action-tmate@v1
@@ -112,9 +112,9 @@ jobs:
         timeout-minutes: 300
         shell: bash
         run: |
-          rm -rf release/RaspberryMatic-* buildroot-????.*
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} clean-all release
-          mv release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          rm -rf release/OpenCCU-* buildroot-????.*
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=${{ matrix.platform }} clean-all release
+          mv release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.mf release/OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
       # check linux kernel config consistency
       - name: Check Linux Kconfig
@@ -123,7 +123,7 @@ jobs:
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
         run: |
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} linux-check-dotconfig
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=${{ matrix.platform }} linux-check-dotconfig
 
       # cleanup
       - name: Cleanup
@@ -141,10 +141,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.zip
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
           asset_content_type: application/zip
           max_releases: 1
 
@@ -156,10 +156,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
           asset_content_type: text/plain
           max_releases: 1
 
@@ -170,10 +170,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
+          asset_path: release/OpenCCU-${{ env.VERSION }}-ccu3.tgz
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
           asset_content_type: application/gzip
           max_releases: 1
 
@@ -184,10 +184,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
+          asset_path: release/OpenCCU-${{ env.VERSION }}-ccu3.tgz.sha256
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
           asset_content_type: text/plain
           max_releases: 1
 
@@ -198,10 +198,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova
+          asset_path: release/OpenCCU-${{ env.VERSION }}.ova
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$.ova
           asset_content_type: application/gzip
           max_releases: 1
 
@@ -212,10 +212,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
+          asset_path: release/OpenCCU-${{ env.VERSION }}.ova.sha256
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$.ova.sha256
           asset_content_type: text/plain
           max_releases: 1
 
@@ -226,10 +226,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tgz
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
           asset_content_type: application/gzip
           max_releases: 1
 
@@ -240,10 +240,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
           asset_content_type: text/plain
           max_releases: 1
 
@@ -254,10 +254,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.xz
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.xz
           asset_content_type: application/x-xz
           max_releases: 1
 
@@ -268,10 +268,10 @@ jobs:
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/OpenCCU/OpenCCU/releases/22744592/assets{?name,label}
           release_id: 22744592
-          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz.sha256
-          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.xz.sha256
+          asset_path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz.sha256
+          asset_name: OpenCCU-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.xz.sha256
           asset_content_type: text/plain
           max_releases: 1
 
@@ -283,8 +283,8 @@ jobs:
           startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+          path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
       - name: Attest artifact provenance [oci]
@@ -292,7 +292,7 @@ jobs:
           startsWith(matrix.platform, 'oci_')
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+          subject-name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
           subject-digest: sha256:${{ steps.upload-oci.outputs.artifact-digest }}
         continue-on-error: true
 
@@ -302,13 +302,13 @@ jobs:
         id: upload-manifest
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          path: release/OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
       - name: Attest artifact provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          subject-name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
           subject-digest: sha256:${{ steps.upload-manifest.outputs.artifact-digest }}
         continue-on-error: true
 
@@ -342,22 +342,22 @@ jobs:
       - name: Download oci_amd64 artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
       - name: Download oci_arm64 artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
       - name: Download oci_arm artifact
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
 
       - name: Extract OCI artifacts
         run: |
           rm -rf oci_build
           mkdir -p oci_build
           cd oci_build || exit 1
-          for f in ../RaspberryMatic-${{ env.BUILD_VERSION }}-oci_*.tgz; do
+          for f in ../OpenCCU-${{ env.BUILD_VERSION }}-oci_*.tgz; do
             echo "extracting ${f}..."
             DIR=$(basename "${f}" .tgz)
             mkdir -p "${DIR}"
@@ -403,11 +403,11 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           labels: |
-            maintainer=RaspberryMatic OpenSource Team
-            org.opencontainers.image.title=RaspberryMatic
+            maintainer=OpenCCU OpenSource Team
+            org.opencontainers.image.title=OpenCCU
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
@@ -416,18 +416,18 @@ jobs:
             org.opencontainers.image.ref.name=${{ env.GIT_REF }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
-            io.hass.name=RaspberryMatic CCU
-            io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+            io.hass.name=OpenCCU
+            io.hass.description=HomeMatic/homematicIP CCU central based on OpenCCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
             io.hass.arch=armv7|aarch64|amd64
           annotations: |
-            maintainer=RaspberryMatic OpenSource Team
-            org.opencontainers.image.title=RaspberryMatic
+            maintainer=OpenCCU OpenSource Team
+            org.opencontainers.image.title=OpenCCU
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
@@ -436,8 +436,8 @@ jobs:
             org.opencontainers.image.ref.name=${{ env.GIT_REF }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
-            io.hass.name=RaspberryMatic CCU
-            io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+            io.hass.name=OpenCCU
+            io.hass.description=HomeMatic/homematicIP CCU central based on OpenCCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
@@ -454,7 +454,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           build-args: |
-            tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+            tar_prefix=OpenCCU-${{ env.BUILD_VERSION }}-oci_
           labels: |
             ${{ steps.meta.outputs.labels }}
           tags: |
@@ -531,32 +531,32 @@ jobs:
       - name: Download rpi0 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf
       - name: Download rpi2 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf
       - name: Download rpi3 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf
       - name: Download rpi4 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
       - name: Download rpi5 manifest
         uses: actions/download-artifact@v4
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Bump rpi-imager version
         run: |
           release/rpi-imager-update.sh release/rpi-imager-dev.json \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
+            OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf \
+            OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf \
+            OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf \
+            OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf \
+            OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Commit changes
         run: |

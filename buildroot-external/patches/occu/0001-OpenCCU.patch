@@ -671,6 +671,19 @@
  proc get_CoProVersion {} {
    set cfgFile "/var/hm_mode"
    set unknownVersion "0.0.0"
+--- occu/WebUI/www/upnp/basic_dev.cgi.orig
++++ occu/WebUI/www/upnp/basic_dev.cgi
+@@ -34,7 +34,9 @@
+ if { "$hostname" == "homematic-ccu3" } {
+     set RESOURCE(TITLE) "HomeMatic Central CCU3"
+ } elseif { "$hostname" == "homematic-raspi" } {
+-    set RESOURCE(TITLE) "HomeMatic Central RaspberryMatic"
++    set RESOURCE(TITLE) "HomeMatic Central OpenCCU"
++} elseif { "$hostname" == "openccu" } {
++    set RESOURCE(TITLE) "HomeMatic Central OpenCCU"
+ } elseif { "$hostname" == "homematic-ccu2" } {
+     set RESOURCE(TITLE) "HomeMatic Central CCU2"
+ } else {
 --- occu/WebUI/www/webui/error/notready.html.orig
 +++ occu/WebUI/www/webui/error/notready.html
 @@ -12,8 +12,8 @@

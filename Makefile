@@ -174,7 +174,7 @@ buildroot-help:
 	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PLATFORM) help
 
 help:
-	@echo "HomeMatic/CCU Build Environment"
+	@echo "OpenCCU Build Environment"
 	@echo
 	@echo "Usage:"
 	@echo "  $(MAKE) <product>: build+create image for selected product"

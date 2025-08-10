@@ -1,4 +1,4 @@
-HOSTNAME=homematic-raspi
+HOSTNAME=openccu
 MODE=DHCP
 CURRENT_IP=
 CURRENT_NETMASK=

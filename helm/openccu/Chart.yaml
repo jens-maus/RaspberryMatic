@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
-name: raspberrymatic
-description: HomeMatic/homematicIP CCU central based on RaspberryMatic
-home: https://github.com/jens-maus/RaspberryMatic
-icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
+name: openccu
+description: HomeMatic/homematicIP CCU central based on OpenCCU
+home: https://github.com/OpenCCU/OpenCCU
+icon: https://raw.githubusercontent.com/OpenCCU/OpenCCU/master/home-assistant-addon/icon.png
 keywords:
   - smarthome
   - iot
@@ -42,10 +42,10 @@ dependencies:
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.83.6.20250705 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.83.6.20250705)
+    - Release of 3.83.6.20250705 (https://github.com/OpenCCU/OpenCCU/releases/tag/3.83.6.20250705)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage
-      url: https://raspberrymatic.de/
+      url: https://openccu.de/
     - name: Documentation
-      url: https://github.com/jens-maus/RaspberryMatic/wiki
+      url: https://github.com/OpenCCU/OpenCCU/wiki

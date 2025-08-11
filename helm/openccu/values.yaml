@@ -8,7 +8,7 @@
 
 image:
   # -- image repository
-  repository: ghcr.io/jens-maus/raspberrymatic
+  repository: ghcr.io/openccu/openccu
   # -- image pull policy
   pullPolicy: IfNotPresent
 

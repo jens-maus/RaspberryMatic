@@ -1,14 +1,14 @@
-# RaspberryMatic
+# OpenCCU
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: snapshot](https://img.shields.io/badge/AppVersion-snapshot-informational?style=flat-square)
 
-This is a helm chart for [RaspberryMatic](https://raspberrymatic.de/)
+This is a helm chart for [OpenCCU](https://openccu.de/)
 
 ## Installing the Chart
 
 Since this chart depends on HW to manage Homemtatic devices the setup goes beyond just installing the chart.
 
-Please follow the [RaspberryMatic Kubernetes installation Wiki](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes) to deploy.
+Please follow the [OpenCCU Kubernetes installation Wiki](https://github.com/OpenCCU/OpenCCU/wiki/Installation-Kubernetes) to deploy.
 
 ## Uninstalling the Chart
 
@@ -28,7 +28,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | annotations | object | `{}` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
-| image.repository | string | `"ghcr.io/jens-maus/raspberrymatic"` |  |
+| image.repository | string | `"ghcr.io/openccu/openccu"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |

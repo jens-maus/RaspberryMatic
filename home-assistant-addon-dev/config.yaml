@@ -1,18 +1,18 @@
 ---
-name: RaspberryMatic CCU (snapshot)
+name: OpenCCU (snapshot)
 version: 3.83.6.20250804-6357640
 stage: experimental
 slug: raspberrymatic-dev
-image: ghcr.io/jens-maus/raspberrymatic
+image: ghcr.io/openccu/openccu
 arch:
   - armv7
   - aarch64
   - amd64
-description: HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot)
-url: https://github.com/jens-maus/RaspberryMatic/
+description: HomeMatic/homematicIP CCU central based on OpenCCU (Snapshot)
+url: https://github.com/OpenCCU/OpenCCU/
 ingress: true
 ingress_stream: true
-panel_title: RaspberryMatic (snapshot)
+panel_title: OpenCCU (snapshot)
 panel_icon: mdi:router-wireless
 startup: services
 map:

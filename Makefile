@@ -17,7 +17,7 @@ else
 	PRODUCT:=$(firstword $(PRODUCTS))
 endif
 
-PLATFORM:=$(shell echo -n $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//')
+PLATFORM:=$(shell echo -n $(PRODUCT) | sed 's/_\(amd64\|arm.*\)//')
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
 .PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg
@@ -89,7 +89,7 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//'))
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)//'))
 	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) $(PRODUCT) $(PRODUCT_VERSION); fi
 
 check-all: $(addsuffix -check, $(PRODUCTS))
@@ -98,7 +98,7 @@ $(addsuffix -check, $(PRODUCTS)): %:
 
 check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking: $(PRODUCT)]"
-	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//'))
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)//'))
 	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
 	@echo "[checking apply patch status: OCCU $(OCCU_VERSION)]"

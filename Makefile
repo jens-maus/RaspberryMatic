@@ -17,7 +17,7 @@ else
 	PRODUCT:=$(firstword $(PRODUCTS))
 endif
 
-PLATFORM:=$(shell echo -n $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//')
+PLATFORM:=$(shell echo -n $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//')
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
 .PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg
@@ -60,7 +60,7 @@ build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 ifneq ($(FAKE_BUILD),true)
 	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) PRODUCT_PLATFORM=$(PLATFORM)
 else
-	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
+	$(eval BOARD := $(shell echo $(PRODUCT)))
 	# Dummy build - mainly for testing CI
 	echo -n "FAKE_BUILD - generating fake release archives..."
 	mkdir -p build-$(PRODUCT)/images
@@ -89,7 +89,7 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//'))
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//'))
 	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) $(PRODUCT) $(PRODUCT_VERSION); fi
 
 check-all: $(addsuffix -check, $(PRODUCTS))
@@ -98,7 +98,7 @@ $(addsuffix -check, $(PRODUCTS)): %:
 
 check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking: $(PRODUCT)]"
-	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2- | sed 's/_\(amd64\|arm.*\)//'))
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | sed 's/_\(amd64\|arm.*\)$//'))
 	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
 	@echo "[checking apply patch status: OCCU $(OCCU_VERSION)]"

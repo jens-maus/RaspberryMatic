@@ -36,9 +36,9 @@ jobs:
 
   build:
     permissions:
-      contents: write     # actions/upload-artifact
-      id-token: write     # actions/attest-build-provenance
-      attestations: write # actions/attest-build-provenance
+      contents: write      # actions/upload-artifact
+      id-token: write      # actions/attest-build-provenance
+      attestations: write  # actions/attest-build-provenance
     name: Snapshot build [${{ matrix.platform }}]
     if: ${{ github.repository == 'jens-maus/RaspberryMatic' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
     runs-on: self-hosted
@@ -316,10 +316,10 @@ jobs:
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     permissions:
-      packages: write     # docker/build-push-action
-      id-token: write     # actions/attest-build-provenance
-      attestations: write # actions/attest-build-provenance
-      contents: read      # actions/attest-build-provenance
+      packages: write      # docker/build-push-action
+      id-token: write      # actions/attest-build-provenance
+      attestations: write  # actions/attest-build-provenance
+      contents: read       # actions/attest-build-provenance
     name: OCI/Docker Build+Push
     runs-on: ubuntu-24.04
     needs: build

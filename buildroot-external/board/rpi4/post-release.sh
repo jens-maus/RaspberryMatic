@@ -6,7 +6,7 @@ set -e
 #BOARD_DIR=${1}
 PRODUCT=${2}
 PRODUCT_VERSION=${3}
-BOARD=$(echo "${PRODUCT}" | cut -d'_' -f2-)
+BOARD=${2}
 
 # change into release dir
 cd ./release

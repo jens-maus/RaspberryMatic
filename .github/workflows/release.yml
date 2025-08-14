@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -124,7 +124,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Dependencies
         run: |
@@ -330,7 +330,7 @@ jobs:
     needs: [release_draft, build]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # download all artifact files
       - name: Download all workflow artifacts
@@ -380,7 +380,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Environment
         run: |
@@ -528,7 +528,7 @@ jobs:
     needs: [release_draft, build, oci-multiarch-build-push]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Bump HomeAssistant add-on version
         run: |
@@ -602,7 +602,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 

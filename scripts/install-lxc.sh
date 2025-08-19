@@ -4,7 +4,7 @@
 # Script to install a RaspberryMatic LXC container programatically.
 # https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/scripts/install-lxc.sh
 #
-# Copyright (c) 2024 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2024-2025 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.18"
+VERSION="1.19"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -541,8 +541,8 @@ fi
 # check if cgroup cpuset and memory is enabled and if not try
 # to enable them (if this is a RaspberryPi system)
 info "Checking correct cgroup kernel settings..."
-CGROUP_CPU=$(grep ^cpuset /proc/cgroups | cut -f4)
-CGROUP_MEM=$(grep ^memory /proc/cgroups | cut -f4)
+CGROUP_CPU=$( (grep -m1 ^cpuset /proc/cgroups 2>/dev/null || true) | cut -f4)
+CGROUP_MEM=$( (grep -m1 ^memory /proc/cgroups 2>/dev/null || true) | cut -f4)
 if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
   # check if this is a RaspberryPi system and try to enable
   # all necessary cgroup sets

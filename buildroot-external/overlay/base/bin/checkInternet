@@ -26,6 +26,14 @@ fi
 
 # if we reach here we ensure that hasInternet is present
 if [[ ! -e /var/status/hasInternet ]]; then
+
+  # make sure /var/status exists with correct permissions
+  if [[ ! -d /var/status ]]; then
+    mkdir -p /var/status
+    chown root:status /var/status
+    chmod 2775 /var/status
+  fi
+
   echo "Creating /var/status/hasInternet"
   touch /var/status/hasInternet
   if [[ ! -e /var/status/hasInternet ]]; then

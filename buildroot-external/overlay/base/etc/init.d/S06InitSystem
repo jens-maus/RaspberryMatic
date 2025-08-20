@@ -28,8 +28,8 @@ init_system() {
   mkdir -p /var/empty
   mkdir -p /var/etc
   mkdir -p /var/status
-  chmod g+s /var/status
-  chgrp status /var/status
+  chown root:status /var/status
+  chmod 2775 /var/status
   mkdir -p /var/empty
   chmod 0700 /var/empty
 

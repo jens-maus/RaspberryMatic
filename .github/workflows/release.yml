@@ -418,7 +418,7 @@ jobs:
       - name: Build OCI tags
         shell: bash
         run: |
-          BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
+          BASE_TAG="ghcr.io/${{ github.repository_owner }}/openccu"
           UNIQUE_TAG="${BASE_TAG}:${{ needs.release_draft.outputs.version }}"
           BRANCH="${GITHUB_REF##*/}"
           if [[ ${BRANCH} == 'master' ]]; then
@@ -454,14 +454,14 @@ jobs:
             org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
           annotations: |
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
@@ -483,7 +483,7 @@ jobs:
             org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
             org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
@@ -510,7 +510,7 @@ jobs:
         uses: actions/attest-build-provenance@v2
         id: attest
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/raspberrymatic
+          subject-name: ghcr.io/${{ github.repository_owner }}/openccu
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: true
 
@@ -574,9 +574,9 @@ jobs:
         shell: bash
         run: |
           VERSION=${{ needs.release_draft.outputs.version }}
-          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION::-9}/" helm/raspberrymatic/Chart.yaml
-          sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/raspberrymatic/Chart.yaml
-          sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/OpenCCU/OpenCCU/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
+          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION::-9}/" helm/openccu/Chart.yaml
+          sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/openccu/Chart.yaml
+          sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/OpenCCU/OpenCCU/releases/tag/${VERSION})|" helm/openccu/Chart.yaml
 
       - name: Show git diffs
         shell: bash

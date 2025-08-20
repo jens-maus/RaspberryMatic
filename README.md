@@ -27,7 +27,7 @@ OpenCCU is a free and non-commercial open-source operating system alternative fo
 
 ## :cookie: Features
 
-Due to the used base components, OpenCCU is 100% compatible to the standard CCU control center distributed by eQ3/ELV (CCU2/CCU3). This means, that not only it can use the same HomeMatic/homematicIP IoT hardware like a CCU3 central with the same base version. It also provides the same level of functionality in areas like the WebUI or Add-on compatibility. Furthermore, even system backups are compatible between the two CCU variants, which allows to easily switch between the vendor-provided CCU firmware and this free open-source based CCU system software.
+Due to the base components used, OpenCCU is 100% compatible with the standard CCU control center distributed by eQ3/ELV (CCU2/CCU3). This means not only can it use the same HomeMatic/homematicIP IoT hardware as a CCU3 running the same base version, it also provides the same level of functionality in areas such as the WebUI and add-on compatibility. Furthermore, even system backups are compatible between the two CCU variants, which allows to easily switch between the vendor-provided CCU firmware and this free open-source based CCU system software.
 
 On top of that, OpenCCU provides a whole bunch of enhancements or even bugfixes in the WebUI or underlying Linux operating system which are either not _yet_ integrated in the official eQ3 CCU firmware or will never be integrated due to the functionality not being commercially interesting enough for eQ3/ELV.
 

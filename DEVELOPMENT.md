@@ -6,7 +6,7 @@ The fastest and recommended way to develop is using a local [Visual Studio Code]
 
 1. Please follow the instructions to download and install the [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) VS Code extension.
 2. Open the root folder inside VS Code, and when prompted re-open the window inside the container (or, from the Command Palette, select 'Rebuild and Reopen in Container').
-3. Follow one of the subsections bellow depending on what component you want to build
+3. Follow one of the subsections below depending on what component you want to build
 
 ### Building OpenCCU images
 
@@ -19,10 +19,10 @@ The fastest and recommended way to develop is using a local [Visual Studio Code]
 2. You'll then be able to access the normal onboarding process via the Home Assistant instance at `http://localhost:7123/`.
 3. The add-on(s) found in your root folder will automatically be found in the Local Add-ons repository.
 4. Install the OpenCCU add-on from the Supervisor menu.
-5. Once installed you need to start the adapter.
-6. It is useful to enable the `Show in sidebar` so you can open the OpenCCU WebUI (NOTE: you might need to wait some seconds until it is available).
+5. Once installed, you need to start the add-on.
+6. It is useful to enable “Show in sidebar” so you can open the OpenCCU WebUI (Note: you might need to wait a few seconds until it is available).
 
-## Continous integration
+## Continuous Integration
 
 OpenCCU uses GitHub Workflows for Continuous Integration. The actions tab shows available workflows.
 

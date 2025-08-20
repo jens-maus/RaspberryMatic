@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169,SC3010,SC3028 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3014,SC3028 source=/dev/null
 
 # make sure we have a secure umask
 umask 0002
@@ -137,10 +137,16 @@ esac
 # cleanup first
 RESOLV_CONF=/tmp/resolv.conf.tmp
 rm -f ${RESOLV_CONF}
-mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
+
+# make sure /var/status exists with correct permissions
+if [[ ! -d /var/status ]]; then
+  mkdir -p /var/status
+  chown root:status /var/status
+  chmod 2775 /var/status
+fi
 
 # setup the hostname
 echo "${HOSTNAME}" >/etc/hostname

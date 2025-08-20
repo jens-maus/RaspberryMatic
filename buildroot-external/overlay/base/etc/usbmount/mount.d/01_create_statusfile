@@ -1,5 +1,12 @@
 #!/bin/sh
-mkdir -p /var/status
+
+# make sure /var/status exists with correct permissions
+if [ ! -d /var/status ]; then
+  mkdir -p /var/status
+  chown root:status /var/status
+  chmod 2775 /var/status
+fi
+
 touch /var/status/hasUSB
 # CCU2 compatibility 
 touch /var/status/hasSD

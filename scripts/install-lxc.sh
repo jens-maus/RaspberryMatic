@@ -4,7 +4,7 @@
 # Script to install a OpenCCU LXC container programatically.
 # https://raw.githubusercontent.com/OpenCCU/OpenCCU/master/scripts/install-lxc.sh
 #
-# Copyright (c) 2024 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2024-2025 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.17"
+VERSION="1.19"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -257,7 +257,7 @@ for release in r:
         if asset["name"].endswith("${ENDSWITH}") == True:
             image_url = asset["browser_download_url"]
             name = asset["name"]
-            version = re.findall('OpenCCU-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+            version = re.findall('OpenCCU-(\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+(?:-[0-9a-f]{6})?)-?.*\\\\.', name)
             if len(version) > 0 and num < 5:
                 print(version[0] + ' release ' + image_url)
                 num = num + 1
@@ -281,7 +281,7 @@ for asset in r["assets"]:
     if asset["name"].endswith("${ENDSWITH}") == True:
         image_url = asset["browser_download_url"]
         name = asset["name"]
-        version = re.findall('OpenCCU-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+        version = re.findall('OpenCCU-(\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+(?:-[0-9a-f]{6})?)-?.*\\\\.', name)
         if len(version) > 0:
           print(version[0] + ' snapshot ' + image_url)
         break
@@ -541,8 +541,8 @@ fi
 # check if cgroup cpuset and memory is enabled and if not try
 # to enable them (if this is a RaspberryPi system)
 info "Checking correct cgroup kernel settings..."
-CGROUP_CPU=$(grep ^cpuset /proc/cgroups | cut -f4)
-CGROUP_MEM=$(grep ^memory /proc/cgroups | cut -f4)
+CGROUP_CPU=$( (grep -m1 ^cpuset /proc/cgroups 2>/dev/null || true) | cut -f4)
+CGROUP_MEM=$( (grep -m1 ^memory /proc/cgroups 2>/dev/null || true) | cut -f4)
 if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
   # check if this is a RaspberryPi system and try to enable
   # all necessary cgroup sets

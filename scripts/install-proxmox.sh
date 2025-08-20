@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.16"
+VERSION="3.17"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -333,7 +333,7 @@ for release in r:
         if asset["name"].endswith("${ENDSWITH}") == True:
             image_url = asset["browser_download_url"]
             name = asset["name"]
-            version = re.findall('OpenCCU-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+            version = re.findall('OpenCCU-(\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+(?:-[0-9a-f]{6})?)-?.*\\\\.', name)
             if len(version) > 0 and num < 5:
                 print(version[0] + ' release ' + image_url)
                 num = num + 1
@@ -357,7 +357,7 @@ for asset in r["assets"]:
     if asset["name"].endswith("${ENDSWITH}") == True:
         image_url = asset["browser_download_url"]
         name = asset["name"]
-        version = re.findall('OpenCCU-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+        version = re.findall('OpenCCU-(\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+(?:-[0-9a-f]{6})?)-?.*\\\\.', name)
         if len(version) > 0:
           print(version[0] + ' snapshot ' + image_url)
         break

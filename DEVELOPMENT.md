@@ -11,20 +11,20 @@ The fastest and recommended way to develop is using a local [Visual Studio Code]
 ### Building OpenCCU images
 
 1. When VS Code has opened your folder in the container (which can take some time for the first run) you will need to start a terminal (Terminal -> New Terminal).
-2. Use `make` to build any of the OpenCCU. If you run `make`without targets the list of available commands is printed.
+2. Use `make` to build OpenCCU images. If you run `make` without targets, a list of available commands is printed.
 
 ### Building and testing the Home Assistant Add-on
 
 1. When VS Code has opened your folder in the container (which can take some time for the first run) you'll need to run the task (Terminal -> Run Task) 'Start Home Assistant', which will bootstrap Supervisor and Home Assistant.
 2. You'll then be able to access the normal onboarding process via the Home Assistant instance at `http://localhost:7123/`.
 3. The add-on(s) found in your root folder will automatically be found in the Local Add-ons repository.
-4. Install the OpenCCU from the supervisord menu.
+4. Install the OpenCCU add-on from the Supervisor menu.
 5. Once installed you need to start the adapter.
-6. It is usefull to enable the `Show in sidebar` so you can open the OpenCCU WebUI (NOTE: you might need to wait some seconds until it is available).
+6. It is useful to enable the `Show in sidebar` so you can open the OpenCCU WebUI (NOTE: you might need to wait some seconds until it is available).
 
 ## Continous integration
 
-OpenCCU uses GitHub Workflows for Continous Integrations. The actions tab shows available workflows.
+OpenCCU uses GitHub Workflows for Continuous Integration. The actions tab shows available workflows.
 
 ## Requirements
 

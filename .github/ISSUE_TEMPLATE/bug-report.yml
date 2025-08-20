@@ -55,7 +55,7 @@ body:
       label: What is the version this bug report is based on?
       placeholder: 3.XX.YY-YYYYMMDD
       description: >
-        The OpenCCU version you are using Can be found in the help page of the WebUI and starts with `3.XX.YY-YYYYMMDD`.
+        The OpenCCU version you are using can be found in the help page of the WebUI and starts with `3.XX.YY-YYYYMMDD`.
   - type: dropdown
     validations:
       required: true

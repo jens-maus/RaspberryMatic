@@ -45,17 +45,17 @@ jobs:
           labels: |
             org.opencontainers.image.title=OpenCCU HA Proxy-Addon
             org.opencontainers.image.description=Proxy to externally running OpenCCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ steps.info.outputs.version }}
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
           annotations: |
             org.opencontainers.image.title=OpenCCU HA Proxy-Addon
             org.opencontainers.image.description=Proxy to externally running OpenCCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ steps.info.outputs.version }}
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
@@ -84,10 +84,10 @@ jobs:
           labels: |
             org.opencontainers.image.title=OpenCCU HA Proxy-Addon
             org.opencontainers.image.description=Proxy to externally running OpenCCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
             org.opencontainers.image.revision=${{ github.sha }}

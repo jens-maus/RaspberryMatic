@@ -26,7 +26,7 @@ Bei _OpenCCU_ handelt es sich um ein alternatives, freies und nicht-kommerziell 
 
 ## :cookie: Features
 
-OpenCCU ist systembedingt zu der Betriebssystemsoftware einer CCU-Zentrale der Firma eQ3/ELV (CCU2/CCU3) (die den gleichen Versionsstand hat) 100% kompatibel. Dies bedeutet, das nicht nur dieselben HomeMatic/homematicIP Geräte angelernt/genutzt werden können, auch verhält sich OpenCCU in Punkto Funktionalität und WebUI vollkommen kompatibel. Des Weiteren kann die komplette Konfiguration zwischen der Standard Betriebssystemsoftware von eQ3/ELV und OpenCCU ausgetauscht werden und ein Wechsel zwischen den beiden Betriebssystemen ist jederzeit möglich.
+OpenCCU ist systembedingt zur Betriebssystemsoftware einer CCU‑Zentrale der Firma eQ3/ELV (CCU2/CCU3) (mit gleichem Versionsstand) 100% kompatibel. Dies bedeutet, dass nicht nur dieselben HomeMatic/homematicIP‑Geräte angelernt/genutzt werden können, auch verhält sich OpenCCU in puncto Funktionalität und WebUI vollkommen kompatibel. Des Weiteren kann die komplette Konfiguration zwischen der Standard‑Betriebssystemsoftware von eQ3/ELV und OpenCCU ausgetauscht werden und ein Wechsel zwischen den beiden Betriebssystemen ist jederzeit möglich.
 
 Darüber hinaus bringt OpenCCU jedoch eine ganze Reihe von Verbesserungen/Erweiterungen, neuen Features und teilweise bereits integrierten Bugfixes mit sich die entweder _noch_ nicht in der originalen CCU Firmware von der Firma eQ3/ELV übernommen wurde oder aus kommerzieller Sicht nicht übernommen werden soll.
 

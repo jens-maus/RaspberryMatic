@@ -136,7 +136,7 @@ if [[ "${HM_MODE}" == "NORMAL" ]]; then
 fi
 
 # check internet connection
-/bin/checkInternet
+/bin/checkInternet >/dev/null
 if [[ -f /var/status/hasInternet ]]; then
   echo -n "inet up, "
 else

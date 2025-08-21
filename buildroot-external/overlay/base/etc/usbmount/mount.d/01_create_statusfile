@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# set umask correctly
+umask 0002
+
 # make sure /var/status exists with correct permissions
 if [ ! -d /var/status ]; then
   mkdir -p /var/status

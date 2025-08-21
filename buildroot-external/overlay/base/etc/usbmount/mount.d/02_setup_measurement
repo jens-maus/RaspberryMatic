@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# set umask correctly.
+umask 0002
+
 if /bin/mountpoint -q "${UM_MOUNTPOINT}"; then
   if [ ! -L /media/usb0 ]; then
     RET=0

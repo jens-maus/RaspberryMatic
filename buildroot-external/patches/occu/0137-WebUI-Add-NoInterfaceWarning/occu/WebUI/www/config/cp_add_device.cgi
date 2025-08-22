@@ -117,7 +117,7 @@ proc putSectionBidCosRF {} {
           append html "<tr>"
             append html "<td>\${dialogNewDevicesBidCosRFLbl4}</td>"
             append html "<td>"
-              append html "<input id='text_serial' size='28' name='serial' oninput='let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);'>"
+              append html "<input id='text_serial' size='28' name='serial'>"
             append html "</td>"
 
             append html "<td>"

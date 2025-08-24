@@ -36025,6 +36025,7 @@ getExtendedDescription = function(oChannelDescr)  {
         case "hmip-wgt-a":
         case "hmip-wgtc":
         case "hmip-wgtc-a":
+          if (channel === undefined) { var channel = DeviceList.getChannelByAddress(channelAddress); }
           var channelMode = homematic("Interface.getMetadata", {
             "objectId": channel.id,
             "dataId": "channelMode"

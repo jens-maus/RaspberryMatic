@@ -109,7 +109,7 @@ html,body
   margin:0;
   padding:0;
   color: $_(textColorB); /* black */
-  background-color: $_(background); /* #183473 */
+  #background-color: $_(background); /* #183473 */
 }
 
 p {
@@ -211,6 +211,7 @@ a img {
     outline: none;
     /* Stretch to max available space */
     height: calc(100% - 168px); /* FIX: header + menubar + footer: 72px + 41px + 55px = 168px */
+    margin: 10px;
 }
 
 #prgcontent
@@ -3108,9 +3109,9 @@ html, body {
 }
 #DeviceListTable {
   height:auto;
-  margin:10px;
-  border:1px black solid;
-  padding:0;
+  #margin:10px;
+  #border:1px black solid;
+  #padding:0;
   empty-cells:show;
   width:100%;
 }
@@ -4890,9 +4891,9 @@ application {
 }
 
 thead {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+	position: sticky;
+	top: 0px;
+	z-index: 2;
 }
 
 /* rega\pages\msg\autoLoginConfig.htm */
@@ -9071,7 +9072,7 @@ color: $_(textColorA); /* white */
 /* config\ic_deviceparameters.cgi */
 
 .CLASS22000 {
-  margin: 10px;
+  #margin: 10px;
   width: 100%;
 }
 

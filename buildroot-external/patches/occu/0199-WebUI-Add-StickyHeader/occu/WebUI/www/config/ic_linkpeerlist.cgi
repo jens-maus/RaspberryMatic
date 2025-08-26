@@ -67,10 +67,10 @@ proc put_page {} {
       puts "  s += \"<table cellspacing='8'>\";"
       puts "  s += \"<tr>\";"
       puts "  s += \"<td  style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='WebUI.goBack()'>\" + translateKey('footerBtnPageBack') + \"</div></td>\";"
-      puts "  s += \"<td  style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS22100' onclick='loadNewLinkPage();' >\"+ translateKey('footerBtnNewLink') +\"</div></td></td><td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04906' onclick='PrintAllDV();'>&Uuml;bersicht Drucken</div></td>\";"
+      puts "  s += \"<td  style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS22100' onclick='loadNewLinkPage();' >\"+ translateKey('footerBtnNewLink') +\"</div></td>\";"
       puts "  s += \"</tr>\";"
       puts "  s += \"</table>\";"
-      puts "  setFooter(s); var scriptpp = document.createElement(\"script\"); scriptpp.type = \"text/javascript\"; scriptpp.src = \"/addons/print/functions.js\"; \$(\"body\").appendChild(scriptpp);"
+      puts "  setFooter(s);"
 
       puts "  LINKLISTSORTBY = '$sortby';"
   
@@ -320,28 +320,6 @@ proc put_tablebody {} {
           if {([string index $senderParent 0] != "@")  && ([string index $receiverParent 0] != "@") && ![isInExceptionList $sender_descr(TYPE) $receiver_descr(TYPE)]} {
             set internalLink 1
             set hideBtnDelete 1
-          }
-        }
-        catch {
-          set devType $sender_descr(PARENT_TYPE)
-          if { 
-           ([string equal -nocase "HB-LC-Sw1PBU-FM"       $devType] == 1) ||
-           ([string equal -nocase "HB-LC-Sw2PBU-FM"       $devType] == 1) ||
-           ([string equal -nocase "HB-LC-Bl1PBU-FM"       $devType] == 1) ||
-           ([string equal -nocase "HB-LC-Sw1-FM"          $devType] == 1) ||
-           ([string equal -nocase "HB-LC-Sw2-FM"          $devType] == 1) ||
-           ([string match -nocase "HB-UNI-SenAct-4-4-SC*" $devType] == 1) ||
-           ([string match -nocase "HB-UNI-SenAct-8-8-SC*" $devType] == 1)
-          } {
-            #interne Tasten (InternalKeys) ausblenden, wenn Sender und Empfaenger die selbe Kanalnummer besitzen
-            set sndCh [lindex [split $link(SENDER)   ":"] 1]
-            set rcvCh [lindex [split $link(RECEIVER) ":"] 1]
-            if { ($sndCh == $rcvCh) } {
-              set internalLink  1
-            } else {
-              set internalLink  0
-            }
-            set hideBtnDelete 0
           }
         }
       }

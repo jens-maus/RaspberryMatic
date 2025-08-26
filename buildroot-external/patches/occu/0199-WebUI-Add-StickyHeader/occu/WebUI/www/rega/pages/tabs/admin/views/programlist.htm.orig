@@ -412,14 +412,14 @@
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03306' onclick='fltPL.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
     //s += "<td  style='text-align:center;' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >Systeminterne Programme<br /><% Write(sInternalBtnText); %>blenden</div></td>";
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >"+translateKey(internalBtnText) +"</div></td>";
-    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td><td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04906' onclick='PrintAllPrograms();'>Drucken</div></td><td align='center' valign='middle'><div class='FooterButton CLASS04906' onclick='PrintAllSysPrograms();'>Drucken inkl. Interne</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td>";
     if(dbg)
     {
       s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='reloadPage();'>"+translateKey('footerBtnUpdate')+ "</div></td>";
     }
   s += "</tr>";
   s += "</table>";
-  setFooter(s); var scriptpp = document.createElement("script"); scriptpp.type = "text/javascript"; scriptpp.src = "/addons/print/functions.js"; $("body").appendChild(scriptpp);
+  setFooter(s);
   translateButtons("btnRemove, btnEdit");
   translatePage("#ProgramListTable");
   jQuery("#ProgramListTable").show();

@@ -99,7 +99,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 tr.UserSysVars:nth-child(odd) {
-  /*background-color: $_(activeBackground);*/
+  background-color: $_(activeBackground);
 }
 
 html,body
@@ -111,13 +111,6 @@ html,body
   color: $_(textColorB); /* black */
   background-color: $_(background); /* #183473 */
 }
-
-thead {                                                                                                                                                         
-  position: -webkit-sticky;                                                                                                                                     
-  position: sticky;                                                                                                                                             
-  top: 0;                                                                                                                                                       
-  z-index: 2;                                                                                                                                                   
-} 
 
 p {
   margin-top: 10px;
@@ -481,7 +474,6 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   color: $_(textColorB); /* black */
-  height: 30px;
 }
 
 .filterTable .leftAlign {
@@ -1231,6 +1223,7 @@ a img {
   height:60px;
   text-align:center;
   cursor:pointer;
+  word-break: break-word;
 }
 .SysVarsTblPopup_Highlight{
   background-color:$_(inactiveBackground);
@@ -1238,6 +1231,7 @@ a img {
   height:60px;
   text-align:center;
   cursor:pointer;
+  word-break: break-word;
 }
 .WhiteBkgChannelPopup {
   background-color: $_(white); /* white */
@@ -6432,7 +6426,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03902 {
-	/*overflow:auto;*/
+	overflow:auto;
 	margin-left:10px;
 	margin-right:2px;
 }
@@ -6615,7 +6609,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04201 {
-	/*overflow:auto;*/
+	overflow:auto;
 	margin-left:10px;
 	margin-right:2px;
 }

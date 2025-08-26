@@ -234,7 +234,7 @@
            {
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -4895,6 +4895,12 @@
+@@ -4889,6 +4889,12 @@
  	text-align:center;
  }
  
@@ -249,7 +249,7 @@
  .CLASS01400 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -32231,6 +32231,7 @@
+@@ -32293,6 +32293,7 @@
      
      this.sub.style.top = newY + "px";
      this.sub.style.left = newX + "px";

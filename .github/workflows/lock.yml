@@ -1,3 +1,6 @@
+# RaspberryMatic Regular Lock Issue workflow
+# yamllint disable rule:truthy
+---
 name: Lock Closed Issues
 
 on:

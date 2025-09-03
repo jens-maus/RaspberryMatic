@@ -88,7 +88,7 @@ jobs:
 
       - name: Create release draft
         id: release_drafter
-        uses: ncipollo/release-action@v1.18.0
+        uses: ncipollo/release-action@v1.19.1
         with:
           tag: ${{ steps.env.outputs.tag }}
           name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
@@ -351,7 +351,7 @@ jobs:
           done
 
       - name: Update release draft
-        uses: ncipollo/release-action@v1.18.0
+        uses: ncipollo/release-action@v1.19.1
         with:
           tag: ${{ needs.release_draft.outputs.tag }}
           bodyFile: release-template.md/release-template.md

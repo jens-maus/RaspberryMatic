@@ -108,7 +108,7 @@
 +    "dialogSettingsCMLblFreeUserSpace" : "Verf%FCgbarer Speicherplatz:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "erforderlich",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
-     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der RaspberryMatic Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende RaspberryMatic Dokumentation.",
+     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der OpenCCU Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende OpenCCU Dokumentation.",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
@@ -132,5 +132,5 @@
 +    "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
-     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the RaspberryMatic version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding RaspberryMatic documentation.",
+     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the OpenCCU version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding OpenCCU documentation.",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",

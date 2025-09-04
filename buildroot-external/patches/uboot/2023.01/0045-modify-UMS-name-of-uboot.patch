@@ -7,7 +7,7 @@ index cb5260b558..4c3da13115 100644
  		if (!name)
  			goto cleanup;
 -		snprintf(name, UMS_NAME_LEN, "UMS disk %d", ums_count);
-+		snprintf(name, UMS_NAME_LEN, "RaspberryMatic UMS disk %d", ums_count);
++		snprintf(name, UMS_NAME_LEN, "OpenCCU UMS disk %d", ums_count);
  		ums[ums_count].name = name;
  		ums[ums_count].block_dev = *block_dev;
 

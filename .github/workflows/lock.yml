@@ -1,4 +1,4 @@
-# RaspberryMatic Regular Lock Issue workflow
+# OpenCCU Lock Closed Issues workflow
 # yamllint disable rule:truthy
 ---
 name: Lock Closed Issues

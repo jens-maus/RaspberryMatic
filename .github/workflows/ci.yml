@@ -1,4 +1,4 @@
-# RaspberryMatic Continious Integration Check Workflow
+# OpenCCU Continious Integration Check Workflow
 # yamllint disable rule:truthy
 ---
 name: CI Build
@@ -168,8 +168,8 @@ jobs:
 
       - name: Switch to experimental EULA files
         run: |
-          mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
-          mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
+          mv -f release/updatepkg/${{ matrix.platform }}/EULA.de_nightly release/updatepkg/${{ matrix.platform }}/EULA.de
+          mv -f release/updatepkg/${{ matrix.platform }}/EULA.en_nightly release/updatepkg/${{ matrix.platform }}/EULA.en
 
       # - name: remote debug tmate session
       #   uses: mxschmitt/action-tmate@v1
@@ -179,8 +179,8 @@ jobs:
       - name: Build
         timeout-minutes: 300
         run: |
-          rm -rf release/RaspberryMatic-* buildroot-????.*
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} clean-all release
+          rm -rf release/OpenCCU-* buildroot-????.*
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=${{ matrix.platform }} clean-all release
 
       # cleanup
       - name: Cleanup
@@ -196,8 +196,8 @@ jobs:
           !startsWith(matrix.platform, 'lxc_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
+          path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.zip*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
         continue-on-error: true
 
       - name: Upload build artifact [ccu3]
@@ -205,8 +205,8 @@ jobs:
           matrix.platform == 'rpi3'
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
+          path: release/OpenCCU-${{ env.VERSION }}-ccu3.tgz*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
         continue-on-error: true
 
       - name: Upload build artifact [ova]
@@ -214,8 +214,8 @@ jobs:
           matrix.platform == 'ova'
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}.ova*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
+          path: release/OpenCCU-${{ env.VERSION }}.ova*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
         continue-on-error: true
 
       - name: Upload build artifact [oci]
@@ -223,8 +223,8 @@ jobs:
           startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+          path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
       - name: Upload build artifact [lxc]
@@ -232,8 +232,8 @@ jobs:
           startsWith(matrix.platform, 'lxc_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.xz
+          path: release/OpenCCU-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz*
+          name: OpenCCU-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.xz
         continue-on-error: true
 
   ##########################################
@@ -262,22 +262,22 @@ jobs:
       - name: Download oci_amd64 artifact
         uses: actions/download-artifact@v5
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
       - name: Download oci_arm64 artifact
         uses: actions/download-artifact@v5
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
       - name: Download oci_arm artifact
         uses: actions/download-artifact@v5
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
+          name: OpenCCU-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
 
       - name: Extract OCI artifacts
         run: |
           rm -rf oci_build
           mkdir -p oci_build
           cd oci_build || exit 1
-          for f in ../RaspberryMatic-${{ env.BUILD_VERSION }}-oci_*.tgz; do
+          for f in ../OpenCCU-${{ env.BUILD_VERSION }}-oci_*.tgz; do
             echo "extracting ${f}..."
             DIR=$(basename "${f}" .tgz)
             mkdir -p "${DIR}"
@@ -308,15 +308,15 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           labels: |
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
           annotations: |
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
@@ -335,12 +335,12 @@ jobs:
           # load: true #load in docker - needed for testing later on
           push: ${{ env.SECRETS_ARE_AVAILABLE }}
           build-args: |
-            tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+            tar_prefix=OpenCCU-${{ env.BUILD_VERSION }}-oci_
           labels: |
-            org.opencontainers.image.title=RaspberryMatic
+            org.opencontainers.image.title=OpenCCU
             org.opencontainers.image.description=Alternative OS for your homematicIP CCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
@@ -349,8 +349,8 @@ jobs:
             org.opencontainers.image.ref.name=${{ env.GIT_REF }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
-            io.hass.name=RaspberryMatic CCU
-            io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+            io.hass.name=OpenCCU
+            io.hass.description=HomeMatic/homematicIP CCU central based on OpenCCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
@@ -374,12 +374,12 @@ jobs:
           load: true  # load in docker - needed for testing later on
           push: false
           build-args: |
-            tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+            tar_prefix=OpenCCU-${{ env.BUILD_VERSION }}-oci_
           labels: |
-            org.opencontainers.image.title=RaspberryMatic
+            org.opencontainers.image.title=OpenCCU
             org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
-            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
-            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.vendor=OpenCCU OpenSource Project
+            org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.url=https://raspberrymatic.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
@@ -388,8 +388,8 @@ jobs:
             org.opencontainers.image.ref.name=${{ env.GIT_REF }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
-            io.hass.name=RaspberryMatic CCU
-            io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+            io.hass.name=OpenCCU
+            io.hass.description=HomeMatic/homematicIP CCU central based on OpenCCU
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
@@ -445,7 +445,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: debug_output.tgz
-          name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
+          name: OpenCCU-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
 
       - name: Remove/Cleanup container environment
         run: |

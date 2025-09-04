@@ -40,7 +40,7 @@ jobs:
       id-token: write      # actions/attest-build-provenance
       attestations: write  # actions/attest-build-provenance
     name: Snapshot build [${{ matrix.platform }}]
-    if: ${{ github.repository == 'jens-maus/RaspberryMatic' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
+    if: ${{ github.repository == 'OpenCCU/OpenCCU' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
     runs-on: self-hosted
     needs: repo-check
     timeout-minutes: 300
@@ -135,7 +135,7 @@ jobs:
       # nightly snapshot uploads
       - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, ova, generic-*]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.2.0
@@ -150,7 +150,7 @@ jobs:
 
       - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, ova, generic-*]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.2.0
@@ -165,7 +165,7 @@ jobs:
 
       - name: Upload build snapshot [ccu3]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           matrix.platform == 'rpi3'
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -179,7 +179,7 @@ jobs:
 
       - name: Upload build snapshot checksum [ccu3]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           matrix.platform == 'rpi3'
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -193,7 +193,7 @@ jobs:
 
       - name: Upload build snapshot [ova]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           matrix.platform == 'ova'
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -207,7 +207,7 @@ jobs:
 
       - name: Upload build snapshot checksum [ova]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           matrix.platform == 'ova'
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -221,7 +221,7 @@ jobs:
 
       - name: Upload build snapshot [oci]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -235,7 +235,7 @@ jobs:
 
       - name: Upload build snapshot checksum [oci]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -249,7 +249,7 @@ jobs:
 
       - name: Upload build snapshot [lxc]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -263,7 +263,7 @@ jobs:
 
       - name: Upload build snapshot checksum [lxc]
         if: |
-          github.repository_owner == 'jens-maus' &&
+          github.repository_owner == 'OpenCCU' &&
           startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.2.0
         with:
@@ -370,7 +370,7 @@ jobs:
       - name: Build OCI tags
         shell: bash
         run: |
-          BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
+          BASE_TAG="ghcr.io/${{ github.repository_owner }}/openccu"
           UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
           if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]]; then
             BRANCH="${GITHUB_REF##*/}"
@@ -409,7 +409,7 @@ jobs:
             org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
             org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
@@ -429,7 +429,7 @@ jobs:
             org.opencontainers.image.vendor=OpenCCU OpenSource Project
             org.opencontainers.image.authors=OpenCCU OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.url=https://openccu.de
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
             org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
@@ -470,7 +470,7 @@ jobs:
         uses: actions/attest-build-provenance@v3
         id: attest
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/raspberrymatic
+          subject-name: ghcr.io/${{ github.repository_owner }}/openccu
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: true
 
@@ -587,7 +587,7 @@ jobs:
           account: user
           token: ${{ secrets.CR_PAT }}
           cut-off: 4w
-          image-names: raspberrymatic
+          image-names: openccu
           image-tags: "*-???????"
           tag-selection: tagged
           keep-n-most-recent: 5

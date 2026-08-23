@@ -45,7 +45,8 @@ OPENCCU_BASE_RF_PROTOCOL=HM_HMIP
 endif
 
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
-	cp -a $(@D)/buildroot-rootfs/. $(TARGET_DIR)/
+
+	cp -a $(OPENCCU_BASE_PKGDIR)/rootfs-overlay/. $(TARGET_DIR)/
 
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
 	for file in ReGaHss SetInterfaceClock crypttool eq3configcmd eq3configd hs485d hs485dLoader hss_led multimacd rfd ssdpd; do \
@@ -127,7 +128,7 @@ define OPENCCU_BASE_FINALIZE_TARGET
 	ln -snf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
 
 	# fix permissions
-	chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc
+	if [ -e $(TARGET_DIR)/www/config/fileupload.ccc ]; then chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc; fi
 
 	# remove obsolete init.d jobs
 	rm -f $(TARGET_DIR)/etc/init.d/S01logging
@@ -175,7 +176,9 @@ define OPENCCU_BASE_FINALIZE_TARGET
 		--jar-license-info=$(@D)/ESHBridge.jar-JARLICENSEINFO.txt \
 		--output=$(TARGET_DIR)/www/rega/licenseinfo.htm
 endef
+ifeq ($(BR2_PACKAGE_OCCU),y)
 TARGET_FINALIZE_HOOKS += OPENCCU_BASE_FINALIZE_TARGET
+endif
 
 define OPENCCU_BASE_USERS
 	-      -1 hm     -1 * - - -      homematic access group

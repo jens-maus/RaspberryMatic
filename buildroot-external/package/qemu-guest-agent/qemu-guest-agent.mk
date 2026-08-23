@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-QEMU_GUEST_AGENT_VERSION = 11.0.3
+QEMU_GUEST_AGENT_VERSION = 11.1.0
 QEMU_GUEST_AGENT_SOURCE = qemu-$(QEMU_GUEST_AGENT_VERSION).tar.xz
 QEMU_GUEST_AGENT_SITE = https://download.qemu.org
 QEMU_GUEST_AGENT_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
@@ -90,7 +90,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-bzip2 \
 			--disable-seccomp \
 			--disable-coroutine-pool \
-			--disable-glusterfs \
 			--disable-tpm \
 			--disable-numa \
 			--disable-capstone \

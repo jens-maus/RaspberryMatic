@@ -4,13 +4,13 @@
 #
 ################################################################################
 
-OPENCCU_BASE_VERSION = 288e258c3c0802cf740a0b1e273960bf3ae816f1
+OPENCCU_BASE_VERSION = 2c540daf0fcaa03f6ee966ff7fcfbd1d05f3018a
 OPENCCU_BASE_COMPAT_VERSION = 3.89.8
 OPENCCU_BASE_SITE = https://github.com/OpenCCU/OpenCCU-Base
 OPENCCU_BASE_SITE_METHOD = git
 OPENCCU_BASE_LICENSE = HMSL-2.0 and mixed
 OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md
-OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text
+OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text libusb host-libusb
 OPENCCU_BASE_BUILD_TARGET = package
 
 OPENCCU_BASE_CONF_OPTS = \
@@ -46,35 +46,47 @@ endif
 
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
 
-	cp -a $(OPENCCU_BASE_PKGDIR)/rootfs-overlay/. $(TARGET_DIR)/
+	# override stuff via rootfs-overlay
+	cp -av $(OPENCCU_BASE_PKGDIR)/rootfs-overlay/. $(TARGET_DIR)/
 
+	# generate /bin
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
-	for file in ReGaHss SetInterfaceClock crypttool eq3configcmd eq3configd hs485d hs485dLoader hss_led multimacd rfd ssdpd; do \
-		if [ -f "$(@D)/bin/$(OPENCCU_BASE_TARGET_PLATFORM)/$$file" ]; then \
-			$(INSTALL) -m 0755 "$(@D)/bin/$(OPENCCU_BASE_TARGET_PLATFORM)/$$file" "$(TARGET_DIR)/bin/$$file"; \
-		fi; \
+
+	# collect own compiled binaries from $(@D)/buildroot-rootfs/bin
+	for file in SetInterfaceClock crypttool eq3configcmd eq3configd hs485d hs485dLoader hss_led multimacd rfd ssdpd; do \
+		$(INSTALL) -m 0755 "$(@D)/buildroot-rootfs/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
+	done
+	# collect some pre-compiled scripts/bins from $(@D)/bin
+	for file in hm_autoconf hm_deldev hm_startup; do \
+		$(INSTALL) -m 0755 "$(@D)/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
+	done
+	# collect some pre-compiled binaries from $(@D)/bin/$(OPENCCU_BASE_TARGET_PLATFORM)
+	for file in ReGaHss; do \
+		$(INSTALL) -m 0755 "$(@D)/bin/$(OPENCCU_BASE_TARGET_PLATFORM)/$$file" "$(TARGET_DIR)/bin/$$file"; \
 	done
 
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/$(BR2_ROOTFS_LIB_DIR)
+	# generate /lib
+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
+
+	# collect own compiled libraries from $(@D)/buildroot-rootfs/lib
 	for lib in libLanDeviceUtils.so libUnifiedLanComm.so libXmlRpc.so libelvutils.so libeq3config.so libhsscomm.so libxmlparser.so; do \
-		if [ -f "$(@D)/lib/$(OPENCCU_BASE_TARGET_PLATFORM)/$$lib" ]; then \
-			$(INSTALL) -m 0644 "$(@D)/lib/$(OPENCCU_BASE_TARGET_PLATFORM)/$$lib" "$(TARGET_DIR)/$(BR2_ROOTFS_LIB_DIR)/$$lib"; \
-		fi; \
+		$(INSTALL) -m 0644 "$(@D)/buildroot-rootfs/lib/$$lib" "$(TARGET_DIR)/lib/$$lib"; \
 	done
 
-	if [ -d "$(@D)/usr/lib/tcl8.6/homematic" ]; then \
-		cp -a "$(@D)/usr/lib/tcl8.6/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"; \
-	fi
+	# copy homematic tcl package to target dir
+	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"; \
 
-	cp -a $(@D)/etc/. $(TARGET_DIR)/etc/
-	cp -a $(@D)/firmware/. $(TARGET_DIR)/firmware/
-	cp -a $(@D)/opt/. $(TARGET_DIR)/opt/
-	cp -a $(@D)/usr/. $(TARGET_DIR)/usr/
-	cp -a $(@D)/www/. $(TARGET_DIR)/www/
+	# copy all all static stuff from main directory
+	cp -av $(@D)/etc/. $(TARGET_DIR)/etc/
+	cp -av $(@D)/firmware/. $(TARGET_DIR)/firmware/
+	cp -av $(@D)/opt/. $(TARGET_DIR)/opt/
+	cp -av $(@D)/www/. $(TARGET_DIR)/www/
 
+	# link EULA.{de,en} to /www/rega
 	ln -snf /tmp/EULA.de $(TARGET_DIR)/www/rega/EULA.de
 	ln -snf /tmp/EULA.en $(TARGET_DIR)/www/rega/EULA.en
 
+	# patch XXX-WEBUI-VERSION-XXX and XXX-PRODUCT-XXX templates
 	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g' || true
 	grep -rl 'XXX-PRODUCT-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-PRODUCT-XXX/$(PRODUCT)/g' || true
 endef
@@ -128,7 +140,7 @@ define OPENCCU_BASE_FINALIZE_TARGET
 	ln -snf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
 
 	# fix permissions
-	if [ -e $(TARGET_DIR)/www/config/fileupload.ccc ]; then chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc; fi
+	chmod 755 $(TARGET_DIR)/www/config/fileupload.ccc
 
 	# remove obsolete init.d jobs
 	rm -f $(TARGET_DIR)/etc/init.d/S01logging
@@ -176,7 +188,7 @@ define OPENCCU_BASE_FINALIZE_TARGET
 		--jar-license-info=$(@D)/ESHBridge.jar-JARLICENSEINFO.txt \
 		--output=$(TARGET_DIR)/www/rega/licenseinfo.htm
 endef
-ifeq ($(BR2_PACKAGE_OCCU),y)
+ifeq ($(BR2_PACKAGE_OPENCCU_BASE),y)
 TARGET_FINALIZE_HOOKS += OPENCCU_BASE_FINALIZE_TARGET
 endif
 

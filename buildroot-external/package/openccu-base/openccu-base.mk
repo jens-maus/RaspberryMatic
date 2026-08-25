@@ -74,7 +74,7 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	done
 
 	# copy homematic tcl package to target dir
-	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"; \
+	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"
 
 	# copy all all static stuff from main directory
 	cp -av $(@D)/etc/. $(TARGET_DIR)/etc/

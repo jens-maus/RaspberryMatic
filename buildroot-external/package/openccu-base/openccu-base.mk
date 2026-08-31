@@ -47,7 +47,7 @@ endif
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
 
 	# override stuff via rootfs-overlay
-	cp -av $(OPENCCU_BASE_PKGDIR)/rootfs-overlay/. $(TARGET_DIR)/
+	cp -av "$(OPENCCU_BASE_PKGDIR)/rootfs-overlay/." "$(TARGET_DIR)/"
 
 	# generate /bin
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
@@ -73,23 +73,29 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 		$(INSTALL) -m 0644 "$(@D)/build/rootfs/lib/$$lib" "$(TARGET_DIR)/lib/$$lib"; \
 	done
 
-	# generate /www
+	# collect own compiled WebUI from $(@D)/build/rootfs/www
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/www
-
-	# collect own compiled www from $(@D)/build/rootfs/www
-	cp -av $(@D)/build/rootfs/www/. $(TARGET_DIR)/www/
+	cp -av "$(@D)/build/rootfs/www/." "$(TARGET_DIR)/www/"
 
 	# copy homematic tcl package to target dir
-	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"
+	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/usr/lib/tcl8.6/homematic"
+	cp -av "$(@D)/build/rootfs/usr/lib/tcl8.2/homematic/." \
+		"$(TARGET_DIR)/usr/lib/tcl8.6/homematic/"
 
-	# copy all all static stuff from main directory
-	cp -av $(@D)/etc/. $(TARGET_DIR)/etc/
-	cp -av $(@D)/firmware/. $(TARGET_DIR)/firmware/
-	cp -av $(@D)/opt/. $(TARGET_DIR)/opt/
+	# copy all static /etc stuff from main and build directory
+	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/etc"
+	cp -av "$(@D)/etc/." "$(TARGET_DIR)/etc/"
+	cp -av "$(@D)/build/rootfs/etc/." "$(TARGET_DIR)/etc/"
 
-	# link EULA.{de,en} to /www/rega
-	ln -snf /tmp/EULA.de $(TARGET_DIR)/www/rega/EULA.de
-	ln -snf /tmp/EULA.en $(TARGET_DIR)/www/rega/EULA.en
+	# copy all static /firmware stuff from main and build directory
+	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/firmware"
+	cp -av "$(@D)/firmware/." "$(TARGET_DIR)/firmware/"
+	cp -av "$(@D)/build/rootfs/firmware/." "$(TARGET_DIR)/firmware/"
+
+	# copy all static /opt stuff from main and build directory
+	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/opt"
+	cp -av "$(@D)/opt/." "$(TARGET_DIR)/opt/"
+	cp -av "$(@D)/build/rootfs/opt/." "$(TARGET_DIR)/opt/"
 
 	# patch XXX-WEBUI-VERSION-XXX and XXX-PRODUCT-XXX templates
 	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g' || true

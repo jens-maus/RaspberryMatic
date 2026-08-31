@@ -77,7 +77,7 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/www
 
 	# collect own compiled www from $(@D)/build/rootfs/www
-	cp -av "$(@D)/build/rootfs/www/. $(TARGET_DIR)/www/
+	cp -av $(@D)/build/rootfs/www/. $(TARGET_DIR)/www/
 
 	# copy homematic tcl package to target dir
 	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"

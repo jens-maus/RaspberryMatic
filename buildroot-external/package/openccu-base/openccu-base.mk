@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OPENCCU_BASE_VERSION = 2c540daf0fcaa03f6ee966ff7fcfbd1d05f3018a
+OPENCCU_BASE_VERSION = bde93606c6c52a3c9dafea65f5abf6c13afc20e4
 OPENCCU_BASE_COMPAT_VERSION = 3.89.8
 OPENCCU_BASE_SITE = https://github.com/OpenCCU/OpenCCU-Base
 OPENCCU_BASE_SITE_METHOD = git
@@ -18,7 +18,7 @@ OPENCCU_BASE_CONF_OPTS = \
 	-DBUILD_TCL_MODULES=ON \
 	-DBUILD_WEBUI_AND_DEVICETYPES=ON \
 	-DHAS_USB_SUPPORT=ON \
-	-DROOTFS_DIR=$(@D)/buildroot-rootfs
+	-DROOTFS_DIR=$(@D)/build/rootfs
 
 ifeq ($(BR2_aarch64),y)
 OPENCCU_BASE_TARGET_PLATFORM = aarch64-linux-gnu
@@ -52,9 +52,9 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	# generate /bin
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
 
-	# collect own compiled binaries from $(@D)/buildroot-rootfs/bin
+	# collect own compiled binaries from $(@D)/build/rootfs/bin
 	for file in SetInterfaceClock crypttool eq3configcmd eq3configd hs485d hs485dLoader hss_led multimacd rfd ssdpd; do \
-		$(INSTALL) -m 0755 "$(@D)/buildroot-rootfs/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
+		$(INSTALL) -m 0755 "$(@D)/build/rootfs/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
 	done
 	# collect some pre-compiled scripts/bins from $(@D)/bin
 	for file in hm_autoconf hm_deldev hm_startup; do \
@@ -68,10 +68,16 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	# generate /lib
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
 
-	# collect own compiled libraries from $(@D)/buildroot-rootfs/lib
+	# collect own compiled libraries from $(@D)/build/rootfs/lib
 	for lib in libLanDeviceUtils.so libUnifiedLanComm.so libXmlRpc.so libelvutils.so libeq3config.so libhsscomm.so libxmlparser.so; do \
-		$(INSTALL) -m 0644 "$(@D)/buildroot-rootfs/lib/$$lib" "$(TARGET_DIR)/lib/$$lib"; \
+		$(INSTALL) -m 0644 "$(@D)/build/rootfs/lib/$$lib" "$(TARGET_DIR)/lib/$$lib"; \
 	done
+
+	# generate /www
+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/www
+
+	# collect own compiled www from $(@D)/build/rootfs/www
+	cp -av "$(@D)/build/rootfs/www/. $(TARGET_DIR)/www/
 
 	# copy homematic tcl package to target dir
 	cp -av "$(@D)/usr/lib/tcl8.2/homematic" "$(TARGET_DIR)/usr/lib/tcl8.6/"
@@ -80,7 +86,6 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	cp -av $(@D)/etc/. $(TARGET_DIR)/etc/
 	cp -av $(@D)/firmware/. $(TARGET_DIR)/firmware/
 	cp -av $(@D)/opt/. $(TARGET_DIR)/opt/
-	cp -av $(@D)/www/. $(TARGET_DIR)/www/
 
 	# link EULA.{de,en} to /www/rega
 	ln -snf /tmp/EULA.de $(TARGET_DIR)/www/rega/EULA.de

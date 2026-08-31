@@ -2,6 +2,7 @@ import os
 import hashlib
 
 def buildCommonLicensesDict():
+    """Return normalized content hashes for the bundled common licenses."""
     commonLicensesDict = {}
     commonLicensesDir = os.path.join(os.path.dirname(__file__), 'common-licenses')
     if os.path.exists(commonLicensesDir):
@@ -16,6 +17,7 @@ def buildCommonLicensesDict():
     return commonLicensesDict
 
 def checkCommonLicenses(licenseText, commonLicensesDict):
+    """Return the common-license name matching the supplied text, if any."""
     licenseTextNoWhitespace = ''.join(licenseText.split()).encode('utf-8')
     licenseHash = hashlib.sha256(licenseTextNoWhitespace).hexdigest()
     for licName, licHash in commonLicensesDict.items():

@@ -28,12 +28,15 @@ log = logging.getLogger(__name__)
 OUTPUT_ENCODING = 'iso-8859-1'
 
 def html_text(value):
+    """Escape a value for use as HTML text."""
     return html.escape(str(value), quote=False)
 
 def html_attr(value):
+    """Escape a value for use in an HTML attribute."""
     return html.escape(str(value), quote=True)
 
 def parse_args():
+    """Parse command-line arguments for license page generation."""
     parser = argparse.ArgumentParser(description='Create LICENSE.html from manifest.csv and license information created by buildroot "make legal-info" command.')
     parser.add_argument('--build-dir', required=True, type=str, default='', help='Path to build dir. For example: build-generic-x86_64')
     parser.add_argument('--output', type=str, default='license.html', help='Path to output LICENSE.html file.')
@@ -41,6 +44,7 @@ def parse_args():
     return parser.parse_args()
 
 def parseManfifest(manifest_path):
+    """Read Buildroot's legal-info manifest and return its package rows."""
     entries = []
     with open(manifest_path, 'r', encoding='utf-8', newline='') as f:
         # use csv.DictReader to properly parse CSV with quoted values
@@ -51,6 +55,7 @@ def parseManfifest(manifest_path):
     return entries
 
 def getLicenseTexts(packageSubdir):
+    """Render the license files for one Buildroot package as escaped HTML."""
     global log
     log.info(f'Looking for license files in {packageSubdir}...')
     licenseText = ''
@@ -74,6 +79,7 @@ def getLicenseTexts(packageSubdir):
     return licenseText          
 
 def main():
+    """Generate the combined package and JAR license information page."""
     args = parse_args()
     global log
     logFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'createLicenseHtml.log')

@@ -9,9 +9,17 @@ OPENCCU_BASE_COMPAT_VERSION = 3.89.8
 OPENCCU_BASE_SITE = https://github.com/OpenCCU/OpenCCU-Base
 OPENCCU_BASE_SITE_METHOD = git
 OPENCCU_BASE_LICENSE = HMSL-2.0 and mixed
-OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md
+OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md licenses/HMSL2.txt \
+	licenses/gpl-2.0.txt licenses/lgpl-2.1.txt
 OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text libusb host-libusb
 OPENCCU_BASE_BUILD_OPTS = --target package
+
+# The upstream file uses CRLF, while the local security patch is kept as a
+# normal LF-only Buildroot patch. Normalize it before the patch phase.
+define OPENCCU_BASE_NORMALIZE_REGA_TCL
+	LC_ALL=C $(SED) 's/\r$$//' $(@D)/src/webui/www/tcl/eq3/rega.tcl
+endef
+OPENCCU_BASE_POST_EXTRACT_HOOKS += OPENCCU_BASE_NORMALIZE_REGA_TCL
 
 OPENCCU_BASE_CONF_OPTS = \
 	-DDEPLOY_TO_REPO=OFF \
@@ -31,18 +39,6 @@ endif
 OPENCCU_BASE_CONF_OPTS += \
 	-DTARGET_PLATFORM=$(OPENCCU_BASE_TARGET_PLATFORM) \
 	-DCROSS_PREFIX=$(TARGET_CROSS)
-
-ifeq ($(BR2_PACKAGE_OPENCCU_BASE_RF_PROTOCOL_HM_ONLY),y)
-OPENCCU_BASE_RF_PROTOCOL=HM
-endif
-
-ifeq ($(BR2_PACKAGE_OPENCCU_BASE_RF_PROTOCOL_HMIP_ONLY),y)
-OPENCCU_BASE_RF_PROTOCOL=HMIP
-endif
-
-ifeq ($(BR2_PACKAGE_OPENCCU_BASE_RF_PROTOCOL_HM_HMIP),y)
-OPENCCU_BASE_RF_PROTOCOL=HM_HMIP
-endif
 
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
 

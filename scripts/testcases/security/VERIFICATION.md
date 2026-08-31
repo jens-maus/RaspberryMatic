@@ -1,4 +1,4 @@
-# Verification — GHSA-c45w-fgwq-mvq4 / patch 0207-WebUI-Fix-ReGaScriptInjection
+# Verification — GHSA-c45w-fgwq-mvq4 / OpenCCU-Base package patch
 
 How we ensured the fix actually closes the vulnerability, without building a
 full firmware image. Three independent layers, each reproducible.
@@ -19,7 +19,7 @@ and `rega_escape`, plus the *old* (vulnerable) escaper, and asserts the
 invariant above against quote/backslash payloads.
 
 ```text
-$ tclsh tests/security/rega_script_injection_test.tcl
+$ tclsh scripts/testcases/security/rega_script_injection_test.tcl
 ... 22 assertions ...
 ALL TESTS PASSED   (exit 0)
 ```
@@ -56,13 +56,12 @@ the would-be payload is just data.
 
 ## Layer 3 — patch hygiene
 
-- `.orig` files are pristine upstream — byte-identical to the four target files
-  in the currently-pinned OCCU (`3.89.2-1`; these files are unchanged since
-  `3.87.6-3`, where this was first verified); no other patch in
-  `buildroot-external/package/openccu-base/*.patch` (if present) must still apply cleanly, so the base selection remains correct.
-- `patch -p1 --dry-run` applies cleanly against the pinned occu tree.
-- The committed `.patch` matches `create_patches.sh` output (keeps CI
-  `git diff --exit-code` green).
+- `buildroot-external/package/openccu-base/0001-WebUI-Fix-ReGaScriptInjection.patch`
+  applies with `patch -p1` to the exact OpenCCU-Base commit pinned by
+  `OPENCCU_BASE_VERSION` in `openccu-base.mk`.
+- `patch -p1 --dry-run` applies cleanly against that pinned OpenCCU-Base tree.
+- Buildroot's normal package patch phase applies the committed patch before
+  CMake generates the WebUI assets.
 - All 4 edited Tcl files pass `info complete` (brace balance).
 
 ## Layer 4 — functional regression on the live WebUI (does legit `\` still work?)
@@ -99,6 +98,6 @@ so escaper-doubling and parser-halving cancel) and neutralizes the injection.
 ## Reproduce
 
 ```sh
-tclsh tests/security/rega_script_injection_test.tcl     # layer 1
+tclsh scripts/testcases/security/rega_script_injection_test.tcl  # layer 1
 # layer 2: run the two scripts above via any ReGa runner (rega.exe / tclrega)
 ```

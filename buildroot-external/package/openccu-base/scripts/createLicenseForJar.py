@@ -27,6 +27,7 @@ commonLicenses = {}
 log = logging.getLogger(__name__)
 
 def parse_args():
+    """Parse command-line arguments for JAR license extraction."""
     parser = argparse.ArgumentParser(
         description=(
             'Extract license information from HMIPServer/HMServer/'
@@ -62,6 +63,7 @@ def parse_args():
     return parser.parse_args()
 
 def getLicenseInfoFromJarFile(jarFilePath):
+    """Return third-party notices and unique license texts from a JAR."""
     global log
     global commonLicenses
     if os.path.exists(jarFilePath):
@@ -104,6 +106,7 @@ def getLicenseInfoFromJarFile(jarFilePath):
     return None, None
 
 def main():
+    """Extract license information from the requested JAR into a text file."""
     args = parse_args()
 
     outputFilePath = args.output if args.output else os.path.join(args.packagedir, args.jarfile + '-JARLICENSEINFO.txt')

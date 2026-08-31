@@ -11,7 +11,7 @@ OPENCCU_BASE_SITE_METHOD = git
 OPENCCU_BASE_LICENSE = HMSL-2.0 and mixed
 OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md
 OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text libusb host-libusb
-OPENCCU_BASE_BUILD_TARGET = package
+OPENCCU_BASE_BUILD_OPTS = --target package
 
 OPENCCU_BASE_CONF_OPTS = \
 	-DDEPLOY_TO_REPO=OFF \

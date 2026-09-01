@@ -13,13 +13,9 @@ OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md licenses/HMSL2.txt \
 	licenses/gpl-2.0.txt licenses/lgpl-2.1.txt
 OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text libusb host-libusb
 OPENCCU_BASE_BUILD_OPTS = --target package
-
-# The upstream file uses CRLF, while the local security patch is kept as a
-# normal LF-only Buildroot patch. Normalize it before the patch phase.
-define OPENCCU_BASE_NORMALIZE_REGA_TCL
-	LC_ALL=C $(SED) 's/\r$$//' $(@D)/src/webui/www/tcl/eq3/rega.tcl
-endef
-OPENCCU_BASE_POST_EXTRACT_HOOKS += OPENCCU_BASE_NORMALIZE_REGA_TCL
+OPENCCU_BASE_ROOTFS_PATCH_DIR = \
+	$(OPENCCU_BASE_PKGDIR)/rootfs-patches
+OPENCCU_BASE_ENABLE_ROOTFS_PATCHING ?= YES
 
 OPENCCU_BASE_CONF_OPTS = \
 	-DDEPLOY_TO_REPO=OFF \
@@ -40,6 +36,53 @@ OPENCCU_BASE_CONF_OPTS += \
 	-DTARGET_PLATFORM=$(OPENCCU_BASE_TARGET_PLATFORM) \
 	-DCROSS_PREFIX=$(TARGET_CROSS)
 
+# Keep build/rootfs as the canonical, pristine input for the post-build patch
+# series. Do not remove the complete staging directory here: incremental CMake
+# builds do not necessarily re-stage binaries and libraries that are already
+# up to date.
+define OPENCCU_BASE_PREPARE_ROOTFS_PATCH_INPUTS
+	rm -rf \
+		"$(@D)/build/rootfs/www" \
+		"$(@D)/build/rootfs/opt" \
+		"$(@D)/build/rootfs/firmware" \
+		"$(@D)/build/rootfs/usr/lib/tcl8.2/homematic"
+	rm -f \
+		"$(@D)/build/rootfs/bin/hm_autoconf" \
+		"$(@D)/build/rootfs/bin/hm_deldev" \
+		"$(@D)/build/rootfs/bin/hm_startup" \
+		"$(@D)/build/rootfs/.applied_patches_list"
+	$(INSTALL) -d -m 0755 "$(@D)/build/rootfs/bin"
+	for file in hm_autoconf hm_deldev hm_startup; do \
+		$(INSTALL) -m 0755 "$(@D)/bin/$$file" \
+			"$(@D)/build/rootfs/bin/$$file"; \
+	done
+	$(INSTALL) -d -m 0755 "$(@D)/build/rootfs/firmware"
+	cp -a "$(@D)/firmware/." "$(@D)/build/rootfs/firmware/"
+endef
+OPENCCU_BASE_PRE_BUILD_HOOKS += OPENCCU_BASE_PREPARE_ROOTFS_PATCH_INPUTS
+
+# Apply the OpenCCU rootfs patch stack after CMake has generated the WebUI and
+# device types, but before any files are installed into TARGET_DIR.
+define OPENCCU_BASE_APPLY_ROOTFS_PATCHES
+	test -s "$(@D)/build/rootfs/www/webui/webui.js"
+	test -s "$(@D)/build/rootfs/www/webui/style.css"
+	test -s "$(@D)/build/rootfs/www/config/st_values.cgi"
+	test -s "$(@D)/build/rootfs/opt/HMServer/pages/AvailableFirmware.ftl"
+	test -s "$(@D)/build/rootfs/bin/hm_autoconf"
+	test -s "$(@D)/build/rootfs/usr/lib/tcl8.2/homematic/homematic.tcl"
+	# Legacy patches expect the generated template strings at the beginning of
+	# webui.js to be split into individual lines.
+	$(SHELL) "$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/prepare_patch_input.sh" \
+		"$(@D)/build/rootfs"
+	rm -f "$(@D)/build/rootfs/.applied_patches_list"
+	$(APPLY_PATCHES) "$(@D)/build/rootfs" \
+		"$(OPENCCU_BASE_ROOTFS_PATCH_DIR)" \*.patch
+	rm -f "$(@D)/build/rootfs/.applied_patches_list"
+endef
+ifeq ($(OPENCCU_BASE_ENABLE_ROOTFS_PATCHING),YES)
+OPENCCU_BASE_POST_BUILD_HOOKS += OPENCCU_BASE_APPLY_ROOTFS_PATCHES
+endif
+
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
 
 	# override stuff via rootfs-overlay
@@ -52,9 +95,9 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	for file in SetInterfaceClock crypttool eq3configcmd eq3configd hs485d hs485dLoader hss_led multimacd rfd ssdpd; do \
 		$(INSTALL) -m 0755 "$(@D)/build/rootfs/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
 	done
-	# collect some pre-compiled scripts/bins from $(@D)/bin
+	# collect staged scripts/bins from $(@D)/build/rootfs/bin
 	for file in hm_autoconf hm_deldev hm_startup; do \
-		$(INSTALL) -m 0755 "$(@D)/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
+		$(INSTALL) -m 0755 "$(@D)/build/rootfs/bin/$$file" "$(TARGET_DIR)/bin/$$file"; \
 	done
 	# collect some pre-compiled binaries from $(@D)/bin/$(OPENCCU_BASE_TARGET_PLATFORM)
 	for file in ReGaHss; do \
@@ -83,14 +126,12 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	cp -av "$(@D)/etc/." "$(TARGET_DIR)/etc/"
 	cp -av "$(@D)/build/rootfs/etc/." "$(TARGET_DIR)/etc/"
 
-	# copy all static /firmware stuff from main and build directory
+	# copy the complete staged /firmware tree
 	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/firmware"
-	cp -av "$(@D)/firmware/." "$(TARGET_DIR)/firmware/"
 	cp -av "$(@D)/build/rootfs/firmware/." "$(TARGET_DIR)/firmware/"
 
-	# copy all static /opt stuff from main and build directory
+	# copy the complete staged /opt tree
 	$(INSTALL) -d -m 0755 "$(TARGET_DIR)/opt"
-	cp -av "$(@D)/opt/." "$(TARGET_DIR)/opt/"
 	cp -av "$(@D)/build/rootfs/opt/." "$(TARGET_DIR)/opt/"
 
 	# patch XXX-WEBUI-VERSION-XXX and XXX-PRODUCT-XXX templates

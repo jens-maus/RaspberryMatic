@@ -77,16 +77,12 @@ define OPENCCU_BASE_APPLY_ROOTFS_PATCHES
 	rm -f "$(@D)/build/rootfs/.applied_patches_list"
 	$(APPLY_PATCHES) "$(@D)/build/rootfs" \
 		"$(OPENCCU_BASE_ROOTFS_PATCH_DIR)" \*.patch
-	rm -f "$(@D)/build/rootfs/.applied_patches_list"
 endef
 ifeq ($(OPENCCU_BASE_ENABLE_ROOTFS_PATCHING),YES)
 OPENCCU_BASE_POST_BUILD_HOOKS += OPENCCU_BASE_APPLY_ROOTFS_PATCHES
 endif
 
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
-
-	# override stuff via rootfs-overlay
-	cp -av "$(OPENCCU_BASE_PKGDIR)/rootfs-overlay/." "$(TARGET_DIR)/"
 
 	# generate /bin
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin

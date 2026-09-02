@@ -14,7 +14,7 @@
  CCU.getSerial {
    LEVEL ADMIN
    SCRIPT_FILE ccu/getserial.tcl
---- a/www/api/methods/recoverymode/enter.tcl
+--- /dev/null
 +++ b/www/api/methods/recoverymode/enter.tcl
 @@ -0,0 +1,23 @@
 +##

@@ -4,14 +4,15 @@
 #
 ################################################################################
 
-OPENCCU_BASE_VERSION = bde93606c6c52a3c9dafea65f5abf6c13afc20e4
+OPENCCU_BASE_VERSION = 662592ebc65a6c8ff5375c1b2299c5a7e4c3cfcc
 OPENCCU_BASE_COMPAT_VERSION = 3.89.8
 OPENCCU_BASE_SITE = https://github.com/OpenCCU/OpenCCU-Base
 OPENCCU_BASE_SITE_METHOD = git
 OPENCCU_BASE_LICENSE = HMSL-2.0 and mixed
 OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md licenses/HMSL2.txt \
 	licenses/gpl-2.0.txt licenses/lgpl-2.1.txt
-OPENCCU_BASE_DEPENDENCIES = host-python3 host-python-html2text libusb host-libusb
+OPENCCU_BASE_DEPENDENCIES = \
+	host-openjdk-bin host-python3 host-python-html2text host-tcl libusb
 OPENCCU_BASE_BUILD_OPTS = --target package
 OPENCCU_BASE_ROOTFS_PATCH_DIR = \
 	$(OPENCCU_BASE_PKGDIR)/rootfs-patches
@@ -22,6 +23,9 @@ OPENCCU_BASE_CONF_OPTS = \
 	-DBUILD_TCL_MODULES=ON \
 	-DBUILD_WEBUI_AND_DEVICETYPES=ON \
 	-DHAS_USB_SUPPORT=ON \
+	-DOPENCCU_JAVA_EXECUTABLE=$(HOST_OPENJDK_BIN_ROOT_DIR)/bin/java \
+	-DOPENCCU_PYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+	-DOPENCCU_TCLSH_EXECUTABLE=$(HOST_DIR)/bin/tclsh8.6 \
 	-DROOTFS_DIR=$(@D)/build/rootfs
 
 ifeq ($(BR2_aarch64),y)
@@ -77,6 +81,9 @@ define OPENCCU_BASE_APPLY_ROOTFS_PATCHES
 	rm -f "$(@D)/build/rootfs/.applied_patches_list"
 	$(APPLY_PATCHES) "$(@D)/build/rootfs" \
 		"$(OPENCCU_BASE_ROOTFS_PATCH_DIR)" \*.patch
+	$(SHELL) "$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/finalize_patch_input.sh" \
+		"$(@D)/build/rootfs"
+	chmod 0755 "$(@D)/build/rootfs/www/config/fileupload.ccc"
 endef
 ifeq ($(OPENCCU_BASE_ENABLE_ROOTFS_PATCHING),YES)
 OPENCCU_BASE_POST_BUILD_HOOKS += OPENCCU_BASE_APPLY_ROOTFS_PATCHES
@@ -104,7 +111,7 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
 
 	# collect own compiled libraries from $(@D)/build/rootfs/lib
-	for lib in libLanDeviceUtils.so libUnifiedLanComm.so libXmlRpc.so libelvutils.so libeq3config.so libhsscomm.so libxmlparser.so; do \
+	for lib in libLanDeviceUtils.so libUnifiedLanComm.so libXmlRpc.so libelvutils.so libeq3config.so libfirewall.tcl libhsscomm.so libxmlparser.so tclrega.so tclrpc.so; do \
 		$(INSTALL) -m 0644 "$(@D)/build/rootfs/lib/$$lib" "$(TARGET_DIR)/lib/$$lib"; \
 	done
 

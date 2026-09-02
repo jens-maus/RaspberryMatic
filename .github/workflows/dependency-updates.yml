@@ -189,6 +189,31 @@ jobs:
           PACKAGE: ${{ steps.metadata.outputs.package }}
         run: |
           echo "patch_warning=false" >>"${GITHUB_OUTPUT}"
+
+          if [[ "${PACKAGE}" == "openccu-base" ]]; then
+            patch_dir=buildroot-external/package/openccu-base/rootfs-patches
+            if ! "${patch_dir}/create_patches.sh" --check \
+              || ! make PRODUCT=rpi3 build-rpi3/.config \
+              || ! make -C build-rpi3 openccu-base-dirclean \
+              || ! make -C build-rpi3 OPENCCU_BASE_ENABLE_ROOTFS_PATCHING=NO openccu-base-build; then
+              echo "::warning::OpenCCU-Base source or generated rootfs patches require an update."
+              echo "patch_warning=true" >>"${GITHUB_OUTPUT}"
+              exit 0
+            fi
+
+            openccu_base_dir=$(find build-rpi3/build -maxdepth 1 -type d \
+              -name 'openccu-base-*' -print -quit)
+            if [[ -z "${openccu_base_dir}" ]] \
+              || ! TCLSH="${PWD}/build-rpi3/host/bin/tclsh8.6" \
+                "${patch_dir}/validate_patches.sh" \
+                "${openccu_base_dir}/build/rootfs" "${openccu_base_dir}"; then
+              echo "::warning::OpenCCU-Base rootfs patch validation failed."
+              echo "patch_warning=true" >>"${GITHUB_OUTPUT}"
+            fi
+            make -C build-rpi3 openccu-base-dirclean
+            exit 0
+          fi
+
           shopt -s nullglob
           package_patch_files=(buildroot-external/package/"${PACKAGE}"/*.patch)
           global_patch_files=(buildroot-external/patches/"${PACKAGE}"/*.patch)

@@ -236,7 +236,7 @@
          append html "</tr>"
        }
 --- a/www/config/easymodes/hmip/hmip-etrv-b1_1_master.tcl
-+++ b/www/config/easymodes/hmip/hmip-etrv-b1_1_master.tcl
++++ /dev/null
 @@ -1,502 +0,0 @@
 -#!/bin/tclsh
 -
@@ -741,7 +741,7 @@
 -
 -constructor
 --- a/www/config/easymodes/hmip/hmip-etrv-b_1_master.tcl
-+++ b/www/config/easymodes/hmip/hmip-etrv-b_1_master.tcl
++++ /dev/null
 @@ -1,502 +0,0 @@
 -#!/bin/tclsh
 -
@@ -1246,7 +1246,7 @@
 -
 -constructor
 --- a/www/config/easymodes/hmip/hmip-etrv-c-2_1_master.tcl
-+++ b/www/config/easymodes/hmip/hmip-etrv-c-2_1_master.tcl
++++ /dev/null
 @@ -1,502 +0,0 @@
 -#!/bin/tclsh
 -
@@ -1751,7 +1751,7 @@
 -
 -constructor
 --- a/www/config/easymodes/hmip/hmip-etrv-c_1_master.tcl
-+++ b/www/config/easymodes/hmip/hmip-etrv-c_1_master.tcl
++++ /dev/null
 @@ -1,502 +0,0 @@
 -#!/bin/tclsh
 -
@@ -2256,7 +2256,7 @@
 -
 -constructor
 --- a/www/config/easymodes/hmip/hmip-etrv-cl_1_master.tcl
-+++ b/www/config/easymodes/hmip/hmip-etrv-cl_1_master.tcl
++++ /dev/null
 @@ -1,502 +0,0 @@
 -#!/bin/tclsh
 -

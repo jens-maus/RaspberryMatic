@@ -54,7 +54,7 @@
  
      <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
      <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
---- a/www/webui/site.webmanifest
+--- /dev/null
 +++ b/www/webui/site.webmanifest
 @@ -0,0 +1,21 @@
 +{

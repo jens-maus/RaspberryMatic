@@ -67,7 +67,7 @@
  
  
  #
---- a/www/api/methods/device/setenabledservicemsg.tcl
+--- /dev/null
 +++ b/www/api/methods/device/setenabledservicemsg.tcl
 @@ -0,0 +1,74 @@
 +##

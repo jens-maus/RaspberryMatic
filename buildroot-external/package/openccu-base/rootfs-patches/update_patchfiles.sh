@@ -321,6 +321,10 @@ apply_rega_injection_fix_semantically() {
   die "usage: ${0##*/} PRISTINE_ROOTFS [OPENCCU_BASE_SOURCE]"
 patch --version 2>/dev/null | grep -q '^GNU patch ' || \
   die "GNU patch is required"
+diff --version 2>/dev/null | grep -q '^diff (GNU diffutils)' || \
+  die "GNU diffutils is required"
+chmod --version 2>/dev/null | grep -q '^chmod (GNU coreutils)' || \
+  die "GNU coreutils is required"
 pristine_rootfs=$(cd "$1" && pwd -P)
 if (($# == 2)); then
   openccu_base_source=$(cd "$2" && pwd -P)

@@ -35,6 +35,9 @@ while IFS= read -r patch_name || [[ -n $patch_name ]]; do
     die "patch does not apply with zero fuzz: $patch_name"
 done <"${script_dir}/series"
 
+"${script_dir}/finalize_patch_input.sh" "$state"
+chmod 0755 "${state}/www/config/fileupload.ccc"
+
 for marker in \
   www/webui/webui.js \
   www/webui/style.css \
@@ -43,6 +46,21 @@ for marker in \
   usr/lib/tcl8.2/homematic/homematic.tcl; do
   [[ -s ${state}/${marker} ]] || die "patched rootfs is missing: $marker"
 done
+
+[[ -x ${state}/www/config/fileupload.ccc ]] || \
+  die "file upload CGI is not executable"
+
+if find "$state" -type f -name '*.rej' -print -quit | grep -q .; then
+  die "patched rootfs contains rejected hunks"
+fi
+
+repo_root=$(cd "${script_dir}/../../../.." && pwd -P)
+tclsh=${TCLSH:-}
+if [[ -z $tclsh ]]; then
+  tclsh=$(command -v tclsh || true)
+fi
+[[ -x $tclsh ]] || die "Tcl interpreter not found; set TCLSH=/absolute/path/to/tclsh"
+"$tclsh" "${repo_root}/scripts/testcases/security/rega_script_injection_test.tcl"
 
 printf 'Validated %s patches against %s\n' \
   "$(grep -Ec '^[^#[:space:]]' "${script_dir}/series")" "$pristine_rootfs"

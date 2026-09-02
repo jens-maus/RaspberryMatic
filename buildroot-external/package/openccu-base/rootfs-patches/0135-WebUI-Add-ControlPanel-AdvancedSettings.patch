@@ -47,7 +47,7 @@
          ];
  
         jQuery.each(helpContainer, function(index, container){
---- a/www/config/cp_advancedsettings.cgi
+--- /dev/null
 +++ b/www/config/cp_advancedsettings.cgi
 @@ -0,0 +1,685 @@
 +#!/bin/tclsh

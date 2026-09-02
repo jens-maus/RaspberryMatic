@@ -14,7 +14,7 @@
  Device.setName {
    LEVEL ADMIN
    SCRIPT_FILE device/setname.tcl
---- a/www/api/methods/device/liststatus.tcl
+--- /dev/null
 +++ b/www/api/methods/device/liststatus.tcl
 @@ -0,0 +1,46 @@
 +##

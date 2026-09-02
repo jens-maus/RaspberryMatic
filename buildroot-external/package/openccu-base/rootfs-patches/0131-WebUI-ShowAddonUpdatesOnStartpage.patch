@@ -14,7 +14,7 @@
  CCU.getVersion {
    LEVEL ADMIN
    SCRIPT_FILE ccu/getversion.tcl
---- a/www/api/methods/ccu/getaddonversions.tcl
+--- /dev/null
 +++ b/www/api/methods/ccu/getaddonversions.tcl
 @@ -0,0 +1,67 @@
 +proc get_info {script array_var} {

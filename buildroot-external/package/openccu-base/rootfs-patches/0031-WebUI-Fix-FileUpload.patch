@@ -361,7 +361,7 @@
  
    if {[session_requestisvalid 8] > 0} then action_$action
  }
---- a/www/config/fileupload.ccc
+--- /dev/null
 +++ b/www/config/fileupload.ccc
 @@ -0,0 +1,109 @@
 +#!/bin/sh

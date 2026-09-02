@@ -81,7 +81,7 @@
  CCU.restartSSHDaemon {
    LEVEL ADMIN
    SCRIPT_FILE ccu/restartsshdaemon.tcl
---- a/www/api/methods/ccu/getsystemlanguage.tcl
+--- /dev/null
 +++ b/www/api/methods/ccu/getsystemlanguage.tcl
 @@ -0,0 +1,21 @@
 +##
@@ -105,7 +105,7 @@
 +}
 +
 +jsonrpc_response [json_toString $lang]
---- a/www/api/methods/ccu/setsystemlanguage.tcl
+--- /dev/null
 +++ b/www/api/methods/ccu/setsystemlanguage.tcl
 @@ -0,0 +1,259 @@
 +##
@@ -367,7 +367,7 @@
 +}
 +
 +jsonrpc_response $result
---- a/www/rega/pages/msg/systemLanguageConfig.htm
+--- /dev/null
 +++ b/www/rega/pages/msg/systemLanguageConfig.htm
 @@ -0,0 +1,62 @@
 +<div class="popupTitle">

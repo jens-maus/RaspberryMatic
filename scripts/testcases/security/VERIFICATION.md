@@ -56,12 +56,14 @@ the would-be payload is just data.
 
 ## Layer 3 — patch hygiene
 
-- `buildroot-external/package/openccu-base/0001-WebUI-Fix-ReGaScriptInjection.patch`
-  applies with `patch -p1` to the exact OpenCCU-Base commit pinned by
+- `rootfs-patches/0207-WebUI-Fix-ReGaScriptInjection.patch` applies to the
+  pristine rootfs generated from the exact OpenCCU-Base commit pinned by
   `OPENCCU_BASE_VERSION` in `openccu-base.mk`.
-- `patch -p1 --dry-run` applies cleanly against that pinned OpenCCU-Base tree.
-- Buildroot's normal package patch phase applies the committed patch before
-  CMake generates the WebUI assets.
+- Buildroot calls `prepare_patch_input.sh`, applies the complete rootfs patch
+  series with zero-fuzz-compatible paths, and calls `finalize_patch_input.sh`
+  before installing the generated WebUI.
+- `rootfs-patches/validate_patches.sh` reproduces that lifecycle, verifies the
+  final rootfs invariants, and runs the Tcl security regression test.
 - All 4 edited Tcl files pass `info complete` (brace balance).
 
 ## Layer 4 — functional regression on the live WebUI (does legit `\` still work?)
@@ -99,5 +101,9 @@ so escaper-doubling and parser-halving cancel) and neutralizes the injection.
 
 ```sh
 tclsh scripts/testcases/security/rega_script_injection_test.tcl  # layer 1
+# full generated-rootfs verification:
+buildroot-external/package/openccu-base/rootfs-patches/validate_patches.sh \
+  /absolute/path/to/pristine/build/rootfs \
+  /absolute/path/to/extracted/OpenCCU-Base
 # layer 2: run the two scripts above via any ReGa runner (rega.exe / tclrega)
 ```

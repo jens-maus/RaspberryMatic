@@ -14,7 +14,7 @@
  Interface.init {
    LEVEL ADMIN
    SCRIPT_FILE interface/dispatch.tcl
---- a/www/api/methods/interface/getdutycycle.tcl
+--- /dev/null
 +++ b/www/api/methods/interface/getdutycycle.tcl
 @@ -0,0 +1,24 @@
 +##

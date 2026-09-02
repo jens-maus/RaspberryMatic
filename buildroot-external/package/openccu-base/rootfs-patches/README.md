@@ -12,6 +12,10 @@ Regenerate after editing a modified file:
 ./create_patches.sh --check
 ```
 
+Patch generation requires Bash 4 or newer and GNU diffutils. Refreshing also
+requires GNU coreutils. Validation requires GNU patch and a Tcl interpreter;
+set `TCLSH` when it is not available as `tclsh` in `PATH`.
+
 Refresh the complete stack for a newer OpenCCU-Base revision using an unpatched
 rootfs generated with `OPENCCU_BASE_ENABLE_ROOTFS_PATCHING=NO`:
 
@@ -25,3 +29,20 @@ The refresh deliberately fails at the first incompatible patch. Resolve that
 patch's semantic change in its modified file, regenerate, and repeat. Do not
 generate patches automatically during a normal Buildroot build; generated
 patches are committed so they remain reproducible and reviewable.
+
+Patches `0125`, `0155`, and `0207` are rebased semantically because their
+generated inputs are unstable across OpenCCU-Base revisions. For these three
+patches the transformations in `update_patchfiles.sh`, together with their
+workspace files, define the desired result. Keep both representations in sync;
+`validate_patches.sh` detects divergence after a refresh.
+
+Non-rootfs maintenance inputs may be kept next to a patch workspace and are
+preserved by `update_patchfiles.sh`. For example, patch `0002` retains its npm
+and Sass metadata below `maintenance/webui`; these files are not emitted into
+the firmware image.
+
+Normal builds call `prepare_patch_input.sh` before applying the series and
+`finalize_patch_input.sh` afterwards. The pair temporarily splits generated
+template strings in `webui.js` for legacy patches and restores valid JavaScript
+before the rootfs is installed. Always use both helpers when applying the stack
+outside Buildroot.

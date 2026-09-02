@@ -107,15 +107,23 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	python3 -c "import flake8" >/dev/null 2>&1 || (echo "Installing missing python dependency: flake8" && python3 -m pip install --user flake8)
 	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
-	@echo "[checking apply patch status: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
+	@echo "[checking generated rootfs patches: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
+	$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches/create_patches.sh --check
+	@echo "[building pristine rootfs: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
 	rm -rf build-$(PRODUCT)/build/openccu-base-*
-	$(MAKE) -C build-$(PRODUCT) openccu-base-patch
-	@echo "[checking clean patch status: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
-	@if ls $(BUILDROOT_EXTERNAL)/package/openccu-base/*.patch >/dev/null 2>&1; then \
-		git diff --exit-code $(BUILDROOT_EXTERNAL)/package/openccu-base/*.patch; \
-	else \
-		echo "No openccu-base package patch files found"; \
-	fi
+	$(MAKE) -C build-$(PRODUCT) OPENCCU_BASE_ENABLE_ROOTFS_PATCHING=NO openccu-base-build
+	@openccu_base_dir=$$(find build-$(PRODUCT)/build -maxdepth 1 -type d \
+		-name 'openccu-base-*' -print -quit); \
+		validation_status=0; \
+		if test -z "$$openccu_base_dir"; then \
+			validation_status=1; \
+		else \
+			TCLSH="$(shell pwd)/build-$(PRODUCT)/host/bin/tclsh8.6" \
+			$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches/validate_patches.sh \
+			"$$openccu_base_dir/build/rootfs" "$$openccu_base_dir" || validation_status=$$?; \
+		fi; \
+		$(MAKE) -C build-$(PRODUCT) openccu-base-dirclean; \
+		exit $$validation_status
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:

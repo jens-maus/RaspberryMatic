@@ -21,6 +21,8 @@ die() {
   exit 1
 }
 
+diff --version 2>/dev/null | grep -q '^diff (GNU diffutils)' || \
+  die "GNU diffutils is required"
 [[ -s ${script_dir}/series ]] || die "missing or empty series file"
 temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/openccu-create-patches.XXXXXX")
 trap 'rm -rf -- "$temp_dir"' EXIT
@@ -50,10 +52,20 @@ while IFS= read -r patch_name || [[ -n $patch_name ]]; do
     relative_path=${orig_file#"${workspace_root}/"}
     relative_path=${relative_path%.orig}
 
+    old_label=a/${relative_path}
+    new_label=b/${relative_path}
+    if [[ ! -s $orig_file && -s $modified_file ]]; then
+      old_label=/dev/null
+    elif [[ -s $orig_file && ! -s $modified_file ]]; then
+      new_label=/dev/null
+    elif [[ ! -s $orig_file && ! -s $modified_file ]]; then
+      die "both counterparts are empty: $relative_path in ${patch_name%.patch}"
+    fi
+
     set +e
     diff -u \
-      --label="a/${relative_path}" \
-      --label="b/${relative_path}" \
+      --label="$old_label" \
+      --label="$new_label" \
       "$orig_file" "$modified_file" >>"$output"
     diff_status=$?
     set -e

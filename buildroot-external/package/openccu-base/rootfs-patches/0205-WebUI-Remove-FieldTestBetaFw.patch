@@ -78,7 +78,7 @@
    LEVEL ADMIN
    SCRIPT_FILE ccu/getauthenabled.tcl
 --- a/www/api/methods/ccu/removeFieldTestActive.tcl
-+++ b/www/api/methods/ccu/removeFieldTestActive.tcl
++++ /dev/null
 @@ -1,22 +0,0 @@
 -##
 -# CCU.removeFieldTestActive

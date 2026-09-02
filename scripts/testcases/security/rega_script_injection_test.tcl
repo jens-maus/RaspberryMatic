@@ -29,7 +29,7 @@
 # quotes, must never contain a character that terminates or escapes the
 # enclosing "..." literal.
 #
-# Run:  tclsh tests/security/rega_script_injection_test.tcl
+# Run:  tclsh scripts/testcases/security/rega_script_injection_test.tcl
 ##
 
 set ::failures 0

@@ -2,7 +2,8 @@
 
 ## Artifact inventory baseline from OCCU package install logic
 
-The previous `/home/runner/work/OpenCCU/OpenCCU/buildroot-external/package/occu/Makefile` installation logic provided these runtime artifact classes:
+The previous `buildroot-external/package/occu/occu.mk` installation logic
+provided these runtime artifact classes:
 
 - **Binaries (`/bin`)**: `SetInterfaceClock`, `crypttool`, `multimacd`, `rfd`, `hs485d`, `hs485dLoader`, `ReGaHss`, `eq3configcmd`, `eq3configd`, `hss_led`, `ssdpd`.
 - **Libraries (`/lib` / architecture lib dir)**: `libLanDeviceUtils.so`, `libUnifiedLanComm.so`, `libelvutils.so`, `libhsscomm.so`, `libeq3config.so`.
@@ -26,9 +27,15 @@ Parity validation should verify at least:
 - **Source-buildable from OpenCCU-Base**:
   - Native daemons/libs produced by CMake (`package` target) and staged rootfs content.
   - Generated WebUI/devicetype assets from `src/webui` + `src/devicetypes`.
-  - Tcl modules built from source (`tclrega`, `tclrpc`, `tclticks`).
+  - Tcl modules built from source (`tclrega`, `tclrpc`).
 - **Binary-only from OpenCCU-Base**:
   - Architecture-pinned payload under `bin/<triple>`, `lib/<triple>`, and selected runtime bundles in `opt/`.
 - **OpenCCU-local overlays/customizations**:
   - Overlay layers in `buildroot-external/overlay/base*`, `buildroot-external/overlay/WebUI*`, and `buildroot-external/overlay/RFD`.
   - Package finalize hooks for OpenCCU-specific symlinks, cleanup behavior, permissions, and license page generation.
+
+## Version maintenance
+
+`scripts/update-openccu-base.sh` updates the pinned OpenCCU-Base source commit.
+`OPENCCU_BASE_COMPAT_VERSION` is the OpenCCU release identity and must be
+reviewed and adjusted manually whenever the imported baseline changes.

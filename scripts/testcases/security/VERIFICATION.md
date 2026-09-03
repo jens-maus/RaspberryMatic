@@ -14,8 +14,9 @@ the PDA interface did no escaping at all.
 
 ## Layer 1 — escaper logic, isolated (`tclsh`)
 
-`rega_script_injection_test.tcl` reproduces the patched `hmscript_escapeString`
-and `rega_escape`, plus the *old* (vulnerable) escaper, and asserts the
+`rega_script_injection_test.tcl` sources the patched `hmscript_escapeString`
+and `rega_escape` from a supplied rootfs (or uses reference implementations in
+standalone mode), includes the *old* vulnerable escaper, and asserts the
 invariant above against quote/backslash payloads.
 
 ```text
@@ -63,7 +64,9 @@ the would-be payload is just data.
   series with zero-fuzz-compatible paths, and calls `finalize_patch_input.sh`
   before installing the generated WebUI.
 - `rootfs-patches/validate_patches.sh` reproduces that lifecycle, verifies the
-  final rootfs invariants, and runs the Tcl security regression test.
+  final rootfs invariants and compatibility symlinks, checks removed files and
+  Tcl syntax, and runs the security regression against the actual patched
+  helper implementations.
 - All 4 edited Tcl files pass `info complete` (brace balance).
 
 ## Layer 4 — functional regression on the live WebUI (does legit `\` still work?)
@@ -100,7 +103,7 @@ so escaper-doubling and parser-halving cancel) and neutralizes the injection.
 ## Reproduce
 
 ```sh
-tclsh scripts/testcases/security/rega_script_injection_test.tcl  # layer 1
+tclsh scripts/testcases/security/rega_script_injection_test.tcl  # standalone layer 1
 # full generated-rootfs verification:
 buildroot-external/package/openccu-base/rootfs-patches/validate_patches.sh \
   /absolute/path/to/pristine/build/rootfs \

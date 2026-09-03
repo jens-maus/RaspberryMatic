@@ -8,11 +8,13 @@ OPENCCU_BASE_VERSION = 662592ebc65a6c8ff5375c1b2299c5a7e4c3cfcc
 OPENCCU_BASE_COMPAT_VERSION = 3.89.8
 OPENCCU_BASE_SITE = https://github.com/OpenCCU/OpenCCU-Base
 OPENCCU_BASE_SITE_METHOD = git
-OPENCCU_BASE_LICENSE = HMSL-2.0 and mixed
+OPENCCU_BASE_LICENSE = HMSL-2.0, Apache-2.0 (WebUI), \
+	GPL-2.0+ (kernel modules), LGPL-2.1 (libraries)
 OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md licenses/HMSL2.txt \
 	licenses/gpl-2.0.txt licenses/lgpl-2.1.txt
 OPENCCU_BASE_DEPENDENCIES = \
-	host-openjdk-bin host-python3 host-python-html2text host-tcl libusb
+	host-openjdk-bin host-pkgconf host-python3 host-python-html2text host-tcl \
+	libusb openssl tcl
 OPENCCU_BASE_BUILD_OPTS = --target package
 OPENCCU_BASE_ROOTFS_PATCH_DIR = \
 	$(OPENCCU_BASE_PKGDIR)/rootfs-patches
@@ -216,27 +218,27 @@ define OPENCCU_BASE_FINALIZE_TARGET
 	$(HOST_DIR)/bin/python3 $(OPENCCU_BASE_PKGDIR)/scripts/createLicenseForJar.py \
 		--packagedir=$(TARGET_DIR)/opt/HMServer \
 		--jarfile=HMIPServer.jar \
-		--output=$(@D)/HMIPServer.jar-JARLICENSEINFO.txt
+		--output=$(OPENCCU_BASE_BUILDDIR)/HMIPServer.jar-JARLICENSEINFO.txt
 	$(HOST_DIR)/bin/python3 $(OPENCCU_BASE_PKGDIR)/scripts/createLicenseForJar.py \
 		--packagedir=$(TARGET_DIR)/opt/HMServer \
 		--jarfile=HMServer.jar \
-		--output=$(@D)/HMServer.jar-JARLICENSEINFO.txt
+		--output=$(OPENCCU_BASE_BUILDDIR)/HMServer.jar-JARLICENSEINFO.txt
 	$(HOST_DIR)/bin/python3 $(OPENCCU_BASE_PKGDIR)/scripts/createLicenseForJar.py \
 		--packagedir=$(TARGET_DIR)/opt/HmIP \
 		--jarfile=hmip-copro-update.jar \
-		--output=$(@D)/hmip-copro-update.jar-JARLICENSEINFO.txt
+		--output=$(OPENCCU_BASE_BUILDDIR)/hmip-copro-update.jar-JARLICENSEINFO.txt
 	$(HOST_DIR)/bin/python3 $(OPENCCU_BASE_PKGDIR)/scripts/createLicenseForJar.py \
 		--packagedir=$(TARGET_DIR)/opt/HMServer/coupling \
 		--jarfile=ESHBridge.jar \
-		--output=$(@D)/ESHBridge.jar-JARLICENSEINFO.txt
+		--output=$(OPENCCU_BASE_BUILDDIR)/ESHBridge.jar-JARLICENSEINFO.txt
 
 	# create licenseinfo.htm
 	$(HOST_DIR)/bin/python3 $(OPENCCU_BASE_PKGDIR)/scripts/createLicenseHtml.py \
 		--build-dir=$(BUILD_DIR)/../ \
-		--jar-license-info=$(@D)/HMIPServer.jar-JARLICENSEINFO.txt \
-		--jar-license-info=$(@D)/HMServer.jar-JARLICENSEINFO.txt \
-		--jar-license-info=$(@D)/hmip-copro-update.jar-JARLICENSEINFO.txt \
-		--jar-license-info=$(@D)/ESHBridge.jar-JARLICENSEINFO.txt \
+		--jar-license-info=$(OPENCCU_BASE_BUILDDIR)/HMIPServer.jar-JARLICENSEINFO.txt \
+		--jar-license-info=$(OPENCCU_BASE_BUILDDIR)/HMServer.jar-JARLICENSEINFO.txt \
+		--jar-license-info=$(OPENCCU_BASE_BUILDDIR)/hmip-copro-update.jar-JARLICENSEINFO.txt \
+		--jar-license-info=$(OPENCCU_BASE_BUILDDIR)/ESHBridge.jar-JARLICENSEINFO.txt \
 		--output=$(TARGET_DIR)/www/rega/licenseinfo.htm
 endef
 ifeq ($(BR2_PACKAGE_OPENCCU_BASE),y)

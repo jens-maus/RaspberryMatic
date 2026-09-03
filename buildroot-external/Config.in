@@ -5,10 +5,6 @@ menu "eQ-3 HomeMatic Services"
   source "$BR2_EXTERNAL_EQ3_PATH/package/openccu-base/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/cloudmatic/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/hmlangw/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/libxmlparser/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/libxmlrpcxx/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/tclrpc/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/tclrega/Config.in"
 endmenu
 
 menu "Kernel Module Support"

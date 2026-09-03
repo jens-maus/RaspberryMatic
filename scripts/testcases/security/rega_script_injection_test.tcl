@@ -27,9 +27,11 @@
 # These tcl-level tests assert the same security invariant without needing a
 # full firmware build: the escaped output, when placed between the surrounding
 # quotes, must never contain a character that terminates or escapes the
-# enclosing "..." literal.
+# enclosing "..." literal. If PATCHED_ROOTFS is supplied, the test sources the
+# helpers from that tree instead of using the reference implementations below.
 #
-# Run:  tclsh scripts/testcases/security/rega_script_injection_test.tcl
+# Run:  tclsh scripts/testcases/security/rega_script_injection_test.tcl \
+#          [PATCHED_ROOTFS]
 ##
 
 set ::failures 0
@@ -50,17 +52,23 @@ proc vuln_hmscript_escape {str} {
         "\'" "\\\'"  "\"" "\\\""  "\n" "\\n"  "\r" "\\r"  "\t" "\\t"
     } $str]
 }
-# fixed -- backslash escaped FIRST
-proc hmscript_escapeString {str} {
-    return [string map {
-        "\\" "\\\\"  "\'" "\\\'"  "\"" "\\\""  "\n" "\\n"  "\r" "\\r"  "\t" "\\t"
-    } $str]
-}
-# fixed rega_escape (the latent twin)
-proc rega_escape {value} {
-    return [string map {
-        "\\" "\\\\"  "\'" "\\\'"  "\"" "\\\""  "\f" "\\\f"  "\t" "\\\t"  "\r" "\\\r"  "\n" "\\\n"
-    } $value]
+set patched_rootfs [lindex $argv 0]
+if {$patched_rootfs eq ""} {
+    # Fixed reference implementations for standalone use.
+    proc hmscript_escapeString {str} {
+        return [string map {
+            "\\" "\\\\"  "\'" "\\\'"  "\"" "\\\""  "\n" "\\n"  "\r" "\\r"  "\t" "\\t"
+        } $str]
+    }
+    proc rega_escape {value} {
+        return [string map {
+            "\\" "\\\\"  "\'" "\\\'"  "\"" "\\\""  "\f" "\\\f"  "\t" "\\\t"  "\r" "\\\r"  "\n" "\\\n"
+        } $value]
+    }
+} else {
+    package provide HomeMatic 1.0
+    source [file join $patched_rootfs www api eq3 hmscript.tcl]
+    source [file join $patched_rootfs www tcl eq3 rega.tcl]
 }
 # already-correct JSON encoder (DOES escape backslash) -- regression guard only,
 # this code was never vulnerable and was NOT changed by the patch.

@@ -20,7 +20,8 @@ endif
 PLATFORM:=$(shell echo -n $(PRODUCT) | sed 's/_\(amd64\|arm.*\)//')
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
-.PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg build-$(PRODUCT)/legal-info
+.PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg \
+	build-$(PRODUCT)/legal-info check-openccu-base
 
 all: help
 
@@ -107,6 +108,9 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	python3 -c "import flake8" >/dev/null 2>&1 || (echo "Installing missing python dependency: flake8" && python3 -m pip install --user flake8)
 	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
+	$(MAKE) PRODUCT=$(PRODUCT) check-openccu-base
+
+check-openccu-base: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking generated rootfs patches: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
 	$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches/create_patches.sh --check
 	@echo "[building pristine rootfs: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"

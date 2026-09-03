@@ -6,11 +6,9 @@
 ':label: OCCU':
   - changed-files:
       - any-glob-to-any-file:
-          - 'buildroot-external/package/occu/**'
+          - 'buildroot-external/package/openccu-base/**'
           - 'buildroot-external/package/hmlangw/**'
           - 'buildroot-external/package/neoserver/**'
-          - 'buildroot-external/package/tclrega/**'
-          - 'buildroot-external/package/tclrpc/**'
           - 'buildroot-external/package/eq3configd/**'
           - 'buildroot-external/package/cloudmatic/**'
           - 'buildroot-external/package/detect_radio_module/**'
@@ -29,7 +27,7 @@
       - any-glob-to-any-file:
           - 'buildroot-external/overlay/WebUI/**'
           - 'buildroot-external/overlay/WebUI-openccu/**'
-          - 'buildroot-external/patches/occu/**'
+          - 'buildroot-external/package/openccu-base/rootfs-patches/**'
 
 ':label: OS':
   - changed-files:

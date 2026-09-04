@@ -39,3 +39,12 @@ Parity validation should verify at least:
 `scripts/update-openccu-base.sh` updates the pinned OpenCCU-Base source commit.
 `OPENCCU_BASE_COMPAT_VERSION` is the OpenCCU release identity and must be
 reviewed and adjusted manually whenever the imported baseline changes.
+
+## 32-bit compatibility libraries
+
+The nested `multilib32` build selects the same `openccu-base` package and
+therefore uses the same pinned source commit as the native build. On 32-bit
+targets the package automatically builds only the OpenCCU-Base
+`compat-libraries` target and installs `libxmlparser.so` and `libXmlRpc.so`.
+The outer `multilib32` package then relocates these libraries from `/lib` to
+`/lib32` together with the other 32-bit runtime libraries.

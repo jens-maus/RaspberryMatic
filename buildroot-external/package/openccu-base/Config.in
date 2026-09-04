@@ -1,22 +1,28 @@
 config BR2_PACKAGE_OPENCCU_BASE
 	bool "OpenCCU Base Services"
-	depends on BR2_aarch64 || BR2_x86_64
+	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_x86_64
 	depends on BR2_USE_MMU
 	depends on BR2_TOOLCHAIN_USES_GLIBC
 	depends on BR2_TOOLCHAIN_HAS_THREADS
 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 	depends on BR2_INSTALL_LIBSTDCPP
 	depends on !BR2_STATIC_LIBS
-	select BR2_PACKAGE_LIBUSB
-	select BR2_PACKAGE_OPENSSL
-	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-	select BR2_PACKAGE_TCL
+	select BR2_PACKAGE_LIBUSB if !BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if !BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
+	select BR2_PACKAGE_TCL if !BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
 	help
 	  OpenCCU base services and runtime assets from OpenCCU-Base,
 	  including BidCos-RF, HmIP, HM Wired, HMServer and the WebUI.
+	  On 32-bit targets, only libxmlparser and libXmlRpc are built for
+	  compatibility with legacy Homematic binaries.
+
+config BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
+	bool
+	default y if BR2_PACKAGE_OPENCCU_BASE && (BR2_arm || BR2_i386)
 
 comment "OpenCCU Base needs a glibc toolchain w/ C++, threads, dynamic library"
-	depends on BR2_aarch64 || BR2_x86_64
+	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_x86_64
 	depends on !BR2_USE_MMU || !BR2_TOOLCHAIN_USES_GLIBC || \
 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
 		!BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS

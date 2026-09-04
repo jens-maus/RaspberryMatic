@@ -30,8 +30,27 @@ OPENCCU_BASE_CONF_OPTS = \
 	-DOPENCCU_TCLSH_EXECUTABLE=$(HOST_DIR)/bin/tclsh8.6 \
 	-DROOTFS_DIR=$(@D)/build/rootfs
 
+ifeq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
+OPENCCU_BASE_DEPENDENCIES =
+OPENCCU_BASE_BUILD_OPTS = --target compat-libraries
+OPENCCU_BASE_CONF_OPTS = \
+	-DDEPLOY_TO_REPO=OFF \
+	-DBUILD_TCL_MODULES=OFF \
+	-DBUILD_WEBUI_AND_DEVICETYPES=OFF \
+	-DHAS_USB_SUPPORT=OFF \
+	-DROOTFS_DIR=$(@D)/build/rootfs
+endif
+
+ifeq ($(BR2_arm),y)
+OPENCCU_BASE_TARGET_PLATFORM = arm-linux-gnueabihf
+endif
+
 ifeq ($(BR2_aarch64),y)
 OPENCCU_BASE_TARGET_PLATFORM = aarch64-linux-gnu
+endif
+
+ifeq ($(BR2_i386),y)
+OPENCCU_BASE_TARGET_PLATFORM = i686-linux-gnu
 endif
 
 ifeq ($(BR2_x86_64),y)
@@ -65,7 +84,9 @@ define OPENCCU_BASE_PREPARE_ROOTFS_PATCH_INPUTS
 	$(INSTALL) -d -m 0755 "$(@D)/build/rootfs/firmware"
 	cp -a "$(@D)/firmware/." "$(@D)/build/rootfs/firmware/"
 endef
+ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 OPENCCU_BASE_PRE_BUILD_HOOKS += OPENCCU_BASE_PREPARE_ROOTFS_PATCH_INPUTS
+endif
 
 # Apply the OpenCCU rootfs patch stack after CMake has generated the WebUI and
 # device types, but before any files are installed into TARGET_DIR.
@@ -88,9 +109,12 @@ define OPENCCU_BASE_APPLY_ROOTFS_PATCHES
 	chmod 0755 "$(@D)/build/rootfs/www/config/fileupload.ccc"
 endef
 ifeq ($(OPENCCU_BASE_ENABLE_ROOTFS_PATCHING),YES)
+ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 OPENCCU_BASE_POST_BUILD_HOOKS += OPENCCU_BASE_APPLY_ROOTFS_PATCHES
 endif
+endif
 
+ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 define OPENCCU_BASE_INSTALL_TARGET_CMDS
 
 	# generate /bin
@@ -143,6 +167,16 @@ define OPENCCU_BASE_INSTALL_TARGET_CMDS
 	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g' || true
 	grep -rl 'XXX-PRODUCT-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-PRODUCT-XXX/$(PRODUCT)/g' || true
 endef
+else
+define OPENCCU_BASE_INSTALL_TARGET_CMDS
+	$(INSTALL) -D -m 0644 \
+		"$(@D)/build/rootfs/lib/libxmlparser.so" \
+		"$(TARGET_DIR)/lib/libxmlparser.so"
+	$(INSTALL) -D -m 0644 \
+		"$(@D)/build/rootfs/lib/libXmlRpc.so" \
+		"$(TARGET_DIR)/lib/libXmlRpc.so"
+endef
+endif
 
 define OPENCCU_BASE_FINALIZE_TARGET
 	# setup /usr/local/etc/config
@@ -242,13 +276,17 @@ define OPENCCU_BASE_FINALIZE_TARGET
 		--output=$(TARGET_DIR)/www/rega/licenseinfo.htm
 endef
 ifeq ($(BR2_PACKAGE_OPENCCU_BASE),y)
+ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 TARGET_FINALIZE_HOOKS += OPENCCU_BASE_FINALIZE_TARGET
 endif
+endif
 
+ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 define OPENCCU_BASE_USERS
 	-      -1 hm     -1 * - - -      homematic access group
 	-      -1 status -1 * - - -      status access group
 	hssled -1 hssled -1 * - - status hss_led user
 endef
+endif
 
 $(eval $(cmake-package))

@@ -42,6 +42,9 @@ dtoverlay=miniuart-bt
 # disable the splash screen
 disable_splash=1
 
+# disable IEEE 802.3az Energy Efficient Ethernet for link stability
+dtparam=eee=off
+
 # activating the hardware watchdog
 dtparam=watchdog=on
 

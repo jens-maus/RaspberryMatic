@@ -75,12 +75,12 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
         with:
           use: true
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}

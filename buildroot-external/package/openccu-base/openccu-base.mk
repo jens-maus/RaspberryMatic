@@ -12,23 +12,9 @@ OPENCCU_BASE_LICENSE = HMSL-2.0, Apache-2.0 (WebUI), \
 	GPL-2.0+ (kernel modules), LGPL-2.1 (libraries)
 OPENCCU_BASE_LICENSE_FILES = licenses/licenses.md licenses/HMSL2.txt \
 	licenses/gpl-2.0.txt licenses/lgpl-2.1.txt
-OPENCCU_BASE_DEPENDENCIES = \
-	host-openjdk-bin host-pkgconf host-python3 host-python-html2text host-tcl \
-	libusb openssl tcl
-OPENCCU_BASE_BUILD_OPTS = --target package
 OPENCCU_BASE_ROOTFS_PATCH_DIR = \
 	$(OPENCCU_BASE_PKGDIR)/rootfs-patches
 OPENCCU_BASE_ENABLE_ROOTFS_PATCHING ?= YES
-
-OPENCCU_BASE_CONF_OPTS = \
-	-DDEPLOY_TO_REPO=OFF \
-	-DBUILD_TCL_MODULES=ON \
-	-DBUILD_WEBUI_AND_DEVICETYPES=ON \
-	-DHAS_USB_SUPPORT=ON \
-	-DOPENCCU_JAVA_EXECUTABLE=$(HOST_OPENJDK_BIN_ROOT_DIR)/bin/java \
-	-DOPENCCU_PYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
-	-DOPENCCU_TCLSH_EXECUTABLE=$(HOST_DIR)/bin/tclsh8.6 \
-	-DROOTFS_DIR=$(@D)/build/rootfs
 
 ifeq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
 OPENCCU_BASE_DEPENDENCIES =
@@ -38,6 +24,20 @@ OPENCCU_BASE_CONF_OPTS = \
 	-DBUILD_TCL_MODULES=OFF \
 	-DBUILD_WEBUI_AND_DEVICETYPES=OFF \
 	-DHAS_USB_SUPPORT=OFF \
+	-DROOTFS_DIR=$(@D)/build/rootfs
+else
+OPENCCU_BASE_DEPENDENCIES = \
+	host-openjdk-bin host-pkgconf host-python3 host-python-html2text host-tcl \
+	libusb openssl tcl
+OPENCCU_BASE_BUILD_OPTS = --target package
+OPENCCU_BASE_CONF_OPTS = \
+	-DDEPLOY_TO_REPO=OFF \
+	-DBUILD_TCL_MODULES=ON \
+	-DBUILD_WEBUI_AND_DEVICETYPES=ON \
+	-DHAS_USB_SUPPORT=ON \
+	-DOPENCCU_JAVA_EXECUTABLE=$(HOST_OPENJDK_BIN_ROOT_DIR)/bin/java \
+	-DOPENCCU_PYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+	-DOPENCCU_TCLSH_EXECUTABLE=$(HOST_DIR)/bin/tclsh8.6 \
 	-DROOTFS_DIR=$(@D)/build/rootfs
 endif
 

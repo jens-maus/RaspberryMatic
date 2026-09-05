@@ -1,6 +1,15 @@
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -921,6 +921,22 @@
+@@ -2823,6 +2823,8 @@
+ DEV_PATHS["HmIPW-DRAP"]["50"] = "/config/img/devices/50/162_hmipw-drap_thumb.png";
+ DEV_PATHS["HmIPW-DRAP"]["250"] = "/config/img/devices/250/162_hmipw-drap.png";
+ DEV_HIGHLIGHT["HmIPW-DRAP"] = new Object();
++DEV_HIGHLIGHT["HmIPW-DRAP"]["1"] = [1, 0.240, 0.875, 0.040];
++DEV_HIGHLIGHT["HmIPW-DRAP"]["2"] = [1, 0.450, 0.875, 0.040];
+ DEV_LIST.push('263 130');
+ DEV_DESCRIPTION["263 130"] = "263_130";
+ DEV_PATHS["263 130"] = new Object();
+@@ -3198,6 +3200,22 @@
  DEV_PATHS["HmIPW-DRS4"]["50"] = "/config/img/devices/50/160_hmipw-drs4_thumb.png";
  DEV_PATHS["HmIPW-DRS4"]["250"] = "/config/img/devices/250/160_hmipw-drs4.png";
  DEV_HIGHLIGHT["HmIPW-DRS4"] = new Object();
@@ -20,10 +29,33 @@
 +DEV_HIGHLIGHT["HmIPW-DRS4"]["14"] = [1, 0.645, 0.900, 0.040];
 +DEV_HIGHLIGHT["HmIPW-DRS4"]["15"] = [1, 0.645, 0.900, 0.040];
 +DEV_HIGHLIGHT["HmIPW-DRS4"]["16"] = [1, 0.645, 0.900, 0.040];
- DEV_LIST.push('HmIP-WRC2');
- DEV_DESCRIPTION["HmIP-WRC2"] = "HmIP-WRC2";
- DEV_PATHS["HmIP-WRC2"] = new Object();
-@@ -1869,19 +1885,18 @@
+ DEV_LIST.push('VIR-LG-DIM');
+ DEV_DESCRIPTION["VIR-LG-DIM"] = "VIR-LG-DIM";
+ DEV_PATHS["VIR-LG-DIM"] = new Object();
+@@ -3423,14 +3441,14 @@
+ DEV_PATHS["HmIP-BSL"]["50"] = "/config/img/devices/50/173_hmip-bsl_thumb.png";
+ DEV_PATHS["HmIP-BSL"]["250"] = "/config/img/devices/250/173_hmip-bsl.png";
+ DEV_HIGHLIGHT["HmIP-BSL"] = new Object();
+-DEV_HIGHLIGHT["HmIP-BSL"]["1"] = [1, 0.525, 0.650, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["2"] = [1, 0.510, 0.360, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["12"] = [1, 0.525, 0.650, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["13"] = [1, 0.525, 0.650, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["14"] = [1, 0.525, 0.650, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["8"] = [1, 0.510, 0.360, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["9"] = [1, 0.510, 0.360, 0.025];
+-DEV_HIGHLIGHT["HmIP-BSL"]["10"] = [1, 0.510, 0.360, 0.025];
++DEV_HIGHLIGHT["HmIP-BSL"]["1"]  = [1, 0.505, 0.635, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["2"]  = [1, 0.505, 0.360, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["8"]  = [1, 0.505, 0.360, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["9"]  = [1, 0.505, 0.360, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["10"] = [1, 0.505, 0.360, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["12"] = [1, 0.505, 0.635, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["13"] = [1, 0.505, 0.635, 0.050];
++DEV_HIGHLIGHT["HmIP-BSL"]["14"] = [1, 0.505, 0.635, 0.050];
+ DEV_LIST.push('HM-LC-Sw2PBU-FM');
+ DEV_DESCRIPTION["HM-LC-Sw2PBU-FM"] = "HM-LC-Sw2PBU-FM";
+ DEV_PATHS["HM-LC-Sw2PBU-FM"] = new Object();
+@@ -3999,19 +4017,18 @@
  DEV_PATHS["HmIPW-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
  DEV_PATHS["HmIPW-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
  DEV_HIGHLIGHT["HmIPW-WRC6"] = new Object();
@@ -55,58 +87,7 @@
  DEV_HIGHLIGHT["HmIPW-WRC6"]["1+2"] = [5, '1', '2'];
  DEV_HIGHLIGHT["HmIPW-WRC6"]["3+4"] = [5, '3', '4'];
  DEV_HIGHLIGHT["HmIPW-WRC6"]["5+6"] = [5, '5', '6'];
-@@ -2198,6 +2213,8 @@
- DEV_PATHS["HmIPW-DRAP"]["50"] = "/config/img/devices/50/162_hmipw-drap_thumb.png";
- DEV_PATHS["HmIPW-DRAP"]["250"] = "/config/img/devices/250/162_hmipw-drap.png";
- DEV_HIGHLIGHT["HmIPW-DRAP"] = new Object();
-+DEV_HIGHLIGHT["HmIPW-DRAP"]["1"] = [1, 0.240, 0.875, 0.040];
-+DEV_HIGHLIGHT["HmIPW-DRAP"]["2"] = [1, 0.450, 0.875, 0.040];
- DEV_LIST.push('HmIP-RCV-50');
- DEV_DESCRIPTION["HmIP-RCV-50"] = "HmIP-RCV-50";
- DEV_PATHS["HmIP-RCV-50"] = new Object();
-@@ -3530,12 +3547,12 @@
- DEV_PATHS["HmIP-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
- DEV_PATHS["HmIP-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
- DEV_HIGHLIGHT["HmIP-WRC6"] = new Object();
--DEV_HIGHLIGHT["HmIP-WRC6"]["1"] = [1, 0.3, 0.358, 0.025];
--DEV_HIGHLIGHT["HmIP-WRC6"]["2"] = [1, 0.705, 0.315, 0.025];
--DEV_HIGHLIGHT["HmIP-WRC6"]["3"] = [1, 0.3, 0.53, 0.025];
--DEV_HIGHLIGHT["HmIP-WRC6"]["4"] = [1, 0.705, 0.495, 0.025];
--DEV_HIGHLIGHT["HmIP-WRC6"]["5"] = [1, 0.3, 0.706, 0.025];
--DEV_HIGHLIGHT["HmIP-WRC6"]["6"] = [1, 0.705, 0.671, 0.025];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["1"] = [1, 0.270, 0.310, 0.050];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["2"] = [1, 0.675, 0.285, 0.050];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["3"] = [1, 0.270, 0.510, 0.050];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["4"] = [1, 0.675, 0.480, 0.050];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["5"] = [1, 0.270, 0.706, 0.050];
-+DEV_HIGHLIGHT["HmIP-WRC6"]["6"] = [1, 0.675, 0.671, 0.050];
- DEV_HIGHLIGHT["HmIP-WRC6"]["1+2"] = [5, '1', '2'];
- DEV_HIGHLIGHT["HmIP-WRC6"]["3+4"] = [5, '3', '4'];
- DEV_HIGHLIGHT["HmIP-WRC6"]["5+6"] = [5, '5', '6'];
-@@ -4215,14 +4232,14 @@
- DEV_PATHS["HmIP-BSL"]["50"] = "/config/img/devices/50/173_hmip-bsl_thumb.png";
- DEV_PATHS["HmIP-BSL"]["250"] = "/config/img/devices/250/173_hmip-bsl.png";
- DEV_HIGHLIGHT["HmIP-BSL"] = new Object();
--DEV_HIGHLIGHT["HmIP-BSL"]["1"] = [1, 0.525, 0.650, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["2"] = [1, 0.510, 0.360, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["12"] = [1, 0.525, 0.650, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["13"] = [1, 0.525, 0.650, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["14"] = [1, 0.525, 0.650, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["8"] = [1, 0.510, 0.360, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["9"] = [1, 0.510, 0.360, 0.025];
--DEV_HIGHLIGHT["HmIP-BSL"]["10"] = [1, 0.510, 0.360, 0.025];
-+DEV_HIGHLIGHT["HmIP-BSL"]["1"]  = [1, 0.505, 0.635, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["2"]  = [1, 0.505, 0.360, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["8"]  = [1, 0.505, 0.360, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["9"]  = [1, 0.505, 0.360, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["10"] = [1, 0.505, 0.360, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["12"] = [1, 0.505, 0.635, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["13"] = [1, 0.505, 0.635, 0.050];
-+DEV_HIGHLIGHT["HmIP-BSL"]["14"] = [1, 0.505, 0.635, 0.050];
- DEV_LIST.push('HmIP-HAP2-A');
- DEV_DESCRIPTION["HmIP-HAP2-A"] = "HmIP-HAP";
- DEV_PATHS["HmIP-HAP2-A"] = new Object();
-@@ -5686,6 +5703,38 @@
+@@ -4617,6 +4634,38 @@
  DEV_PATHS["HmIPW-DRS8"]["50"] = "/config/img/devices/50/161_hmipw-drs8_thumb.png";
  DEV_PATHS["HmIPW-DRS8"]["250"] = "/config/img/devices/250/161_hmipw-drs8.png";
  DEV_HIGHLIGHT["HmIPW-DRS8"] = new Object();
@@ -142,6 +123,25 @@
 +DEV_HIGHLIGHT["HmIPW-DRS8"]["30"]  = [1, 0.485, 0.230, 0.050];
 +DEV_HIGHLIGHT["HmIPW-DRS8"]["31"]  = [1, 0.485, 0.230, 0.050];
 +DEV_HIGHLIGHT["HmIPW-DRS8"]["32"]  = [1, 0.485, 0.230, 0.050];
- //======================================================================
- //Defines
- //======================================================================
+ DEV_LIST.push('ELV-SH-CTV');
+ DEV_DESCRIPTION["ELV-SH-CTV"] = "ELV-SH-CTV";
+ DEV_PATHS["ELV-SH-CTV"] = new Object();
+@@ -4796,12 +4845,12 @@
+ DEV_PATHS["HmIP-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+ DEV_PATHS["HmIP-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+ DEV_HIGHLIGHT["HmIP-WRC6"] = new Object();
+-DEV_HIGHLIGHT["HmIP-WRC6"]["1"] = [1, 0.3, 0.358, 0.025];
+-DEV_HIGHLIGHT["HmIP-WRC6"]["2"] = [1, 0.705, 0.315, 0.025];
+-DEV_HIGHLIGHT["HmIP-WRC6"]["3"] = [1, 0.3, 0.53, 0.025];
+-DEV_HIGHLIGHT["HmIP-WRC6"]["4"] = [1, 0.705, 0.495, 0.025];
+-DEV_HIGHLIGHT["HmIP-WRC6"]["5"] = [1, 0.3, 0.706, 0.025];
+-DEV_HIGHLIGHT["HmIP-WRC6"]["6"] = [1, 0.705, 0.671, 0.025];
++DEV_HIGHLIGHT["HmIP-WRC6"]["1"] = [1, 0.270, 0.310, 0.050];
++DEV_HIGHLIGHT["HmIP-WRC6"]["2"] = [1, 0.675, 0.285, 0.050];
++DEV_HIGHLIGHT["HmIP-WRC6"]["3"] = [1, 0.270, 0.510, 0.050];
++DEV_HIGHLIGHT["HmIP-WRC6"]["4"] = [1, 0.675, 0.480, 0.050];
++DEV_HIGHLIGHT["HmIP-WRC6"]["5"] = [1, 0.270, 0.706, 0.050];
++DEV_HIGHLIGHT["HmIP-WRC6"]["6"] = [1, 0.675, 0.671, 0.050];
+ DEV_HIGHLIGHT["HmIP-WRC6"]["1+2"] = [5, '1', '2'];
+ DEV_HIGHLIGHT["HmIP-WRC6"]["3+4"] = [5, '3', '4'];
+ DEV_HIGHLIGHT["HmIP-WRC6"]["5+6"] = [5, '5', '6'];

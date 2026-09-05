@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: OpenCCU <noreply@openccu>
+Date: Sat, 5 Sep 2026 11:30:00 +0000
+Subject: [PATCH] webui: sort devdescr inputs before JS generation
+
+Upstream: Not applicable
+Signed-off-by: GitHub Copilot <noreply@github.com>
+
+The DEVDB glob order is filesystem-dependent. This can change the generated
+`webui.js` layout between builds and makes downstream rootfs patches brittle.
+
+Sort the file list explicitly so generated output is deterministic.
+---
+ src/webui/www_source/create_devdescr_js.tcl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/webui/www_source/create_devdescr_js.tcl b/src/webui/www_source/create_devdescr_js.tcl
+index 2f4b3df..f95dc5d 100755
+--- a/src/webui/www_source/create_devdescr_js.tcl
++++ b/src/webui/www_source/create_devdescr_js.tcl
+@@ -60,7 +60,7 @@ proc DEV_getImagePath {key size} {
+   return $path
+ }
+ 
+-set filelist [glob -nocomplain [file join "$DEVDB_DIRECTORY/*.tcl"]]
++set filelist [lsort [glob -nocomplain [file join "$DEVDB_DIRECTORY/*.tcl"]]]
+   
+ foreach file $filelist {
+ 
+-- 
+2.47.0

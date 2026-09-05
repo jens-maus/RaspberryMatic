@@ -14,8 +14,8 @@ config BR2_PACKAGE_OPENCCU_BASE
 	help
 	  OpenCCU base services and runtime assets from OpenCCU-Base,
 	  including BidCos-RF, HmIP, HM Wired, HMServer and the WebUI.
-	  On 32-bit targets, only libxmlparser and libXmlRpc are built for
-	  compatibility with legacy Homematic binaries.
+	  On 32-bit targets, only libxmlparser and libXmlRpc are built.
+	  This keeps compatibility with legacy Homematic binaries.
 
 config BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY
 	bool

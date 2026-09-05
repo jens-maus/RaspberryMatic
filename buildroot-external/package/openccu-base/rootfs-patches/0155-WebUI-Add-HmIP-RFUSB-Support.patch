@@ -132,9 +132,9 @@
 +DEV_PATHS["HmIP-RFUSB"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
 +DEV_PATHS["HmIP-RFUSB"]["250"] = "/config/img/devices/250/CCU3.png";
 +DEV_HIGHLIGHT["HmIP-RFUSB"] = new Object();
- DEV_LIST.push('HM-EM-CCM');
- DEV_DESCRIPTION["HM-EM-CCM"] = "HM-EM-CCM";
- DEV_PATHS["HM-EM-CCM"] = new Object();
+ DEV_LIST.push('VIR-HUE-GTW');
+ DEV_DESCRIPTION["VIR-HUE-GTW"] = "VIR-HUE-GTW";
+ DEV_PATHS["VIR-HUE-GTW"] = new Object();
 @@ -11512,7 +11518,8 @@
      "HM-Sec-SD-Team",
      "HM-Sec-SD-2-Team",

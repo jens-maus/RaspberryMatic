@@ -276,10 +276,19 @@ endif
 endif
 
 ifneq ($(BR2_PACKAGE_OPENCCU_BASE_COMPAT_LIBS_ONLY),y)
+define OPENCCU_BASE_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(OPENCCU_BASE_PKGDIR)/S50eq3configd \
+		$(TARGET_DIR)/etc/init.d/S50eq3configd
+	$(INSTALL) -D -m 0755 $(OPENCCU_BASE_PKGDIR)/S50ssdpd \
+		$(TARGET_DIR)/etc/init.d/S50ssdpd
+endef
+
 define OPENCCU_BASE_USERS
 	-      -1 hm     -1 * - - -      homematic access group
 	-      -1 status -1 * - - -      status access group
 	hssled -1 hssled -1 * - - status hss_led user
+	eq3cfg -1 eq3cfg -1 * - - -      eq3configd user
+	ssdp   -1 ssdp   -1 * - - -      ssdpd user
 endef
 endif
 

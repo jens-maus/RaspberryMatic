@@ -3,6 +3,8 @@ BUILDROOT_SHA256=85bc6b52b77a6e1e5f2235eb7fb7c6ac3e23e4abc1d78e5318408de60baeabc
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OPENCCU_BASE_VERSION=$(shell grep "OPENCCU_BASE_COMPAT_VERSION =" $(BUILDROOT_EXTERNAL)/package/openccu-base/openccu-base.mk | cut -d' ' -f3)
+OPENCCU_BASE_SOURCE_VERSION=$(shell grep "^OPENCCU_BASE_VERSION =" $(BUILDROOT_EXTERNAL)/package/openccu-base/openccu-base.mk | cut -d' ' -f3)
+OPENCCU_BASE_ROOTFS_PATCH_DIR=$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION:=$(OPENCCU_BASE_VERSION).$(DATE)
@@ -112,22 +114,20 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 
 check-openccu-base: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking generated rootfs patches: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
-	$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches/create_patches.sh --check
-	@echo "[building pristine rootfs: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
-	rm -rf build-$(PRODUCT)/build/openccu-base-*
-	$(MAKE) -C build-$(PRODUCT) OPENCCU_BASE_ENABLE_ROOTFS_PATCHING=NO openccu-base-build
-	@openccu_base_dir=$$(find build-$(PRODUCT)/build -maxdepth 1 -type d \
-		-name 'openccu-base-*' -print -quit); \
-		validation_status=0; \
-		if test -z "$$openccu_base_dir"; then \
-			validation_status=1; \
-		else \
-			TCLSH="$(shell pwd)/build-$(PRODUCT)/host/bin/tclsh8.6" \
-			$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches/validate_patches.sh \
-			"$$openccu_base_dir/build/rootfs" "$$openccu_base_dir" || validation_status=$$?; \
-		fi; \
-		$(MAKE) -C build-$(PRODUCT) openccu-base-dirclean; \
-		exit $$validation_status
+	$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/create_patches.sh --check
+	@echo "[extracting patch validation sources: OPENCCU_BASE $(OPENCCU_BASE_SOURCE_VERSION)]"
+	$(MAKE) -C build-$(PRODUCT) openccu-base-extract
+	@openccu_base_dir="$(shell pwd)/build-$(PRODUCT)/build/openccu-base-$(OPENCCU_BASE_SOURCE_VERSION)"; \
+		validation_dir=$$(mktemp -d "$${TMPDIR:-/tmp}/openccu-base-check.XXXXXX"); \
+		trap 'rm -rf -- "$$validation_dir"' EXIT HUP INT TERM; \
+		test -d "$$openccu_base_dir" || { \
+			echo "ERROR: extracted OpenCCU-Base source not found: $$openccu_base_dir" >&2; \
+			exit 1; \
+		}; \
+		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/stage_validation_rootfs.sh \
+			"$$openccu_base_dir" "$$validation_dir/rootfs"; \
+		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/validate_patches.sh \
+			"$$validation_dir/rootfs" "$$openccu_base_dir"
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:

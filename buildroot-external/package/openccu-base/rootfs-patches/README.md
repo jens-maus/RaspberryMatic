@@ -46,3 +46,10 @@ Normal builds call `prepare_patch_input.sh` before applying the series and
 template strings in `webui.js` for legacy patches and restores valid JavaScript
 before the rootfs is installed. Always use both helpers when applying the stack
 outside Buildroot.
+
+The repository-level `check-openccu-base` target extracts the pinned
+OpenCCU-Base revision and calls `stage_validation_rootfs.sh`. That helper uses
+the OpenCCU-Base CMake definitions to generate only WebUI, device-type, and Tcl
+assets with host tools; it does not compile target binaries or libraries. The
+result is then passed to `validate_patches.sh` to verify the complete patch
+series with zero fuzz.

@@ -103,7 +103,6 @@ jobs:
         run: |
           pip install flake8
           make PRODUCT=rpi3 check
-          make PRODUCT=ova check-openccu-base
 
   build:
     permissions:

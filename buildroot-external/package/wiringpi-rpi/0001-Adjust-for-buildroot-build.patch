@@ -79,7 +79,7 @@ diff -ruN wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/wiringPi/Ma
 +CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
  #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
  
- LIBS    = -lm -lpthread -lrt -lcrypt
+ LIBS    = -lm -lpthread -lrt -lcrypt -latomic
 @@ -76,6 +76,7 @@
  $(DYNAMIC):	$(OBJ)
  	$Q echo "[Link (Dynamic)]"

@@ -48,3 +48,31 @@ targets the package automatically builds only the OpenCCU-Base
 `compat-libraries` target and installs `libxmlparser.so` and `libXmlRpc.so`.
 The outer `multilib32` package then relocates these libraries from `/lib` to
 `/lib32` together with the other 32-bit runtime libraries.
+
+## Source patches and fast validation
+
+`make PRODUCT=rpi3 check-openccu-base` applies the Buildroot source patches,
+runs compiler-free device generator failure tests, and generates only the
+assets needed for the rootfs patch validation. It does not configure or
+build the C++ services or the target toolchain. Both the normal package
+check and the dependency-update workflow use this target.
+
+The package-level `0001-devicetypes-fail-on-incomplete-generation.patch`
+makes each device generation fail on a Java error or missing/empty output.
+Output is generated into a temporary file before replacing a previous
+device definition. This source patch is separate from `rootfs-patches/`;
+it can be removed once the pinned Base revision includes the same fix.
+
+After adding or changing source patches, clean an existing Base build once
+before checking or rebuilding it, for example:
+
+```sh
+make -C build-rpi3 openccu-base-dirclean
+make PRODUCT=rpi3 check-openccu-base
+```
+
+Use the corresponding build directory for other products. A subsequent
+normal image build will build Base again; the fast check itself does not.
+
+`eq3_char_loop` follows `OPENCCU_BASE_VERSION` and is updated together with
+Base, not through an independent OCCU updater.

@@ -115,15 +115,17 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 check-openccu-base: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking generated rootfs patches: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
 	$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/create_patches.sh --check
-	@echo "[extracting patch validation sources: OPENCCU_BASE $(OPENCCU_BASE_SOURCE_VERSION)]"
-	$(MAKE) -C build-$(PRODUCT) openccu-base-extract
-	@openccu_base_dir="$(shell pwd)/build-$(PRODUCT)/build/openccu-base-$(OPENCCU_BASE_SOURCE_VERSION)"; \
+	@echo "[preparing patch validation sources: OPENCCU_BASE $(OPENCCU_BASE_SOURCE_VERSION)]"
+	$(MAKE) -C build-$(PRODUCT) openccu-base-patch
+	@set -eu; \
+		openccu_base_dir="$(shell pwd)/build-$(PRODUCT)/build/openccu-base-$(OPENCCU_BASE_SOURCE_VERSION)"; \
 		validation_dir=$$(mktemp -d "$${TMPDIR:-/tmp}/openccu-base-check.XXXXXX"); \
 		trap 'rm -rf -- "$$validation_dir"' EXIT HUP INT TERM; \
 		test -d "$$openccu_base_dir" || { \
 			echo "ERROR: extracted OpenCCU-Base source not found: $$openccu_base_dir" >&2; \
 			exit 1; \
 		}; \
+		python3 scripts/testcases/build/test_devicetypes_assets.py "$$openccu_base_dir"; \
 		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/stage_validation_rootfs.sh \
 			"$$openccu_base_dir" "$$validation_dir/rootfs"; \
 		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/validate_patches.sh \

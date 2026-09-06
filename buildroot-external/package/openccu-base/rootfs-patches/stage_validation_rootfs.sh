@@ -68,6 +68,17 @@ CMAKE
 "$cmake" --build "$build_dir/build" --target \
   webui-assets devicetypes-assets tcl-homematic-assets
 
+# Check every generated device before validate_patches.sh can supplement the
+# firmware tree with static files from OpenCCU-Base.
+for family in rftypes hs485types; do
+  device_sources=("$openccu_base_source/src/devicetypes/$family/"*.xml)
+  [[ -f ${device_sources[0]} ]] || die "no device XML files found: $family"
+  for device_source in "${device_sources[@]}"; do
+    generated_device=$rootfs/firmware/$family/${device_source##*/}
+    [[ -s $generated_device ]] || die "asset target did not generate: $generated_device"
+  done
+done
+
 for generated_asset in \
   firmware/rftypes/rf_cfm_tw.xml \
   usr/lib/tcl8.2/homematic/homematic.tcl \

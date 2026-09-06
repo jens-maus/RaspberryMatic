@@ -72,7 +72,8 @@ static char* create_hex_string( const char* source, int length, char* target, in
     if ( source )
     {
           current = target;
-        int i = 16;
+        int maxIterations = ( size - 1 ) / 3;
+        int i = maxIterations < 16 ? maxIterations : 16;
           while ( i-- )
         {
             length--;
@@ -80,12 +81,12 @@ static char* create_hex_string( const char* source, int length, char* target, in
             if(length >= 0)
             {
                     value = *source++;
-                    sprintf( current, " %02x", value );
+                    snprintf( current, 4, " %02x", value );
                     current += 3;
             }
             else
             {
-                sprintf( current, "   " );
+                snprintf( current, 4, "   " );
                 current += 3;
             }
           }

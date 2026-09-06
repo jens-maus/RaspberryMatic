@@ -179,7 +179,7 @@ make PRODUCT=rpi4 recovery-menuconfig
 make PRODUCT=rpi4 recovery-savedefconfig
 ```
 
-The recovery build **reuses already-built multilib32 artifacts** via rsync rather than rebuilding them. The `RECOVERY_SYSTEM_CONFIGURE_CMDS` step copies any `multilib32-*` build directories from the outer build into the inner build tree before the inner Buildroot run starts.
+The recovery build **reuses completed multilib32 artifacts when the selected configuration fragment matches**. `RECOVERY_SYSTEM_BUILD_CMDS` copies the current `MULTILIB32_DIR` via rsync, excluding installation stamps so the artifacts are installed into the recovery target. If the configuration differs or the outer build is incomplete, recovery builds its own variant.
 
 ---
 
@@ -198,7 +198,9 @@ It also writes `/etc/ld.so.conf.d/lib32.conf` (paths `/lib32`, `/usr/lib32`, `/u
 - aarch64: `lib/ld-linux-armhf.so.3 → ../lib32/ld-linux-armhf.so.3`
 
 **32-bit packages built** (defined in `multilib32/external/Buildroot.config`):
-`c-ares`, `file`, `fontconfig`, `libglib2`, `libusb`, `libusb-compat`, `libuv`, `libxmlparser`, `libxmlrpcxx`, `openssl`, `pcre`, `readline`
+`c-ares`, `file`, `fontconfig`, `libglib2`, `libusb`, `libusb-compat`, `libuv`, `openccu-base`, `openssl`, `pcre`, `readline`
+
+In this 32-bit build, `openccu-base` selects `compat-libraries` and supplies `libxmlparser.so` and `libXmlRpc.so` from the same pinned revision as the native build. The former standalone `libxmlparser` and `libxmlrpcxx` packages no longer exist.
 
 **CPU architecture config fragments** (selected per product via `BR2_PACKAGE_MULTILIB32_CONFIG_FRAGMENT_FILE`):
 
@@ -216,7 +218,7 @@ make PRODUCT=rpi4 multilib32-menuconfig
 make PRODUCT=rpi4 multilib32-savedefconfig
 ```
 
-**Interaction with recovery-system:** The recovery build rsync-copies completed `multilib32-*` build directories from the outer build before starting its own inner Buildroot run, so multilib32 is never rebuilt twice.
+**Interaction with recovery-system:** Recovery reuses only the completed current multilib32 build with a matching configuration fragment. Otherwise it builds its own variant. The outer package versions include the Base revision, Buildroot version and multilib configuration hash to invalidate stale nested builds.
 
 **Adding a new 32-bit library:** Edit `multilib32/external/Buildroot.config` to enable the package, verify it exists in the Buildroot package tree, then rebuild: `make -C build-<product> multilib32-rebuild`.
 
@@ -226,6 +228,8 @@ make PRODUCT=rpi4 multilib32-savedefconfig
 
 Each subdirectory is a standard Buildroot package (with `Config.in` + `<name>.mk`). Packages that have no upstream source use `SITE_METHOD = local`.
 
+The `eq3configd` and `ssdpd` daemons, their init scripts and user definitions are part of `openccu-base`; they are no longer separate packages. The Tcl modules `tclrega` and `tclrpc` are also built by Base.
+
 | Package | Purpose | Source |
 |---------|---------|--------|
 | `openccu-base` | Native services, libraries, firmware, HMServer, WebUI and device types | github:OpenCCU/OpenCCU-Base |
@@ -233,18 +237,14 @@ Each subdirectory is a standard Buildroot package (with `Config.in` + `<name>.mk
 | `bcm2835_raw_uart` | Legacy BCM2835 raw UART kernel module (RPi-specific predecessor) | local |
 | `rpi-rf-mod` | Meta package: compiles the correct DTS overlay for the RF module per board; uses `host-dtc` | local |
 | `detect_radio_module` | Tool that detects attached HM/HmIP RF modules at runtime | github:alexreinert/piVCCU |
-| `eq3_char_loop` | eQ-3 char loopback kernel module for HM/HmIP virtual devices | local |
-| `eq3configd` | eQ-3 configuration daemon | local |
+| `eq3_char_loop` | eQ-3 char loopback kernel module; revision follows `openccu-base` | github:OpenCCU/OpenCCU-Base, src/eq3_char_loop |
 | `recovery-system` | Nested Buildroot build producing the recovery initramfs (see above) | local |
 | `multilib32` | Nested Buildroot build producing 32-bit userspace libraries for 64-bit targets | local |
 | `java-azul` | Azul Zulu Embedded JRE (required by HMServer) | cdn.azul.com |
 | `tdom` | Tcl DOM/XML library | local |
-| `libxmlparser` | XMLParser C++ library used by the nested multilib32 build | local |
-| `libxmlrpcxx` | XML-RPC C++ library used by the nested multilib32 build | local |
 | `hmlangw` | HomeMatic LAN Gateway daemon | local |
 | `neoserver` | Mediola NEO Server integration | local |
 | `cloudmatic` | CloudMatic/meine-homematic.de cloud add-on | github:OpenCCU/CloudMatic-CCUAddon |
-| `ssdpd` | SSDP daemon (UPnP device advertisement) | local |
 | `tailscale-bin` | Tailscale zero-config VPN (pre-built binary) | pkgs.tailscale.com |
 | `qemu-guest-agent` | QEMU guest agent (for OVA/VM targets) | download.qemu.org |
 | `xe-guest-utilities` | XCP-ng / XenServer guest utilities | github:xenserver/xe-guest-utilities |

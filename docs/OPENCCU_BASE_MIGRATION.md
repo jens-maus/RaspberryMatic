@@ -57,11 +57,18 @@ assets needed for the rootfs patch validation. It does not configure or
 build the C++ services or the target toolchain. Both the normal package
 check and the dependency-update workflow use this target.
 
-The package-level `0001-devicetypes-fail-on-incomplete-generation.patch`
-makes each device generation fail on a Java error or missing/empty output.
-Output is generated into a temporary file before replacing a previous
-device definition. This source patch is separate from `rootfs-patches/`;
-it can be removed once the pinned Base revision includes the same fix.
+The pinned OpenCCU-Base revision includes
+`src/devicetypes/GenerateDeviceTypes.cmake`, which fails on a Java error or
+missing/empty output. Output is generated into a temporary file before
+replacing a previous device definition. No local source patch is needed
+for this generator fix.
+
+The package-level `0001-isolate-version-header-generation.patch` keeps the
+temporary version files for rfd, hs485d and multimacd in their respective
+build directories and tracks the version scripts and header generator as
+dependencies. It is separate from `rootfs-patches/` and can be removed once
+the pinned Base revision includes these changes. The fast check also runs
+compiler-free parallel and incremental version-header tests.
 
 After adding or changing source patches, clean an existing Base build once
 before checking or rebuilding it, for example:

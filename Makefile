@@ -126,6 +126,7 @@ check-openccu-base: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 			exit 1; \
 		}; \
 		python3 scripts/testcases/build/test_devicetypes_assets.py "$$openccu_base_dir"; \
+		python3 scripts/testcases/build/test_version_headers.py "$$openccu_base_dir"; \
 		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/stage_validation_rootfs.sh \
 			"$$openccu_base_dir" "$$validation_dir/rootfs"; \
 		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/validate_patches.sh \

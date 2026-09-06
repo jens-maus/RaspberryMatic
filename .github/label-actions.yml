@@ -47,8 +47,10 @@
   issues:
     comment: >
       @{issue-author}, the issue you reported cannot be solved within this
-      project or should be better directly solved in the upstream [OCCU](https://github.com/eq-3/occu)
-      project OpenCCU is just using. However, for being able to
+      project or should be better directly solved in the relevant upstream
+      project. For the base services and WebUI, this is
+      [OpenCCU-Base](https://github.com/OpenCCU/OpenCCU-Base).
+      However, for being able to
       reference and track this upstream issue we will keep this ticket
       open for the time being so that you can also reference it accordingly.
 

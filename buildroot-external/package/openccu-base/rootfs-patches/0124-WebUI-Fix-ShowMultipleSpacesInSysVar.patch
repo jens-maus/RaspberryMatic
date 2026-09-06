@@ -1,0 +1,10 @@
+--- a/www/webui/style.css
++++ b/www/webui/style.css
+@@ -5475,6 +5475,7 @@
+ 	word-wrap: break-word;
+ 	max-width: 480px;
+ 	display: inline-block;
++	white-space: break-spaces;
+ }
+ 
+ .CLASS02535B {

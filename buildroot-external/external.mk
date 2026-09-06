@@ -1,4 +1,4 @@
-include $(sort $(wildcard $(BR2_EXTERNAL_EQ3_PATH)/package/*/*.mk))
+include $(BR2_EXTERNAL_EQ3_PATH)/package/packages.mk
 
 .PHONY: linux-check-dotconfig
 linux-check-dotconfig: linux-check-configuration-done

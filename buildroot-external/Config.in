@@ -2,13 +2,9 @@ source "$BR2_EXTERNAL_EQ3_PATH/package/multilib32/Config.in"
 source "$BR2_EXTERNAL_EQ3_PATH/package/recovery-system/Config.in"
 
 menu "eQ-3 HomeMatic Services"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/occu/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/openccu-base/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/cloudmatic/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/hmlangw/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/libxmlparser/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/libxmlrpcxx/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/tclrpc/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/tclrega/Config.in"
 endmenu
 
 menu "Kernel Module Support"
@@ -33,8 +29,6 @@ endmenu
 menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/detect_radio_module/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/daemonize/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/ssdpd/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/eq3configd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-rpi/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-odroid/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"

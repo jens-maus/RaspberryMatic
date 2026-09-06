@@ -63,12 +63,11 @@ missing/empty output. Output is generated into a temporary file before
 replacing a previous device definition. No local source patch is needed
 for this generator fix.
 
-The package-level `0001-isolate-version-header-generation.patch` keeps the
-temporary version files for rfd, hs485d and multimacd in their respective
-build directories and tracks the version scripts and header generator as
-dependencies. It is separate from `rootfs-patches/` and can be removed once
-the pinned Base revision includes these changes. The fast check also runs
-compiler-free parallel and incremental version-header tests.
+The pinned OpenCCU-Base revision also keeps the temporary version files for
+rfd, hs485d and multimacd in their respective build directories and tracks
+the version scripts and header generator as dependencies. No local source
+patch is needed for these changes. The fast check also runs compiler-free
+parallel and incremental version-header tests.
 
 After adding or changing source patches, clean an existing Base build once
 before checking or rebuilding it, for example:

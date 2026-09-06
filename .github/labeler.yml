@@ -3,24 +3,19 @@
 # Labels are applied to PRs based on which files are changed.
 # https://github.com/actions/labeler
 
+# Keep the existing label name for historical issues and release changelogs.
 ':label: OCCU':
   - changed-files:
       - any-glob-to-any-file:
-          - 'buildroot-external/package/occu/**'
+          - 'buildroot-external/package/openccu-base/**'
           - 'buildroot-external/package/hmlangw/**'
           - 'buildroot-external/package/neoserver/**'
-          - 'buildroot-external/package/tclrega/**'
-          - 'buildroot-external/package/tclrpc/**'
-          - 'buildroot-external/package/eq3configd/**'
           - 'buildroot-external/package/cloudmatic/**'
           - 'buildroot-external/package/detect_radio_module/**'
           - 'buildroot-external/package/eq3_char_loop/**'
           - 'buildroot-external/package/generic_raw_uart/**'
-          - 'buildroot-external/package/libxmlparser/**'
-          - 'buildroot-external/package/libxmlrpcxx/**'
           - 'buildroot-external/package/recovery-system/**'
           - 'buildroot-external/package/rpi-rf-mod/**'
-          - 'buildroot-external/package/ssdpd/**'
           - 'buildroot-external/overlay/base*/**'
           - 'buildroot-external/patches/tcl/**'
 
@@ -29,7 +24,7 @@
       - any-glob-to-any-file:
           - 'buildroot-external/overlay/WebUI/**'
           - 'buildroot-external/overlay/WebUI-openccu/**'
-          - 'buildroot-external/patches/occu/**'
+          - 'buildroot-external/package/openccu-base/rootfs-patches/**'
 
 ':label: OS':
   - changed-files:

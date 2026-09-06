@@ -13,7 +13,7 @@ This App allows to run a [HomeMatic/homematicIP][homematic] control center (CCU)
 your Home Assistant. It is based on [OpenCCU][openccu] which
 is open-source and 100% compatible with the homematic vendor ([eQ3][eq3]) own CCU
 system (CCU3) to connect to HomeMatic/homematicIP devices without any cloud connection.
-Furthermore, it is based on [OCCU][occu] while providing additional exclusive features in
+Furthermore, it is based on [OpenCCU-Base][openccu-base] while providing additional exclusive features in
 the WebUI and underlying operating system for an improved user experience.
 
 ## Features
@@ -38,6 +38,6 @@ This Home Assistant App as well as the OpenCCU base system is licensed under the
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [openccu]: https://github.com/OpenCCU/OpenCCU
-[occu]: https://github.com/eq-3/occu
+[openccu-base]: https://github.com/OpenCCU/OpenCCU-Base
 [eq3]: https://www.eq-3.com/
 [homematic]: https://www.homematic-ip.com/en/start.html

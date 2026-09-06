@@ -1,0 +1,54 @@
+--- a/www/ise/htm/header.htm
++++ b/www/ise/htm/header.htm
+@@ -82,6 +82,10 @@
+   if ($("UserName"))
+   {
+     $("UserName").appendChild(document.createTextNode(userName));
++    if (getUPL() != UPL_GUEST) {
++      $("UserName").setAttribute('onClick', userLink);
++      $("UserName").setAttribute('style','cursor: pointer;');
++    }
+   }
+ 
+   if (getUPL() != UPL_GUEST) {
+--- a/www/rega/pages/index.htm
++++ b/www/rega/pages/index.htm
+@@ -142,7 +142,13 @@
+         object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+         string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
+         if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
+-        WriteLine('var userName = "' # sUserFullName # '";');
++        string sUserLevel = "lblGuest";
++        if (oUser.UserLevel() == iulAdmin) { sUserLevel = "lblAdmin"; }
++        elseif (oUser.UserLevel() == iulUser) { sUserLevel = "lblUser" ; }
++        string sUserEasyMode = "lblUIModeExpert";
++        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "lblUIModeEasy"; }
++        WriteLine('var userName = "' # sUserFullName # ' (" + translateKey("' # sUserLevel # '") + ") | " + translateKey("lblEasyModeActiveShort") + " " + translateKey("' # sUserEasyMode # '");');
++        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
+       %>
+ 
+ 
+--- a/www/webui/js/lang/de/translate.lang.js
++++ b/www/webui/js/lang/de/translate.lang.js
+@@ -204,6 +204,9 @@
+     "lblBtnForLogin" : "Benutzername-Button in der Anmeldung: ",
+     "lblAccessLevel" : "Berechtigungsstufe: ",
+     "lblEasyModeActive" : "Modus vereinfachte<br/>Verkn%FCpfungskonfiguration aktivieren: ",
++    "lblEasyModeActiveShort" : "Modus: ",
++    "lblUIModeEasy" : "Einfach",
++    "lblUIModeExpert" : "Experte",
+     "lblPhoneNumber" : "Telefonnummer: ",
+     "lblEMailAddress" : "E-Mail-<br/>Adresse: ",
+     "lblStartPageSystemInfo" : "Startseite - Systeminformation",
+--- a/www/webui/js/lang/en/translate.lang.js
++++ b/www/webui/js/lang/en/translate.lang.js
+@@ -203,6 +203,9 @@
+     "lblBtnForLogin" : "User name - button for login: ",
+     "lblAccessLevel" : "Permission level: ",
+     "lblEasyModeActive" : "Expert mode not visible",
++    "lblEasyModeActiveShort" : "Mode: ",
++    "lblUIModeEasy" : "simple",
++    "lblUIModeExpert" : "expert",
+     "lblPhoneNumber" : "Phone number: ",
+     "lblEMailAddress" : "Email<br/>address: ",
+     "lblStartPageSystemInfo" : "Home page - system information",

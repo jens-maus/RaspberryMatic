@@ -1,1 +1,1 @@
-include $(sort $(wildcard $(BR2_EXTERNAL_EQ3_PATH)/package/*/*.mk))
+include $(BR2_EXTERNAL_MULTILIB32_PATH)/../../packages.mk

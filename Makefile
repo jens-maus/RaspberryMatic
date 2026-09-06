@@ -2,10 +2,12 @@ BUILDROOT_VERSION=2026.05.2
 BUILDROOT_SHA256=85bc6b52b77a6e1e5f2235eb7fb7c6ac3e23e4abc1d78e5318408de60baeabc4
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
-OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
+OPENCCU_BASE_VERSION=$(shell grep "OPENCCU_BASE_COMPAT_VERSION =" $(BUILDROOT_EXTERNAL)/package/openccu-base/openccu-base.mk | cut -d' ' -f3)
+OPENCCU_BASE_SOURCE_VERSION=$(shell grep "^OPENCCU_BASE_VERSION =" $(BUILDROOT_EXTERNAL)/package/openccu-base/openccu-base.mk | cut -d' ' -f3)
+OPENCCU_BASE_ROOTFS_PATCH_DIR=$(BUILDROOT_EXTERNAL)/package/openccu-base/rootfs-patches
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
-PRODUCT_VERSION:=$(OCCU_VERSION).$(DATE)
+PRODUCT_VERSION:=$(OPENCCU_BASE_VERSION).$(DATE)
 PRODUCTS:=$(sort $(notdir $(patsubst %.config,%,$(wildcard $(DEFCONFIG_DIR)/*.config))))
 BR2_DL_DIR=$(shell pwd)/download
 BR2_CCACHE_DIR=${HOME}/.buildroot-ccache
@@ -20,7 +22,8 @@ endif
 PLATFORM:=$(shell echo -n $(PRODUCT) | sed 's/_\(amd64\|arm.*\)//')
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
-.PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg build-$(PRODUCT)/legal-info
+.PHONY: all build release clean clean-all distclean default buildroot-help help updatePkg \
+	build-$(PRODUCT)/legal-info check-openccu-base
 
 all: help
 
@@ -107,12 +110,27 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	python3 -c "import flake8" >/dev/null 2>&1 || (echo "Installing missing python dependency: flake8" && python3 -m pip install --user flake8)
 	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
-	@echo "[checking apply patch status: OCCU $(OCCU_VERSION)]"
-	(cd $(BUILDROOT_EXTERNAL)/patches/occu ; ./create_patches.sh)
-	rm -rf build-$(PRODUCT)/build/occu-$(OCCU_VERSION)*
-	$(MAKE) -C build-$(PRODUCT) occu-patch
-	@echo "[checking clean patch status: OCCU $(OCCU_VERSION)]"
-	git diff --exit-code $(BUILDROOT_EXTERNAL)/patches/occu/*.patch
+	$(MAKE) PRODUCT=$(PRODUCT) check-openccu-base
+
+check-openccu-base: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	@echo "[checking generated rootfs patches: OPENCCU_BASE $(OPENCCU_BASE_VERSION)]"
+	$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/create_patches.sh --check
+	@echo "[preparing patch validation sources: OPENCCU_BASE $(OPENCCU_BASE_SOURCE_VERSION)]"
+	$(MAKE) -C build-$(PRODUCT) openccu-base-patch
+	@set -eu; \
+		openccu_base_dir="$(shell pwd)/build-$(PRODUCT)/build/openccu-base-$(OPENCCU_BASE_SOURCE_VERSION)"; \
+		validation_dir=$$(mktemp -d "$${TMPDIR:-/tmp}/openccu-base-check.XXXXXX"); \
+		trap 'rm -rf -- "$$validation_dir"' EXIT HUP INT TERM; \
+		test -d "$$openccu_base_dir" || { \
+			echo "ERROR: extracted OpenCCU-Base source not found: $$openccu_base_dir" >&2; \
+			exit 1; \
+		}; \
+		python3 scripts/testcases/build/test_devicetypes_assets.py "$$openccu_base_dir"; \
+		python3 scripts/testcases/build/test_version_headers.py "$$openccu_base_dir"; \
+		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/stage_validation_rootfs.sh \
+			"$$openccu_base_dir" "$$validation_dir/rootfs"; \
+		$(OPENCCU_BASE_ROOTFS_PATCH_DIR)/validate_patches.sh \
+			"$$validation_dir/rootfs" "$$openccu_base_dir"
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:

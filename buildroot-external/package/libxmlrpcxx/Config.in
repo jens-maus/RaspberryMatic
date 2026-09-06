@@ -1,6 +1,0 @@
-config BR2_PACKAGE_LIBXMLRPCXX
-	bool "libXmlRpc++"
-	help
-	  Implementation of XmlRpc protocol (libXmlRpc++)
-
-	  https://github.com/eq-3/occu/blob/master/CCU2/download/xmlrpc-eQ-3.tar.gz

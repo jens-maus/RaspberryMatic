@@ -55,13 +55,13 @@
  # Intel SST DSP
  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP),y)
  LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
-@@ -580,13 +593,23 @@
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+@@ -617,13 +630,23 @@
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSES/LICENCE.iwlwifi_firmware
  endif
  
 -ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000),y)
 -LINUX_FIRMWARE_FILES += intel/iwlwifi/iwlwifi-QuZ-*.ucode intel/iwlwifi/iwlwifi-Qu-*.ucode
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSES/LICENCE.iwlwifi_firmware
 -endif
 -
 -ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22260),y)
@@ -83,10 +83,10 @@
 +	intel/iwlwifi/iwlwifi-so-a0-gf4-a0.pnvm \
 +	intel/iwlwifi/iwlwifi-ty-a0-gf-a0-72.ucode \
 +	intel/iwlwifi/iwlwifi-ty-a0-gf-a0.pnvm
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSES/LICENCE.iwlwifi_firmware
  endif
  
-@@ -1028,15 +1051,34 @@
+@@ -1071,15 +1094,34 @@
  # sure we canonicalize the pointed-to file, to cover the symlinks of the form
  # a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
  # not yet exist.
@@ -123,7 +123,7 @@
  		fi ; \
  	done
  endef
-@@ -1044,11 +1086,22 @@
+@@ -1087,11 +1129,22 @@
  endif  # LINUX_FIRMWARE_FILES || LINUX_FIRMWARE_DIRS
  
  define LINUX_FIRMWARE_INSTALL_TARGET_CMDS

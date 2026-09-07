@@ -48,8 +48,9 @@ make distclean
 ```text
 buildroot-external/        # Buildroot BR2_EXTERNAL layer – all OpenCCU customization
   configs/                 # Per-product Buildroot defconfigs (e.g. rpi4.config)
-  package/                 # Custom Buildroot packages (occu, rpi-rf-mod, generic_raw_uart, …)
-  patches/occu/            # Upstream OCCU WebUI/firmware patches (see below)
+  package/                 # Custom Buildroot packages (openccu-base, rpi-rf-mod, …)
+    openccu-base/
+      rootfs-patches/      # OpenCCU WebUI/rootfs patch workspaces and series
   patches/<pkg>/           # Patches applied to other Buildroot packages
   board/<product>/         # Board-specific files: kernel defconfig, U-Boot config, DTS patches
   kernel/6.18/             # Shared kernel config fragments applied to all boards
@@ -64,132 +65,54 @@ helm/                      # Kubernetes Helm chart
 .github/workflows/         # CI/CD: ci.yml, snapshot.yml, release.yml, …
 ```
 
-The build system downloads `buildroot-2025.11.2.tar.gz`, applies `buildroot-patches/`, then invokes Buildroot with `BR2_EXTERNAL=buildroot-external`. Build output goes to `build-<product>/`.
+The build system downloads `buildroot-2026.05.2.tar.gz`, applies `buildroot-patches/`, then invokes Buildroot with `BR2_EXTERNAL=buildroot-external`. Build output goes to `build-<product>/`.
 
 ## Key Conventions
 
-### OCCU Patches
+### OpenCCU-Base rootfs patches
 
-`buildroot-external/patches/occu/` holds all modifications to the upstream eQ-3 OCCU firmware. There are currently **322 patch directories** covering 635 individual files.
+OpenCCU-specific changes to the generated WebUI and runtime files live in
+`buildroot-external/package/openccu-base/rootfs-patches/`. They are applied
+after OpenCCU-Base has staged `build/rootfs`, but before files are installed
+into Buildroot's target directory.
 
-#### How Buildroot applies the patches
-
-`buildroot-external/Buildroot.config` sets:
-
-```make
-BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_EQ3_PATH)/patches"
-```
-
-Buildroot's global patch mechanism scans that directory for a subdirectory whose name matches the package being built (`occu`), then applies every `*.patch` file found there in **lexicographic / numeric sort order** during the `occu-patch` build step.
-
-#### Directory layout
-
-Every patch is represented by **two sibling items** sharing the same name — a directory and a `.patch` file:
+Each numbered patch has a generated `.patch` file and a workspace directory.
+The workspace mirrors the staged rootfs; for every changed path it contains an
+upstream `.orig` file and the desired file without that suffix:
 
 ```text
-buildroot-external/patches/occu/
-  0001-OpenCCU/              ← working-copy source tree for this patch
-  0001-OpenCCU.patch         ← generated unified diff (applied by Buildroot)
-  0002-WebUI-Bootstrap/
-  0002-WebUI-Bootstrap.patch
-  …
-  0173-WebUI-SendPOSTRequest/
-  0173-WebUI-SendPOSTRequest.patch
+rootfs-patches/0123-WebUI-Example/
+  rootfs/www/webui/example.js.orig
+  rootfs/www/webui/example.js
+rootfs-patches/0123-WebUI-Example.patch
 ```
 
-Inside each numbered directory the layout mirrors the upstream OCCU source tree under an `occu/` prefix. For every file that the patch modifies, **two files are kept side by side**:
-
-```text
-0001-OpenCCU/
-  occu/
-    WebUI/www/webui/webui.js        ← modified version (what goes into the build)
-    WebUI/www/webui/webui.js.orig   ← upstream original (never edited)
-    WebUI/www/config/cp_network.cgi
-    WebUI/www/config/cp_network.cgi.orig
-    …
-```
-
-The `.orig` file is **always the verbatim upstream content** for that OCCU version. The file without `.orig` is the OpenCCU-modified version. Diffs are generated from `.orig` → no-extension.
-
-#### create_patches.sh — what it does
-
-`buildroot-external/patches/occu/create_patches.sh` regenerates **all** `.patch` files from the working-copy source pairs:
-
-1. Deletes every existing `*.patch` file in the directory.
-2. Iterates numbered directories in sorted order.
-3. For each directory, finds all `*.orig` files under `occu/`.
-4. For each `*.orig` file, runs:
-   ```sh
-   diff -u --label="${file}" --label="${file%.orig}" "${file}" "${file%.orig}" >> "../${dir}.patch"
-   ```
-   The `--label` flags produce standard `---`/`+++` headers with the `.orig` suffix stripped from the destination label, matching what Buildroot's `patch` command expects.
-5. All per-file diffs for a given numbered directory are **concatenated into one `.patch` file**.
-6. If a directory contains no `.orig` files it exits non-zero (`set -e` propagates the failure).
-
-#### Workflow for editing an existing patch
-
-```text
-# 1. Edit the modified file (never touch .orig)
-vim buildroot-external/patches/occu/0042-WebUI-MyFix/occu/WebUI/www/webui/webui.js
-
-# 2. Regenerate all .patch files
-cd buildroot-external/patches/occu && ./create_patches.sh
-
-# 3. Commit both the modified source file AND the regenerated .patch file
-git add buildroot-external/patches/occu/0042-WebUI-MyFix/occu/WebUI/www/webui/webui.js
-git add buildroot-external/patches/occu/0042-WebUI-MyFix.patch
-git commit
-```
-
-#### Adding a new patch
-
-```text
-# 1. Create the numbered directory (choose a number not already in use)
-mkdir -p buildroot-external/patches/occu/0206-WebUI-MyNewFix/occu/WebUI/www/webui/
-
-# 2. Copy the upstream file as .orig
-cp <upstream-occu-source>/WebUI/www/webui/webui.js \
-   buildroot-external/patches/occu/0206-WebUI-MyNewFix/occu/WebUI/www/webui/webui.js.orig
-
-# 3. Copy again as the file to be modified (no extension)
-cp buildroot-external/patches/occu/0206-WebUI-MyNewFix/occu/WebUI/www/webui/webui.js.orig \
-   buildroot-external/patches/occu/0206-WebUI-MyNewFix/occu/WebUI/www/webui/webui.js
-
-# 4. Make your changes to the no-extension file, then generate the patch
-cd buildroot-external/patches/occu && ./create_patches.sh
-
-# 5. Commit directory + .patch file together
-```
-
-#### webui.js special handling
-
-`webui.js` is a minified file where actual newlines in the code are represented as literal `\n` escape sequences on a single very long line. To make it patchable line-by-line, `occu.mk` uses two build hooks:
-
-- **`OCCU_UNWRAP_WEBUI_JS`** (PRE_PATCH hook): expands the `\n` literals in the first 10 lines back into real newlines before patches are applied.
-- **`OCCU_WRAP_WEBUI_JS`** (POST_PATCH hook): collapses those real newlines back to `\n` literals after all patches have been applied.
-
-This means `webui.js` / `webui.js.orig` pairs in the patch directories are stored in the **unwrapped (multi-line) form** so diffs are readable, but the file installed into the final image is in the original minified single-line form.
-
-#### CI check — how divergence is caught
-
-`make PRODUCT=<product> check` runs three steps specifically for OCCU patches:
+Edit only the file without `.orig`, then keep the generated series synchronized:
 
 ```bash
-# 1. Regenerate .patch files from working-copy sources
-(cd buildroot-external/patches/occu; ./create_patches.sh)
+# Verify that generated patches match their workspaces
+buildroot-external/package/openccu-base/rootfs-patches/create_patches.sh --check
 
-# 2. Wipe the occu build directory and re-apply patches from scratch
-rm -rf build-<product>/build/occu-<version>*
-make -C build-<product> occu-patch
+# Regenerate after editing a workspace
+buildroot-external/package/openccu-base/rootfs-patches/create_patches.sh
 
-# 3. Fail if any .patch file changed (i.e. sources and patch file were out of sync)
-git diff --exit-code buildroot-external/patches/occu/*.patch
+# Rebase workspaces onto a newly generated pristine rootfs
+buildroot-external/package/openccu-base/rootfs-patches/update_patchfiles.sh \
+  /absolute/path/to/pristine/build/rootfs \
+  /absolute/path/to/OpenCCU-Base
+
+# Apply and validate the complete series independently
+buildroot-external/package/openccu-base/rootfs-patches/validate_patches.sh \
+  /absolute/path/to/pristine/build/rootfs \
+  /absolute/path/to/OpenCCU-Base
 ```
 
-CI fails if:
-- A `.patch` file was not regenerated after editing a source file.
-- A patch fails to apply cleanly to the current OCCU version.
-- A `.patch` file was manually edited instead of regenerating via `create_patches.sh`.
+`prepare_patch_input.sh` converts generated inputs such as `webui.js` into the
+canonical patchable representation. `finalize_patch_input.sh` restores the
+runtime representation after the series has been applied. The `series` file is
+the authoritative patch order. CI builds an unpatched pristine rootfs and then
+runs the same validation lifecycle, so stale workspaces, rejects, excessive
+fuzz, missing symlinks, Tcl syntax errors, and security regressions fail early.
 
 ### Kernel & Defconfig Changes
 
@@ -256,15 +179,15 @@ make PRODUCT=rpi4 recovery-menuconfig
 make PRODUCT=rpi4 recovery-savedefconfig
 ```
 
-The recovery build **reuses already-built multilib32 artifacts** via rsync rather than rebuilding them. The `RECOVERY_SYSTEM_CONFIGURE_CMDS` step copies any `multilib32-*` build directories from the outer build into the inner build tree before the inner Buildroot run starts.
+The recovery build **reuses completed multilib32 artifacts when the selected configuration fragment matches**. `RECOVERY_SYSTEM_BUILD_CMDS` copies the current `MULTILIB32_DIR` via rsync, excluding installation stamps so the artifacts are installed into the recovery target. If the configuration differs or the outer build is incomplete, recovery builds its own variant.
 
 ---
 
 ## multilib32 Package
 
-`multilib32` is a **second nested Buildroot build** (same pattern as the recovery system) that produces a 32-bit userspace to satisfy OCCU's 32-bit ARM/x86 binaries running on 64-bit targets.
+`multilib32` is a **second nested Buildroot build** (same pattern as the recovery system) that produces a 32-bit userspace for legacy/vendor binaries running on 64-bit targets.
 
-**Why it exists:** The eQ-3 OCCU firmware ships pre-compiled 32-bit binaries (ARM hard-float or x86). All OpenCCU targets are 64-bit, so they need a 32-bit glibc and support libraries alongside the native 64-bit ones.
+**Why it exists:** Some OpenCCU runtime components are available only as pre-compiled 32-bit binaries (ARM hard-float or x86). All OpenCCU targets are 64-bit, so they need a 32-bit glibc and support libraries alongside the native 64-bit ones.
 
 **What gets built:** The inner Buildroot produces a minimal `rootfs.tar` containing only shared libraries. `MULTILIB32_INSTALL_TARGET_CMDS` extracts from that tar:
 - `./lib/*.so*` → `/lib32/` on the target
@@ -275,7 +198,9 @@ It also writes `/etc/ld.so.conf.d/lib32.conf` (paths `/lib32`, `/usr/lib32`, `/u
 - aarch64: `lib/ld-linux-armhf.so.3 → ../lib32/ld-linux-armhf.so.3`
 
 **32-bit packages built** (defined in `multilib32/external/Buildroot.config`):
-`c-ares`, `file`, `fontconfig`, `libglib2`, `libusb`, `libusb-compat`, `libuv`, `libxmlparser`, `libxmlrpcxx`, `openssl`, `pcre`, `readline`
+`c-ares`, `file`, `fontconfig`, `libglib2`, `libusb`, `libusb-compat`, `libuv`, `openccu-base`, `openssl`, `pcre`, `readline`
+
+In this 32-bit build, `openccu-base` selects `compat-libraries` and supplies `libxmlparser.so` and `libXmlRpc.so` from the same pinned revision as the native build. The former standalone `libxmlparser` and `libxmlrpcxx` packages no longer exist.
 
 **CPU architecture config fragments** (selected per product via `BR2_PACKAGE_MULTILIB32_CONFIG_FRAGMENT_FILE`):
 
@@ -293,7 +218,7 @@ make PRODUCT=rpi4 multilib32-menuconfig
 make PRODUCT=rpi4 multilib32-savedefconfig
 ```
 
-**Interaction with recovery-system:** The recovery build rsync-copies completed `multilib32-*` build directories from the outer build before starting its own inner Buildroot run, so multilib32 is never rebuilt twice.
+**Interaction with recovery-system:** Recovery reuses only the completed current multilib32 build with a matching configuration fragment. Otherwise it builds its own variant. The outer package versions include the Base revision, Buildroot version and multilib configuration hash to invalidate stale nested builds.
 
 **Adding a new 32-bit library:** Edit `multilib32/external/Buildroot.config` to enable the package, verify it exists in the Buildroot package tree, then rebuild: `make -C build-<product> multilib32-rebuild`.
 
@@ -303,27 +228,23 @@ make PRODUCT=rpi4 multilib32-savedefconfig
 
 Each subdirectory is a standard Buildroot package (with `Config.in` + `<name>.mk`). Packages that have no upstream source use `SITE_METHOD = local`.
 
+The `eq3configd` and `ssdpd` daemons, their init scripts and user definitions are part of `openccu-base`; they are no longer separate packages. The Tcl modules `tclrega` and `tclrpc` are also built by Base.
+
 | Package | Purpose | Source |
 |---------|---------|--------|
-| `occu` | eQ-3 OCCU CCU firmware (core component) | github:OpenCCU/occu |
+| `openccu-base` | Native services, libraries, firmware, HMServer, WebUI and device types | github:OpenCCU/OpenCCU-Base |
 | `generic_raw_uart` | Low-latency UART kernel module for RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB, HmIP-RFUSB) | github:alexreinert/piVCCU |
 | `bcm2835_raw_uart` | Legacy BCM2835 raw UART kernel module (RPi-specific predecessor) | local |
 | `rpi-rf-mod` | Meta package: compiles the correct DTS overlay for the RF module per board; uses `host-dtc` | local |
 | `detect_radio_module` | Tool that detects attached HM/HmIP RF modules at runtime | github:alexreinert/piVCCU |
-| `eq3_char_loop` | eQ-3 char loopback kernel module for HM/HmIP virtual devices | local |
-| `eq3configd` | eQ-3 configuration daemon | local |
+| `eq3_char_loop` | eQ-3 char loopback kernel module; revision follows `openccu-base` | github:OpenCCU/OpenCCU-Base, src/eq3_char_loop |
 | `recovery-system` | Nested Buildroot build producing the recovery initramfs (see above) | local |
 | `multilib32` | Nested Buildroot build producing 32-bit userspace libraries for 64-bit targets | local |
-| `java-azul` | Azul Zulu Embedded JRE (required by OCCU) | cdn.azul.com |
-| `tclrega` | Tcl library to interact with ReGaHss (OCCU scripting engine) | local |
-| `tclrpc` | Tcl library to interact with XML-RPC interfaces | local |
+| `java-azul` | Azul Zulu Embedded JRE (required by HMServer) | cdn.azul.com |
 | `tdom` | Tcl DOM/XML library | local |
-| `libxmlparser` | XMLParser C++ library | local |
-| `libxmlrpcxx` | XML-RPC C++ library | local |
 | `hmlangw` | HomeMatic LAN Gateway daemon | local |
 | `neoserver` | Mediola NEO Server integration | local |
 | `cloudmatic` | CloudMatic/meine-homematic.de cloud add-on | github:OpenCCU/CloudMatic-CCUAddon |
-| `ssdpd` | SSDP daemon (UPnP device advertisement) | local |
 | `tailscale-bin` | Tailscale zero-config VPN (pre-built binary) | pkgs.tailscale.com |
 | `qemu-guest-agent` | QEMU guest agent (for OVA/VM targets) | download.qemu.org |
 | `xe-guest-utilities` | XCP-ng / XenServer guest utilities | github:xenserver/xe-guest-utilities |

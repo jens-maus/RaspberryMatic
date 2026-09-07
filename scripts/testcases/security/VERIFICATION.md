@@ -1,4 +1,4 @@
-# Verification — GHSA-c45w-fgwq-mvq4 / patch 0207-WebUI-Fix-ReGaScriptInjection
+# Verification — GHSA-c45w-fgwq-mvq4 / OpenCCU-Base package patch
 
 How we ensured the fix actually closes the vulnerability, without building a
 full firmware image. Three independent layers, each reproducible.
@@ -14,12 +14,13 @@ the PDA interface did no escaping at all.
 
 ## Layer 1 — escaper logic, isolated (`tclsh`)
 
-`rega_script_injection_test.tcl` reproduces the patched `hmscript_escapeString`
-and `rega_escape`, plus the *old* (vulnerable) escaper, and asserts the
+`rega_script_injection_test.tcl` sources the patched `hmscript_escapeString`
+and `rega_escape` from a supplied rootfs (or uses reference implementations in
+standalone mode), includes the *old* vulnerable escaper, and asserts the
 invariant above against quote/backslash payloads.
 
 ```text
-$ tclsh tests/security/rega_script_injection_test.tcl
+$ tclsh scripts/testcases/security/rega_script_injection_test.tcl
 ... 22 assertions ...
 ALL TESTS PASSED   (exit 0)
 ```
@@ -56,13 +57,16 @@ the would-be payload is just data.
 
 ## Layer 3 — patch hygiene
 
-- `.orig` files are pristine upstream — byte-identical to the four target files
-  in the currently-pinned OCCU (`3.89.2-1`; these files are unchanged since
-  `3.87.6-3`, where this was first verified); no other patch in
-  `buildroot-external/patches/occu/` touches these 4 files, so the base is correct.
-- `patch -p1 --dry-run` applies cleanly against the pinned occu tree.
-- The committed `.patch` matches `create_patches.sh` output (keeps CI
-  `git diff --exit-code` green).
+- `rootfs-patches/0207-WebUI-Fix-ReGaScriptInjection.patch` applies to the
+  pristine rootfs generated from the exact OpenCCU-Base commit pinned by
+  `OPENCCU_BASE_VERSION` in `openccu-base.mk`.
+- Buildroot calls `prepare_patch_input.sh`, applies the complete rootfs patch
+  series with zero-fuzz-compatible paths, and calls `finalize_patch_input.sh`
+  before installing the generated WebUI.
+- `rootfs-patches/validate_patches.sh` reproduces that lifecycle, verifies the
+  final rootfs invariants and compatibility symlinks, checks removed files and
+  Tcl syntax, and runs the security regression against the actual patched
+  helper implementations.
 - All 4 edited Tcl files pass `info complete` (brace balance).
 
 ## Layer 4 — functional regression on the live WebUI (does legit `\` still work?)
@@ -99,6 +103,10 @@ so escaper-doubling and parser-halving cancel) and neutralizes the injection.
 ## Reproduce
 
 ```sh
-tclsh tests/security/rega_script_injection_test.tcl     # layer 1
+tclsh scripts/testcases/security/rega_script_injection_test.tcl  # standalone layer 1
+# full generated-rootfs verification:
+buildroot-external/package/openccu-base/rootfs-patches/validate_patches.sh \
+  /absolute/path/to/pristine/build/rootfs \
+  /absolute/path/to/extracted/OpenCCU-Base
 # layer 2: run the two scripts above via any ReGa runner (rega.exe / tclrega)
 ```

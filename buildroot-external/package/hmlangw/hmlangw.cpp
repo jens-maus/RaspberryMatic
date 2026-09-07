@@ -57,7 +57,7 @@ static bool g_inBootloader = false;
 
 //const char *g_productString = "01,eQ3-HM-LGW,1.1.4,ABC0123456";
 
-#define VERSION "1.1.0"
+#define VERSION "1.1.1"
 static char *g_address=NULL;
 static const char *g_productString = "01,Revilo-HM-LGW," VERSION ",%s\r\n";
 
@@ -72,7 +72,8 @@ static char* create_hex_string( const char* source, int length, char* target, in
     if ( source )
     {
           current = target;
-        int i = 16;
+        int maxIterations = ( size - 1 ) / 3;
+        int i = maxIterations < 16 ? maxIterations : 16;
           while ( i-- )
         {
             length--;
@@ -80,12 +81,12 @@ static char* create_hex_string( const char* source, int length, char* target, in
             if(length >= 0)
             {
                     value = *source++;
-                    sprintf( current, " %02x", value );
+                    snprintf( current, 4, " %02x", value );
                     current += 3;
             }
             else
             {
-                sprintf( current, "   " );
+                snprintf( current, 4, "   " );
                 current += 3;
             }
           }

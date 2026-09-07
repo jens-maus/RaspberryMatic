@@ -1,0 +1,30 @@
+From 19fec7a1301abf9c2275c8ef8a06252e7dc346ef Mon Sep 17 00:00:00 2001
+From: Kruti Pendharkar <kp025370@broadcom.com>
+Date: Fri, 21 Feb 2025 05:54:27 -0800
+Subject: [PATCH] Fix function pointer definition mismatch
+
+Caught with -std=c23, which is the default for GCC 15.
+
+Upstream: https://github.com/vmware/open-vm-tools/commit/19fec7a1301abf9c2275c8ef8a06252e7dc346ef
+Addresses: https://github.com/vmware/open-vm-tools/issues/750
+
+[Backported to open-vm-tools 12.3.0 by omitting the AUTHORS update and
+adjusting the source path for the release tarball.]
+---
+ lib/lock/ul.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/lock/ul.c b/lib/lock/ul.c
+--- a/lib/lock/ul.c
++++ b/lib/lock/ul.c
+@@ -28,7 +28,7 @@
+ static Bool mxInPanic = FALSE;  // track when involved in a panic
+ static Bool mxUserCollectLockingTree = FALSE;
+ 
+-Bool (*MXUserTryAcquireForceFail)() = NULL;
++Bool (*MXUserTryAcquireForceFail)(const char *name) = NULL;
+ 
+ static MX_Rank (*MXUserMxCheckRank)(void) = NULL;
+ static void (*MXUserMxLockLister)(void) = NULL;
+-- 
+2.51.0

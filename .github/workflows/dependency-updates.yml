@@ -85,16 +85,16 @@ jobs:
             package: rpi-eeprom
             version_file: buildroot-external/package/rpi-eeprom/rpi-eeprom.mk
             version_regex: '^RPI_EEPROM_VERSION = (.*)$'
-          # - slug: rpi-kernel
-          #   script: scripts/update-rpi-kernel.sh
-          #   package: linux-rpi
-          #   version_file: buildroot-external/configs/rpi4.config
-          #   version_regex: '^BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github\.com/raspberrypi/linux/archive/([^"]+)\.tar\.gz"$'
-          # - slug: rpi-firmware
-          #   script: scripts/update-rpi-firmware.sh
-          #   package: rpi-firmware
-          #   version_file: buildroot-external/configs/rpi4.config
-          #   version_regex: '^BR2_PACKAGE_RPI_FIRMWARE_VERSION="([^"]+)"$'
+          - slug: rpi-kernel
+            script: scripts/update-rpi-kernel.sh
+            package: linux-rpi
+            version_file: buildroot-external/configs/rpi4.config
+            version_regex: '^BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github\.com/raspberrypi/linux/archive/([^"]+)\.tar\.gz"$'
+          - slug: rpi-firmware
+            script: scripts/update-rpi-firmware.sh
+            package: rpi-firmware
+            version_file: buildroot-external/configs/rpi4.config
+            version_regex: '^BR2_PACKAGE_RPI_FIRMWARE_VERSION="([^"]+)"$'
           - slug: wiringpi-odroid
             script: scripts/update-wiringpi-odroid.sh
             package: wiringpi-odroid

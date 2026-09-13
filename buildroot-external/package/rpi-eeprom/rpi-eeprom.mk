@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-RPI_EEPROM_VERSION = 279e8b86fd038f026a8daad1223305a15a7d1f2b
+RPI_EEPROM_VERSION = da7cd207d7ee97361ff76e1390634afae05aa3fa
 RPI_EEPROM_SITE = $(call github,raspberrypi,rpi-eeprom,$(RPI_EEPROM_VERSION))
 RPI_EEPROM_LICENSE = BSD-3-Clause, MIT, uIP, custom
 RPI_EEPROM_LICENSE_FILES = LICENSE
@@ -12,12 +12,12 @@ RPI_EEPROM_INSTALL_IMAGES = YES
 
 ifeq ($(BR2_PACKAGE_RPI_EEPROM_RPI4),y)
   # Raspberry Pi 4 (2711)
-  RPI_EEPROM_FIRMWARE_PATH = firmware-2711/stable/pieeprom-2026-08-04.bin
+  RPI_EEPROM_FIRMWARE_PATH = firmware-2711/stable/pieeprom-2026-09-12.bin
   RPI_EEPROM_RECOVERY_PATH = firmware-2711/stable/recovery.bin
   RPI_EEPROM_VL805_GLOB = firmware-2711/stable/vl805-*.bin
 else ifeq ($(BR2_PACKAGE_RPI_EEPROM_RPI5),y)
   # Raspberry Pi 5 (2712)
-  RPI_EEPROM_FIRMWARE_PATH = firmware-2712/stable/pieeprom-2026-09-10.bin
+  RPI_EEPROM_FIRMWARE_PATH = firmware-2712/stable/pieeprom-2026-09-12.bin
   RPI_EEPROM_RECOVERY_PATH = firmware-2712/stable/recovery.bin
 endif
 

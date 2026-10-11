@@ -595,7 +595,13 @@
       "patch": "0040-WebUI-AddonInstallNoReboot.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "c589a774566581d351af67396598d1d960fc3a18",
+    "base_pr": 181,
+    "cleanup_pr": null,
+    "patch": "0019-WebUI-EqualThanCondition.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "634337a7197d2038b68710467b71c917d3ee5add",

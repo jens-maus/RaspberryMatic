@@ -589,7 +589,13 @@
       "patch": "0036-WebUI-ImprovedFavIcons.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "79b2ab51f34131009b7de23c004e75b761859180",
+    "base_pr": 160,
+    "cleanup_pr": null,
+    "patch": "0040-WebUI-AddonInstallNoReboot.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "c0e41619b38aca3a0e366f404552556bd9964f9c",

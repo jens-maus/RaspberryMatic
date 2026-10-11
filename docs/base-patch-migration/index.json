@@ -199,17 +199,6 @@
       "sha256": "8bea0f511e5014773a09d4d105e63153229b52ad6032d1c3100bf43143217d0a"
     },
     {
-      "added": 33,
-      "files": [
-        "www/config/cp_software.cgi",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.js"
-      ],
-      "patch": "0040-WebUI-AddonInstallNoReboot.patch",
-      "removed": 12,
-      "sha256": "4bfc73bea08504dd76189da26993ec0b9d64a1e0bf244a45f19fd47e1927ef5d"
-    },
-    {
       "added": 138,
       "files": [
         "www/rega/esp/controls/heating_control.fn",
@@ -893,5 +882,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "a6a2478420087e9794cec93c870e76e4d460bf7371a15fdec070615ce8213b64"
+  "series_sha256": "36b5aeebb9dda9ea129b0f9a8cf367bdf2161225858ad0b059151cb18dc04f37"
 }

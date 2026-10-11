@@ -71,19 +71,6 @@
       "sha256": "b0482542b1fef82c10ec142aa5bcd72f484f2483a01d074f02bb8dc2ea77e811"
     },
     {
-      "added": 43,
-      "files": [
-        "www/rega/esp/programs.fn",
-        "www/rega/esp/sico.inc",
-        "www/rega/pages/msg/setValueRange.htm",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.js"
-      ],
-      "patch": "0019-WebUI-EqualThanCondition.patch",
-      "removed": 7,
-      "sha256": "ff54c26300bc354f4252169743e85efbbfc73b8c4834796ec5d5511ead83a25b"
-    },
-    {
       "added": 51,
       "files": [
         "www/rega/pages/msg/sysVarsArray.htm",
@@ -882,5 +869,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "36b5aeebb9dda9ea129b0f9a8cf367bdf2161225858ad0b059151cb18dc04f37"
+  "series_sha256": "c4dd887cd09c15ff5cb7a1ee91360fe1e1b66dfc31fe40ca4ec06d1a4527c5f8"
 }

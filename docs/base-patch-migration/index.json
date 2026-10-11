@@ -122,18 +122,6 @@
       "sha256": "c25537f3f3a564999fe80154b0e2fe7095e2abc3f4ec21298e138314cbf49648"
     },
     {
-      "added": 42,
-      "files": [
-        "www/rega/login.htm",
-        "www/rega/logout.htm",
-        "www/rega/pages/index.htm",
-        "www/webui/site.webmanifest"
-      ],
-      "patch": "0036-WebUI-ImprovedFavIcons.patch",
-      "removed": 3,
-      "sha256": "f202a9ec4d8a1a16430752a9902c9d129020fa75fce41b3fe97183cce12a8852"
-    },
-    {
       "added": 277,
       "files": [
         "www/api/methods.conf",
@@ -905,5 +893,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "c70004917b01029748b6c98305184a45cb51250b4553dc5920db373e82ce33ad"
+  "series_sha256": "a6a2478420087e9794cec93c870e76e4d460bf7371a15fdec070615ce8213b64"
 }

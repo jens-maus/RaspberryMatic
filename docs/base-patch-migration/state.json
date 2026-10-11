@@ -575,18 +575,24 @@
       "base_pr": 155,
       "cleanup_pr": 4399,
       "patch": "0002-WebUI-Bootstrap.patch"
+    },
+    {
+      "base_merge_commit": "7d8dbddf1d5ad2a5be0ccdfd0d0706742ac56ab7",
+      "base_pr": 157,
+      "cleanup_pr": 4403,
+      "patch": "0026-WebUI-Fix-CacheControl.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "7d8dbddf1d5ad2a5be0ccdfd0d0706742ac56ab7",
-    "base_pr": 157,
-    "cleanup_pr": 4403,
-    "patch": "0026-WebUI-Fix-CacheControl.patch",
+    "base_merge_commit": "570566e3fa0979698b83d0b6714997f78e8f9979",
+    "base_pr": 158,
+    "cleanup_pr": 4410,
+    "patch": "0036-WebUI-ImprovedFavIcons.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "f5ae9c94107220be490694ca7b3abee9a49870c3",
-  "verified_base_pin": "b9ce345d29be44193a45a0a1985d06c5cd236e7c",
-  "verified_source_sha256": "68f490e76df8ea63650a2236971ce3bd6e76ccb7bc884ef5346376a11b5208e4"
+  "verified_at_openccu_commit": "9a7e00a8b07fa4de86b2d25e45e072752792c74e",
+  "verified_base_pin": "030dba79b5e76cb10178a20e87a1b050df09faa9",
+  "verified_source_sha256": "61697fdc7b61329b130cbbc3df7251109584fdfa39335f879b326558d45a6cb1"
 }

@@ -8,7 +8,6 @@
 0032-WebUI-Show-Gateway-DC.patch
 0038-WebUI-DeviceOverview-StatusColumn.patch
 0039-WebUI-Fix-Style-Glitches.patch
-0040-WebUI-AddonInstallNoReboot.patch
 0042-WebUI-HeatingControl-HumidityBatteryValveState.patch
 0044-WebUI-DisableDeviceServiceMsg.patch
 0046-WebUI-ImprovedScriptEditor.patch

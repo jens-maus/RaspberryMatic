@@ -592,7 +592,7 @@
   "in_progress": {
     "base_merge_commit": "79b2ab51f34131009b7de23c004e75b761859180",
     "base_pr": 160,
-    "cleanup_pr": null,
+    "cleanup_pr": 4412,
     "patch": "0040-WebUI-AddonInstallNoReboot.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

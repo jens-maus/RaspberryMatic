@@ -586,7 +586,7 @@
   "in_progress": {
     "base_merge_commit": "570566e3fa0979698b83d0b6714997f78e8f9979",
     "base_pr": 158,
-    "cleanup_pr": null,
+    "cleanup_pr": 4410,
     "patch": "0036-WebUI-ImprovedFavIcons.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

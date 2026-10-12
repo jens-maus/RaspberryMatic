@@ -576,7 +576,8 @@
     if (isNaN(oldIndex) || oldIndex < 0) oldIndex = 0;
     if (oldIndex >= vals.length) oldIndex = vals.length - 1;
     selection.selectedIndex = oldIndex;
-    selection.parentNode.parentNode.parentNode.style.display = "";
+    var table = jQuery(selection).closest("table")[0];
+    if (table) table.style.display = "";
   };
 
   loadValueEdit = function(vals, sValue, optionList) 

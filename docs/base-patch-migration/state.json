@@ -593,18 +593,24 @@
       "base_pr": 160,
       "cleanup_pr": 4412,
       "patch": "0040-WebUI-AddonInstallNoReboot.patch"
+    },
+    {
+      "base_merge_commit": "c589a774566581d351af67396598d1d960fc3a18",
+      "base_pr": 181,
+      "cleanup_pr": 4414,
+      "patch": "0019-WebUI-EqualThanCondition.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "c589a774566581d351af67396598d1d960fc3a18",
-    "base_pr": 181,
-    "cleanup_pr": 4414,
-    "patch": "0019-WebUI-EqualThanCondition.patch",
+    "base_merge_commit": "79f0e6edb8c451bfa2194ce08582a48f8da475a0",
+    "base_pr": 183,
+    "cleanup_pr": 4420,
+    "patch": "0140-WebUI-Add-ChannelPicsInControl.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "634337a7197d2038b68710467b71c917d3ee5add",
-  "verified_base_pin": "79b2ab51f34131009b7de23c004e75b761859180",
-  "verified_source_sha256": "8e5a6f0328d5657499cd69464a346219eb10034197b0858fae9dd39d90a195b4"
+  "verified_at_openccu_commit": "8d6de61c778ddf83a8939761d1577395249b12d2",
+  "verified_base_pin": "c1ad8c60063ba347bf6552193b4f0e723950c9d4",
+  "verified_source_sha256": "81e4b6a91e1224aa501ef25dd7be9810875a950b74fbc99c5c500a89c40f52d8"
 }

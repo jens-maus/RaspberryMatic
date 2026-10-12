@@ -570,17 +570,6 @@
       "sha256": "3f0be372fcec9fb238b817dc45b3b76800240b90258edabe28da5a0e1f193961"
     },
     {
-      "added": 62,
-      "files": [
-        "www/rega/pages/tabs/control/hdevichannels.htm",
-        "www/rega/pages/tabs/control/hfuncchannels.htm",
-        "www/rega/pages/tabs/control/hroomchannels.htm"
-      ],
-      "patch": "0140-WebUI-Add-ChannelPicsInControl.patch",
-      "removed": 14,
-      "sha256": "3b3e86b4a0b84d18aeb23efbb9469e6907fffdedc197c9f43654d4ad7f616d90"
-    },
-    {
       "added": 58,
       "files": [
         "www/rega/esp/controls/weather_sensor.fn",
@@ -869,5 +858,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "c4dd887cd09c15ff5cb7a1ee91360fe1e1b66dfc31fe40ca4ec06d1a4527c5f8"
+  "series_sha256": "a9783be4600dbaac84e4ecb05cd146336ea01f2147e731df1724243e06f96e68"
 }

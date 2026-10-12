@@ -1,4 +1,4 @@
---- a/www/rega/esp/system.fn
+--- fa/www/rega/esp/system.fn
 +++ b/www/rega/esp/system.fn
 @@ -820,8 +820,16 @@
    !sv.ValueSubType(ist);
@@ -97,7 +97,7 @@
      sv.ValueType( ivtInteger );
      sv.ValueSubType( istEnum );
      sv.ValueList(system.GetVar("sValList"));
---- a/www/rega/pages/tabs/admin/msg/newSysVar.htm
+--- fa/www/rega/pages/tabs/admin/msg/newSysVar.htm
 +++ b/www/rega/pages/tabs/admin/msg/newSysVar.htm
 @@ -4,8 +4,28 @@
      object sv = dom.GetObject(system.GetVar("varid"));
@@ -344,7 +344,7 @@
        new Ajax.Request(url, opts);
      } else {
          // No name available
-@@ -387,6 +558,27 @@
+@@ -387,6 +558,28 @@
      $("tdValueEdit").innerHTML = s
    };
    
@@ -366,13 +366,14 @@
 +    if (isNaN(oldIndex) || oldIndex < 0) oldIndex = 0;
 +    if (oldIndex >= vals.length) oldIndex = vals.length - 1;
 +    selection.selectedIndex = oldIndex;
-+    selection.parentNode.parentNode.parentNode.style.display = "";
++    var table = jQuery(selection).closest("table")[0];
++    if (table) table.style.display = "";
 +  };
 +
    loadValueEdit = function(vals, sValue, optionList) 
    {
      if( vals == "" )
-@@ -396,7 +588,7 @@
+@@ -396,7 +589,7 @@
      var s = "";
      s += "<table class='CLASS05012'>";
      s += "<tr><td>"+ translateKey("lblValueDescription") + ":</td></tr>";
@@ -381,7 +382,7 @@
      s += "</table>";
      $("tdEdit").innerHTML = s;
      
---- a/www/webui/js/lang/de/translate.lang.js
+--- fa/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
 @@ -1104,6 +1104,15 @@
      "optionNone" : "Keine",
@@ -399,7 +400,7 @@
      "HelpTitle" : "Hilfe"
    }
  });
---- a/www/webui/js/lang/en/translate.lang.js
+--- fa/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
 @@ -1182,6 +1182,15 @@
      "optionNone" : "None",

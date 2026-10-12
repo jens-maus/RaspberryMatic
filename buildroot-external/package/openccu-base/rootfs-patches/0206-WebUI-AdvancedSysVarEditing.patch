@@ -1,4 +1,4 @@
---- fa/www/rega/esp/system.fn
+--- a/www/rega/esp/system.fn
 +++ b/www/rega/esp/system.fn
 @@ -820,8 +820,16 @@
    !sv.ValueSubType(ist);
@@ -97,7 +97,7 @@
      sv.ValueType( ivtInteger );
      sv.ValueSubType( istEnum );
      sv.ValueList(system.GetVar("sValList"));
---- fa/www/rega/pages/tabs/admin/msg/newSysVar.htm
+--- a/www/rega/pages/tabs/admin/msg/newSysVar.htm
 +++ b/www/rega/pages/tabs/admin/msg/newSysVar.htm
 @@ -4,8 +4,28 @@
      object sv = dom.GetObject(system.GetVar("varid"));
@@ -194,7 +194,7 @@
    var arrElem = ["#inpName", "#inpDesc"];
  
    jQuery.each(arrElem, function(index, elem){
-@@ -175,6 +228,99 @@
+@@ -175,6 +228,95 @@
      $("chnNameRow").hidden = true;
    };
    
@@ -210,7 +210,6 @@
 +      object sc;
 +      object destination;
 +      object sd;
-+      integer ruleNum;
 +      integer singleNum;
 +      integer conditionCount;
 +      integer maxIndex;
@@ -222,8 +221,7 @@
 +        {
 +          maxIndex = -1;
 +          rule = program.Rule();
-+          ruleNum = 0;
-+          while( rule && (ruleNum < 100) )
++          while( rule )
 +          {
 +            conditionCount = rule.RuleConditions().Count();
 +            if( conditionCount > 0 )
@@ -235,12 +233,11 @@
 +                {
 +                  singleNum = 0;
 +                  sc = condition.CndSingleCondition(singleNum);
-+                  while( sc && (singleNum < 200) )
++                  while( sc )
 +                  {
 +                    if( (sc.LeftValType() == ivtSystemId) && (sc.LeftVal() == sv.ID()) )
 +                    {
 +                      if( (sc.RightVal1ValType() == ivtInteger) && (sc.RightVal1() > maxIndex) ) { maxIndex = sc.RightVal1(); }
-+                      if( (sc.RightVal2ValType() == ivtInteger) && (sc.RightVal2() > maxIndex) ) { maxIndex = sc.RightVal2(); }
 +                    }
 +                    singleNum = singleNum + 1;
 +                    sc = condition.CndSingleCondition(singleNum);
@@ -253,7 +250,7 @@
 +            {
 +              singleNum = 0;
 +              sd = destination.DestSingleDestination(singleNum);
-+              while( sd && (singleNum < 200) )
++              while( sd )
 +              {
 +                if( (sd.DestinationParam() == ivtSystemId) && (sd.DestinationDP() == sv.ID()) )
 +                {
@@ -263,7 +260,6 @@
 +                sd = destination.DestSingleDestination(singleNum);
 +              }
 +            }
-+            ruleNum = ruleNum + 1;
 +            rule = rule.RuleSubRule();
 +          }
 +          if( maxIndex >= 0 )
@@ -294,7 +290,7 @@
    saveSysVars = function()
    {
      if ( isTextAllowed($("inpDesc").value) === false || isTextAllowed($("inpName").value) === false ) return;
-@@ -207,8 +353,18 @@
+@@ -207,8 +349,18 @@
            break;
          case 1:
            iSubType = SYSVAR_ENUM;
@@ -315,7 +311,7 @@
            break;
          case 2:
            iSubType = SYSVAR_GENERIC;
-@@ -228,6 +384,16 @@
+@@ -228,6 +380,16 @@
            var itmpMaxVal = parseFloat( $("inpMax").value );
            if( isNaN(itmpMinVal) ) itmpMinVal = 0;
            if( isNaN(itmpMaxVal) ) itmpMaxVal = 0;
@@ -332,7 +328,7 @@
            pb += "integer iMinVal = '"+itmpMinVal+"';";
            pb += "integer iMaxVal = '"+itmpMaxVal+"';";
            
-@@ -265,6 +431,11 @@
+@@ -265,6 +427,11 @@
            if (channel) { DeviceList.beginUpdateDevice(channel.deviceId); }
          }
        };
@@ -344,7 +340,7 @@
        new Ajax.Request(url, opts);
      } else {
          // No name available
-@@ -387,6 +558,28 @@
+@@ -387,6 +554,28 @@
      $("tdValueEdit").innerHTML = s
    };
    
@@ -373,7 +369,7 @@
    loadValueEdit = function(vals, sValue, optionList) 
    {
      if( vals == "" )
-@@ -396,7 +589,7 @@
+@@ -396,7 +585,7 @@
      var s = "";
      s += "<table class='CLASS05012'>";
      s += "<tr><td>"+ translateKey("lblValueDescription") + ":</td></tr>";
@@ -382,9 +378,9 @@
      s += "</table>";
      $("tdEdit").innerHTML = s;
      
---- fa/www/webui/js/lang/de/translate.lang.js
+--- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -1104,6 +1104,15 @@
+@@ -1104,6 +1104,13 @@
      "optionNone" : "Keine",
      "optionNotActive" : "Nicht aktiv",
  
@@ -395,14 +391,12 @@
 +    "svEditEmptyValueList" : "Die Werteliste muss mindestens einen nichtleeren Eintrag enthalten.",
 +    "svEditProgramConfirmOne" : "1 Programm muss an die reduzierte Werteliste angepasst werden. Soll das betroffene Programm automatisch angepasst werden? Bitte anschlie%DFend pr%FCfen.",
 +    "svEditProgramConfirmMany" : "%d Programme m%FCssen an die reduzierte Werteliste angepasst werden. Sollen die betroffenen Programme automatisch angepasst werden? Bitte anschlie%DFend pr%FCfen.",
-+    "svEditProgramPreviewOnly" : "Testversion: Keine Programme angepasst und keine %C4nderung gespeichert.",
-+    "svEditProgramCheckFailed" : "Programmpr%FCfung fehlgeschlagen. Keine %C4nderung gespeichert.",
      "HelpTitle" : "Hilfe"
    }
  });
---- fa/www/webui/js/lang/en/translate.lang.js
+--- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -1182,6 +1182,15 @@
+@@ -1182,6 +1182,13 @@
      "optionNone" : "None",
      "optionNotActive" : "Not active",
  
@@ -413,8 +407,6 @@
 +    "svEditEmptyValueList" : "The value list must contain at least one non-empty entry.",
 +    "svEditProgramConfirmOne" : "1 program must be adjusted to the shortened value list. Should the affected program be adjusted automatically? Please review it afterwards.",
 +    "svEditProgramConfirmMany" : "%d programs must be adjusted to the shortened value list. Should the affected programs be adjusted automatically? Please review them afterwards.",
-+    "svEditProgramPreviewOnly" : "Test version: No programs changed and nothing saved.",
-+    "svEditProgramCheckFailed" : "Program check failed. Nothing saved.",
      "HelpTitle" : "Help"
    }
  });

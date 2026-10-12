@@ -240,7 +240,6 @@
       object sc;
       object destination;
       object sd;
-      integer ruleNum;
       integer singleNum;
       integer conditionCount;
       integer maxIndex;
@@ -252,8 +251,7 @@
         {
           maxIndex = -1;
           rule = program.Rule();
-          ruleNum = 0;
-          while( rule && (ruleNum < 100) )
+          while( rule )
           {
             conditionCount = rule.RuleConditions().Count();
             if( conditionCount > 0 )
@@ -265,12 +263,11 @@
                 {
                   singleNum = 0;
                   sc = condition.CndSingleCondition(singleNum);
-                  while( sc && (singleNum < 200) )
+                  while( sc )
                   {
                     if( (sc.LeftValType() == ivtSystemId) && (sc.LeftVal() == sv.ID()) )
                     {
                       if( (sc.RightVal1ValType() == ivtInteger) && (sc.RightVal1() > maxIndex) ) { maxIndex = sc.RightVal1(); }
-                      if( (sc.RightVal2ValType() == ivtInteger) && (sc.RightVal2() > maxIndex) ) { maxIndex = sc.RightVal2(); }
                     }
                     singleNum = singleNum + 1;
                     sc = condition.CndSingleCondition(singleNum);
@@ -283,7 +280,7 @@
             {
               singleNum = 0;
               sd = destination.DestSingleDestination(singleNum);
-              while( sd && (singleNum < 200) )
+              while( sd )
               {
                 if( (sd.DestinationParam() == ivtSystemId) && (sd.DestinationDP() == sv.ID()) )
                 {
@@ -293,7 +290,6 @@
                 sd = destination.DestSingleDestination(singleNum);
               }
             }
-            ruleNum = ruleNum + 1;
             rule = rule.RuleSubRule();
           }
           if( maxIndex >= 0 )

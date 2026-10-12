@@ -1189,8 +1189,6 @@ jQuery.extend(true,langJSON, {
     "svEditEmptyValueList" : "The value list must contain at least one non-empty entry.",
     "svEditProgramConfirmOne" : "1 program must be adjusted to the shortened value list. Should the affected program be adjusted automatically? Please review it afterwards.",
     "svEditProgramConfirmMany" : "%d programs must be adjusted to the shortened value list. Should the affected programs be adjusted automatically? Please review them afterwards.",
-    "svEditProgramPreviewOnly" : "Test version: No programs changed and nothing saved.",
-    "svEditProgramCheckFailed" : "Program check failed. Nothing saved.",
     "HelpTitle" : "Help"
   }
 });

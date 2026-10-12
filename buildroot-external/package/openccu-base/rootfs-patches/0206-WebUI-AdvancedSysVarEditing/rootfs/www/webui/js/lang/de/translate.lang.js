@@ -1111,8 +1111,6 @@ jQuery.extend(true,langJSON, {
     "svEditEmptyValueList" : "Die Werteliste muss mindestens einen nichtleeren Eintrag enthalten.",
     "svEditProgramConfirmOne" : "1 Programm muss an die reduzierte Werteliste angepasst werden. Soll das betroffene Programm automatisch angepasst werden? Bitte anschlie%DFend pr%FCfen.",
     "svEditProgramConfirmMany" : "%d Programme m%FCssen an die reduzierte Werteliste angepasst werden. Sollen die betroffenen Programme automatisch angepasst werden? Bitte anschlie%DFend pr%FCfen.",
-    "svEditProgramPreviewOnly" : "Testversion: Keine Programme angepasst und keine %C4nderung gespeichert.",
-    "svEditProgramCheckFailed" : "Programmpr%FCfung fehlgeschlagen. Keine %C4nderung gespeichert.",
     "HelpTitle" : "Hilfe"
   }
 });

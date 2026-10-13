@@ -607,7 +607,13 @@
       "patch": "0140-WebUI-Add-ChannelPicsInControl.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "00d9cf721d8c723abbf4f58473d2123ed3b2ad75",
+    "base_pr": 186,
+    "cleanup_pr": null,
+    "patch": "0196-WebUI-Fix-FilterOfTwoColumnControlPages.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "a084a812f31cb5cb60557ee480a972d4dbbfcf9f",

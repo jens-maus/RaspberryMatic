@@ -340,7 +340,15 @@
        new Ajax.Request(url, opts);
      } else {
          // No name available
-@@ -387,6 +554,28 @@
+@@ -316,6 +483,7 @@
+         break;
+       case 1:
+         loadValueEdit(translateKey("lblVal1Val2Val3"));
++        updateValueList();
+         break;
+       case 2:
+         loadIntEdit(0, 65000);
+@@ -387,6 +555,28 @@
      $("tdValueEdit").innerHTML = s
    };
    
@@ -369,7 +377,7 @@
    loadValueEdit = function(vals, sValue, optionList) 
    {
      if( vals == "" )
-@@ -396,7 +585,7 @@
+@@ -396,7 +586,7 @@
      var s = "";
      s += "<table class='CLASS05012'>";
      s += "<tr><td>"+ translateKey("lblValueDescription") + ":</td></tr>";

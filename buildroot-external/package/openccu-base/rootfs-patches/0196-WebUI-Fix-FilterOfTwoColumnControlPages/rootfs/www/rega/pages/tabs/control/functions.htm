@@ -219,7 +219,21 @@
         }
       }
     }
-    loadChannels(sFirstId);
+    if (sFirstId != "")
+    {
+      loadChannels(sFirstId);
+    }
+    else
+    {
+      // no entry matches the filter: clear the selection and the channel list
+      iseInitUpdateArrays();
+      jQuery("#tblFunctionNames td").each(function() {
+        if (this.className == "ButtonStatusRoomsSelected") {
+          this.className = "ButtonStatusRooms";
+        }
+      });
+      jQuery("#chnList").empty();
+    }
   };
 
   clearInputLeft = function()

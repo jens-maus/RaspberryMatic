@@ -821,7 +821,7 @@
       "sha256": "8404fa38f1807a4cf2b6aee643e859e8df7220ea5e29aa5d82b8aa2846f0f2ba"
     },
     {
-      "added": 82,
+      "added": 112,
       "files": [
         "www/rega/pages/tabs/control/devices.htm",
         "www/rega/pages/tabs/control/functions.htm",
@@ -829,7 +829,7 @@
       ],
       "patch": "0196-WebUI-Fix-FilterOfTwoColumnControlPages.patch",
       "removed": 10,
-      "sha256": "c6aab4e4cbfdf19991edcebf7391073ae6e5e0fefd5f739b9c22158ff2daf061"
+      "sha256": "198a9054568b8ea2d813dea5143e0bf81858ccf6683d10e4d7fd894e95a9b497"
     },
     {
       "added": 4,

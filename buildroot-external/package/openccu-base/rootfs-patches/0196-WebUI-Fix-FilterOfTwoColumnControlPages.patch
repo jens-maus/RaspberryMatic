@@ -63,7 +63,7 @@
      colorFilterBtns(fltDL);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -270,8 +295,13 @@
+@@ -270,8 +295,23 @@
        else
        {
          show(arItems[i]['trid']);
@@ -73,7 +73,17 @@
 +        }
        }
      }
-+    loadChannels(sFirstId);
++    if (sFirstId != "")
++    {
++      loadChannels(sFirstId);
++    }
++    else
++    {
++      // no entry matches the filter: clear the selection and the channel list
++      iseInitUpdateArrays();
++      jQuery("#tblFunctionNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
++      jQuery("#chnList").empty();
++    }
    };
  
    clearInputLeft = function()
@@ -141,7 +151,7 @@
      colorFilterBtns(fltFN);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -188,8 +213,13 @@
+@@ -188,8 +213,23 @@
        else
        {
          show(arItems[i]['trid']);
@@ -151,7 +161,17 @@
 +        }
        }
      }
-+    loadChannels(sFirstId);
++    if (sFirstId != "")
++    {
++      loadChannels(sFirstId);
++    }
++    else
++    {
++      // no entry matches the filter: clear the selection and the channel list
++      iseInitUpdateArrays();
++      jQuery("#tblFunctionNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
++      jQuery("#chnList").empty();
++    }
    };
  
    clearInputLeft = function()
@@ -216,7 +236,7 @@
      colorFilterBtns(fltRM);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -212,8 +219,13 @@
+@@ -212,8 +219,23 @@
        else
        {
          show(arItems[i]['trid']);
@@ -226,7 +246,17 @@
 +        }
        }
      }
-+    loadChannels(sFirstId);
++    if (sFirstId != "")
++    {
++      loadChannels(sFirstId);
++    }
++    else
++    {
++      // no entry matches the filter: clear the selection and the channel list
++      iseInitUpdateArrays();
++      jQuery("#tblRoomNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
++      jQuery("#chnList").empty();
++    }
    };
  
    clearInputLeft = function()

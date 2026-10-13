@@ -821,17 +821,6 @@
       "sha256": "8404fa38f1807a4cf2b6aee643e859e8df7220ea5e29aa5d82b8aa2846f0f2ba"
     },
     {
-      "added": 120,
-      "files": [
-        "www/rega/pages/tabs/control/devices.htm",
-        "www/rega/pages/tabs/control/functions.htm",
-        "www/rega/pages/tabs/control/rooms.htm"
-      ],
-      "patch": "0196-WebUI-Fix-FilterOfTwoColumnControlPages.patch",
-      "removed": 10,
-      "sha256": "676f496bcc6ace77f61e9a8427660d8d7f7087c947498166633d7d033d77efde"
-    },
-    {
       "added": 4,
       "files": [
         "www/tcl/extern/cgi.tcl"
@@ -858,5 +847,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "a9783be4600dbaac84e4ecb05cd146336ea01f2147e731df1724243e06f96e68"
+  "series_sha256": "cc4a1b6be24084fce8041f346067a82f24bb0899f5d3d5bd396690b7795b94ec"
 }

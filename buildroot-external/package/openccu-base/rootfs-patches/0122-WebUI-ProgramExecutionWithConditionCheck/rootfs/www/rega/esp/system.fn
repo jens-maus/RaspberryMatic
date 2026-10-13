@@ -1053,7 +1053,7 @@ function ::TmToString() {
       !sTm = sTm # "nachts ";
       sTm = sTm # "${ruleConditionLblTimeDuringNight} ";
     }
-    elseif (tm.CalDuration() != 0) {
+    if ((tm.SunOffsetType() == sotNone) && (tm.CalDuration() != 0)) {
       sTm = sTm # "${lblTo} ";
       sTm = sTm # (tm.TimeSeconds() + tm.CalDuration()).ToTime().Format("%H:%M");
       sTm = sTm # " ${ruleConditionLblTimeClock} ";

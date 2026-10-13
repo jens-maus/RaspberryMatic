@@ -308,7 +308,7 @@
       ],
       "patch": "0073-WebUI-AstroDelays.patch",
       "removed": 27,
-      "sha256": "05d739e78b314d59e181e1429a3b8ac3bd026290564c4614c5f571e221805ff7"
+      "sha256": "2f32b3a1e3273d86d18f14dfd9f1ac6219f90d142a4ab75e5097010ec3219153"
     },
     {
       "added": 59,

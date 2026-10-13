@@ -233,7 +233,11 @@
     {
       // no entry matches the filter: clear the selection and the channel list
       iseInitUpdateArrays();
-      jQuery("#tblRoomNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
+      jQuery("#tblRoomNames td").each(function() {
+        if (this.className == "ButtonStatusRoomsSelected") {
+          this.className = "ButtonStatusRooms";
+        }
+      });
       jQuery("#chnList").empty();
     }
   };

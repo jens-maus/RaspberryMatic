@@ -151,7 +151,7 @@
      colorFilterBtns(fltFN);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -188,8 +213,23 @@
+@@ -188,8 +213,27 @@
        else
        {
          show(arItems[i]['trid']);
@@ -169,7 +169,11 @@
 +    {
 +      // no entry matches the filter: clear the selection and the channel list
 +      iseInitUpdateArrays();
-+      jQuery("#tblFunctionNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
++      jQuery("#tblFunctionNames td").each(function() {
++        if (this.className == "ButtonStatusRoomsSelected") {
++          this.className = "ButtonStatusRooms";
++        }
++      });
 +      jQuery("#chnList").empty();
 +    }
    };
@@ -236,7 +240,7 @@
      colorFilterBtns(fltRM);
      for (var i = 0; i < arItems.length; i++)
      {
-@@ -212,8 +219,23 @@
+@@ -212,8 +219,27 @@
        else
        {
          show(arItems[i]['trid']);
@@ -254,7 +258,11 @@
 +    {
 +      // no entry matches the filter: clear the selection and the channel list
 +      iseInitUpdateArrays();
-+      jQuery("#tblRoomNames td").removeClass("ButtonStatusRoomsSelected ButtonStatusRoomsPicSelected");
++      jQuery("#tblRoomNames td").each(function() {
++        if (this.className == "ButtonStatusRoomsSelected") {
++          this.className = "ButtonStatusRooms";
++        }
++      });
 +      jQuery("#chnList").empty();
 +    }
    };

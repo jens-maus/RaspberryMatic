@@ -744,7 +744,6 @@ jQuery.extend(true, langJSON, {
     "btnPresenceDetectionFalse" :                "Switch on presence detection",
     "btnPresenceDetectionTrue" :                 "Switch off presence detection",
     "btnResetPresence" :                         "Reset status",
-    "dialogRestart2ChanceReGaVersion" :          "For the change of the logic tier version to apply, the " +HMIdentifier.en.CCUShortName + " must be restarted.",
     "dialogBtnPerformLaterRestart" :             "Later",
     "dialogLblAckSecurityHint" : "I have read the above warning",
     "btnNext" : "Next",

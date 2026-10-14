@@ -51,11 +51,22 @@
     {
       "added": 0,
       "files": [
-        "www/config/cp_maintenance.cgi"
+        "www/api/methods.conf",
+        "www/api/methods/user/getregaversion.tcl",
+        "www/api/methods/user/setregaversion.tcl",
+        "www/config/cp_maintenance.cgi",
+        "www/webui/js/lang/de/translate.lang.extension.js",
+        "www/webui/js/lang/de/translate.lang.help.js",
+        "www/webui/js/lang/de/translate.lang.label.js",
+        "www/webui/js/lang/de/translate.lang.option.js",
+        "www/webui/js/lang/en/translate.lang.extension.js",
+        "www/webui/js/lang/en/translate.lang.help.js",
+        "www/webui/js/lang/en/translate.lang.label.js",
+        "www/webui/js/lang/en/translate.lang.option.js"
       ],
       "patch": "0008-WebUI-Disable-ReGa.patch",
-      "removed": 79,
-      "sha256": "73f1c3a22f10059b365de9629ae62bac1243e6413a45b9c55d86f050174d41af"
+      "removed": 144,
+      "sha256": "181346473c2f0a518c01460602d5801181de9c40f90fd693967583d8f8826dc6"
     },
     {
       "added": 79,
@@ -569,7 +580,7 @@
       ],
       "patch": "0143-WebUI-Fix-Translation.patch",
       "removed": 42,
-      "sha256": "4e893a31091e7630faccbc2aa14e0be7ea22a9fa2a825ff9c9d183625b71144c"
+      "sha256": "f2bb08dfda27f5b11b4ad05827769bd6454ce8dfc95d9618bc57f188287ee8dc"
     },
     {
       "added": 376,
@@ -581,7 +592,7 @@
       ],
       "patch": "0144-WebUI-ControlForMaintenanceChannel.patch",
       "removed": 1,
-      "sha256": "07ff6afc2bf10dbe9a6554382e508b4de2c96f9c36c39e647d80852324420dee"
+      "sha256": "9436d0754475bc37a0fa70ab48718b94ebb141a854663e17a11e6ca9d2585bb0"
     },
     {
       "added": 6,
@@ -746,7 +757,7 @@
       ],
       "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
       "removed": 7,
-      "sha256": "0e54c65fc9efd5f406dee70b6c1a24dccd7ded0cc3c620d96c7e468857df21bc"
+      "sha256": "e22040a8740657ac67960ee4d90a1050b5a8c47eeb5d4845b4fa4a44d2d9d4c2"
     },
     {
       "added": 86,
@@ -791,7 +802,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "85ed33ef96042454dde6a8e4f738466dff2da501ad773161161c0cbc65016992"
+      "sha256": "734f25f6b717c5ba97f7d0737a9f8dcf5eb104c71e130cb439a194ae32dbefab"
     },
     {
       "added": 163,
@@ -831,7 +842,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "61047fcb7c292d1f792664e3f6653780e67207792e20a28afe36db6b4f36a368"
+      "sha256": "65e9ee83f05c78eb5154e33223cd4d0090a2006ba1bcaff52d3af9ddad27f94f"
     }
   ],
   "schema": 1,

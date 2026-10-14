@@ -308,7 +308,6 @@ jQuery.extend(true,langJSON, {
     "lblSysConfCoupling1" : "DESCRIPTION",
     "lblSysConfSetPowerCost" : "Set the price per kWh",
     "lblSystemKey" : "System button",
-    "lblTDRegaVersion" :                         "Logic tier<br/>version",
     "lblTeachInKEY" : "KEY",
     "lblTeachInSGTIN" : "SGTIN",
     "lblText" : "Text",

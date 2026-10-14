@@ -89,6 +89,19 @@
      }
  
  
+--- a/www/tcl/eq3_old/common.tcl
++++ b/www/tcl/eq3_old/common.tcl
+@@ -173,6 +173,10 @@
+     return [read_var /VERSION VERSION]
+ }
+ 
++proc get_platform { } {
++    return [read_var /VERSION PLATFORM]
++}
++
+ proc get_CoProVersion {} {
+   set cfgFile "/var/hm_mode"
+   set unknownVersion "0.0.0"
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
 @@ -390,9 +390,10 @@

@@ -308,7 +308,6 @@ jQuery.extend(true,langJSON, {
     "lblSysConfCoupling1" : "DESCRIPTION",
     "lblSysConfSetPowerCost" : "Energiekostenverwaltung",
     "lblSystemKey" : "Systemtaste",
-    "lblTDRegaVersion" :                         "Logikschicht<br/>Version",
     "lblTeachInKEY" : "KEY",
     "lblTeachInSGTIN" : "SGTIN",
     "lblText" : "Text",

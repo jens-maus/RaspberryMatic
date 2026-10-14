@@ -26,7 +26,6 @@ jQuery.extend(true, langJSON, {
 
     "helpOsramLightify" : "You can create the pairing between the "+HMIdentifier.en.CCUShortName+" and <b>OSRAM Lightify</b> here. Please find further information here:",
     "helpPhilipsHue" : "You can create the pairing between the "+HMIdentifier.en.CCUShortName+" and <b>Philips Hue</b> here. Please find further information here:",
-    "lblTDReGaVersionHelp" :                     "Here you can define, which logic layer version of the CCU should be used. You can change to <b>Compatibility mode</b> if you have problems with older Homematic scripts.",
     "helpPartyModeWithinPrograms" : "If you select the holiday mode, you have to set the following parameters as well:",
     "dialogSettingsCMHintSoftwareUpdate3a" : "Update any additional modules installed to the latest version before installation of the update!",
 

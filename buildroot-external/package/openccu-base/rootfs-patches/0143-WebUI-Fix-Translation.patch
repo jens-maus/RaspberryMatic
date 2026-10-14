@@ -129,7 +129,7 @@
      "infoStatusControlStateUnknown" : "Zustand<br/>unbestimmt",
      "infoStatusControlCalculateFillingLevel" : "F&uuml;llmenge wird berechnet...",
      "infoStatusControlFillingLevel" : "F&uuml;llmenge:",
-@@ -883,7 +892,7 @@
+@@ -882,7 +891,7 @@
        "<li>Vollzugriff: Remote und lokaler Zugriff erlaubt</li>" +
        "<li>Eingeschr%E4nkt: Nur lokaler Zugriff erlaubt</li>" +
        "<li>Kein Zugriff: Zugriff nicht gestattet</li>" +
@@ -138,7 +138,7 @@
      "dialogSettingsFirewallLblHintIPAddresses" : "Sie k%F6nnen den Zugriff f%FCr einzelne IP-Adressen oder ganze Adressbereiche sowohl f%FCr IPv4 als auch f%FCr IPv6 freigeben. Geben Sie die Adressen durch ein ';' getrennt ein.",
      "dialogSettingsFirewallLblHintIPAddressesWithoutIPv6" : "Sie k%F6nnen den Zugriff f%FCr einzelne IP-Adressen (z. B. 192.168.0.1) oder ganze Adressbereiche (z. B. 192.168.0.0/16) f%FCr IPv4 freigeben. Geben Sie die Adressen durch ein ';' getrennt ein.",
      "dglUserNewFwSettingsTitle" : "Bitte beachten!",
-@@ -993,7 +1002,7 @@
+@@ -992,7 +1001,7 @@
      "apMigrationErrorOrTimeout" : "Bei dem Firmware-Update ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Ansicht und versuchen Sie es erneut.",
      "apMigrationUpdateSuccessfulAddition" : "Sie k%F6nnen den Access Point jetzt %FCber &ldquo;Ger%E4te anlernen&rdquo; anlernen.",
      "apMigrationUpdateSuccessfulAdditionMigrationMode" : "Der Access Point befindet sich jetzt im Posteingang.",
@@ -169,7 +169,7 @@
      "lblInfoStatusControlFrequency" : "Netzfrequenz",
      "lblInfoStatusControlGas" : "Verbrauch",
      "lblInfoStatusControlGasFlow" : "Gasdurchfluss",
-@@ -355,4 +355,4 @@
+@@ -354,4 +354,4 @@
  
      "noMOreKeys" : ""
    }
@@ -234,7 +234,7 @@
      "lblInfoStatusControlFrequency" : "Frequency",
      "lblInfoStatusControlGas" : "Consumption",
      "lblInfoStatusControlGasFlow" : "Gas flow",
-@@ -355,4 +355,4 @@
+@@ -354,4 +354,4 @@
  
      "noMOreKeys" : ""
    }

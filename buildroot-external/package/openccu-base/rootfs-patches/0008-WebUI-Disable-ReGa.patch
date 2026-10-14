@@ -1,3 +1,71 @@
+--- a/www/api/methods.conf
++++ b/www/api/methods.conf
+@@ -1235,20 +1235,6 @@
+         ARGUMENTS {_session_id_ userName userLang}
+ }
+ 
+-User.getReGaVersion {
+-        LEVEL NONE
+-        SCRIPT_FILE user/getregaversion.tcl
+-        INFO {Ermittelt die gewählte ReGaVersion}
+-        ARGUMENTS {}
+-}
+-
+-User.setReGaVersion {
+-        LEVEL USER
+-        SCRIPT_FILE user/setregaversion.tcl
+-        INFO {Speichert die gewählte ReGaVersion}
+-        ARGUMENTS {_session_id_ ReGaVersion}
+-}
+-
+ User.existsCertificate {
+         LEVEL ADMIN
+         SCRIPT_FILE user/existscertificate.tcl
+--- a/www/api/methods/user/getregaversion.tcl
++++ /dev/null
+@@ -1,26 +0,0 @@
+-##
+-# User.getReGaVersion
+-# Ermittelt die gewählte ReGaVersion
+-#
+-# Parameter: kein
+-#
+-# Rückgabewert: Gewählte ReGaVersion
+-##
+-
+- set defaultVersion "COMMUNITY"
+-
+- if {[catch {set fp [open "/etc/config/ReGaHssVersion" r]}] == 0} {
+-   set data [read $fp]
+-   set version [split $data "\n"]
+-   close $fp
+- } else {
+-   set version $defaultVersion
+- }
+-
+- set version [lindex $version 0]
+-
+- if {[string equal $version LEGACY]} {
+-   set version $defaultVersion
+- }
+-
+- jsonrpc_response [json_toString $version]
+--- a/www/api/methods/user/setregaversion.tcl
++++ /dev/null
+@@ -1,13 +0,0 @@
+-##
+-# User.setReGaVersion
+-# Speichert die gewÃ¤hlte ReGaVersion
+-#
+-# Parameter:
+-#   ReGaVersion: [string] ReGa Version
+-#
+-# RÃ¼ckgabewert: kein
+-##
+-
+-exec echo $args(ReGaVersion) > /etc/config/ReGaHssVersion
+-
+-jsonrpc_response ""
 --- a/www/config/cp_maintenance.cgi
 +++ b/www/config/cp_maintenance.cgi
 @@ -535,85 +535,6 @@
@@ -86,3 +154,87 @@
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
          table_data {class="CLASS20903"} $styleMaxWidth  {
            #puts "Fehler-<br>"
+--- a/www/webui/js/lang/de/translate.lang.extension.js
++++ b/www/webui/js/lang/de/translate.lang.extension.js
+@@ -726,7 +726,6 @@
+     "btnPresenceDetectionFalse" :                "Pr%E4senzerkennung einschalten",
+     "btnPresenceDetectionTrue" :                 "Pr%E4senzerkennung ausschalten",
+     "btnResetPresence" :                         "Reset Status",
+-    "dialogRestart2ChanceReGaVersion" :          "Damit die %C4nderung der Logikschicht-Version wirksam wird, muss die " +HMIdentifier.de.CCUShortName + " neu gestartet werden.",
+     "dialogBtnPerformLaterRestart" :             "Sp%E4ter",
+     "dialogLblAckSecurityHint" : "Ich habe die obige Warnung gelesen!",
+     "btnNext" : "Weiter",
+--- a/www/webui/js/lang/de/translate.lang.help.js
++++ b/www/webui/js/lang/de/translate.lang.help.js
+@@ -25,7 +25,6 @@
+       "<div>Diese Einstellung hat nur Auswirkungen auf gro&szlig;e Zeitr%E4ume (Woche/Monat/Jahr)</div>",
+     "helpOsramLightify" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>OSRAM-Lightify</b> her. Mehr Informationen finden Sie hier:",
+     "helpPhilipsHue" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>Philips-Hue</b> her. Mehr Informationen finden Sie hier:",
+-    "lblTDReGaVersionHelp" :                     "Hier k%F6nnen Sie festlegen, welche Version der Logikschicht in der CCU verwendet werden soll. Wechseln Sie zur Version <b>Kompatibilit%E4tsmodus</b>, wenn Sie Probleme mit %E4lteren Homematic Skripten haben.",
+ 
+     "helpPartyModeWithinPrograms" : "Wenn Sie den Urlaubsmodus w%E4hlen, m%FCssen Sie zus%E4tzlich folgende Parameter setzen:",
+     "dialogSettingsCMHintSoftwareUpdate3a" : "Bringen Sie eventuell installierte Zusatzmodule vor dem Update auf die aktuelle Version!",
+--- a/www/webui/js/lang/de/translate.lang.label.js
++++ b/www/webui/js/lang/de/translate.lang.label.js
+@@ -309,7 +309,6 @@
+     "lblSysConfCoupling1" : "DESCRIPTION",
+     "lblSysConfSetPowerCost" : "Energiekostenverwaltung",
+     "lblSystemKey" : "Systemtaste",
+-    "lblTDRegaVersion" :                         "Logikschicht<br/>Version",
+     "lblTeachInKEY" : "KEY",
+     "lblTeachInSGTIN" : "SGTIN",
+     "lblText" : "Text",
+--- a/www/webui/js/lang/de/translate.lang.option.js
++++ b/www/webui/js/lang/de/translate.lang.option.js
+@@ -100,9 +100,6 @@
+     "optionRGBWControllerPrg6" : "TV-Simulation",
+     "optionRadiator" : "Radiator",
+     "optionRainbow" : "Regenbogen",
+-    "optionReGaCOMMUNITY" :                      "Standard",
+-    "optionReGaLEGACY" :                         "Legacy",
+-    "optionReGaNORMAL" :                         "Kompatibilit%E4tsmodus",
+     "optionRelayInactive" : "Ger%E4t nicht aktiv",
+     "optionRelayOffDelay05S" : "Standby nach 0,5 s.",
+     "optionRelayOffDelay10S" : "Standby nach 10 s.",
+--- a/www/webui/js/lang/en/translate.lang.extension.js
++++ b/www/webui/js/lang/en/translate.lang.extension.js
+@@ -724,7 +724,6 @@
+     "btnPresenceDetectionFalse" :                "Switch on presence detection",
+     "btnPresenceDetectionTrue" :                 "Switch off presence detection",
+     "btnResetPresence" :                         "Reset status",
+-    "dialogRestart2ChanceReGaVersion" :          "For the change of the logic tier version to apply, the " +HMIdentifier.en.CCUShortName + " must be restarted.",
+     "dialogBtnPerformLaterRestart" :             "Later",
+     "dialogLblAckSecurityHint" : "I have read the above warning",
+     "btnNext" : "Next",
+--- a/www/webui/js/lang/en/translate.lang.help.js
++++ b/www/webui/js/lang/en/translate.lang.help.js
+@@ -26,7 +26,6 @@
+ 
+     "helpOsramLightify" : "You can create the pairing between the "+HMIdentifier.en.CCUShortName+" and <b>OSRAM Lightify</b> here. Please find further information here:",
+     "helpPhilipsHue" : "You can create the pairing between the "+HMIdentifier.en.CCUShortName+" and <b>Philips Hue</b> here. Please find further information here:",
+-    "lblTDReGaVersionHelp" :                     "Here you can define, which logic layer version of the CCU should be used. You can change to <b>Compatibility mode</b> if you have problems with older Homematic scripts.",
+     "helpPartyModeWithinPrograms" : "If you select the holiday mode, you have to set the following parameters as well:",
+     "dialogSettingsCMHintSoftwareUpdate3a" : "Update any additional modules installed to the latest version before installation of the update!",
+ 
+--- a/www/webui/js/lang/en/translate.lang.label.js
++++ b/www/webui/js/lang/en/translate.lang.label.js
+@@ -309,7 +309,6 @@
+     "lblSysConfCoupling1" : "DESCRIPTION",
+     "lblSysConfSetPowerCost" : "Set the price per kWh",
+     "lblSystemKey" : "System button",
+-    "lblTDRegaVersion" :                         "Logic tier<br/>version",
+     "lblTeachInKEY" : "KEY",
+     "lblTeachInSGTIN" : "SGTIN",
+     "lblText" : "Text",
+--- a/www/webui/js/lang/en/translate.lang.option.js
++++ b/www/webui/js/lang/en/translate.lang.option.js
+@@ -100,9 +100,6 @@
+     "optionRGBWControllerPrg6" : "TV simulation",
+     "optionRadiator" : "Radiator",
+     "optionRainbow" : "Rainbow",
+-    "optionReGaCOMMUNITY" :                      "Standard",
+-    "optionReGaLEGACY" :                         "Legacy",
+-    "optionReGaNORMAL" :                         "Compatibility mode",
+     "optionRelayInactive" : "Device not active",
+     "optionRelayOffDelay05S" : "Standby after 0,5 s.",
+     "optionRelayOffDelay10S" : "Standby after 10 s.",

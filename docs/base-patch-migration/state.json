@@ -625,7 +625,13 @@
       "patch": "0008-WebUI-Disable-ReGa.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "8c10dbf35a48c6e384993fa2c7005b355791cfae",
+    "base_pr": 194,
+    "cleanup_pr": null,
+    "patch": "0012-WebUI-RecoveryButton.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "559a5a50463591930ffeac8c6ffe0e496c5d6f9f",

@@ -48,20 +48,6 @@
       "sha256": "b117ee17f1bf93cd19cb34a313f5a34abd9b539f26ca665680f68de5e05000d8"
     },
     {
-      "added": 110,
-      "files": [
-        "www/api/methods.conf",
-        "www/api/methods/recoverymode/enter.tcl",
-        "www/config/cp_maintenance.cgi",
-        "www/tcl/eq3_old/common.tcl",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.js"
-      ],
-      "patch": "0012-WebUI-RecoveryButton.patch",
-      "removed": 2,
-      "sha256": "f218f52963e3255e3cfd1931fc9e6f7d690dfae2bff1a79d6450abcadb84d219"
-    },
-    {
       "added": 51,
       "files": [
         "www/rega/pages/msg/sysVarsArray.htm",
@@ -826,5 +812,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "6ce8cb29732e47f46fc5902864457734a9925e01cf5bbabb6fc6ae5cfa959301"
+  "series_sha256": "d380d944e0ee3d9915239866dbd108354c5d183c472f953dfac016439b51461f"
 }

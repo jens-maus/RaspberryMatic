@@ -611,18 +611,24 @@
       "base_pr": 186,
       "cleanup_pr": 4425,
       "patch": "0196-WebUI-Fix-FilterOfTwoColumnControlPages.patch"
+    },
+    {
+      "base_merge_commit": "7f9702d288f098760bdb6c408a07396b917c67f8",
+      "base_pr": 188,
+      "cleanup_pr": 4427,
+      "patch": "0073-WebUI-AstroDelays.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "7f9702d288f098760bdb6c408a07396b917c67f8",
-    "base_pr": 188,
-    "cleanup_pr": 4427,
-    "patch": "0073-WebUI-AstroDelays.patch",
+    "base_merge_commit": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
+    "base_pr": 193,
+    "cleanup_pr": 4432,
+    "patch": "0008-WebUI-Disable-ReGa.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "4dc98eecef4eb2e768af1dcb96e7841b69654adc",
-  "verified_base_pin": "00d9cf721d8c723abbf4f58473d2123ed3b2ad75",
-  "verified_source_sha256": "e3986a5c7490c0ac5044bbbaa29d6f481b2c62b43b3de5f6ee270c16549ce21d"
+  "verified_at_openccu_commit": "6bb0e1690c53251bc5ed7118682f3887cd706f23",
+  "verified_base_pin": "df07a0ec4e956e65f7c14cc96364e738245220cc",
+  "verified_source_sha256": "ebeeccda8fea1c94d8fa277874ce1729812aa15acc5570ced66d22f9b2507204"
 }

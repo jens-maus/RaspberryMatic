@@ -49,26 +49,6 @@
       "sha256": "b117ee17f1bf93cd19cb34a313f5a34abd9b539f26ca665680f68de5e05000d8"
     },
     {
-      "added": 0,
-      "files": [
-        "www/api/methods.conf",
-        "www/api/methods/user/getregaversion.tcl",
-        "www/api/methods/user/setregaversion.tcl",
-        "www/config/cp_maintenance.cgi",
-        "www/webui/js/lang/de/translate.lang.extension.js",
-        "www/webui/js/lang/de/translate.lang.help.js",
-        "www/webui/js/lang/de/translate.lang.label.js",
-        "www/webui/js/lang/de/translate.lang.option.js",
-        "www/webui/js/lang/en/translate.lang.extension.js",
-        "www/webui/js/lang/en/translate.lang.help.js",
-        "www/webui/js/lang/en/translate.lang.label.js",
-        "www/webui/js/lang/en/translate.lang.option.js"
-      ],
-      "patch": "0008-WebUI-Disable-ReGa.patch",
-      "removed": 144,
-      "sha256": "181346473c2f0a518c01460602d5801181de9c40f90fd693967583d8f8826dc6"
-    },
-    {
       "added": 79,
       "files": [
         "www/api/methods.conf",
@@ -846,5 +826,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "ddee5392afc43f28f5b0b0f38b4d433a63eb030435102221df957bea9804ee92"
+  "series_sha256": "6ce8cb29732e47f46fc5902864457734a9925e01cf5bbabb6fc6ae5cfa959301"
 }

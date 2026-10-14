@@ -19,6 +19,9 @@ catch {
   }
   close $fd
 }
+if { $platform == "" } {
+  jsonrpc_error 500 "could not determine the platform from /VERSION"
+}
 if { $platform == "oci" || $platform == "lxc" } {
   jsonrpc_error 501 "recovery mode is not supported on platform $platform"
 }

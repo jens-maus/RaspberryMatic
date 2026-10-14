@@ -617,18 +617,24 @@
       "base_pr": 188,
       "cleanup_pr": 4427,
       "patch": "0073-WebUI-AstroDelays.patch"
+    },
+    {
+      "base_merge_commit": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
+      "base_pr": 193,
+      "cleanup_pr": 4432,
+      "patch": "0008-WebUI-Disable-ReGa.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
-    "base_pr": 193,
-    "cleanup_pr": 4432,
-    "patch": "0008-WebUI-Disable-ReGa.patch",
+    "base_merge_commit": "8c10dbf35a48c6e384993fa2c7005b355791cfae",
+    "base_pr": 194,
+    "cleanup_pr": 4436,
+    "patch": "0012-WebUI-RecoveryButton.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "6bb0e1690c53251bc5ed7118682f3887cd706f23",
-  "verified_base_pin": "df07a0ec4e956e65f7c14cc96364e738245220cc",
-  "verified_source_sha256": "ebeeccda8fea1c94d8fa277874ce1729812aa15acc5570ced66d22f9b2507204"
+  "verified_at_openccu_commit": "559a5a50463591930ffeac8c6ffe0e496c5d6f9f",
+  "verified_base_pin": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
+  "verified_source_sha256": "fb6cb94d217f4f50a7e275e902dd7e3de75526fa775cc64fcbb37955db819422"
 }

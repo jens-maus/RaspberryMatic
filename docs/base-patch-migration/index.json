@@ -48,7 +48,7 @@
       "sha256": "b117ee17f1bf93cd19cb34a313f5a34abd9b539f26ca665680f68de5e05000d8"
     },
     {
-      "added": 107,
+      "added": 110,
       "files": [
         "www/api/methods.conf",
         "www/api/methods/recoverymode/enter.tcl",
@@ -59,7 +59,7 @@
       ],
       "patch": "0012-WebUI-RecoveryButton.patch",
       "removed": 2,
-      "sha256": "d61786bc6f62282d4509ae0149d91bc5235ac82a82a05b9f0b33fc8117be1730"
+      "sha256": "f218f52963e3255e3cfd1931fc9e6f7d690dfae2bff1a79d6450abcadb84d219"
     },
     {
       "added": 51,

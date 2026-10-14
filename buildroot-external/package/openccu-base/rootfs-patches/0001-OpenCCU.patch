@@ -649,19 +649,6 @@
            <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
            <div id="webuiloader_caption"></div>
            <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
---- a/www/tcl/eq3_old/common.tcl
-+++ b/www/tcl/eq3_old/common.tcl
-@@ -173,6 +173,10 @@
-     return [read_var /VERSION VERSION]
- }
- 
-+proc get_platform { } {
-+    return [read_var /VERSION PLATFORM]
-+}
-+
- proc get_CoProVersion {} {
-   set cfgFile "/var/hm_mode"
-   set unknownVersion "0.0.0"
 --- a/www/upnp/basic_dev.cgi
 +++ b/www/upnp/basic_dev.cgi
 @@ -1,187 +1,316 @@

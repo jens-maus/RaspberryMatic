@@ -623,18 +623,18 @@
       "base_pr": 193,
       "cleanup_pr": 4432,
       "patch": "0008-WebUI-Disable-ReGa.patch"
+    },
+    {
+      "base_merge_commit": "8c10dbf35a48c6e384993fa2c7005b355791cfae",
+      "base_pr": 194,
+      "cleanup_pr": 4436,
+      "patch": "0012-WebUI-RecoveryButton.patch"
     }
   ],
-  "in_progress": {
-    "base_merge_commit": "8c10dbf35a48c6e384993fa2c7005b355791cfae",
-    "base_pr": 194,
-    "cleanup_pr": 4436,
-    "patch": "0012-WebUI-RecoveryButton.patch",
-    "phase": "cleanup-prepared; merge not yet verified"
-  },
+  "in_progress": null,
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "559a5a50463591930ffeac8c6ffe0e496c5d6f9f",
-  "verified_base_pin": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
-  "verified_source_sha256": "fb6cb94d217f4f50a7e275e902dd7e3de75526fa775cc64fcbb37955db819422"
+  "verified_at_openccu_commit": "0ace65578e1262ddab5dcc14ff87ad35a23a63fc",
+  "verified_base_pin": "b77da714d61ebf55b12c1aab5cc5194c46ec3678",
+  "verified_source_sha256": "598fdbca8614d2863d1430238dc74c7b6649efb267a1bfe30e5fd4d05944dd5e"
 }

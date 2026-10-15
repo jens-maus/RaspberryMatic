@@ -728,21 +728,6 @@
       "sha256": "734f25f6b717c5ba97f7d0737a9f8dcf5eb104c71e130cb439a194ae32dbefab"
     },
     {
-      "added": 172,
-      "files": [
-        "www/config/easymodes/MASTER_LANG/HEATINGTHERMOSTATE_2ND_GEN.js",
-        "www/config/easymodes/etc/hmipChannelConfigDialogs.tcl",
-        "www/config/easymodes/hmip/hmip-etrv-b1_1_master.tcl",
-        "www/config/easymodes/hmip/hmip-etrv-b_1_master.tcl",
-        "www/config/easymodes/hmip/hmip-etrv-c-2_1_master.tcl",
-        "www/config/easymodes/hmip/hmip-etrv-c_1_master.tcl",
-        "www/config/easymodes/hmip/hmip-etrv-cl_1_master.tcl"
-      ],
-      "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch",
-      "removed": 2524,
-      "sha256": "15a23b023f4700c94498587af0ff7851d23205e08b580e343196bff7059acff9"
-    },
-    {
       "added": 4,
       "files": [
         "www/tcl/extern/cgi.tcl"
@@ -769,5 +754,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "0d21d57f0f9df95b0283b7bb3ccf6dd304317d18b3378c0f3fea8d55bc909f4b"
+  "series_sha256": "a20632e3f5344fbf3fcb93a260445c54ed29dbe9f7a01fc6f5d37c8b8aef6c90"
 }

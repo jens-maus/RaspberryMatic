@@ -641,18 +641,24 @@
       "base_pr": 198,
       "cleanup_pr": 4439,
       "patch": "0133-WebUI-Fix-InternalIDExposure.patch"
+    },
+    {
+      "base_merge_commit": "6d7d79f36dd760a3d817f7281123bf95f328c6f9",
+      "base_pr": 199,
+      "cleanup_pr": 4442,
+      "patch": "0144-WebUI-ControlForMaintenanceChannel.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "6d7d79f36dd760a3d817f7281123bf95f328c6f9",
-    "base_pr": 199,
-    "cleanup_pr": 4442,
-    "patch": "0144-WebUI-ControlForMaintenanceChannel.patch",
+    "base_merge_commit": "ff52021b6b564033b73db09dbdb69523415292d7",
+    "base_pr": 200,
+    "cleanup_pr": 4445,
+    "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "662691f15dedca88a14ab9dd34f674ce82843fc9",
-  "verified_base_pin": "616b8bd530af6c0938b25f9bdce2c212b1d98c9b",
-  "verified_source_sha256": "5a0f2bdeeed387905a4ffdfc29d705dc65bb91ee7b0d56ad5684dde28d10fc4a"
+  "verified_at_openccu_commit": "5cf0d3573427e27996cfe06ee61f35c6f13c46ae",
+  "verified_base_pin": "6d7d79f36dd760a3d817f7281123bf95f328c6f9",
+  "verified_source_sha256": "8e159b248c25465471a10121983606ac89db96e91e15e8dc19ef4dd530e1c288"
 }

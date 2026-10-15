@@ -399,6 +399,17 @@
      "optionUnitD" : "Tage",
      "optionUnitH" : "Stunden",
      "optionUnitM" : "Minuten",
+--- a/www/webui/js/lang/de/translate.lang.stringtable.js
++++ b/www/webui/js/lang/de/translate.lang.stringtable.js
+@@ -219,6 +219,8 @@
+     "stringTableConfButtonTimePermanent" : "dauerhaft",
+     "stringTableConfigPendingFalse" : "Konfigurationsdaten zur %DCbertragung: Nein",
+     "stringTableConfigPendingTrue" : "Konfigurationsdaten zur %DCbertragung: Ja",
++    "stringTableStickyUnreachFalse" : "Kommunikation war gest%F6rt: Nein",
++    "stringTableStickyUnreachTrue" : "Kommunikation war gest%F6rt: Ja",
+     "stringTableControlMode" : "Modus Auto/Manu/Urlaub",
+     "stringTableCoolingDisable" : "K%FChlen im K%FChlmode",
+     "stringTableCurrentDetectionBehavior" :  "Verhalten",
 --- a/www/webui/js/lang/en/translate.lang.option.js
 +++ b/www/webui/js/lang/en/translate.lang.option.js
 @@ -198,6 +198,7 @@
@@ -409,3 +420,14 @@
      "optionUnitD" : "Days",
      "optionUnitH" : "Hours",
      "optionUnitM" : "Minutes",
+--- a/www/webui/js/lang/en/translate.lang.stringtable.js
++++ b/www/webui/js/lang/en/translate.lang.stringtable.js
+@@ -219,6 +219,8 @@
+     "stringTableConfButtonTimePermanent" : "permanent",
+     "stringTableConfigPendingFalse" : "There is no configuration data to be transmitted",
+     "stringTableConfigPendingTrue" : "Configuration data is ready for transmission",
++    "stringTableStickyUnreachFalse" : "Device communication was disturbed: No",
++    "stringTableStickyUnreachTrue" : "Device communication was disturbed: Yes",
+     "stringTableControlMode" : "Auto/manu/party mode",
+     "stringTableCoolingDisable" : "Cooling in cooling mode",
+     "stringTableCurrentDetectionBehavior" :  "Response",

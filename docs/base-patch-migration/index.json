@@ -337,7 +337,7 @@
       "sha256": "91dd7da07960e11e92367e29a26107fd5dd8e8f5096473c3ce66b9565cd0c15b"
     },
     {
-      "added": 47,
+      "added": 43,
       "files": [
         "www/api/methods/device/get.tcl",
         "www/api/methods/device/listalldetail.tcl",
@@ -349,13 +349,11 @@
         "www/rega/pages/tabs/admin/views/functions.htm",
         "www/rega/pages/tabs/admin/views/roomchannels.htm",
         "www/rega/pages/tabs/admin/views/rooms.htm",
-        "www/webui/js/lang/de/translate.lang.stringtable.js",
-        "www/webui/js/lang/en/translate.lang.stringtable.js",
         "www/webui/webui.js"
       ],
       "patch": "0104-WebUI-Add-AssignFunctionAndRoomToHmRFChan0.patch",
       "removed": 27,
-      "sha256": "86307f916627a6c3cc999012039d29cb737a90808701aa4ece5fa93cb3c17624"
+      "sha256": "7fc47358110a13c8afb366b26217f282cce91b2b1638335fb436f88be27b142e"
     },
     {
       "added": 432,
@@ -520,16 +518,18 @@
       "sha256": "3f0be372fcec9fb238b817dc45b3b76800240b90258edabe28da5a0e1f193961"
     },
     {
-      "added": 376,
+      "added": 380,
       "files": [
         "www/rega/esp/controls/maintenance.fn",
         "www/rega/esp/datapointconfigurator.fn",
         "www/webui/js/lang/de/translate.lang.option.js",
-        "www/webui/js/lang/en/translate.lang.option.js"
+        "www/webui/js/lang/de/translate.lang.stringtable.js",
+        "www/webui/js/lang/en/translate.lang.option.js",
+        "www/webui/js/lang/en/translate.lang.stringtable.js"
       ],
       "patch": "0144-WebUI-ControlForMaintenanceChannel.patch",
       "removed": 1,
-      "sha256": "9436d0754475bc37a0fa70ab48718b94ebb141a854663e17a11e6ca9d2585bb0"
+      "sha256": "9b7c54dc44c834f7f2ba8e1e01e858346ebb570c9740e652db0c27ad24d97576"
     },
     {
       "added": 6,

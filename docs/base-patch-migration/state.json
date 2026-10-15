@@ -637,7 +637,13 @@
       "patch": "0143-WebUI-Fix-Translation.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "616b8bd530af6c0938b25f9bdce2c212b1d98c9b",
+    "base_pr": 198,
+    "cleanup_pr": null,
+    "patch": "0133-WebUI-Fix-InternalIDExposure.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "f188d0eeb0ab7af4c2ef4c33dd31fee744cb7b0e",

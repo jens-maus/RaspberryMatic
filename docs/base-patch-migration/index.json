@@ -475,21 +475,6 @@
       "sha256": "ec3524afdd46ce33ba0c4611a6d0687f3c8bffeb1a29e3fef27e185f9feb0f81"
     },
     {
-      "added": 104,
-      "files": [
-        "www/rega/esp/functions.fn",
-        "www/rega/pages/tabs/control/devices.htm",
-        "www/rega/pages/tabs/control/hdevichannels.htm",
-        "www/rega/pages/tabs/control/hfuncchannels.htm",
-        "www/rega/pages/tabs/control/hroomchannels.htm",
-        "www/rega/pages/tabs/statusviews/alarmMessages.htm",
-        "www/rega/pages/tabs/user/newFav.htm"
-      ],
-      "patch": "0133-WebUI-Fix-InternalIDExposure.patch",
-      "removed": 49,
-      "sha256": "e0ca1a56cc776d14ae8e1852f3cbf463054970b416910e0120bda6ee1d151819"
-    },
-    {
       "added": 836,
       "files": [
         "www/config/control_panel.cgi",
@@ -798,5 +783,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "cbe5b6ccc94bfef64c0e3d7337bb7eac343755a684604bab6965698ccc73ca0f"
+  "series_sha256": "ec42961c218acd883491505d57c55fb8357cd7a4fcaeba96d90a3769811bc446"
 }

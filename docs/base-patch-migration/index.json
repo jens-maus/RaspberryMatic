@@ -728,7 +728,7 @@
       "sha256": "734f25f6b717c5ba97f7d0737a9f8dcf5eb104c71e130cb439a194ae32dbefab"
     },
     {
-      "added": 163,
+      "added": 165,
       "files": [
         "www/config/easymodes/MASTER_LANG/HEATINGTHERMOSTATE_2ND_GEN.js",
         "www/config/easymodes/etc/hmipChannelConfigDialogs.tcl",
@@ -740,7 +740,7 @@
       ],
       "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch",
       "removed": 2524,
-      "sha256": "8404fa38f1807a4cf2b6aee643e859e8df7220ea5e29aa5d82b8aa2846f0f2ba"
+      "sha256": "57193c702f70fedcb3f2f00553e3b8ae9c74dfdea39d4ff0a4c5e26f7f029b39"
     },
     {
       "added": 4,

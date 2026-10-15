@@ -50,7 +50,7 @@
        append html "</tr>"
      }
  
-@@ -3231,10 +3224,141 @@
+@@ -3231,10 +3224,143 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        append html "<tr><td>\${lblTemperatureWindowOpenCooling}</td>"
@@ -86,8 +86,8 @@
 +      append html "<tr>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallValue}</td>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
-+      append html "</tr>"
-+    }
+       append html "</tr>"
+     }
 +	   
 +    set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
 +    if { [info exists ps($param)] == 1  } {
@@ -104,8 +104,8 @@
 +    append html "<table class=\"ProfileTbl\">"
 +	
 +    array_clear options
-+    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-+      set options($val) "[expr int($val * 100)] %"
++    for {set i 0} {$i <= 100} {incr i} {
++      set options([expr {$i / 100.0}]) "$i %"
 +    }
 +
 +    set param VALVE_ERROR_RUN_POSITION
@@ -115,30 +115,32 @@
 +        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveStateErrorPosition}</td>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
 +    }
-+
+ 
 +    set param VALVE_MAXIMUM_POSITION
 +    if { [info exists ps($param)] == 1  } {
 +      incr prn
 +        append html "<td>\${stringTableValveMaximumPosition}</td>"
 +        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
-       append html "</tr>"
-     }
- 
-+    # left
-+    incr prn
-+    set param TEMPERATURE_OFFSET
-+    array_clear options
-+    for {set val -3.5} {$val <= 3.5} {set val [expr $val + 0.5]} {
-+      set options($val) "$val &#176;C"
++      append html "</tr>"
 +    }
++
++    # left
++    set param TEMPERATURE_OFFSET
 +    append html "<tr>"
-+    append html "<td>\${stringTableTemperatureOffset}</td>"
-+    append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
++    if { [info exists ps($param)] == 1  } {
++      incr prn
++      array_clear options
++      for {set val -3.5} {$val <= 3.5} {set val [expr $val + 0.5]} {
++        set options($val) "$val &#176;C"
++      }
++      append html "<td>\${stringTableTemperatureOffset}</td>"
++      append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
++    }
 +	
 +    # right
 +	  array_clear options
-+    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-+      set options($val) "[expr int($val * 100)] %"
++    for {set i 0} {$i <= 100} {incr i} {
++      set options([expr {$i / 100.0}]) "$i %"
 +    }
 +    set param VALVE_OFFSET
 +    if { [info exists ps($param)] == 1  } {
@@ -193,7 +195,7 @@
    append html "</table>"
  
    append html "<hr>"
-@@ -3249,7 +3373,32 @@
+@@ -3249,7 +3375,32 @@
      }
      append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
@@ -226,7 +228,7 @@
    append html "</table>"
  
    if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {
-@@ -3272,7 +3421,7 @@
+@@ -3272,7 +3423,7 @@
          append html "<tr>"
            append html "<td>\${lblAcousticAlarmSignal}</td>"
            append html "<td>"

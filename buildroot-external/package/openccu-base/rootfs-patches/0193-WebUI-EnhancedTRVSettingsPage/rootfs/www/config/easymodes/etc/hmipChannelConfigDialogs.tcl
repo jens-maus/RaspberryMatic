@@ -3273,8 +3273,8 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     append html "<table class=\"ProfileTbl\">"
 	
     array_clear options
-    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-      set options($val) "[expr int($val * 100)] %"
+    for {set i 0} {$i <= 100} {incr i} {
+      set options([expr {$i / 100.0}]) "$i %"
     }
 
     set param VALVE_ERROR_RUN_POSITION
@@ -3294,20 +3294,22 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     }
 
     # left
-    incr prn
     set param TEMPERATURE_OFFSET
-    array_clear options
-    for {set val -3.5} {$val <= 3.5} {set val [expr $val + 0.5]} {
-      set options($val) "$val &#176;C"
-    }
     append html "<tr>"
-    append html "<td>\${stringTableTemperatureOffset}</td>"
-    append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      array_clear options
+      for {set val -3.5} {$val <= 3.5} {set val [expr $val + 0.5]} {
+        set options($val) "$val &#176;C"
+      }
+      append html "<td>\${stringTableTemperatureOffset}</td>"
+      append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
+    }
 	
     # right
 	  array_clear options
-    for {set val 0} {$val <= 1} {set val [expr $val + 0.01]} {
-      set options($val) "[expr int($val * 100)] %"
+    for {set i 0} {$i <= 100} {incr i} {
+      set options([expr {$i / 100.0}]) "$i %"
     }
     set param VALVE_OFFSET
     if { [info exists ps($param)] == 1  } {

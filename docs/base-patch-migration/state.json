@@ -629,18 +629,18 @@
       "base_pr": 194,
       "cleanup_pr": 4436,
       "patch": "0012-WebUI-RecoveryButton.patch"
+    },
+    {
+      "base_merge_commit": "a55e7d9506cefa269c8559f3683d1f315d56a55a",
+      "base_pr": 197,
+      "cleanup_pr": 4437,
+      "patch": "0143-WebUI-Fix-Translation.patch"
     }
   ],
-  "in_progress": {
-    "base_merge_commit": "a55e7d9506cefa269c8559f3683d1f315d56a55a",
-    "base_pr": 197,
-    "cleanup_pr": 4437,
-    "patch": "0143-WebUI-Fix-Translation.patch",
-    "phase": "cleanup-prepared; merge not yet verified"
-  },
+  "in_progress": null,
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "0ace65578e1262ddab5dcc14ff87ad35a23a63fc",
-  "verified_base_pin": "b77da714d61ebf55b12c1aab5cc5194c46ec3678",
-  "verified_source_sha256": "598fdbca8614d2863d1430238dc74c7b6649efb267a1bfe30e5fd4d05944dd5e"
+  "verified_at_openccu_commit": "f188d0eeb0ab7af4c2ef4c33dd31fee744cb7b0e",
+  "verified_base_pin": "a55e7d9506cefa269c8559f3683d1f315d56a55a",
+  "verified_source_sha256": "9e350601f716ec8983b19569fca25283b0e45818654cc5224427fadaaebc1489"
 }

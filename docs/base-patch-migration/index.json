@@ -535,20 +535,6 @@
       "sha256": "3f0be372fcec9fb238b817dc45b3b76800240b90258edabe28da5a0e1f193961"
     },
     {
-      "added": 58,
-      "files": [
-        "www/rega/esp/controls/weather_sensor.fn",
-        "www/rega/esp/datapointconfigurator.fn",
-        "www/webui/js/lang/de/translate.lang.extension.js",
-        "www/webui/js/lang/de/translate.lang.label.js",
-        "www/webui/js/lang/en/translate.lang.extension.js",
-        "www/webui/js/lang/en/translate.lang.label.js"
-      ],
-      "patch": "0143-WebUI-Fix-Translation.patch",
-      "removed": 42,
-      "sha256": "f2bb08dfda27f5b11b4ad05827769bd6454ce8dfc95d9618bc57f188287ee8dc"
-    },
-    {
       "added": 376,
       "files": [
         "www/rega/esp/controls/maintenance.fn",
@@ -812,5 +798,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "d380d944e0ee3d9915239866dbd108354c5d183c472f953dfac016439b51461f"
+  "series_sha256": "cbe5b6ccc94bfef64c0e3d7337bb7eac343755a684604bab6965698ccc73ca0f"
 }

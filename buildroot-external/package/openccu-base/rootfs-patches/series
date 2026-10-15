@@ -32,7 +32,6 @@
 0135-WebUI-Add-ControlPanel-AdvancedSettings.patch
 0136-WebUI-Add-Tailscale-VPN.patch
 0138-WebUI-Add-SettingsAccessInStatusAndControl.patch
-0143-WebUI-Fix-Translation.patch
 0144-WebUI-ControlForMaintenanceChannel.patch
 0145-WebUI-NaturalSorting.patch
 0146-WebUI-ImprovedStartpageLayout.patch

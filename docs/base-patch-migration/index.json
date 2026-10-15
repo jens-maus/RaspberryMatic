@@ -518,20 +518,6 @@
       "sha256": "3f0be372fcec9fb238b817dc45b3b76800240b90258edabe28da5a0e1f193961"
     },
     {
-      "added": 381,
-      "files": [
-        "www/rega/esp/controls/maintenance.fn",
-        "www/rega/esp/datapointconfigurator.fn",
-        "www/webui/js/lang/de/translate.lang.option.js",
-        "www/webui/js/lang/de/translate.lang.stringtable.js",
-        "www/webui/js/lang/en/translate.lang.option.js",
-        "www/webui/js/lang/en/translate.lang.stringtable.js"
-      ],
-      "patch": "0144-WebUI-ControlForMaintenanceChannel.patch",
-      "removed": 1,
-      "sha256": "e31dceb4c46c30c69a9a259484f9c4fe60eb1cc55b5d75b7901a0be39fff034b"
-    },
-    {
       "added": 6,
       "files": [
         "www/webui/webui.js"
@@ -783,5 +769,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "ec42961c218acd883491505d57c55fb8357cd7a4fcaeba96d90a3769811bc446"
+  "series_sha256": "0d21d57f0f9df95b0283b7bb3ccf6dd304317d18b3378c0f3fea8d55bc909f4b"
 }

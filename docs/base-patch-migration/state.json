@@ -649,7 +649,13 @@
       "patch": "0144-WebUI-ControlForMaintenanceChannel.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "ff52021b6b564033b73db09dbdb69523415292d7",
+    "base_pr": 200,
+    "cleanup_pr": null,
+    "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "5cf0d3573427e27996cfe06ee61f35c6f13c46ae",

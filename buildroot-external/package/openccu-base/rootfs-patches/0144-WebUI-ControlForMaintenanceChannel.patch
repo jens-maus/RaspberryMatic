@@ -1,6 +1,6 @@
 --- a/www/rega/esp/controls/maintenance.fn
 +++ b/www/rega/esp/controls/maintenance.fn
-@@ -103,4 +103,371 @@
+@@ -103,4 +103,372 @@
      Call("/esp/controls/maintenance.fn::CreateNoFunction()");
    }
  
@@ -217,9 +217,9 @@
 +  Call("/esp/controls/maintenance.fn::OutputMaintenanceValueDP()");
 +
 +  mnDP = "ERROR_COMMUNICATION_PARTICLE_MATTER_SENSOR";
-+  mnDPText = "ERROR_COMMUNICATION_PARTICLE_MATTER_SENSOR:";
-+  mnDPTrue = "TRUE";
-+  mnDPFalse = "FALSE";
++  mnDPText = "";
++  mnDPTrue = "${stringTableErrorCommunicationParticulateMatterSensorTrue}";
++  mnDPFalse = "${stringTableErrorCommunicationParticulateMatterSensorFalse}";
 +  Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 +
 +  mnDP = "ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR";
@@ -254,8 +254,9 @@
 +
 +  mnDP = "ERROR_SABOTAGE";
 +  mnDPText = "";
-+  mnDPTrue = "${stringTableErrorSabotageTrue}";
-+  mnDPFalse = "${stringTableErrorSabotageFalse}";
++  ! the texts of stringTableErrorSabotageTrue/False are swapped
++  mnDPTrue = "${stringTableErrorSabotageFalse}";
++  mnDPFalse = "${stringTableErrorSabotageTrue}";
 +  Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 +
 +  mnDP = "ERROR_UNDERVOLTAGE";
@@ -266,8 +267,8 @@
 +
 +  mnDP = "HEATING_COOLING";
 +  mnDPText = "";
-+  mnDPTrue = "${stringTableHeating}";
-+  mnDPFalse = "${stringTableCooling}";
++  mnDPTrue = "${stringTableCooling}";
++  mnDPFalse = "${stringTableHeating}";
 +  Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 +
 +  mnDP = "HUMIDITY_ALARM";

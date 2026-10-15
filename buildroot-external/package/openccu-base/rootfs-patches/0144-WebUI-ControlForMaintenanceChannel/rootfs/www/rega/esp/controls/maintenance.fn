@@ -314,9 +314,9 @@ function ::CreateDeviceMaintenanceChannel()
   Call("/esp/controls/maintenance.fn::OutputMaintenanceValueDP()");
 
   mnDP = "ERROR_COMMUNICATION_PARTICLE_MATTER_SENSOR";
-  mnDPText = "ERROR_COMMUNICATION_PARTICLE_MATTER_SENSOR:";
-  mnDPTrue = "TRUE";
-  mnDPFalse = "FALSE";
+  mnDPText = "";
+  mnDPTrue = "${stringTableErrorCommunicationParticulateMatterSensorTrue}";
+  mnDPFalse = "${stringTableErrorCommunicationParticulateMatterSensorFalse}";
   Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 
   mnDP = "ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR";
@@ -351,8 +351,9 @@ function ::CreateDeviceMaintenanceChannel()
 
   mnDP = "ERROR_SABOTAGE";
   mnDPText = "";
-  mnDPTrue = "${stringTableErrorSabotageTrue}";
-  mnDPFalse = "${stringTableErrorSabotageFalse}";
+  ! the texts of stringTableErrorSabotageTrue/False are swapped
+  mnDPTrue = "${stringTableErrorSabotageFalse}";
+  mnDPFalse = "${stringTableErrorSabotageTrue}";
   Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 
   mnDP = "ERROR_UNDERVOLTAGE";
@@ -363,8 +364,8 @@ function ::CreateDeviceMaintenanceChannel()
 
   mnDP = "HEATING_COOLING";
   mnDPText = "";
-  mnDPTrue = "${stringTableHeating}";
-  mnDPFalse = "${stringTableCooling}";
+  mnDPTrue = "${stringTableCooling}";
+  mnDPFalse = "${stringTableHeating}";
   Call("/esp/controls/maintenance.fn::OutputMaintenanceBoolDP()");
 
   mnDP = "HUMIDITY_ALARM";

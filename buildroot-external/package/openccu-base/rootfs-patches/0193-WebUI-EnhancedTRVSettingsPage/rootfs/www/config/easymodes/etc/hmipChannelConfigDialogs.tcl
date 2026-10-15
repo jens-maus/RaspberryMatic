@@ -3261,6 +3261,7 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
     set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
     if { [info exists ps($param)] == 1  } {
       incr prn
+      append html "<tr>"
         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
         append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
       append html "</tr>"
@@ -3277,10 +3278,14 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       set options([expr {$i / 100.0}]) "$i %"
     }
 
+    set hasValvePosition [expr {[info exists ps(VALVE_ERROR_RUN_POSITION)] || [info exists ps(VALVE_MAXIMUM_POSITION)]}]
+    if { $hasValvePosition } {
+      append html "<tr>"
+    }
+
     set param VALVE_ERROR_RUN_POSITION
     if { [info exists ps($param)] == 1  } {
       incr prn
-      append html "<tr>"
         append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveStateErrorPosition}</td>"
         append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
     }
@@ -3290,6 +3295,8 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       incr prn
         append html "<td>\${stringTableValveMaximumPosition}</td>"
         append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
+    }
+    if { $hasValvePosition } {
       append html "</tr>"
     }
 
@@ -3357,8 +3364,8 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
       }
         append html "<td>\${stringTableClimateControlRegDecalcTime}</td>"
         append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
-      append html "</tr>"
     }
+      append html "</tr>"
   }
 	
   append html "</table>"

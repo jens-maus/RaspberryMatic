@@ -50,7 +50,7 @@
        append html "</tr>"
      }
  
-@@ -3231,10 +3224,143 @@
+@@ -3231,10 +3224,150 @@
      if { [info exists ps($param)] == 1  } {
        incr prn
        append html "<tr><td>\${lblTemperatureWindowOpenCooling}</td>"
@@ -86,12 +86,13 @@
 +      append html "<tr>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallValue}</td>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
-       append html "</tr>"
-     }
++      append html "</tr>"
++    }
 +	   
 +    set param TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD
 +    if { [info exists ps($param)] == 1  } {
 +      incr prn
++      append html "<tr>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableTemperatureFallOpenTimePeriod}</td>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">[getTextField $param $ps($param) $chn $prn]&nbsp;min [getMinMaxValueDescr $param]</td>"
 +      append html "</tr>"
@@ -108,22 +109,28 @@
 +      set options([expr {$i / 100.0}]) "$i %"
 +    }
 +
++    set hasValvePosition [expr {[info exists ps(VALVE_ERROR_RUN_POSITION)] || [info exists ps(VALVE_MAXIMUM_POSITION)]}]
++    if { $hasValvePosition } {
++      append html "<tr>"
++    }
++
 +    set param VALVE_ERROR_RUN_POSITION
 +    if { [info exists ps($param)] == 1  } {
 +      incr prn
-+      append html "<tr>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">\${stringTableValveStateErrorPosition}</td>"
 +        append html "<td name=\"expertParam\" class=\"hidden\">[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
 +    }
- 
++
 +    set param VALVE_MAXIMUM_POSITION
 +    if { [info exists ps($param)] == 1  } {
 +      incr prn
 +        append html "<td>\${stringTableValveMaximumPosition}</td>"
 +        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param][getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]</td>"
-+      append html "</tr>"
 +    }
-+
++    if { $hasValvePosition } {
+       append html "</tr>"
+     }
+ 
 +    # left
 +    set param TEMPERATURE_OFFSET
 +    append html "<tr>"
@@ -188,14 +195,14 @@
 +      }
 +        append html "<td>\${stringTableClimateControlRegDecalcTime}</td>"
 +        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]</td>"
-+      append html "</tr>"
 +    }
++      append html "</tr>"
 +  }
 +	
    append html "</table>"
  
    append html "<hr>"
-@@ -3249,7 +3375,32 @@
+@@ -3249,7 +3382,32 @@
      }
      append html "<tr><td>\${stringTableBoostTimePeriod}</td>"
        append html "<td>[get_ComboBox options $param separate_$CHANNEL\_$prn ps $param]&nbsp;[getHelpIcon $param]</td>"
@@ -228,7 +235,7 @@
    append html "</table>"
  
    if { ([info exists ps(CHANNEL_OPERATION_MODE)] == 1) || ([info exists ps(ACOUSTIC_ALARM_SIGNAL)] == 1) || ([info exists ps(EFFECT_ADAPTION_FADE_OUT_TIME_FACTOR)] == 1)  } {
-@@ -3272,7 +3423,7 @@
+@@ -3272,7 +3430,7 @@
          append html "<tr>"
            append html "<td>\${lblAcousticAlarmSignal}</td>"
            append html "<td>"

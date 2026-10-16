@@ -665,18 +665,18 @@
       "base_pr": 204,
       "cleanup_pr": 4452,
       "patch": "0124-WebUI-Fix-ShowMultipleSpacesInSysVar.patch"
+    },
+    {
+      "base_merge_commit": "935847b11e9535b1804498edd8ab4e93c84be123",
+      "base_pr": 205,
+      "cleanup_pr": 4454,
+      "patch": "0089-WebUI-MessagBoxFailureWarning.patch"
     }
   ],
-  "in_progress": {
-    "base_merge_commit": "935847b11e9535b1804498edd8ab4e93c84be123",
-    "base_pr": 205,
-    "cleanup_pr": 4454,
-    "patch": "0089-WebUI-MessagBoxFailureWarning.patch",
-    "phase": "cleanup-prepared; merge not yet verified"
-  },
+  "in_progress": null,
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "731831b983b8395caba70a0d57ee668b5ffc6595",
-  "verified_base_pin": "c9553f936fef2c1ce349b325532ae24999472cf0",
-  "verified_source_sha256": "b9fdb91d740d3bbc4be31ce1cbc4d1c6ae00febd37eccb1575c48edcaf3ba693"
+  "verified_at_openccu_commit": "18a4fd911e923ba2cab6710f566ddb0c187e3bc2",
+  "verified_base_pin": "2b84089ff7c5143a5afded768e86e2525d7c3857",
+  "verified_source_sha256": "666e3bced4446f63713b257216f8a5568b4a169bb62886edf16047d8f32c9a42"
 }

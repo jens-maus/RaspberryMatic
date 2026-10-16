@@ -1,7 +1,7 @@
 {
   "patches": [
     {
-      "added": 569,
+      "added": 568,
       "files": [
         "www/api/methods/ccu/downloadFirmware.tcl",
         "www/config/cp_maintenance.cgi",
@@ -28,8 +28,8 @@
         "www/webui/webui.js"
       ],
       "patch": "0001-OpenCCU.patch",
-      "removed": 254,
-      "sha256": "3871190c8f5e40f71ed829fb33f06e0e50eac58f8da9775c362af432988b6f3b"
+      "removed": 253,
+      "sha256": "f25428e4757dde541927d7be5f05cf4d470a55b9c232080ed677aa6df28fe715"
     },
     {
       "added": 51,
@@ -43,7 +43,7 @@
       ],
       "patch": "0029-WebUI-Fix-Variable-selection-and-filter.patch",
       "removed": 24,
-      "sha256": "ae211093fbd03edd1e6ff12b04eda7d3842836c9b3e9b5498c9ea782e824f55d"
+      "sha256": "f0bd09bf1310eab6f5c89a70559a36929775f7467e4ca9b2246cdb9c39797dbb"
     },
     {
       "added": 370,
@@ -144,7 +144,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 653,
-      "sha256": "a2c0f55b6609df9944b42e2523b46931f6d7c1bb403de592376669e1abf76719"
+      "sha256": "69c1911a3271d5e1421b55bd99dea4859ef1dc1e147b46e2a94cff83db8249de"
     },
     {
       "added": 138,
@@ -154,7 +154,7 @@
       ],
       "patch": "0042-WebUI-HeatingControl-HumidityBatteryValveState.patch",
       "removed": 19,
-      "sha256": "943035125753d5897eb0f6320b1886bf6ca7b9a1801a2a5310a95708fdc3a2ef"
+      "sha256": "f61b704cfd01dbe8802ec0b756d562774bd44d2daf7679d563882d97bd46ecf0"
     },
     {
       "added": 128,
@@ -194,7 +194,7 @@
       ],
       "patch": "0054-WebUI-AddTimeZones.patch",
       "removed": 155,
-      "sha256": "f6669485a264ad3a836c7c579668845c57f382f7d5dc4012d5914d3662e84ae8"
+      "sha256": "147797f504f10d556fb93e296f60dc44e41f9f505188138ede805aee9b61eae0"
     },
     {
       "added": 123,
@@ -205,7 +205,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "ce429be0a26269e88821596d34dca382d13992dacaadcc001aa7ca1f9365beb4"
+      "sha256": "1fc3a6717022bd8654b840821c3bca6b88f69a3a8d40587e1e6895c3e5f5a2e2"
     },
     {
       "added": 262,
@@ -219,7 +219,7 @@
       ],
       "patch": "0057-WebUI-ImprovedDutyCycleDisplay.patch",
       "removed": 106,
-      "sha256": "fff4c101cefff68b04a48bf444c9fa2e5317d710d098e62c561605ad8bf07863"
+      "sha256": "50786cf7a775275e75b4c2dd99137a4a8dd216c45054e336cfc6570a4c6e768f"
     },
     {
       "added": 357,
@@ -379,7 +379,7 @@
       ],
       "patch": "0119-WebUI-Fix-ProofAndSetValue.patch",
       "removed": 70,
-      "sha256": "6627cdc9628e480b1e7873ee066f8fb4877d1410db70d195bf728c22bf5c6f54"
+      "sha256": "56b2b74bbbe0f6432bae7f43eb6af8e9c918d5fb14d1acdab6c0df374390da41"
     },
     {
       "added": 38,
@@ -393,7 +393,7 @@
       ],
       "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
       "removed": 16,
-      "sha256": "e95e25b14711453b8602c73c2eaea8863d41c26ad1eb4a010ed890aaf319f10e"
+      "sha256": "b21dd1ed67e576892f57bd969ef96e045c46f26d786262db56d548da4083ae94"
     },
     {
       "added": 76,
@@ -436,7 +436,7 @@
       ],
       "patch": "0132-WebUI-Fix-UnitDisplay.patch",
       "removed": 96,
-      "sha256": "ec3524afdd46ce33ba0c4611a6d0687f3c8bffeb1a29e3fef27e185f9feb0f81"
+      "sha256": "18ecf5de6b3c6ef019aed3d52922d1976207ca9c4ff60bd3cf16ad69590cc170"
     },
     {
       "added": 836,
@@ -452,7 +452,7 @@
       ],
       "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
       "removed": 16,
-      "sha256": "9bc89b035b154cbcb837aa9127341c4a63a9c0996d746a9930bf7be112ca4ef1"
+      "sha256": "39163894e61203b29b33b40954f4dc3e7c2141d86ada81c1bf956435aaa7e5f4"
     },
     {
       "added": 72,
@@ -490,7 +490,7 @@
       ],
       "patch": "0145-WebUI-NaturalSorting.patch",
       "removed": 47,
-      "sha256": "3cef734d7ed861d557d959d041980bc7607e3907b2df3b059d561b50aa792d40"
+      "sha256": "9aa0ca8b8d1801af401bc6f17d4d3c4dfdee321181ecb36e8ac6f43d21ae8107"
     },
     {
       "added": 45,
@@ -534,17 +534,7 @@
       ],
       "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch",
       "removed": 3,
-      "sha256": "82bc9c1cec34d25de335ce477b37ab3eed8beab56a2fbc57b84c557c2ee306a6"
-    },
-    {
-      "added": 22,
-      "files": [
-        "www/ise/htm/header.htm",
-        "www/webui/webui.js"
-      ],
-      "patch": "0153-WebUI-Fix-ImproveImgUpdates.patch",
-      "removed": 23,
-      "sha256": "1da67968bc38e1c9906b78965e0145026ecaf59968a2468b3ef3c8938990f91b"
+      "sha256": "038f760fa8b18ebb97bf153eaac7b012156c2cb463807b15cfa71fc2ce8f391b"
     },
     {
       "added": 88,
@@ -705,5 +695,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "64a0f06a9e2faa4fe83be921e15a061e966c4272a65c85b781b856be607fa714"
+  "series_sha256": "1191dd3c649cb158ee9b20145ddac6815fa9aaad2401c06d4f02ae5cf777ca4d"
 }

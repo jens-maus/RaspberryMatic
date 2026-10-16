@@ -537,15 +537,17 @@
  
 --- a/www/ise/htm/header.htm
 +++ b/www/ise/htm/header.htm
-@@ -7,7 +7,7 @@
- </colgroup>
+@@ -8,8 +8,8 @@
  <tr>
    <!-- Logo -->
--          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/homematic_logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
-+          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/occu-logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
+   <td class="CLASS11100">
+-    <img id="headerLogo" src="/ise/img/homematic_logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" />
+-    <img id="headerLogoRed" src="/ise/img/homematic_logo_small_red.png" onclick="LogoClick();" class="SmallLogo hidden" alt="" />
++    <img id="headerLogo" src="/ise/img/occu-logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" />
++    <img id="headerLogoRed" src="/ise/img/occu-logo_small_red.png" onclick="LogoClick();" class="SmallLogo hidden" alt="" />
+   </td>
    <!-- Username und Pfad-->
    <td class="CLASS11101">
-     <table class="CLASS11102">
 --- a/www/ise/js/functions.j_
 +++ b/www/ise/js/functions.j_
 @@ -1904,11 +1904,11 @@
@@ -1274,7 +1276,7 @@
      $("body").appendChild(script);
    },
  
-@@ -34660,11 +34660,11 @@
+@@ -34654,11 +34654,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -1288,18 +1290,3 @@
          }
        }
      },
-@@ -34679,12 +34679,12 @@
- 
- SwitchOnFlashLight = function()
- {
--  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
-+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/occu-logo_small_red.png"; }
- };
- 
- SwitchOffFlashLight = function()
- {
--  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
-+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/occu-logo_small.png"; }
- };
- 
- getAjaxLoadElem = function() {

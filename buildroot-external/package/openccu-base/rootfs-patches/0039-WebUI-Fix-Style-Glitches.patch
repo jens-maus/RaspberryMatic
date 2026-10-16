@@ -3790,7 +3790,7 @@
          this.setFile( "/pages/msg/popupPropEditor.htm" );
          break;
        case ID_TRANSFER_PARAMETERS:
-@@ -33365,7 +33363,7 @@
+@@ -33359,7 +33357,7 @@
    var opts = {
      evalScripts: true,
      onComplete: function(trans) {
@@ -3799,7 +3799,7 @@
      }
    };
    var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
-@@ -45923,7 +45921,7 @@
+@@ -45919,7 +45917,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3808,7 +3808,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -45975,8 +45973,8 @@
+@@ -45971,8 +45969,8 @@
    
    if (!form) return;
  
@@ -3819,7 +3819,7 @@
  
    switch (form[gd_type])
    {
-@@ -46072,7 +46070,7 @@
+@@ -46068,7 +46066,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

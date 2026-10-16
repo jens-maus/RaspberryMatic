@@ -679,7 +679,13 @@
       "patch": "0155-WebUI-Add-HmIP-RFUSB-Support.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "af4539c3755ccdedab11216483dcf28e9321d25a",
+    "base_pr": 212,
+    "cleanup_pr": null,
+    "patch": "0153-WebUI-Fix-ImproveImgUpdates.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "0ba6800df3aa3afea28670d335ec428936bac3de",

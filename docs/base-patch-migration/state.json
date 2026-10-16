@@ -653,18 +653,24 @@
       "base_pr": 200,
       "cleanup_pr": 4445,
       "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch"
+    },
+    {
+      "base_merge_commit": "0b46b1a14456c698a20ad7a71cb6b6e3572217b7",
+      "base_pr": 202,
+      "cleanup_pr": 4450,
+      "patch": "0007-WebUI-Enhanced-FirmwareUpdate.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "0b46b1a14456c698a20ad7a71cb6b6e3572217b7",
-    "base_pr": 202,
-    "cleanup_pr": 4450,
-    "patch": "0007-WebUI-Enhanced-FirmwareUpdate.patch",
+    "base_merge_commit": "c9553f936fef2c1ce349b325532ae24999472cf0",
+    "base_pr": 204,
+    "cleanup_pr": 4452,
+    "patch": "0124-WebUI-Fix-ShowMultipleSpacesInSysVar.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "bcc2300990dd455121109fd91ebafaeae903472a",
-  "verified_base_pin": "806c0faf37551a50969ccd661f94f3bc509edc72",
-  "verified_source_sha256": "cbce2bf7cbfca8a8a85245fea54e5d6c7c242cea9afa6335b58fa6d65737db37"
+  "verified_at_openccu_commit": "60713f34c66a10f6b5349dce1d189507974dc5a2",
+  "verified_base_pin": "0b46b1a14456c698a20ad7a71cb6b6e3572217b7",
+  "verified_source_sha256": "1b459f9c3185ae6cf909d7d07b30e4793234e522fc56207f16d4ce95ec77f2e2"
 }

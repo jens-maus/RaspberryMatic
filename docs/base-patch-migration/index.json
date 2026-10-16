@@ -144,7 +144,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 653,
-      "sha256": "8bea0f511e5014773a09d4d105e63153229b52ad6032d1c3100bf43143217d0a"
+      "sha256": "a2c0f55b6609df9944b42e2523b46931f6d7c1bb403de592376669e1abf76719"
     },
     {
       "added": 138,
@@ -183,7 +183,7 @@
       ],
       "patch": "0046-WebUI-ImprovedScriptEditor.patch",
       "removed": 138,
-      "sha256": "25f125c4270c3b370e4f8ca515dd8ac69c8da17c7225397e452447dd7af7352e"
+      "sha256": "221668b567d3f21601996c0a3778c8ea2edd4e12b5f67b8c6f30ec7af605207d"
     },
     {
       "added": 751,
@@ -237,7 +237,7 @@
       ],
       "patch": "0061-WebUI-MenuSortedIcons.patch",
       "removed": 327,
-      "sha256": "9f79915df4a19a6c07037054d266dc604fa2e667d3aef601299f01762b8021f3"
+      "sha256": "29943f4d6fb665316a92a519d305df082b5c2d58ef16736147cf84e485f6451d"
     },
     {
       "added": 202,
@@ -403,15 +403,6 @@
       "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
       "removed": 16,
       "sha256": "e95e25b14711453b8602c73c2eaea8863d41c26ad1eb4a010ed890aaf319f10e"
-    },
-    {
-      "added": 1,
-      "files": [
-        "www/webui/style.css"
-      ],
-      "patch": "0124-WebUI-Fix-ShowMultipleSpacesInSysVar.patch",
-      "removed": 0,
-      "sha256": "c2a4e6a7786b1860ed76fe67f96b59945503b21d47b1835ae48e7d7828cd7b42"
     },
     {
       "added": 76,
@@ -738,5 +729,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "8c6c80feb5ae068a2db9339ce851ca49bab71e42c5ddb84f9e33fc92be50268d"
+  "series_sha256": "90e6c1d203d97e1d6098013b598fe7f6394be8dec7281ed827a5f571efce2eea"
 }

@@ -32,22 +32,6 @@
       "sha256": "3871190c8f5e40f71ed829fb33f06e0e50eac58f8da9775c362af432988b6f3b"
     },
     {
-      "added": 172,
-      "files": [
-        "www/api/backup/version.cgi",
-        "www/config/backup.tcl",
-        "www/config/cp_maintenance.cgi",
-        "www/config/cp_security.cgi",
-        "www/webui/js/lang/de/translate.lang.extension.js",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.extension.js",
-        "www/webui/js/lang/en/translate.lang.js"
-      ],
-      "patch": "0007-WebUI-Enhanced-FirmwareUpdate.patch",
-      "removed": 102,
-      "sha256": "b117ee17f1bf93cd19cb34a313f5a34abd9b539f26ca665680f68de5e05000d8"
-    },
-    {
       "added": 51,
       "files": [
         "www/rega/pages/msg/sysVarsArray.htm",
@@ -754,5 +738,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "a20632e3f5344fbf3fcb93a260445c54ed29dbe9f7a01fc6f5d37c8b8aef6c90"
+  "series_sha256": "8c6c80feb5ae068a2db9339ce851ca49bab71e42c5ddb84f9e33fc92be50268d"
 }

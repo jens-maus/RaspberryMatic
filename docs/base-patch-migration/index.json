@@ -563,21 +563,6 @@
       "sha256": "0937b1d2d709b1996d88ee72dcfc8bb057796b6e7f2fdf08a0355a7de479ec52"
     },
     {
-      "added": 22,
-      "files": [
-        "www/config/easymodes/etc/hmipChannelConfigDialogs.tcl",
-        "www/rega/esp/datapointconfigurator.fn",
-        "www/rega/esp/functions.fn",
-        "www/tools/js/model/devicetypelist.js",
-        "www/webui/js/lang/de/translate.lang.deviceDescription.js",
-        "www/webui/js/lang/en/translate.lang.deviceDescription.js",
-        "www/webui/webui.js"
-      ],
-      "patch": "0155-WebUI-Add-HmIP-RFUSB-Support.patch",
-      "removed": 12,
-      "sha256": "c372772bcab7c248758d777d38c5679cb556ed50643617c2d2eee5f40e698f50"
-    },
-    {
       "added": 23,
       "files": [
         "www/rega/pages/tabs/admin/systemvars.htm",
@@ -720,5 +705,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "758a7d8ee6859b4193df155d73ee6688ce09ce9c25fe2bd47a32601fc63d2a08"
+  "series_sha256": "64a0f06a9e2faa4fe83be921e15a061e966c4272a65c85b781b856be607fa714"
 }

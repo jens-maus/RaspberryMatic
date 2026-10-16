@@ -35,7 +35,6 @@
 0151-WebUI-Add-DeviceRestoreConfigButton.patch
 0153-WebUI-Fix-ImproveImgUpdates.patch
 0154-WebUI-DynamicResizing.patch
-0155-WebUI-Add-HmIP-RFUSB-Support.patch
 0156-WebUI-ImprovedConfirmDeletePopup.patch
 0161-WebUI-Add-ShowRFGatewayInDeviceList.patch
 0163-WebUI-ImprovedFileUploadButton.patch

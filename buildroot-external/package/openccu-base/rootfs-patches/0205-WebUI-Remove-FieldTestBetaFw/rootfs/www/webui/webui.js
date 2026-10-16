@@ -51558,6 +51558,15 @@ cpMessageBox.prototype =
       url = url+'?sid='+SessionId;                                                  
     }                                                                 
     var t = this;
+    var showLoadError = function(statusText) {
+      $('centerbox').hide();
+      $('trlayer').hide();
+      if(typeof errorLbl != 'undefined') {
+        MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
+      } else {
+        Ajax_failure(url, statusText);
+      }
+    };
     var opt = 
     {
       method: 'post',
@@ -51565,17 +51574,16 @@ cpMessageBox.prototype =
       postBody: pb,
       sendXML: false,
       onComplete: function(trans) {
+        // Prototype treats status 0 (e.g. a network error) as success and does not call onFailure
+        if(trans.status == 0) {
+          showLoadError(trans.statusText);
+          return;
+        }
         centerMessageBox();
         $('messagebox').style.display="";
       },
       onFailure: function(response) {
-        $('centerbox').hide();
-        $('trlayer').hide();
-        if(typeof errorLbl != 'undefined') {
-          MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
-        } else {
-          Ajax_failure(url, response.statusText);
-        }
+        showLoadError(response.statusText);
       }
     };
     new Ajax.Updater('messagebox',url,opt);

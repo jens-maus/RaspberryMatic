@@ -275,15 +275,6 @@
       "sha256": "8120dc9a8b05aae739e51ae96f072faf2a0f27f55a1b6b237ee1ab9556b2305e"
     },
     {
-      "added": 22,
-      "files": [
-        "www/webui/webui.js"
-      ],
-      "patch": "0089-WebUI-MessagBoxFailureWarning.patch",
-      "removed": 5,
-      "sha256": "ad559e67ea205cdd16823c9df43d777f0e77681efca937ea17c59f524956893c"
-    },
-    {
       "added": 74,
       "files": [
         "www/rega/esp/system.fn",
@@ -729,5 +720,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "90e6c1d203d97e1d6098013b598fe7f6394be8dec7281ed827a5f571efce2eea"
+  "series_sha256": "758a7d8ee6859b4193df155d73ee6688ce09ce9c25fe2bd47a32601fc63d2a08"
 }

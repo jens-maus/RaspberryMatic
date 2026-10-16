@@ -661,7 +661,13 @@
       "patch": "0007-WebUI-Enhanced-FirmwareUpdate.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "c9553f936fef2c1ce349b325532ae24999472cf0",
+    "base_pr": 204,
+    "cleanup_pr": null,
+    "patch": "0124-WebUI-Fix-ShowMultipleSpacesInSysVar.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "60713f34c66a10f6b5349dce1d189507974dc5a2",

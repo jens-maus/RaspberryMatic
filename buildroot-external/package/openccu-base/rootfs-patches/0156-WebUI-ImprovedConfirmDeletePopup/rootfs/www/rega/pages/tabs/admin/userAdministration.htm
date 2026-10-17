@@ -145,7 +145,8 @@
         Write("<td style='text-align:center; vertical-align: middle;' class='TblUserAdministration CLASS05303' >")
           Write("<div class='StdButton CLASS05304' onclick='editUser("#user.ID()#")'>${btnEdit}</div>")
           if (system.GetSessionVar('sessionUserID') != user.ID()) {
-            Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#",\""#user.Name()#"\")'>${btnRemove}</div>")
+            string sDelName = user.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
+            Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#",\""#sDelName#"\")'>${btnRemove}</div>")
           }
         Write("</td>")
         Write("</tr>")
@@ -190,8 +191,8 @@
   deleteUser = function(id,name)
   {
     var _id_ = id;
-	var _name_ = name;
-    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser").replace(/%s/, _name_), function(result) {
+    var _name_ = String(name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser").replace(/%s/, function() { return _name_; }), function(result) {
       if (result == YesNoDialog.RESULT_YES)
       {  
         var url = "/esp/system.htm?sid=" + SessionId;

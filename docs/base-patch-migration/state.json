@@ -685,7 +685,13 @@
       "patch": "0153-WebUI-Fix-ImproveImgUpdates.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "17383a074fb95a652335c31dadbbd85a0bf3b22f",
+    "base_pr": 213,
+    "cleanup_pr": null,
+    "patch": "0156-WebUI-ImprovedConfirmDeletePopup.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "638b1d7db704198ddd7ed335efa097deeeb96485",

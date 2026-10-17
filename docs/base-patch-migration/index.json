@@ -553,7 +553,7 @@
       "sha256": "0937b1d2d709b1996d88ee72dcfc8bb057796b6e7f2fdf08a0355a7de479ec52"
     },
     {
-      "added": 23,
+      "added": 26,
       "files": [
         "www/rega/pages/tabs/admin/systemvars.htm",
         "www/rega/pages/tabs/admin/userAdministration.htm",
@@ -566,7 +566,7 @@
       ],
       "patch": "0156-WebUI-ImprovedConfirmDeletePopup.patch",
       "removed": 20,
-      "sha256": "b4163a9d2b4d0cc7ca5900b0973ff99a43269938f19b462781bc45ea3210dcea"
+      "sha256": "4103b9b3b31074bfdc2c99c74551b0d017c0872365adb2d280c7bfd70f4a7358"
     },
     {
       "added": 165,

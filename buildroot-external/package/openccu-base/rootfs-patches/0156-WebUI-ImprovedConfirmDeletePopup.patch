@@ -1,15 +1,16 @@
 --- a/www/rega/pages/tabs/admin/systemvars.htm
 +++ b/www/rega/pages/tabs/admin/systemvars.htm
-@@ -233,7 +233,7 @@
+@@ -233,7 +233,8 @@
          Write("<table cellspacing='0' cellpadding='0' style='width:100%;'><tr>");
          Write("<td class='CLASS05210'>");
            string sClassName = "StdButton";
 -          string sOnclick = "DeleteSysVar("#sv.ID()#");";
-+          string sOnclick = "DeleteSysVar("#sv.ID()#",\""#sv.Name()#"\");";
++          string sDelName = sv.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
++          string sOnclick = "DeleteSysVar("#sv.ID()#",\""#sDelName#"\");";
            if( sv.Unerasable() )
            {
              sClassName = sClassName#"Inactive";
-@@ -427,10 +427,11 @@
+@@ -427,10 +428,11 @@
      }
    }
    
@@ -18,23 +19,24 @@
    {
      var _id_ = id;
 -    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveSysVar"), function(result) {
-+	var _name_ = name;
-+    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveSysVar").replace(/%s/, _name_), function(result) {
++    var _name_ = String(name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
++    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveSysVar").replace(/%s/, function() { return _name_; }), function(result) {
        if (result == YesNoDialog.RESULT_YES) { DeleteObject(_id_); }
      });    
    };
 --- a/www/rega/pages/tabs/admin/userAdministration.htm
 +++ b/www/rega/pages/tabs/admin/userAdministration.htm
-@@ -145,7 +145,7 @@
+@@ -145,7 +145,8 @@
          Write("<td style='text-align:center; vertical-align: middle;' class='TblUserAdministration CLASS05303' >")
            Write("<div class='StdButton CLASS05304' onclick='editUser("#user.ID()#")'>${btnEdit}</div>")
            if (system.GetSessionVar('sessionUserID') != user.ID()) {
 -            Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#")'>${btnRemove}</div>")
-+            Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#",\""#user.Name()#"\")'>${btnRemove}</div>")
++            string sDelName = user.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
++            Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#",\""#sDelName#"\")'>${btnRemove}</div>")
            }
          Write("</td>")
          Write("</tr>")
-@@ -187,10 +187,11 @@
+@@ -187,10 +188,11 @@
      CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, id);
    }
    
@@ -43,23 +45,24 @@
    {
      var _id_ = id;
 -    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser"), function(result) {
-+	var _name_ = name;
-+    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser").replace(/%s/, _name_), function(result) {
++    var _name_ = String(name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
++    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser").replace(/%s/, function() { return _name_; }), function(result) {
        if (result == YesNoDialog.RESULT_YES)
        {  
          var url = "/esp/system.htm?sid=" + SessionId;
 --- a/www/rega/pages/tabs/user/favOverview.htm
 +++ b/www/rega/pages/tabs/user/favOverview.htm
-@@ -304,7 +304,7 @@
+@@ -304,7 +304,8 @@
                    Write('<div class="CLASS06412">Bearbeiten...</div>');
                  }
                  if ((bDelAllowed) && (!oFav.Unerasable())) {
 -                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#');">${btnRemove}</div>');
-+                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#oFav.Name()#'\');">${btnRemove}</div>');
++                    string sDelName = oFav.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
++                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#sDelName#'\');">${btnRemove}</div>');
                  }
                  else {
                    Write('<div class="CLASS06412">${btnRemove}</div>');
-@@ -480,10 +480,11 @@
+@@ -480,10 +481,11 @@
      updateContent("/pages/tabs/user/newFav.htm");
    }
    
@@ -68,8 +71,8 @@
    {
      var _id_ = id;
 -    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveFavorite"), function(result) {
-+	var _name_ = name;
-+    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveFavorite").replace(/%s/, _name_), function(result) {
++    var _name_ = String(name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
++    new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveFavorite").replace(/%s/, function() { return _name_; }), function(result) {
        if (result == YesNoDialog.RESULT_YES) { iseFavorites.RemoveList(_id_); }
      });     
    };
@@ -95,7 +98,7 @@
 -    "dialogQuestionRemoveSysVar" : "M%F6chten Sie die Systemvariable wirklich l%F6schen?",
 -    "dialogQuestionRemoveFavorite" : "M%F6chten Sie den Favoriten wirklich l%F6schen?",
 +    "dialogQuestionRemoveLink" : "M%F6chten Sie die Verkn%FCpfung '%s' wirklich l%F6schen?",
-+    "dialogQuestionRemoveUser" : "M%F6chten Sie den Benutzer wirklich '%s' l%F6schen?",
++    "dialogQuestionRemoveUser" : "M%F6chten Sie den Benutzer '%s' wirklich l%F6schen?",
 +    "dialogQuestionRemoveSysVar" : "M%F6chten Sie die Systemvariable '%s' wirklich l%F6schen?",
 +    "dialogQuestionRemoveFavorite" : "M%F6chten Sie den Favoriten '%s' wirklich l%F6schen?",
      "dialogQuestionRemoveCFG" : "M%F6chten Sie den " + HMIdentifier.de.HomeMaticCFGAdapter + " wirklich l%F6schen?",

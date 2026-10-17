@@ -412,7 +412,7 @@ jQuery.extend(true,langJSON, {
     "dialogHint" : "Hinweis",
     "dialogQuestionRemoveProgram" : "M%F6chten Sie das Programm '%s' wirklich l%F6schen?",
     "dialogQuestionRemoveLink" : "M%F6chten Sie die Verkn%FCpfung '%s' wirklich l%F6schen?",
-    "dialogQuestionRemoveUser" : "M%F6chten Sie den Benutzer wirklich '%s' l%F6schen?",
+    "dialogQuestionRemoveUser" : "M%F6chten Sie den Benutzer '%s' wirklich l%F6schen?",
     "dialogQuestionRemoveSysVar" : "M%F6chten Sie die Systemvariable '%s' wirklich l%F6schen?",
     "dialogQuestionRemoveFavorite" : "M%F6chten Sie den Favoriten '%s' wirklich l%F6schen?",
     "dialogQuestionRemoveCFG" : "M%F6chten Sie den " + HMIdentifier.de.HomeMaticCFGAdapter + " wirklich l%F6schen?",

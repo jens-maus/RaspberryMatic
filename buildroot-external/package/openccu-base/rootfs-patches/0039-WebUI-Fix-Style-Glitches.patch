@@ -250,7 +250,7 @@
    puts "</colgroup>"
  
    puts "<THEAD>"
-@@ -1296,19 +1296,19 @@
+@@ -1328,25 +1328,25 @@
  
    puts "<colgroup>"
    #Name
@@ -271,12 +271,19 @@
    #Interface
 -  puts "  <col style=\"width:5%;\"/>"
 +  puts "  <col />"
-   #Firmware
--  puts "  <col style=\"width:15%;\"/>"
-+  puts "  <col />"
+   if {$SHOWRESTORE} {
+     #Firmware
+-    puts "  <col style=\"width:15%;\"/>"
++    puts "  <col />"
+     #Restore Config
+     puts "  <col />"
+   } else {
+     #Firmware
+-    puts "  <col style=\"width:15%;\"/>"
++    puts "  <col />"
+   }
    puts "</colgroup>"
    
-   puts "<THEAD>"
 --- a/www/config/ic_linkpeerlist.cgi
 +++ b/www/config/ic_linkpeerlist.cgi
 @@ -110,7 +110,10 @@

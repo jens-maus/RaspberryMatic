@@ -1170,6 +1170,29 @@ proc put_channel_parameters {} {
   puts "</script>"
 }
 
+proc get_user_easylinkmode {} {
+  global sid
+
+  set session [string trim $sid "@" ]
+  
+  set isecmd ""
+  append isecmd "var user=system.GetSessionVarStr('$session');"
+  array set user [rega_script $isecmd]
+  
+  set userid [lindex [split $user(user) ";"] 0]
+  
+  set isecmd ""
+  append isecmd "var easylinkmode = true;"
+  append isecmd "object user = dom.GetObject($userid);"
+  append isecmd "if (user)"
+  append isecmd "{"
+  append isecmd "easylinkmode = user.UserEasyLinkMode();"
+  append isecmd "}"
+  array set result [rega_script $isecmd]  
+  
+  return $result(easylinkmode);
+}
+
 proc put_Header {} {
 
   #cgi_debug -on
@@ -1181,6 +1204,7 @@ proc put_Header {} {
 
   set HmIPIdentifier "HmIP-RF"
   set HmIPWIdentifier "HmIP-Wired"
+  set HMRFIdentifier "BidCos-RF"
   set type $dev_descr(TYPE)
 
   array set SENTRY ""
@@ -1196,7 +1220,12 @@ proc put_Header {} {
       set SENTRY(NAME) "$iface"
       append SENTRY(NAME) ".$address"
   }
-
+  # Interface.restoreConfigToDevice needs admin rights
+  global REGA_SESSION
+  set SHOWRESTORE 0
+  if {[info exists REGA_SESSION(UPL)] && $REGA_SESSION(UPL) >= 8} then {
+    set SHOWRESTORE [expr {[get_user_easylinkmode] == "false"}]
+  }
   set SENTRY(IMAGE) "<div id=\"picDiv_thumb\" class=\"CLASS22005\" onmouseover=\"picDivShow(jg_250, '$dev_descr(TYPE)', 250, '-1', this);\" onmouseout=\"picDivHide(jg_250);\"></div>"
   append SENTRY(IMAGE) "<script type=\"text/javascript\">"
   append SENTRY(IMAGE) "var jg_thumb = new jsGraphics(\"picDiv_thumb\");"
@@ -1207,6 +1236,9 @@ proc put_Header {} {
   set SENTRY(FIRMWARE) "<table id=\"id_firmware_table_$address\" class=\"id_firmware_table\" cellspacing=\"0\">"
   #append SENTRY(FIRMWARE) "<tr><td>Version:</td><td class=\"CLASS22006\">$dev_descr(FIRMWARE)</td></tr>"
   append SENTRY(FIRMWARE) "<tr><td>\${lblFirmwareVersion}</td><td id=\"curFwVersion\" class=\"CLASS22006\">$dev_descr(FIRMWARE)</td></tr>"
+  if {$SHOWRESTORE} {
+    set SENTRY(RESTOREDEVPARAMS) "<table><tr><td class=\"CLASS22012\" style='border: none !important;' onclick=\"RestoreDeviceParameters();\"><div class=\"CLASS21000\">Restore<br/>Config</div></td></tr></table>"
+  }
   if {$MODE == "DEVICEPARAMETERS"} then {
     set fw_update_rows ""
     if {($iface != $HmIPIdentifier) && ($iface != $HmIPWIdentifier)} {
@@ -1307,8 +1339,15 @@ proc put_Header {} {
   puts "  <col style=\"width:5%;\"/>"
   #Interface
   puts "  <col style=\"width:5%;\"/>"
-  #Firmware
-  puts "  <col style=\"width:15%;\"/>"
+  if {$SHOWRESTORE} {
+    #Firmware
+    puts "  <col style=\"width:15%;\"/>"
+    #Restore Config
+    puts "  <col />"
+  } else {
+    #Firmware
+    puts "  <col style=\"width:15%;\"/>"
+  }
   puts "</colgroup>"
   
   puts "<THEAD>"
@@ -1321,6 +1360,9 @@ proc put_Header {} {
   puts "<TD>\${thSerialNumber}</TD>"
   puts "<TD>\${thInterface}</TD>"
   puts "<TD>\${thFirmware}</TD>"
+  if {$SHOWRESTORE} {
+    puts "<TD>\${thActions}</TD>"
+  }
   puts "</TR>"
   
   puts "</THEAD>"
@@ -1335,6 +1377,9 @@ proc put_Header {} {
   puts "<td>$SENTRY(ADDRESS)</td>"
   puts "<td>$SENTRY(IFACE)</td>"
   puts "<td>$SENTRY(FIRMWARE)</td>"
+  if {$SHOWRESTORE} {
+    puts "<td>$SENTRY(RESTOREDEVPARAMS)</td>"
+  }
   puts "</tr>"
 
   puts "</TBODY>"

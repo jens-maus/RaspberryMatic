@@ -32,7 +32,7 @@
       "sha256": "2897b251087a5bec7cd707fcd439be541217998e1aa4b56b88b74ad2ca469989"
     },
     {
-      "added": 52,
+      "added": 54,
       "files": [
         "www/rega/pages/msg/sysVarsArray.htm",
         "www/rega/pages/msg/sysVarsArrayAll.htm",
@@ -43,7 +43,7 @@
       ],
       "patch": "0029-WebUI-Fix-Variable-selection-and-filter.patch",
       "removed": 24,
-      "sha256": "5d5391c820a57a4a640968a59ad075b0cf614d0a040ddb0a342aab36f46651b9"
+      "sha256": "a2757833ea8114bda221608add115043a751b4db4bffe44eca5989615dc3562d"
     },
     {
       "added": 370,
@@ -144,7 +144,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 654,
-      "sha256": "f3e3feebccfbc11df22e784b059b925e9efa3ff0c5147766deb2324e0120bf14"
+      "sha256": "3195ca7cc72a3cf144d662a6cf4d10ff4e47c445353279545b932919c39f79ba"
     },
     {
       "added": 138,
@@ -205,7 +205,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "26e23f3776f23e873946d8150d65034bb930fa05f10846df15efe222149cf613"
+      "sha256": "86cf6fbcc0513ba091382360b952690ab6dbd79677311435792884f2d34f6be9"
     },
     {
       "added": 262,
@@ -379,7 +379,7 @@
       ],
       "patch": "0119-WebUI-Fix-ProofAndSetValue.patch",
       "removed": 70,
-      "sha256": "56b2b74bbbe0f6432bae7f43eb6af8e9c918d5fb14d1acdab6c0df374390da41"
+      "sha256": "42fc3712161e92a5a7348806213ea4e3b4a49380463d5578a386365ffb2a2ee1"
     },
     {
       "added": 38,
@@ -436,7 +436,7 @@
       ],
       "patch": "0132-WebUI-Fix-UnitDisplay.patch",
       "removed": 96,
-      "sha256": "ae749e2101464dc9e8eda50da8ad0c0a1a6ff41ecd6ad2c519d5ee579576a549"
+      "sha256": "4e2b75b48951671edb99f95e161809f8d78320008f6829db221421e79b88ea5d"
     },
     {
       "added": 836,
@@ -452,7 +452,7 @@
       ],
       "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
       "removed": 16,
-      "sha256": "7a40b62145d82c0d382f4f698ff8cca3d7c1450e7361a05e875f21809644dc99"
+      "sha256": "b4dca0d067af0aa2c6bb6a26ba120bcc9c5fe704016ea939c7ad60f9ccff404f"
     },
     {
       "added": 72,
@@ -629,7 +629,7 @@
       ],
       "patch": "0173-WebUI-SendPOSTRequest.patch",
       "removed": 19,
-      "sha256": "d4c23c815207891a6bf608a08faaf8203d0fb19d760e240dff2478f6cafd144b"
+      "sha256": "ef9f90ee4203823c74f7af9b7fd2d39902fa3a61d26f550195512c6286f328b4"
     },
     {
       "added": 120,

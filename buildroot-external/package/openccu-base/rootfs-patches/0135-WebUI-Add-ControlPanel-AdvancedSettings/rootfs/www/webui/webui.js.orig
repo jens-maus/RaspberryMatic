@@ -42025,7 +42025,9 @@ sysVarsPopupLoader.prototype = {
           cName = 'LightGrayBkg SysVarsTblPopup';
         }
 
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
+        // Enter and Space select the focused row like a click
+        var sOnkeydown = "if(event.keyCode==13||event.keyCode==32){"+sOnclick+"return false;}";
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, tabIndex:0, onclick:sOnclick, onkeydown:sOnkeydown, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
         var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
         tr.appendChild(td);
         td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));

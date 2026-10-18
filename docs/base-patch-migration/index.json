@@ -144,7 +144,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 654,
-      "sha256": "dde769c5443a1b0b1d910372749ebe8c820e909ac94c9f73800b06cfb33b332b"
+      "sha256": "f3e3feebccfbc11df22e784b059b925e9efa3ff0c5147766deb2324e0120bf14"
     },
     {
       "added": 138,
@@ -481,7 +481,7 @@
       ],
       "patch": "0138-WebUI-Add-SettingsAccessInStatusAndControl.patch",
       "removed": 20,
-      "sha256": "89ae38cb14afed9708d9d8612f1d7e9f191b47b0bc155b2ffd8f1c9547db263c"
+      "sha256": "cba534746953362410d77a43194b580703c54b003ee29a05354cc7a5779f8c8b"
     },
     {
       "added": 6,
@@ -550,7 +550,7 @@
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
       "removed": 10,
-      "sha256": "0bb7c6b76a6e582f10c2991dc3e7ad3a063027b32d2ab3c5e5ceb1675f57343d"
+      "sha256": "91387a90760024928aeab62b9d645fb9f538ac6823dd56a6f9efb108d2840438"
     },
     {
       "added": 74,

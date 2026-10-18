@@ -121,10 +121,10 @@
 +  } else {
 +    set SENTRY(IFACE)       $iface_descr($iface)
 +  }
-   # Interface.restoreConfigToDevice needs admin rights
+   # Interface.restoreConfigToDevice needs admin rights and is only
+   # implemented by rfd (BidCos-RF), not by hs485d or the HmIP server
    global REGA_SESSION
-   set SHOWRESTORE 0
-@@ -1370,12 +1461,12 @@
+@@ -1371,12 +1462,12 @@
    puts "<TBODY>"
        
    puts "<tr>"

@@ -1220,10 +1220,11 @@ proc put_Header {} {
       set SENTRY(NAME) "$iface"
       append SENTRY(NAME) ".$address"
   }
-  # Interface.restoreConfigToDevice needs admin rights
+  # Interface.restoreConfigToDevice needs admin rights and is only
+  # implemented by rfd (BidCos-RF), not by hs485d or the HmIP server
   global REGA_SESSION
   set SHOWRESTORE 0
-  if {[info exists REGA_SESSION(UPL)] && $REGA_SESSION(UPL) >= 8} then {
+  if {[info exists REGA_SESSION(UPL)] && $REGA_SESSION(UPL) >= 8 && $iface eq $HMRFIdentifier} then {
     set SHOWRESTORE [expr {[get_user_easylinkmode] == "false"}]
   }
   set SENTRY(IMAGE) "<div id=\"picDiv_thumb\" class=\"CLASS22005\" onmouseover=\"picDivShow(jg_250, '$dev_descr(TYPE)', 250, '-1', this);\" onmouseout=\"picDivHide(jg_250);\"></div>"

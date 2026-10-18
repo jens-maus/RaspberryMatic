@@ -516,6 +516,7 @@ jQuery.extend(true, langJSON, {
     "sessionInvalid" : "The session is invalid or expired",
 	  "forward" : "Forward to start page",
     "unknownMessage" : "unknown message",
+    "alarmTriggerTimeModule" : "Time module",
     "dialogEulaTitle" : "End User License Agreement",
     "acceptEula": "I accept the terms of the license agreement",
     "dialogEulaBtnInstall" : "Install",

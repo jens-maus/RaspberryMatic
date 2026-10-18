@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "f25428e4757dde541927d7be5f05cf4d470a55b9c232080ed677aa6df28fe715"
+      "sha256": "2897b251087a5bec7cd707fcd439be541217998e1aa4b56b88b74ad2ca469989"
     },
     {
       "added": 51,
@@ -605,7 +605,7 @@
       ],
       "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
       "removed": 7,
-      "sha256": "e22040a8740657ac67960ee4d90a1050b5a8c47eeb5d4845b4fa4a44d2d9d4c2"
+      "sha256": "0e54c65fc9efd5f406dee70b6c1a24dccd7ded0cc3c620d96c7e468857df21bc"
     },
     {
       "added": 86,
@@ -650,7 +650,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "734f25f6b717c5ba97f7d0737a9f8dcf5eb104c71e130cb439a194ae32dbefab"
+      "sha256": "244610267474e7342b9d9fdf2de09cac3c51da986abb73c9febef34e235d4f24"
     },
     {
       "added": 4,
@@ -675,7 +675,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "65e9ee83f05c78eb5154e33223cd4d0090a2006ba1bcaff52d3af9ddad27f94f"
+      "sha256": "61047fcb7c292d1f792664e3f6653780e67207792e20a28afe36db6b4f36a368"
     }
   ],
   "schema": 1,

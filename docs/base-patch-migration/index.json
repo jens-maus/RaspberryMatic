@@ -32,20 +32,6 @@
       "sha256": "2897b251087a5bec7cd707fcd439be541217998e1aa4b56b88b74ad2ca469989"
     },
     {
-      "added": 54,
-      "files": [
-        "www/rega/pages/msg/sysVarsArray.htm",
-        "www/rega/pages/msg/sysVarsArrayAll.htm",
-        "www/rega/pages/msg/sysVarsSelection.htm",
-        "www/rega/pages/tabs/admin/systemvars.htm",
-        "www/webui/style.css",
-        "www/webui/webui.js"
-      ],
-      "patch": "0029-WebUI-Fix-Variable-selection-and-filter.patch",
-      "removed": 24,
-      "sha256": "a2757833ea8114bda221608add115043a751b4db4bffe44eca5989615dc3562d"
-    },
-    {
       "added": 370,
       "files": [
         "www/config/cp_maintenance.cgi",
@@ -669,5 +655,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "2acbc1cec1600427fb00084cb0ce409d0fda72cdc388ce3f6334f8783131f2de"
+  "series_sha256": "6b2138817e2b1d3ed7a745a6d0542304fc71a0dbd16c609e4ac225bc79d32efc"
 }

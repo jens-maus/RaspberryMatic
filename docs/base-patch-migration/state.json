@@ -689,18 +689,24 @@
       "base_pr": 213,
       "cleanup_pr": 4459,
       "patch": "0156-WebUI-ImprovedConfirmDeletePopup.patch"
+    },
+    {
+      "base_merge_commit": "fbf9ef66045d2c9fc8fb147997524454ece94759",
+      "base_pr": 214,
+      "cleanup_pr": 4466,
+      "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "fbf9ef66045d2c9fc8fb147997524454ece94759",
-    "base_pr": 214,
-    "cleanup_pr": 4466,
-    "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch",
+    "base_merge_commit": "8567c8094c1df109a40eff4eaf2524ce4fb4a524",
+    "base_pr": 218,
+    "cleanup_pr": 4470,
+    "patch": "0029-WebUI-Fix-Variable-selection-and-filter.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "1dfa0bc16dc2e4d6729bcdbcf77908a5d8411498",
-  "verified_base_pin": "9ee46d1612c88b793a798bcd5ee958a67bc7f798",
-  "verified_source_sha256": "f1ffa519060a1886c48c7a8a9b1c4e52847c7ef17d377d76fb74d9dd745ef916"
+  "verified_at_openccu_commit": "b5790b6c334614c1f47f6faa25447724b2215218",
+  "verified_base_pin": "eceb71f28818e055d0a04d48c481d3df31a1d1e3",
+  "verified_source_sha256": "3c55cb9a57a43b03fbca04e1be8a1b52d0dc8aa84c468b732441349e8cd9b50b"
 }

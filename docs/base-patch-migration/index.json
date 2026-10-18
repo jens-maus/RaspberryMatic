@@ -82,7 +82,7 @@
       "sha256": "ffe906e8ae10a9faa8509d11ca5eae4e6167c6951147b6b176f48315b5db6554"
     },
     {
-      "added": 779,
+      "added": 780,
       "files": [
         "opt/HMServer/pages/AvailableFirmware.ftl",
         "opt/HMServer/pages/DiagramSettingsDetailPage.ftl",
@@ -143,8 +143,8 @@
         "www/webui/webui.js"
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
-      "removed": 653,
-      "sha256": "69c1911a3271d5e1421b55bd99dea4859ef1dc1e147b46e2a94cff83db8249de"
+      "removed": 654,
+      "sha256": "f3e3feebccfbc11df22e784b059b925e9efa3ff0c5147766deb2324e0120bf14"
     },
     {
       "added": 138,
@@ -205,7 +205,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "1fc3a6717022bd8654b840821c3bca6b88f69a3a8d40587e1e6895c3e5f5a2e2"
+      "sha256": "26e23f3776f23e873946d8150d65034bb930fa05f10846df15efe222149cf613"
     },
     {
       "added": 262,
@@ -436,7 +436,7 @@
       ],
       "patch": "0132-WebUI-Fix-UnitDisplay.patch",
       "removed": 96,
-      "sha256": "18ecf5de6b3c6ef019aed3d52922d1976207ca9c4ff60bd3cf16ad69590cc170"
+      "sha256": "ae749e2101464dc9e8eda50da8ad0c0a1a6ff41ecd6ad2c519d5ee579576a549"
     },
     {
       "added": 836,
@@ -452,7 +452,7 @@
       ],
       "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
       "removed": 16,
-      "sha256": "39163894e61203b29b33b40954f4dc3e7c2141d86ada81c1bf956435aaa7e5f4"
+      "sha256": "7a40b62145d82c0d382f4f698ff8cca3d7c1450e7361a05e875f21809644dc99"
     },
     {
       "added": 72,
@@ -481,7 +481,7 @@
       ],
       "patch": "0138-WebUI-Add-SettingsAccessInStatusAndControl.patch",
       "removed": 20,
-      "sha256": "3f0be372fcec9fb238b817dc45b3b76800240b90258edabe28da5a0e1f193961"
+      "sha256": "cba534746953362410d77a43194b580703c54b003ee29a05354cc7a5779f8c8b"
     },
     {
       "added": 6,
@@ -527,16 +527,6 @@
       "sha256": "84df6a9968c233c1552d0fc1e03f66c38eb4b619e9d20b387f5c08bfeaeb997a"
     },
     {
-      "added": 66,
-      "files": [
-        "www/config/ic_deviceparameters.cgi",
-        "www/webui/webui.js"
-      ],
-      "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch",
-      "removed": 3,
-      "sha256": "7e1c5d3cdf83df22f61bdb7c9587f5e578175c3f674d57558b7465b06bd7b7f5"
-    },
-    {
       "added": 88,
       "files": [
         "www/rega/login.htm",
@@ -560,7 +550,7 @@
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
       "removed": 10,
-      "sha256": "0bb7c6b76a6e582f10c2991dc3e7ad3a063027b32d2ab3c5e5ceb1675f57343d"
+      "sha256": "91387a90760024928aeab62b9d645fb9f538ac6823dd56a6f9efb108d2840438"
     },
     {
       "added": 74,
@@ -679,5 +669,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "0d895cd7057203602323646570d3ea35e39a1e93befd309ca6d5d2fb7c40e364"
+  "series_sha256": "2acbc1cec1600427fb00084cb0ce409d0fda72cdc388ce3f6334f8783131f2de"
 }

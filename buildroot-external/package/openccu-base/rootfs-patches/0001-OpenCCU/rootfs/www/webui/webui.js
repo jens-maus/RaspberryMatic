@@ -36734,6 +36734,7 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
     this.bColLeft = false;
     this.bColCenter = false;
     this.bNameLeft = false;
@@ -36980,6 +36981,12 @@ iseFilter.prototype = {
             if (!bRet) { bRet = true; }
           }
         }
+        if (this.bTypeString) {
+          if (obj['type'] == "string")
+          {
+            if (!bRet) { bRet = true; }
+          }
+        }
         return bRet;
       }
     }
@@ -37033,6 +37040,7 @@ iseFilter.prototype = {
     if (this.bTypeValueList) return true;
     if (this.bTypeNumber) return true;
     if (this.bTypeAlarm) return true;
+    if (this.bTypeString) return true;
     return false; 
   },
     
@@ -37109,6 +37117,7 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
     conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };
@@ -37141,6 +37150,7 @@ selectFilters = function(fltObj, divToShow)
       $("cbValueList").checked = fltObj.bTypeValueList;
       $("cbNumber").checked = fltObj.bTypeNumber;
       $("cbAlarm").checked = fltObj.bTypeAlarm;
+      $("cbString").checked = fltObj.bTypeString;
       break;
     case "btnFilterIfaceSub":
       $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
@@ -37267,7 +37277,8 @@ setAFilter = function(fltObj, sId)
       fltObj.bTypeLogic = $("cbLogic").checked;
       fltObj.bTypeValueList = $("cbValueList").checked;
       fltObj.bTypeNumber = $("cbNumber").checked;
-      fltObj.bTypeAlarm = $("cbAlarm").checked; 
+      fltObj.bTypeAlarm = $("cbAlarm").checked;
+      fltObj.bTypeString = $("cbString").checked;
       break;
     case "colPos":
       fltObj.bColLeft = $("cbColLeft").checked; 
@@ -41251,25 +41262,27 @@ sysVarsPopupLoader.prototype = {
       IseSort(arSysVars,this.colName,false,true);
       for (var i = 0; i < arSysVars.length; i++) 
       {
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid']});
-        var td = Builder.node('td', {className: 'SysVarsTblPopup'}, strCut(translateString(arSysVars[i]['name']), true));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['desc']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['typenames']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['values']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['unit']));
-        tr.appendChild(td);
-        
         var sOnclick = "PopupClose();";
         if( this.sec ) sOnclick = "restorePrevious();";
         sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
-      
-        td = Builder.node('td', {className: 'WhiteBkg'}, [
-          Builder.node('div', {className: 'StdButton', onclick:sOnclick}, translateKey('btnSelect'))
-         ]);
+
+        var cName = 'SysVarsTblPopup';
+        if( arSysVars[i]['internal'] === 'true' ) {
+          cName = 'LightGrayBkg SysVarsTblPopup';
+        }
+
+        // Enter and Space select the focused row like a click
+        var sOnkeydown = "if(event.keyCode==13||event.keyCode==32){"+sOnclick+"return false;}";
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, tabIndex:0, onclick:sOnclick, onkeydown:sOnkeydown, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
+        var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['typenames']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['values']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['unit']));
         tr.appendChild(td);
 
         tableBody.appendChild(tr);       

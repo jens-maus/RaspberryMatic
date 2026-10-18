@@ -67,10 +67,11 @@
     <tbody id="sysVarDisplay">
 --- a/www/rega/pages/tabs/admin/systemvars.htm
 +++ b/www/rega/pages/tabs/admin/systemvars.htm
-@@ -101,6 +101,9 @@
+@@ -101,6 +101,10 @@
              <td>${lblAlarm}</td>
              <td><input type="checkbox" id="cbAlarm" /></td>
            </tr>
++          <tr>
 +            <td>${lblString}</td>
 +            <td><input type="checkbox" id="cbString" /></td>
 +          </tr>

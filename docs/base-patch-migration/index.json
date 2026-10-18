@@ -32,7 +32,7 @@
       "sha256": "2897b251087a5bec7cd707fcd439be541217998e1aa4b56b88b74ad2ca469989"
     },
     {
-      "added": 51,
+      "added": 52,
       "files": [
         "www/rega/pages/msg/sysVarsArray.htm",
         "www/rega/pages/msg/sysVarsArrayAll.htm",
@@ -43,7 +43,7 @@
       ],
       "patch": "0029-WebUI-Fix-Variable-selection-and-filter.patch",
       "removed": 24,
-      "sha256": "f0bd09bf1310eab6f5c89a70559a36929775f7467e4ca9b2246cdb9c39797dbb"
+      "sha256": "5d5391c820a57a4a640968a59ad075b0cf614d0a040ddb0a342aab36f46651b9"
     },
     {
       "added": 370,

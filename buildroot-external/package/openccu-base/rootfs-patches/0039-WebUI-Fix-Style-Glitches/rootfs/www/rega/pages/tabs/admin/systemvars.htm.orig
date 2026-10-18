@@ -101,6 +101,7 @@
             <td>${lblAlarm}</td>
             <td><input type="checkbox" id="cbAlarm" /></td>
           </tr>
+          <tr>
             <td>${lblString}</td>
             <td><input type="checkbox" id="cbString" /></td>
           </tr>

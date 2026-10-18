@@ -121,10 +121,10 @@
 +  } else {
 +    set SENTRY(IFACE)       $iface_descr($iface)
 +  }
-   set EASYLINKMODE [get_user_easylinkmode]
-   set SENTRY(IMAGE) "<div id=\"picDiv_thumb\" class=\"CLASS22005\" onmouseover=\"picDivShow(jg_250, '$dev_descr(TYPE)', 250, '-1', this);\" onmouseout=\"picDivHide(jg_250);\"></div>"
-   append SENTRY(IMAGE) "<script type=\"text/javascript\">"
-@@ -1365,12 +1456,12 @@
+   # Interface.restoreConfigToDevice needs admin rights
+   global REGA_SESSION
+   set SHOWRESTORE 0
+@@ -1370,12 +1461,12 @@
    puts "<TBODY>"
        
    puts "<tr>"
@@ -140,7 +140,7 @@
 +  puts "<td class='DeviceListCell'>$SENTRY(ADDRESS)</td>"
 +  puts "<td class='DeviceListCell' id='InterfaceCell'>$SENTRY(IFACE)</td>"
    puts "<td>$SENTRY(FIRMWARE)</td>"
-   if {$EASYLINKMODE == "false"} {
+   if {$SHOWRESTORE} {
      puts "<td>$SENTRY(RESTOREDEVPARAMS)</td>"
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js

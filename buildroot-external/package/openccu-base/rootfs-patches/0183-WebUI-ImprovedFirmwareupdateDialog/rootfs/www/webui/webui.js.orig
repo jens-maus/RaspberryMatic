@@ -50004,9 +50004,14 @@ RestoreDeviceParameters = function()
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
   
-  homematic("Interface.restoreConfigToDevice", {"interface": $F('global_iface'), "address": $F('global_address')}, function() {
+  homematic("Interface.restoreConfigToDevice", {"interface": $F('global_iface'), "address": $F('global_address')}, function(result, error) {
     ProgressBar.hide();
     ProgressBar.StopKnightRiderLight();
+    if (error) {
+      var msg = String(error.message || "").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      MessageBox.show(translateKey('lblError'), msg, '', 480, 120);
+      return;
+    }
     CheckConfigPending($F('global_iface'), $F('global_address'), '', $F('global_redirect_url'), true);
   });
 }

@@ -527,14 +527,14 @@
       "sha256": "84df6a9968c233c1552d0fc1e03f66c38eb4b619e9d20b387f5c08bfeaeb997a"
     },
     {
-      "added": 56,
+      "added": 66,
       "files": [
         "www/config/ic_deviceparameters.cgi",
         "www/webui/webui.js"
       ],
       "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch",
       "removed": 3,
-      "sha256": "038f760fa8b18ebb97bf153eaac7b012156c2cb463807b15cfa71fc2ce8f391b"
+      "sha256": "206179d3823c10bc086632a68d1bf4d541badc143268e5b1967fb561196b38e8"
     },
     {
       "added": 88,
@@ -560,7 +560,7 @@
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
       "removed": 10,
-      "sha256": "967770479e9257ceb61a49a9841dc84ecf4058795346e5e1cf57736d7d40e27c"
+      "sha256": "0bb7c6b76a6e582f10c2991dc3e7ad3a063027b32d2ab3c5e5ceb1675f57343d"
     },
     {
       "added": 74,
@@ -639,7 +639,7 @@
       ],
       "patch": "0173-WebUI-SendPOSTRequest.patch",
       "removed": 19,
-      "sha256": "9fc7ec1a601b8bf08b2b7d469ca8338e4eac216f491d0e040ccf19eb1437260f"
+      "sha256": "d4c23c815207891a6bf608a08faaf8203d0fb19d760e240dff2478f6cafd144b"
     },
     {
       "added": 110,

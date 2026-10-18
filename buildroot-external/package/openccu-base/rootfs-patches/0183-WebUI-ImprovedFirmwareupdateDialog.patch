@@ -68,7 +68,7 @@
  StatusDisplayDialogAcousticEPaper = Class.create({
   
    initialize: function(title, content, value, callback, contentType) {
-@@ -25716,11 +25730,26 @@
+@@ -25716,11 +25730,28 @@
      return false;
    },*/
  
@@ -78,10 +78,12 @@
 +    // <0  Version bb newer  
 +    const aArr = aa.split(".");
 +    const bArr = bb.split(".");
-+    const min = Math.min(aArr.length, bArr.length);
-+    for (let index = 0; index < min; index++) {
-+        if (aArr[index] != bArr[index])
-+            return (aArr[index] - bArr[index]);
++    const max = Math.max(aArr.length, bArr.length);
++    for (let index = 0; index < max; index++) {
++        const a = Number(aArr[index] || 0);
++        const b = Number(bArr[index] || 0);
++        if (a != b)
++            return (a - b);
 +    }
 +    return 0;
 +  },
@@ -95,7 +97,7 @@
        this.newFwCounter = 0;
        this.devIndex = 0;
        if (this.devList.length == 0) {
-@@ -25830,12 +25859,23 @@
+@@ -25830,12 +25861,23 @@
          newFW = resultMajorMinor;
        }
  
@@ -121,7 +123,7 @@
          }
          self.newFwCounter++;
        }
-@@ -25844,6 +25884,38 @@
+@@ -25844,6 +25886,40 @@
      if (self.devIndex < self.devList.length) {
        self.fetchAndSetDeviceVersion();
      } else {
@@ -149,9 +151,11 @@
 +                                     curVersion +
 +                                   "</td>" +
 +                                   "<td style='text-align:left;vertical-align:top;' class='UILink' " +
++                                     ((Obj.FWUpload > 0) ?
 +                                       "onClick=\"window.location.href='" +
 +                                         Obj.downloadURL +
-+                                         "&serial=0&product=" + Obj.deviceTypeForUrl + "'\">" +
++                                         "&serial=0&product=" + Obj.deviceTypeForUrl + "'\">" :
++                                       "onClick=\"alert(translateKey('hintDevFwAlreadyUploaded'));\">") +
 +                                         Obj.fwVersion +
 +                                   "</td>" +
 +                                   "</tr>";
@@ -160,12 +164,19 @@
        self.fetchDeviceList = false;
        self.deleteScriptElements();
        if (self.newFwCounter > 0) {
-@@ -25871,25 +25943,34 @@
+@@ -25870,26 +25946,41 @@
+   },
  
    showAvailableDeviceFirmware: function() {
++    var groupCounter = 0;
++    for (const Typ of Object.keys(this.DeviceUpdateList)) {
++      groupCounter += Object.keys(this.DeviceUpdateList[Typ]).length;
++    }
++    var quoteOpen = (getLang() == "de") ? "&bdquo;" : "&ldquo;",
++    quoteClose = (getLang() == "de") ? "&ldquo;" : "&rdquo;";
      var contentHeight = jQuery("#content").innerHeight(),
 -    maxMessageBoxHeight = (this.newFwCounter * 20) + 50,
-+    maxMessageBoxHeight = (this.newFwCounter + 5) * 20,
++    maxMessageBoxHeight = (groupCounter + 5) * 20,
      msgBoxHeight = (maxMessageBoxHeight < contentHeight) ? maxMessageBoxHeight : contentHeight;
  
      MessageBox.show(translateKey("dialogShowDeviceFirmwareTitle"),
@@ -194,8 +205,8 @@
 +      "<tr><td colspan='5' align='left'><br/><b>"+translateKey('dialogShowDeviceFirmwareDescription')+":</b><br/>" +
 +      translateKey('dialogShowDeviceFirmwareDownloadInfo1') + "<br/>" +
 +      translateKey('dialogShowDeviceFirmwareDownloadInfo2') + "&nbsp;" +
-+        "'<div class='UILink' style='display: inline;' onclick='MessageBox.close();WebUI.enter(DeviceFirmware);'>"+translateKey('submenuDeviceFirmware')+"</div>" +
-+        " => " + translateKey('footerBtnNew') + "'&nbsp;" +
++        quoteOpen + "<div class='UILink' style='display: inline;' onclick='MessageBox.close();WebUI.enter(DeviceFirmware);'>"+translateKey('submenuDeviceFirmware')+"</div>" +
++        " => " + translateKey('footerBtnNew') + quoteClose + "&nbsp;" +
 +        translateKey('dialogShowDeviceFirmwareDownloadInfo3') +
        //"<tr><td colspan='3' align='center'><a href='http://www.eq-3.de/downloads.html' target='_blank'>"+translateKey('dialogShowDeviceFirmwareLinkDownload')+"</a></td></tr>" +
      "</table>",

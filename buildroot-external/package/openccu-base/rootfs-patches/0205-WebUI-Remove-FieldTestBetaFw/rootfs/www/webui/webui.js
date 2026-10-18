@@ -25730,10 +25730,12 @@ StartPage = Singleton.create(Page, {
     // <0  Version bb newer  
     const aArr = aa.split(".");
     const bArr = bb.split(".");
-    const min = Math.min(aArr.length, bArr.length);
-    for (let index = 0; index < min; index++) {
-        if (aArr[index] != bArr[index])
-            return (aArr[index] - bArr[index]);
+    const max = Math.max(aArr.length, bArr.length);
+    for (let index = 0; index < max; index++) {
+        const a = Number(aArr[index] || 0);
+        const b = Number(bArr[index] || 0);
+        if (a != b)
+            return (a - b);
     }
     return 0;
   },
@@ -25902,9 +25904,11 @@ StartPage = Singleton.create(Page, {
                                      curVersion +
                                    "</td>" +
                                    "<td style='text-align:left;vertical-align:top;' class='UILink' " +
+                                     ((Obj.FWUpload > 0) ?
                                        "onClick=\"window.location.href='" +
                                          Obj.downloadURL +
-                                         "&serial=0&product=" + Obj.deviceTypeForUrl + "'\">" +
+                                         "&serial=0&product=" + Obj.deviceTypeForUrl + "'\">" :
+                                       "onClick=\"alert(translateKey('hintDevFwAlreadyUploaded'));\">") +
                                          Obj.fwVersion +
                                    "</td>" +
                                    "</tr>";
@@ -25936,8 +25940,14 @@ StartPage = Singleton.create(Page, {
   },
 
   showAvailableDeviceFirmware: function() {
+    var groupCounter = 0;
+    for (const Typ of Object.keys(this.DeviceUpdateList)) {
+      groupCounter += Object.keys(this.DeviceUpdateList[Typ]).length;
+    }
+    var quoteOpen = (getLang() == "de") ? "&bdquo;" : "&ldquo;",
+    quoteClose = (getLang() == "de") ? "&ldquo;" : "&rdquo;";
     var contentHeight = jQuery("#content").innerHeight(),
-    maxMessageBoxHeight = (this.newFwCounter + 5) * 20,
+    maxMessageBoxHeight = (groupCounter + 5) * 20,
     msgBoxHeight = (maxMessageBoxHeight < contentHeight) ? maxMessageBoxHeight : contentHeight;
 
     MessageBox.show(translateKey("dialogShowDeviceFirmwareTitle"),
@@ -25958,8 +25968,8 @@ StartPage = Singleton.create(Page, {
       "<tr><td colspan='5' align='left'><br/><b>"+translateKey('dialogShowDeviceFirmwareDescription')+":</b><br/>" +
       translateKey('dialogShowDeviceFirmwareDownloadInfo1') + "<br/>" +
       translateKey('dialogShowDeviceFirmwareDownloadInfo2') + "&nbsp;" +
-        "'<div class='UILink' style='display: inline;' onclick='MessageBox.close();WebUI.enter(DeviceFirmware);'>"+translateKey('submenuDeviceFirmware')+"</div>" +
-        " => " + translateKey('footerBtnNew') + "'&nbsp;" +
+        quoteOpen + "<div class='UILink' style='display: inline;' onclick='MessageBox.close();WebUI.enter(DeviceFirmware);'>"+translateKey('submenuDeviceFirmware')+"</div>" +
+        " => " + translateKey('footerBtnNew') + quoteClose + "&nbsp;" +
         translateKey('dialogShowDeviceFirmwareDownloadInfo3') +
       //"<tr><td colspan='3' align='center'><a href='http://www.eq-3.de/downloads.html' target='_blank'>"+translateKey('dialogShowDeviceFirmwareLinkDownload')+"</a></td></tr>" +
     "</table>",

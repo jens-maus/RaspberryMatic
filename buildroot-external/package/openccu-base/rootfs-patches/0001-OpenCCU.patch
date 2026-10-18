@@ -1117,7 +1117,7 @@
 +</html>
 --- a/www/webui/js/lang/de/translate.lang.extension.js
 +++ b/www/webui/js/lang/de/translate.lang.extension.js
-@@ -816,7 +816,7 @@
+@@ -817,7 +817,7 @@
      "btnGarageClose" : "Schlie%DFen",
      "btnGarageVent" : "L%FCften",
      "btnGarageStop" : "Stopp",
@@ -1171,7 +1171,7 @@
  
 --- a/www/webui/js/lang/en/translate.lang.extension.js
 +++ b/www/webui/js/lang/en/translate.lang.extension.js
-@@ -813,7 +813,7 @@
+@@ -814,7 +814,7 @@
      "btnGarageClose" : "Closing",
      "btnGarageVent" : "Ventilation",
      "btnGarageStop" : "Stop",
@@ -1180,7 +1180,7 @@
      "dialogSettingsStorageHintUSBStorageP1" : "Storage of data only includes the diagrams.",
      "dialogSettingsSecurityTDAuth" : "Authentication",
      "dialogSettingsSecurityLblActivateAuthRemoteXML" : "Authentication active: ",
-@@ -1076,4 +1076,4 @@
+@@ -1077,4 +1077,4 @@
  });
  
  langJSON.en.hintActivateDetectorSelfTest += langJSON.en.checkSmokeDetectorSelfTest;

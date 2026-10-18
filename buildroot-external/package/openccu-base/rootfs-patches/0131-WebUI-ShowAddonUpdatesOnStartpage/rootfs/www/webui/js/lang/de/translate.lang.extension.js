@@ -518,6 +518,7 @@ jQuery.extend(true,langJSON, {
     "sessionInvalid" : "Die Sitzung ist ung%FCltig oder abgelaufen!",
 	  "forward" : "Weiter zur Startseite",
     "unknownMessage" : "unbekannte Meldung",
+    "alarmTriggerTimeModule" : "Zeitmodul",
     "dialogEulaTitle" : "Endbenutzer-Lizenzvertrag",
     "acceptEula" : "Ich stimme den Bedingungen des Lizenzvertrags zu",
     "dialogEulaBtnInstall" : "Installieren",

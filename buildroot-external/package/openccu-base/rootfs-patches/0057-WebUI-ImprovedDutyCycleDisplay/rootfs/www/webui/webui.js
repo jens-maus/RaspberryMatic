@@ -9269,7 +9269,7 @@ WebUI = Singleton.create({
                           '\xFC': 'ue',
                           '\xDF': 'ss'
                         }[m];
-                      });
+                      }).replace(/[^\x20-\x7e]+/g, '');
 
         var usrPwd = homematic('User.hasUserPWD', {'userID': userId});
         if (usrPwd == false) {
@@ -9295,7 +9295,7 @@ WebUI = Singleton.create({
           // The User will see a hint that new firewall settings are active
           if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName}))) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
-            homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
+            homematic("CCU.setUserAckInstallWizard");
           }
         }
       }
@@ -16988,7 +16988,7 @@ FirewallConfigDialog = Class.create({
       delete firstStartInstallWizard;
       homematic("CCU.setSecurityHint");
       homematic("CCU.setFirewallConfigured");
-      homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+      homematic("CCU.setUserAckInstallWizard");
     }
 
     if (this.dlgWoPasswd ) {
@@ -20288,7 +20288,7 @@ DialogUserPassword = Class.create({
 
         if (homematic('CCU.existsFile', {'file': "/etc/config/firewallConfigured"})) {
           WebUI.enter(StartPage);
-          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          homematic("CCU.setUserAckInstallWizard");
 
           if (getUPL() == UPL_USER) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"),translateKey("dglUserNewFwSettingsContent"));
@@ -20299,7 +20299,7 @@ DialogUserPassword = Class.create({
             new DialogChooseSecuritySettings();
           } else {
             WebUI.enter(StartPage);
-            homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+            homematic("CCU.setUserAckInstallWizard");
           }
         }
       }
@@ -20526,7 +20526,7 @@ DialogExpressSettings = Class.create({
           delete firstStartInstallWizard;
           homematic("CCU.setSecurityHint");
           homematic("CCU.setFirewallConfigured");
-          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          homematic("CCU.setUserAckInstallWizard");
         }
 
         if (self.dlgWoPasswd) {
@@ -33027,37 +33027,31 @@ setDate = function(date)
 };
 
 setAlarmMessageCount = function (count) {
-
   if ($("msgAlarms")) {
-    //$("msgAlarms").innerHTML = "${Alarmmeldungen} (" + count + ")";
-    $("msgAlarms").innerHTML = translateKey('alarmMsg') + " (" + count + ")";
-
-  }
-  if (count === 0) {
-    if ($("imgAlarms")) {
-      $("imgAlarms").src = "/ise/img/dot/green.png";
+    const newMsg = translateKey('alarmMsg') + " (" + count + ")";
+    if ($("msgAlarms").innerHTML !== newMsg) {
+      $("msgAlarms").innerHTML = newMsg;
     }
   }
-  else {
-    if ($("imgAlarms")) {
-      $("imgAlarms").src = "/ise/img/dot/red.png";
+  if ($("imgAlarms")) {
+    const newImg = (count === 0 ? '/ise/img/dot/green.png' : '/ise/img/dot/red.png');
+    if ($("imgAlarms").getAttribute('src') !== newImg) {
+      $("imgAlarms").src = newImg;
     }
   }
 };
 
 setServiceMessageCount = function (count) {
   if ($("msgServices")) {
-    $("msgServices").innerHTML = translateKey('serviceMsg') + " (" + count + ")";
-
-  }
-  if (count === 0) {
-    if ($("imgServices")) {
-      $("imgServices").src = "/ise/img/dot/green.png";
+    const newMsg = translateKey('serviceMsg') + " (" + count + ")";
+    if ($("msgServices").innerHTML !== newMsg) {
+      $("msgServices").innerHTML = newMsg;
     }
   }
-  else {
-    if ($("imgServices")) {
-      $("imgServices").src = "/ise/img/dot/yellow.png";
+  if ($("imgServices")) {
+    const newImg = (count === 0 ? '/ise/img/dot/green.png' : '/ise/img/dot/yellow.png');
+    if ($("imgServices").getAttribute('src') !== newImg) {
+      $("imgServices").src = newImg;
     }
   }
 };
@@ -35149,12 +35143,14 @@ StopFlashing = function()
 
 SwitchOnFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/occu-logo_small_red.png"; }
+  if ($("headerLogo")) { $("headerLogo").classList.add('hidden'); }
+  if ($("headerLogoRed")) { $("headerLogoRed").classList.remove('hidden'); }
 };
 
 SwitchOffFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/occu-logo_small.png"; }
+  if ($("headerLogo")) { $("headerLogo").classList.remove('hidden'); }
+  if ($("headerLogoRed")) { $("headerLogoRed").classList.add('hidden'); }
 };
 
 getAjaxLoadElem = function() {

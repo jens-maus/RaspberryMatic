@@ -1082,8 +1082,8 @@ CCU.setSecurityHint {
 CCU.setUserAckInstallWizard {
   LEVEL GUEST
   SCRIPT_FILE ccu/setuserackinstallwizard.tcl
-  INFO {Legt die Datei/etc/config/userprofiles/userAckInstallWizard_USERNAME an}
-  ARGUMENTS {_session_id_ userName}
+  INFO {Legt die Datei /etc/config/userprofiles/userAckInstallWizardId_USERID für den angemeldeten Anwender an}
+  ARGUMENTS {_session_id_}
 }
 
 CCU.setFirewallConfigured {
@@ -1254,20 +1254,6 @@ User.setLanguage {
         SCRIPT_FILE user/setlanguage.tcl
         INFO {Setzt die gewählte Sprache des Benutzers}
         ARGUMENTS {_session_id_ userName userLang}
-}
-
-User.getReGaVersion {
-        LEVEL NONE
-        SCRIPT_FILE user/getregaversion.tcl
-        INFO {Ermittelt die gewählte ReGaVersion}
-        ARGUMENTS {}
-}
-
-User.setReGaVersion {
-        LEVEL USER
-        SCRIPT_FILE user/setregaversion.tcl
-        INFO {Speichert die gewählte ReGaVersion}
-        ARGUMENTS {_session_id_ ReGaVersion}
 }
 
 User.existsCertificate {

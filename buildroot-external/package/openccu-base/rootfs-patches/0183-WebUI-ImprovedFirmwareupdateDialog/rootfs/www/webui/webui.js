@@ -9318,7 +9318,8 @@ WebUI = Singleton.create({
         }
         */
 
-        var usrName = userName.replace(/[ \/\xC4\xD6\xDC\xE4\xF6\xFC\xDF]/g, function(m) {
+        var toAckName = function(name) {
+          return name.replace(/[ \/\xC4\xD6\xDC\xE4\xF6\xFC\xDF]/g, function(m) {
                         return {
                           ' ': ';',
                           '/': '',
@@ -9330,11 +9331,37 @@ WebUI = Singleton.create({
                           '\xFC': 'ue',
                           '\xDF': 'ss'
                         }[m];
-                      });
+                      }).replace(/[^\x20-\x7e]+/g, '');
+        };
+        var usrName = toAckName(userName);
+
+        // The acknowledgement of the install wizard is stored per user ID
+        // (userAckInstallWizardId_<ID>). Until now, it was stored under the
+        // sanitized user name, and before that under the name decorated with the
+        // role and the UI mode shown in the header (now userNameInfo). Still
+        // accept such a file and store the acknowledgement under the user ID, so
+        // that the wizard does not reappear after the update. The former file is
+        // removed, as accounts whose names sanitize identically shared it: only
+        // the first of them that logs in takes it over.
+        var hasUserAckInstallWizard = function() {
+          var ackFile = "/etc/config/userprofiles/userAckInstallWizard";
+          if (homematic('CCU.existsFile', {'file': ackFile + "Id_" + userId})) {
+            return true;
+          }
+          var found = false;
+          var legacyNames = [usrName, toAckName(userNameInfo)];
+          for (var i = 0; i < legacyNames.length; i++) {
+            if (homematic('CCU.existsFile', {'file': ackFile + "_" + legacyNames[i]})) {
+              homematic("CCU.setUserAckInstallWizard", {'legacyName': legacyNames[i]});
+              found = true;
+            }
+          }
+          return found;
+        };
 
         var usrPwd = homematic('User.hasUserPWD', {'userID': userId});
         if (usrPwd == false) {
-          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName});
+          var result = hasUserAckInstallWizard();
           if (!result) {
             var checkUpdateContentRunning = window.setInterval(function () {
               if (!bUpdateContentRunning) {
@@ -9354,9 +9381,9 @@ WebUI = Singleton.create({
 
           // User password set
           // The User will see a hint that new firewall settings are active
-          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName}))) {
+          if ((getUPL() == UPL_USER) && (!hasUserAckInstallWizard())) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
-            homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
+            homematic("CCU.setUserAckInstallWizard");
           }
 
           // open the systemLanguage config dialog if no systemLanguage was selected yet
@@ -17197,7 +17224,7 @@ FirewallConfigDialog = Class.create({
       delete firstStartInstallWizard;
       homematic("CCU.setSecurityHint");
       homematic("CCU.setFirewallConfigured");
-      homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+      homematic("CCU.setUserAckInstallWizard");
     }
 
     if (this.dlgWoPasswd ) {
@@ -20511,7 +20538,7 @@ DialogUserPassword = Class.create({
 
         if (homematic('CCU.existsFile', {'file': "/etc/config/firewallConfigured"})) {
           WebUI.enter(StartPage);
-          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          homematic("CCU.setUserAckInstallWizard");
 
           if (getUPL() == UPL_USER) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"),translateKey("dglUserNewFwSettingsContent"));
@@ -20522,7 +20549,7 @@ DialogUserPassword = Class.create({
             new DialogChooseSecuritySettings();
           } else {
             WebUI.enter(StartPage);
-            homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+            homematic("CCU.setUserAckInstallWizard");
           }
         }
       }
@@ -20749,7 +20776,7 @@ DialogExpressSettings = Class.create({
           delete firstStartInstallWizard;
           homematic("CCU.setSecurityHint");
           homematic("CCU.setFirewallConfigured");
-          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          homematic("CCU.setUserAckInstallWizard");
         }
 
         if (self.dlgWoPasswd) {
@@ -30958,10 +30985,19 @@ ise.System.prototype = {
 
   saveDpInternal: function(id, ctrlId) {                              
     var url = "/esp/system.htm?sid="+SessionId;                       
+    var webuiPage = WebUI.currentPage;
+    var page = sActPage;
+    var pageArgs = sActPageArgs;
     var pb = "string action = 'saveDpInternal';";                     
     pb += "integer dpId = " + id + ";";             
     pb += "integer iInternal   = '"+($(ctrlId).checked ? 1 : 0)+"';";
-    new Ajax.Request(url, {postBody: ReGa.encode(pb)});
+    new Ajax.Request(url, {
+      postBody: ReGa.encode(pb),
+      onComplete: function() {
+        // reload only if the user did not open another page meanwhile
+        if ((WebUI.currentPage == webuiPage) && (sActPage == page) && (sActPageArgs == pageArgs)) { reloadPage(); }
+      }
+    });
   },
 
   ClearHistoryData: function()
@@ -33223,8 +33259,11 @@ setDate = function(date)
 };
 
 resetReGaSaveButton = function () {
-  document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");
-  document.getElementById("btnReGaSave").onclick=function() { LogoClick(); };
+  var btnReGaSave = document.getElementById("btnReGaSave");
+  if (btnReGaSave) {
+    btnReGaSave.style.color=WebUI.getColor("textColorB");
+    btnReGaSave.onclick=function() { LogoClick(); };
+  }
 };
 
 setAlarmMessageCount = function (count) {
@@ -35242,8 +35281,11 @@ recreateControl = function(chnId,sTimeStamp)
 
 LogoClick = function()
 {
-  document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");
-  document.getElementById("btnReGaSave").onclick="";
+  var btnReGaSave = document.getElementById("btnReGaSave");
+  if (btnReGaSave) {
+    btnReGaSave.style.color=WebUI.getColor("grayText");
+    btnReGaSave.onclick="";
+  }
 
   //alert( iseUpdateIDArray.join("_") );
   //alert( iseUpdateTMArray.join("_") );
@@ -37587,7 +37629,7 @@ iseFilter.prototype = {
         }
         else
         {
-          if (obj['desc'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
+          if (obj['sn'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
         }
       }
     }
@@ -49975,7 +50017,7 @@ isDutyCycleOK4DevUpdate = function() {
     dcWarningLevel = 80,
     dcOK = true;
 
-  if(iface === null) {
+  if(iface === null || iface.length === 0) {
     iface = homematic("Interface.listBidcosInterfaces", {"interface": "HmIP-RF"});
   }
 
@@ -51538,6 +51580,15 @@ cpMessageBox.prototype =
       url = url+'?sid='+SessionId;                                                  
     }                                                                 
     var t = this;
+    var showLoadError = function(statusText) {
+      $('centerbox').hide();
+      $('trlayer').hide();
+      if(typeof errorLbl != 'undefined') {
+        MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
+      } else {
+        Ajax_failure(url, statusText);
+      }
+    };
     var opt = 
     {
       method: 'post',
@@ -51545,17 +51596,16 @@ cpMessageBox.prototype =
       postBody: pb,
       sendXML: false,
       onComplete: function(trans) {
+        // Prototype treats status 0 (e.g. a network error) as success and does not call onFailure
+        if(trans.status == 0) {
+          showLoadError(trans.statusText);
+          return;
+        }
         centerMessageBox();
         $('messagebox').style.display="";
       },
       onFailure: function(response) {
-        $('centerbox').hide();
-        $('trlayer').hide();
-        if(typeof errorLbl != 'undefined') {
-          MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
-        } else {
-          Ajax_failure(url, response.statusText);
-        }
+        showLoadError(response.statusText);
       }
     };
     new Ajax.Updater('messagebox',url,opt);

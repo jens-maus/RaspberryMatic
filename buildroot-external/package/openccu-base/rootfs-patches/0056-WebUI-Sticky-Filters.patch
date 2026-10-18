@@ -170,7 +170,7 @@
    },
    
    restorePrevious: function() {
-@@ -33207,11 +33238,31 @@
+@@ -33201,11 +33232,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -204,7 +204,7 @@
      }
      /* ELV --> */
      
-@@ -37137,6 +37188,28 @@
+@@ -37133,6 +37184,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -233,7 +233,7 @@
    },
    
  
-@@ -37508,6 +37581,15 @@
+@@ -37504,6 +37577,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -249,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -37617,6 +37699,12 @@
+@@ -37613,6 +37695,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -51153,6 +51241,9 @@
+@@ -51149,6 +51237,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -51280,6 +51371,9 @@
+@@ -51276,6 +51367,9 @@
    ShowPopup: function()
    {
      this.show();

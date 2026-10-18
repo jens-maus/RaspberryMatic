@@ -455,18 +455,246 @@
       "base_pr": 121,
       "cleanup_pr": 4344,
       "patch": "0190-WebUI-Fix-AddMissingExtendedChannelDescriptions.patch"
+    },
+    {
+      "base_merge_commit": "f26ef50ecc250848f18bc57066640997b14eb5b6",
+      "base_pr": 122,
+      "cleanup_pr": 4346,
+      "patch": "0087-WebUI-Fix-DoubleSIDs.patch"
+    },
+    {
+      "base_merge_commit": "6c6c7c79222f75a7c898d577cddde5b9b006a5f5",
+      "base_pr": 123,
+      "cleanup_pr": 4350,
+      "patch": "0147-WebUI-Fix-AddonUninstallFailureHandling.patch"
+    },
+    {
+      "base_merge_commit": "b08ea2703292199206613e6c9098af14249698dd",
+      "base_pr": 124,
+      "cleanup_pr": 4351,
+      "patch": "0068-WebUI-Fix-isDutyCycleOK4DevUpdate.patch"
+    },
+    {
+      "base_merge_commit": "54b2c4d75153935d0b88e89262660e0463ee0424",
+      "base_pr": 125,
+      "cleanup_pr": 4357,
+      "patch": "0090-WebUI-Add-ReGaSaveButton.patch"
+    },
+    {
+      "base_merge_commit": "fec91dbce8f4c1cb3686713d11dd47b2368c441f",
+      "base_pr": 126,
+      "cleanup_pr": 4363,
+      "patch": "0055-WebUI-Fix-UserAckInstallWizard.patch"
+    },
+    {
+      "base_merge_commit": "6b02215165446c2a024d0489c45b48531da7661c",
+      "base_pr": 127,
+      "cleanup_pr": 4364,
+      "patch": "0141-WebUI-Add-LoggedOnUserInformation.patch"
+    },
+    {
+      "base_merge_commit": "ce9df227fc67b7224c7211ab35be45f2c169618f",
+      "base_pr": 129,
+      "cleanup_pr": 4367,
+      "patch": "0091-WebUI-Add-HM-OU-LED16-LedStatus.patch"
+    },
+    {
+      "base_merge_commit": "3246eb91f2d242536081f1ff6b4a5c76ed4d101f",
+      "base_pr": 130,
+      "cleanup_pr": 4370,
+      "patch": "0035-WebUI-Fix-SysVarPopups.patch"
+    },
+    {
+      "base_merge_commit": "f46173d63a67c8a6fb6ef03a9124d624911737e4",
+      "base_pr": 131,
+      "cleanup_pr": 4374,
+      "patch": "0065-WebUI-Fix-CountUsageStalling.patch"
+    },
+    {
+      "base_merge_commit": "d8372ca0c22370eae64333c6fa3760dc6d2d9e05",
+      "base_pr": 132,
+      "cleanup_pr": 4377,
+      "patch": "0134-WebUI-Add-ShowInternalSysvars.patch"
+    },
+    {
+      "base_merge_commit": "52c49889264786be4f73e3f470097c88b25efc77",
+      "base_pr": 133,
+      "cleanup_pr": 4378,
+      "patch": "0152-WebUI-SysvarSelectionPopupInternalToggle.patch"
+    },
+    {
+      "base_merge_commit": "11b320be070ca45570db52dc8121821eb026c5d4",
+      "base_pr": 134,
+      "cleanup_pr": 4381,
+      "patch": "0071-WebUI-ProgramList-DeleteProgramHint.patch"
+    },
+    {
+      "base_merge_commit": "1faaa3b93140208b28028002d5e666f078f660b6",
+      "base_pr": 135,
+      "cleanup_pr": 4382,
+      "patch": "0120-WebUI-ImprovedPasswordFields.patch"
+    },
+    {
+      "base_merge_commit": "ed6dd54ac0bee790e18df1cba4bfc4f614b8499d",
+      "base_pr": 136,
+      "cleanup_pr": 4385,
+      "patch": "0075-WebUI-Fix-HTMLinUserFavorites.patch"
+    },
+    {
+      "base_merge_commit": "135bca48b4cd87e4e0ce0c2cb86c7ef8583db5d6",
+      "base_pr": 137,
+      "cleanup_pr": 4386,
+      "patch": "0199-WebUI-ImprovedSystemProtocol.patch"
+    },
+    {
+      "base_merge_commit": "1c22085fa55308b1bf45f553c8e40c33159ecbce",
+      "base_pr": 141,
+      "cleanup_pr": 4389,
+      "patch": "0191-WebUI-Add-NaturalSortOrder.patch"
+    },
+    {
+      "base_merge_commit": "34bd63fb452cf0445cd5f02401189ed5c4a7307b",
+      "base_pr": 144,
+      "cleanup_pr": 4390,
+      "patch": "0043-WebUI-SysVarFavorites-SortByName.patch"
+    },
+    {
+      "base_merge_commit": "3be3c5e8b152e42a544ce754ea103a6b2632f757",
+      "base_pr": 151,
+      "cleanup_pr": 4395,
+      "patch": "0137-WebUI-Add-NoInterfaceWarning.patch"
+    },
+    {
+      "base_merge_commit": "5bb7f848a29e6c60a9ca81529e55a55b3454d3be",
+      "base_pr": 153,
+      "cleanup_pr": 4397,
+      "patch": "0070-WebUI-ProgramList-InactiveProgramsMod.patch"
+    },
+    {
+      "base_merge_commit": "b9ce345d29be44193a45a0a1985d06c5cd236e7c",
+      "base_pr": 155,
+      "cleanup_pr": 4399,
+      "patch": "0002-WebUI-Bootstrap.patch"
+    },
+    {
+      "base_merge_commit": "7d8dbddf1d5ad2a5be0ccdfd0d0706742ac56ab7",
+      "base_pr": 157,
+      "cleanup_pr": 4403,
+      "patch": "0026-WebUI-Fix-CacheControl.patch"
+    },
+    {
+      "base_merge_commit": "570566e3fa0979698b83d0b6714997f78e8f9979",
+      "base_pr": 158,
+      "cleanup_pr": 4410,
+      "patch": "0036-WebUI-ImprovedFavIcons.patch"
+    },
+    {
+      "base_merge_commit": "79b2ab51f34131009b7de23c004e75b761859180",
+      "base_pr": 160,
+      "cleanup_pr": 4412,
+      "patch": "0040-WebUI-AddonInstallNoReboot.patch"
+    },
+    {
+      "base_merge_commit": "c589a774566581d351af67396598d1d960fc3a18",
+      "base_pr": 181,
+      "cleanup_pr": 4414,
+      "patch": "0019-WebUI-EqualThanCondition.patch"
+    },
+    {
+      "base_merge_commit": "79f0e6edb8c451bfa2194ce08582a48f8da475a0",
+      "base_pr": 183,
+      "cleanup_pr": 4420,
+      "patch": "0140-WebUI-Add-ChannelPicsInControl.patch"
+    },
+    {
+      "base_merge_commit": "00d9cf721d8c723abbf4f58473d2123ed3b2ad75",
+      "base_pr": 186,
+      "cleanup_pr": 4425,
+      "patch": "0196-WebUI-Fix-FilterOfTwoColumnControlPages.patch"
+    },
+    {
+      "base_merge_commit": "7f9702d288f098760bdb6c408a07396b917c67f8",
+      "base_pr": 188,
+      "cleanup_pr": 4427,
+      "patch": "0073-WebUI-AstroDelays.patch"
+    },
+    {
+      "base_merge_commit": "072f4e2bc0b99bb93b0341671e85851f7a598c42",
+      "base_pr": 193,
+      "cleanup_pr": 4432,
+      "patch": "0008-WebUI-Disable-ReGa.patch"
+    },
+    {
+      "base_merge_commit": "8c10dbf35a48c6e384993fa2c7005b355791cfae",
+      "base_pr": 194,
+      "cleanup_pr": 4436,
+      "patch": "0012-WebUI-RecoveryButton.patch"
+    },
+    {
+      "base_merge_commit": "a55e7d9506cefa269c8559f3683d1f315d56a55a",
+      "base_pr": 197,
+      "cleanup_pr": 4437,
+      "patch": "0143-WebUI-Fix-Translation.patch"
+    },
+    {
+      "base_merge_commit": "616b8bd530af6c0938b25f9bdce2c212b1d98c9b",
+      "base_pr": 198,
+      "cleanup_pr": 4439,
+      "patch": "0133-WebUI-Fix-InternalIDExposure.patch"
+    },
+    {
+      "base_merge_commit": "6d7d79f36dd760a3d817f7281123bf95f328c6f9",
+      "base_pr": 199,
+      "cleanup_pr": 4442,
+      "patch": "0144-WebUI-ControlForMaintenanceChannel.patch"
+    },
+    {
+      "base_merge_commit": "ff52021b6b564033b73db09dbdb69523415292d7",
+      "base_pr": 200,
+      "cleanup_pr": 4445,
+      "patch": "0193-WebUI-EnhancedTRVSettingsPage.patch"
+    },
+    {
+      "base_merge_commit": "0b46b1a14456c698a20ad7a71cb6b6e3572217b7",
+      "base_pr": 202,
+      "cleanup_pr": 4450,
+      "patch": "0007-WebUI-Enhanced-FirmwareUpdate.patch"
+    },
+    {
+      "base_merge_commit": "c9553f936fef2c1ce349b325532ae24999472cf0",
+      "base_pr": 204,
+      "cleanup_pr": 4452,
+      "patch": "0124-WebUI-Fix-ShowMultipleSpacesInSysVar.patch"
+    },
+    {
+      "base_merge_commit": "935847b11e9535b1804498edd8ab4e93c84be123",
+      "base_pr": 205,
+      "cleanup_pr": 4454,
+      "patch": "0089-WebUI-MessagBoxFailureWarning.patch"
+    },
+    {
+      "base_merge_commit": "a4a4a70359ea9d74fc87cc1e227d5c7d0382f79f",
+      "base_pr": 210,
+      "cleanup_pr": 4456,
+      "patch": "0155-WebUI-Add-HmIP-RFUSB-Support.patch"
+    },
+    {
+      "base_merge_commit": "af4539c3755ccdedab11216483dcf28e9321d25a",
+      "base_pr": 212,
+      "cleanup_pr": 4457,
+      "patch": "0153-WebUI-Fix-ImproveImgUpdates.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "f26ef50ecc250848f18bc57066640997b14eb5b6",
-    "base_pr": 122,
-    "cleanup_pr": 4346,
-    "patch": "0087-WebUI-Fix-DoubleSIDs.patch",
+    "base_merge_commit": "17383a074fb95a652335c31dadbbd85a0bf3b22f",
+    "base_pr": 213,
+    "cleanup_pr": 4459,
+    "patch": "0156-WebUI-ImprovedConfirmDeletePopup.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "7f65db386d21103a0c1977f9560f306e2ee67cdc",
-  "verified_base_pin": "f054a4ac73ac0a36df1d18553bd0c0e84cb3892d",
-  "verified_source_sha256": "6d1c3fb8cc982e6fbe7237abc57ccd4ef17f39edf037f5313669abf4860f184d"
+  "verified_at_openccu_commit": "638b1d7db704198ddd7ed335efa097deeeb96485",
+  "verified_base_pin": "af4539c3755ccdedab11216483dcf28e9321d25a",
+  "verified_source_sha256": "bf0c1d93b9bc3b5069689d21ceca66a2c2f059ecc23fb3e51176ed539147a8c4"
 }

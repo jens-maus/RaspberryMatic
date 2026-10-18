@@ -727,7 +727,6 @@ jQuery.extend(true,langJSON, {
     "btnPresenceDetectionFalse" :                "Pr%E4senzerkennung einschalten",
     "btnPresenceDetectionTrue" :                 "Pr%E4senzerkennung ausschalten",
     "btnResetPresence" :                         "Reset Status",
-    "dialogRestart2ChanceReGaVersion" :          "Damit die %C4nderung der Logikschicht-Version wirksam wird, muss die " +HMIdentifier.de.CCUShortName + " neu gestartet werden.",
     "dialogBtnPerformLaterRestart" :             "Sp%E4ter",
     "dialogLblAckSecurityHint" : "Ich habe die obige Warnung gelesen!",
     "btnNext" : "Weiter",

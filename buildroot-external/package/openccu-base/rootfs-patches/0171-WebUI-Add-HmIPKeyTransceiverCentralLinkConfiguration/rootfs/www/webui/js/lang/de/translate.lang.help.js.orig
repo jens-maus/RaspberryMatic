@@ -25,7 +25,6 @@ jQuery.extend(true, langJSON, {
       "<div>Diese Einstellung hat nur Auswirkungen auf gro&szlig;e Zeitr%E4ume (Woche/Monat/Jahr)</div>",
     "helpOsramLightify" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>OSRAM-Lightify</b> her. Mehr Informationen finden Sie hier:",
     "helpPhilipsHue" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>Philips-Hue</b> her. Mehr Informationen finden Sie hier:",
-    "lblTDReGaVersionHelp" :                     "Hier k%F6nnen Sie festlegen, welche Version der Logikschicht in der CCU verwendet werden soll. Wechseln Sie zur Version <b>Kompatibilit%E4tsmodus</b>, wenn Sie Probleme mit %E4lteren Homematic Skripten haben.",
 
     "helpPartyModeWithinPrograms" : "Wenn Sie den Urlaubsmodus w%E4hlen, m%FCssen Sie zus%E4tzlich folgende Parameter setzen:",
     "dialogSettingsCMHintSoftwareUpdate3a" : "Bringen Sie eventuell installierte Zusatzmodule vor dem Update auf die aktuelle Version!",

@@ -694,7 +694,7 @@
   "in_progress": null,
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "c57d251b0733b315e92b07e8097896250f07aa99",
-  "verified_base_pin": "17383a074fb95a652335c31dadbbd85a0bf3b22f",
-  "verified_source_sha256": "5c2c9c6d66c2ce7153501c1f7a2138512a8953b590333f74f4734c5a9317d2c5"
+  "verified_at_openccu_commit": "1dfa0bc16dc2e4d6729bcdbcf77908a5d8411498",
+  "verified_base_pin": "9ee46d1612c88b793a798bcd5ee958a67bc7f798",
+  "verified_source_sha256": "f1ffa519060a1886c48c7a8a9b1c4e52847c7ef17d377d76fb74d9dd745ef916"
 }

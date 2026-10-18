@@ -224,7 +224,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             string sNamePosition = oFav.FavNamePosition().ToString();
             if( sNamePosition == "0" ) { sNamePosition = "${lblLeft}"; }
             if( sNamePosition == "1" ) { sNamePosition = "${lblTop}"; }
-            string trid = "tf" # oFav.ID();
+            string trid = "tf" # oUserFav.ID() # "_" # oFav.ID();
             Write('<tr id="'#trid#'">');
               Write('<td class="bcWhite CLASS06311">');
                 Write('<table class="CLASS06312">');

@@ -642,7 +642,7 @@
       "sha256": "d4c23c815207891a6bf608a08faaf8203d0fb19d760e240dff2478f6cafd144b"
     },
     {
-      "added": 110,
+      "added": 120,
       "files": [
         "www/webui/js/lang/de/translate.lang.extension.js",
         "www/webui/js/lang/en/translate.lang.extension.js",
@@ -650,7 +650,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "244610267474e7342b9d9fdf2de09cac3c51da986abb73c9febef34e235d4f24"
+      "sha256": "8b275f88b668643bae9f27b093a89d888baff7848407dda4440c465ee981521f"
     },
     {
       "added": 4,
@@ -675,7 +675,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "61047fcb7c292d1f792664e3f6653780e67207792e20a28afe36db6b4f36a368"
+      "sha256": "e7155cd3eb463429e37a4d50b1ee667d30d8e412963a29933a3019d5a75fec94"
     }
   ],
   "schema": 1,

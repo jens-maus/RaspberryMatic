@@ -965,7 +965,7 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
-@@ -51329,6 +51339,11 @@
+@@ -51331,6 +51341,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

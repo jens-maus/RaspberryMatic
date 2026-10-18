@@ -534,7 +534,7 @@
       ],
       "patch": "0151-WebUI-Add-DeviceRestoreConfigButton.patch",
       "removed": 3,
-      "sha256": "206179d3823c10bc086632a68d1bf4d541badc143268e5b1967fb561196b38e8"
+      "sha256": "7e1c5d3cdf83df22f61bdb7c9587f5e578175c3f674d57558b7465b06bd7b7f5"
     },
     {
       "added": 88,

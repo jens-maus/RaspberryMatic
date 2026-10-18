@@ -49987,7 +49987,7 @@ RestoreDeviceParameters = function()
     ProgressBar.hide();
     ProgressBar.StopKnightRiderLight();
     if (error) {
-      var msg = String(error.message || "").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      var msg = String(error.message || error.text || "").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
       MessageBox.show(translateKey('lblError'), msg, '', 480, 120);
       return;
     }

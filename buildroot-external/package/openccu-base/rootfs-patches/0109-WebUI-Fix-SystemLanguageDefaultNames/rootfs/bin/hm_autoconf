@@ -479,7 +479,13 @@ if { [catch {
         string func_id;
         string functions;
         foreach (func_id, dom.GetObject(ID_FUNCTIONS).EnumUsedIDs()){
-            functions = functions # " {" # dom.GetObject(func_id).Name() # "} " # func_id;
+            ! the system language selection renames the default functions and
+            ! keeps their untranslated name (e.g. funcLight) as trID metadata
+            object oFunc = dom.GetObject(func_id);
+            string func_name = oFunc.Name();
+            string func_trid = oFunc.MetaData("trID");
+            if(func_trid) { func_name = func_trid; }
+            functions = functions # " {" # func_name # "} " # func_id;
         }
     }]
     

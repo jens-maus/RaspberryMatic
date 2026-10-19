@@ -307,7 +307,7 @@
       "sha256": "7fc47358110a13c8afb366b26217f282cce91b2b1638335fb436f88be27b142e"
     },
     {
-      "added": 432,
+      "added": 439,
       "files": [
         "bin/hm_autoconf",
         "www/api/methods.conf",
@@ -320,8 +320,8 @@
         "www/webui/webui.js"
       ],
       "patch": "0109-WebUI-Fix-SystemLanguageDefaultNames.patch",
-      "removed": 1,
-      "sha256": "6ae4f5005d44c622f1671a6be079b3bfd892e0799f1e3f87eafac1d02ef62667"
+      "removed": 2,
+      "sha256": "740ac9ac53f6d9ca931b6a846ab1cdc76732f938f407fd19dcd0386bd261c27d"
     },
     {
       "added": 56,

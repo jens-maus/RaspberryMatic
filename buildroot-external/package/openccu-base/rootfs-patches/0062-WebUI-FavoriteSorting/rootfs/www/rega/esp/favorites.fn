@@ -232,6 +232,8 @@ function ::SaveFavoriteList()
       object oUsers = dom.GetObject( ID_USERS );
       object oFavorites = dom.GetObject( ID_FAVORITES );
       
+      ! Tab-delimited list of the selected user IDs for an exact match
+      string sSelUsers = "\t" # system.GetVar("sargs") # "\t";
       string s;
       foreach(s,oUsers.EnumEnabledVisibleIDs())
       {
@@ -244,7 +246,7 @@ function ::SaveFavoriteList()
             oU = dom.CreateObject( OT_FAVORITE, "_USER"#s );
             oFavorites.Add( oU );
           }
-          elseif( system.GetVar("sargs").Contains(s) == false )
+          elseif( sSelUsers.Contains("\t"#s#"\t") == false )
           {
             oU.Remove( iOrigID );
             Write( "|rem "#iOrigID#" from "#oU.ID()#"|" );

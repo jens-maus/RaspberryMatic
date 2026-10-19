@@ -1,15 +1,24 @@
 --- a/www/rega/esp/favorites.fn
 +++ b/www/rega/esp/favorites.fn
-@@ -244,7 +244,7 @@
+@@ -232,6 +232,8 @@
+       object oUsers = dom.GetObject( ID_USERS );
+       object oFavorites = dom.GetObject( ID_FAVORITES );
+       
++      ! Tab-delimited list of the selected user IDs for an exact match
++      string sSelUsers = "\t" # system.GetVar("sargs") # "\t";
+       string s;
+       foreach(s,oUsers.EnumEnabledVisibleIDs())
+       {
+@@ -244,7 +246,7 @@
              oU = dom.CreateObject( OT_FAVORITE, "_USER"#s );
              oFavorites.Add( oU );
            }
 -          else
-+          elseif( system.GetVar("sargs").Contains(s) == false )
++          elseif( sSelUsers.Contains("\t"#s#"\t") == false )
            {
              oU.Remove( iOrigID );
              Write( "|rem "#iOrigID#" from "#oU.ID()#"|" );
-@@ -257,7 +257,7 @@
+@@ -257,7 +259,7 @@
        foreach(s,system.GetVar("sargs"))
        {
          object oU = oFavorites.Get( "_USER"#s );
@@ -71,7 +80,7 @@
      <td class="CLASS06405">
        <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
        <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-@@ -168,156 +179,200 @@
+@@ -168,156 +179,204 @@
    </tr>
    <%
      integer iCount =  0;
@@ -166,6 +175,11 @@
 +            
 +            string sInfo = oFav.EnumInfo();
 +            if( !sInfo.Length() ) { sInfo = "${lblWithoutDescription}"; }
++
++            ! Escape the user-defined name and description for HTML and JavaScript output
++            string sNameHtml = sName.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
++            string sInfoHtml = sInfo.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
++            string sJsName = oFav.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
 +            
 +            string sColumnCount = oFav.FavColumnCount().ToString();
 +            if( sColumnCount == "0" ) { sColumnCount = "${lblAuto}"; }
@@ -202,8 +216,8 @@
 +                  Write('</tr>');
 +                Write('</table>');
 +              Write('</td>');
-+              Write('<td class="tCell">'#sName#'</td>');
-+              Write('<td class="tCell">'#sInfo#'</td>');
++              Write('<td class="tCell">'#sNameHtml#'</td>');
++              Write('<td class="tCell">'#sInfoHtml#'</td>');
 +              Write('<td class="tCell">'#sColumnCount#'</td>');
 +              Write('<td class="tCell">'#sColumnAlign#'</td>');
 +              Write('<td class="tCell">'#sNamePosition#'</td>');
@@ -260,8 +274,7 @@
 +                  Write('<div class="CLASS06412">Bearbeiten...</div>');
 +                }
 +                if ((bDelAllowed) && (!oFav.Unerasable())) {
-+                    string sDelName = oFav.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
-+                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#sDelName#'\');">${btnRemove}</div>');
++                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#sJsName#'\');">${btnRemove}</div>');
 +                }
 +                else {
 +                  Write('<div class="CLASS06412">${btnRemove}</div>');
@@ -354,7 +367,7 @@
 +                Write("tmp['unit'] = '"#iFavColumnCount#"';");
 +              }
 +              Write("tmp['users'] = '"#favUserIds#"';");
-+              Write("tmp['name'] = '"#oFav.Name()#"';");
++              Write("tmp['name'] = '"#sJsName#"';");
 +              Write("tmp['colpos'] = '"#oFav.FavColumnAlign().ToString()#"';");
 +              Write("tmp['enddevices'] = '"#endDevices#"';");
 +              
@@ -404,7 +417,7 @@
        }
      }
    %>
-@@ -391,6 +446,16 @@
+@@ -391,6 +450,16 @@
      }
    }
    

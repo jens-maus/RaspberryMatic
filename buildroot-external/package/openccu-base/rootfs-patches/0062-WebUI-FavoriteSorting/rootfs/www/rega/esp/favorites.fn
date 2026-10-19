@@ -232,6 +232,8 @@ function ::SaveFavoriteList()
       object oUsers = dom.GetObject( ID_USERS );
       object oFavorites = dom.GetObject( ID_FAVORITES );
       
+      ! Tab-delimited list of the selected user IDs for an exact match
+      string sSelUsers = "\t" # system.GetVar("sargs") # "\t";
       string s;
       foreach(s,oUsers.EnumEnabledVisibleIDs())
       {
@@ -244,7 +246,7 @@ function ::SaveFavoriteList()
             oU = dom.CreateObject( OT_FAVORITE, "_USER"#s );
             oFavorites.Add( oU );
           }
-          elseif( system.GetVar("sargs").Contains(s) == false )
+          elseif( sSelUsers.Contains("\t"#s#"\t") == false )
           {
             oU.Remove( iOrigID );
             Write( "|rem "#iOrigID#" from "#oU.ID()#"|" );
@@ -257,7 +259,9 @@ function ::SaveFavoriteList()
       foreach(s,system.GetVar("sargs"))
       {
         object oU = oFavorites.Get( "_USER"#s );
-        if( oU && (oU.Get(iOrigID) != null) )
+        ! Only add the favorite for users who do not have it yet, so that
+        ! the users who keep it keep its position
+        if( oU && (!oU.Get(iOrigID)) )
         {
           oU.Add( iOrigID );
           Write( "|add "#iOrigID#" to "#oU.ID()#"|" );

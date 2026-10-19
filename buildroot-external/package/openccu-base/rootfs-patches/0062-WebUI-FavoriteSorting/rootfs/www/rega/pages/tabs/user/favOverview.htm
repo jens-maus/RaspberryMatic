@@ -82,8 +82,8 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
   <col style="width:100px;" />
   </colgroup>
   <tr>
-    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
-    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
+    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
     <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
     <th class="thCell CLASS02803"><div class="pt11">${thDescription}</div></th>
@@ -213,6 +213,11 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             
             string sInfo = oFav.EnumInfo();
             if( !sInfo.Length() ) { sInfo = "${lblWithoutDescription}"; }
+
+            ! Escape the user-defined name and description for HTML and JavaScript output
+            string sNameHtml = sName.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+            string sInfoHtml = sInfo.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+            string sJsName = oFav.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
             
             string sColumnCount = oFav.FavColumnCount().ToString();
             if( sColumnCount == "0" ) { sColumnCount = "${lblAuto}"; }
@@ -232,15 +237,6 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
                     Write('<td rowspan="2" id="favPosCount" class="CLASS06313">');
                       string iIpP = localCount;
                       Write( iIpP );
-                      if( oFav.MetaData("pos") )
-                      {
-                        oFav.MetaData("pos", iIpP);
-                      }
-                      else
-                      {
-                        oFav.AddMetaData("pos");
-                        oFav.MetaData("pos", iIpP);
-                      }
                     Write('</td>');
                     Write('<td class="tMoveUp CLASS06315" onclick="MoveUp('#oUserFav.ID()#','#oFav.ID()#');"></td>');
                   Write('</tr>');
@@ -249,8 +245,8 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
                   Write('</tr>');
                 Write('</table>');
               Write('</td>');
-              Write('<td class="tCell">'#sName#'</td>');
-              Write('<td class="tCell">'#sInfo#'</td>');
+              Write('<td class="tCell">'#sNameHtml#'</td>');
+              Write('<td class="tCell">'#sInfoHtml#'</td>');
               Write('<td class="tCell">'#sColumnCount#'</td>');
               Write('<td class="tCell">'#sColumnAlign#'</td>');
               Write('<td class="tCell">'#sNamePosition#'</td>');
@@ -304,8 +300,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
                   Write('<div class="CLASS06412">Bearbeiten...</div>');
                 }
                 if ((bDelAllowed) && (!oFav.Unerasable())) {
-                    string sDelName = oFav.Name().Replace("\\", "\\x5C").Replace("'", "\\x27").Replace("\"", "\\x22").Replace("<", "\\x3C").Replace(">", "\\x3E").Replace("&", "\\x26");
-                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#sDelName#'\');">${btnRemove}</div>');
+                    Write('<div class="CLASS06409 StdButton" onclick="DeleteFavorite('#sID#',\''#sJsName#'\');">${btnRemove}</div>');
                 }
                 else {
                   Write('<div class="CLASS06412">${btnRemove}</div>');
@@ -317,11 +312,11 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
               Write("var tmp = new Object();");
               Write("tmp['trid'] = '"#trid#"';");
               Write("tmp['id'] = '"#oUserFav.ID()#"';");
-              if( oFav.MetaData("pos") )
-              {
-                string sIPos = oFav.MetaData("pos");
-                Write("tmp['pos'] = '"#sIPos#"';");
-              }
+              ! Sort key: the row number over all lists with a fixed number of
+              ! digits, so that sorting by position keeps the order of the rows
+              ! and the string comparison of IseSort() orders it numerically
+              integer iPosKey = 10000 + iCount;
+              Write("tmp['pos'] = '"#iPosKey#"';");
               integer iFavColumnCount = oFav.FavColumnCount();
               if( iFavColumnCount == 0 )
               {
@@ -332,7 +327,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
                 Write("tmp['unit'] = '"#iFavColumnCount#"';");
               }
               Write("tmp['users'] = '"#favUserIds#"';");
-              Write("tmp['name'] = '"#oFav.Name()#"';");
+              Write("tmp['name'] = '"#sJsName#"';");
               Write("tmp['colpos'] = '"#oFav.FavColumnAlign().ToString()#"';");
               Write("tmp['enddevices'] = '"#endDevices#"';");
               

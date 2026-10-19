@@ -67,8 +67,8 @@
    <col style="width:100px;" />
    </colgroup>
    <tr>
-+    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
-+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
++    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
++    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
      <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
      <th class="thCell CLASS02803"><div class="pt11">${thDescription}</div></th>

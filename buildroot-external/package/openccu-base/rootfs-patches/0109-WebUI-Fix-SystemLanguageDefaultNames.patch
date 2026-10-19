@@ -1,6 +1,6 @@
 --- a/bin/hm_autoconf
 +++ b/bin/hm_autoconf
-@@ -241,14 +241,57 @@
+@@ -226,14 +226,57 @@
        # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurück
        ##
        proc _create_sv_ {name info channelId} {

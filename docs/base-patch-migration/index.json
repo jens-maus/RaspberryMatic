@@ -68,7 +68,7 @@
       "sha256": "ffe906e8ae10a9faa8509d11ca5eae4e6167c6951147b6b176f48315b5db6554"
     },
     {
-      "added": 780,
+      "added": 782,
       "files": [
         "opt/HMServer/pages/AvailableFirmware.ftl",
         "opt/HMServer/pages/DiagramSettingsDetailPage.ftl",
@@ -129,8 +129,8 @@
         "www/webui/webui.js"
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
-      "removed": 654,
-      "sha256": "3195ca7cc72a3cf144d662a6cf4d10ff4e47c445353279545b932919c39f79ba"
+      "removed": 656,
+      "sha256": "71f8ac1c536aa4e2655e1a40838807ada1e7646e92d56204f4e5fb9a41008acb"
     },
     {
       "added": 138,
@@ -224,16 +224,6 @@
       "patch": "0061-WebUI-MenuSortedIcons.patch",
       "removed": 327,
       "sha256": "29943f4d6fb665316a92a519d305df082b5c2d58ef16736147cf84e485f6451d"
-    },
-    {
-      "added": 202,
-      "files": [
-        "www/rega/esp/favorites.fn",
-        "www/rega/pages/tabs/user/favOverview.htm"
-      ],
-      "patch": "0062-WebUI-FavoriteSorting.patch",
-      "removed": 138,
-      "sha256": "2593e41a205ea9dd97701555e91f0d045c69f4ff1c410f8752252bbc021ca731"
     },
     {
       "added": 269,
@@ -655,5 +645,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "6b2138817e2b1d3ed7a745a6d0542304fc71a0dbd16c609e4ac225bc79d32efc"
+  "series_sha256": "670b0a0fb7beddb071231e96b5f6907005901a24faeff5e99aeb9ba102b0d441"
 }

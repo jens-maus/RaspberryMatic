@@ -2029,13 +2029,14 @@
            Write( '<script type="text/javascript">');
 --- a/www/rega/pages/tabs/user/favOverview.htm
 +++ b/www/rega/pages/tabs/user/favOverview.htm
-@@ -63,30 +63,29 @@
+@@ -70,33 +70,32 @@
  <td class="CLASS06402"></td>
  </tr>
  </table>
--<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" width="97%" style="display:none">
-+<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
+-<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" width="97%" style="display:none">
++<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" style="display:none">
    <colgroup>
+-  <col style="width:5%;"/>
 -  <col style="width:15%;"/>
 -  <col style="width:15%;"/>
 -  <col style="width:10%;"/>
@@ -2050,9 +2051,13 @@
 +  <col />
 +  <col />
 +  <col />
++  <col />
 +  <col style="width:100px;" />
    </colgroup>
    <tr>
+     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
+-    <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
++    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
 -    <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
 -    <th><div class="pt11 Sort">${thDescription}</div></th>
@@ -2074,7 +2079,7 @@
 +    <th class="thCell CLASS02803"><div class="pt11">${thAction}</div></th>
    </tr>
    <tr>
-     <td class="CLASS06405">
+     <td class="CLASS06408">&nbsp;</td>
 --- a/www/webui/color.map
 +++ b/www/webui/color.map
 @@ -45,7 +45,7 @@

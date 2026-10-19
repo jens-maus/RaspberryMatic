@@ -712,7 +712,7 @@
   "in_progress": {
     "base_merge_commit": "67780e37036d398af13b48ae0b4ad38874c8b68c",
     "base_pr": 222,
-    "cleanup_pr": null,
+    "cleanup_pr": 4478,
     "patch": "0072-WebUI-Fix-hm_autoconf.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

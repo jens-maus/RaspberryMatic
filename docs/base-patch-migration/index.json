@@ -226,14 +226,14 @@
       "sha256": "29943f4d6fb665316a92a519d305df082b5c2d58ef16736147cf84e485f6451d"
     },
     {
-      "added": 249,
+      "added": 240,
       "files": [
         "bin/hm_autoconf",
         "bin/hm_startup"
       ],
       "patch": "0072-WebUI-Fix-hm_autoconf.patch",
       "removed": 174,
-      "sha256": "c9ab81775f2b3d0f7da50dd8dd2a72814e5241b283d25e0005a9cd23933f3415"
+      "sha256": "f4503e640ebe995b8eb5c44318fd146815defe363e3c25d16853b426bb0b79b2"
     },
     {
       "added": 59,
@@ -321,7 +321,7 @@
       ],
       "patch": "0109-WebUI-Fix-SystemLanguageDefaultNames.patch",
       "removed": 2,
-      "sha256": "740ac9ac53f6d9ca931b6a846ab1cdc76732f938f407fd19dcd0386bd261c27d"
+      "sha256": "677459ae2d87f841367cc09475625d91827031a6bf9cecfbe4fa7b9b6d314c29"
     },
     {
       "added": 56,

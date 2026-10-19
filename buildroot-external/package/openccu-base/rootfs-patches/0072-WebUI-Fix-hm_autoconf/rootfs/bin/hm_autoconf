@@ -118,6 +118,11 @@ if { [catch {
         rega "dom.GetObject($dev_id).ReadyConfig(true);"
         puts "ReadyConfig($dev_id)"
     }
+
+    proc conf_device_HmIP-RFUSB { url dev_id desc_var } {
+        rega "dom.GetObject($dev_id).ReadyConfig(true);"
+        puts "ReadyConfig($dev_id)"
+    }
     
     proc conf_device_HM-CCU-1 { url dev_id desc_var } {
         rega "dom.GetObject($dev_id).ReadyConfig(true);"

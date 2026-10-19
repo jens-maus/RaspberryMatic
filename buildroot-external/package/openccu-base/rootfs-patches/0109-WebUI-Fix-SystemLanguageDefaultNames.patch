@@ -1,6 +1,6 @@
 --- a/bin/hm_autoconf
 +++ b/bin/hm_autoconf
-@@ -226,14 +226,57 @@
+@@ -231,14 +231,57 @@
        # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurück
        ##
        proc _create_sv_ {name info channelId} {
@@ -58,7 +58,7 @@
            sv.ValueUnit("mm");
            sv.ValueType( ivtFloat );
            sv.ValueSubType( istGeneric );
-@@ -436,7 +479,13 @@
+@@ -441,7 +484,13 @@
          string func_id;
          string functions;
          foreach (func_id, dom.GetObject(ID_FUNCTIONS).EnumUsedIDs()){

@@ -226,16 +226,6 @@
       "sha256": "29943f4d6fb665316a92a519d305df082b5c2d58ef16736147cf84e485f6451d"
     },
     {
-      "added": 245,
-      "files": [
-        "bin/hm_autoconf",
-        "bin/hm_startup"
-      ],
-      "patch": "0072-WebUI-Fix-hm_autoconf.patch",
-      "removed": 174,
-      "sha256": "e3e8d7b0240c7f93f6cdea72ae54824c773a117792fe676b0558a936618392d0"
-    },
-    {
       "added": 59,
       "files": [
         "www/rega/esp/programs.fn",
@@ -645,5 +635,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "670b0a0fb7beddb071231e96b5f6907005901a24faeff5e99aeb9ba102b0d441"
+  "series_sha256": "2874de48daf8453a60974d352ad272f602ef1a8d40ce89ca247d43996003dcd6"
 }

@@ -312,9 +312,10 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
               Write("var tmp = new Object();");
               Write("tmp['trid'] = '"#trid#"';");
               Write("tmp['id'] = '"#oUserFav.ID()#"';");
-              ! Sort key with a fixed number of digits, so that the string
-              ! comparison of IseSort() orders the positions numerically
-              integer iPosKey = 10000 + localCount;
+              ! Sort key: the row number over all lists with a fixed number of
+              ! digits, so that sorting by position keeps the order of the rows
+              ! and the string comparison of IseSort() orders it numerically
+              integer iPosKey = 10000 + iCount;
               Write("tmp['pos'] = '"#iPosKey#"';");
               integer iFavColumnCount = oFav.FavColumnCount();
               if( iFavColumnCount == 0 )

@@ -709,7 +709,13 @@
       "patch": "0062-WebUI-FavoriteSorting.patch"
     }
   ],
-  "in_progress": null,
+  "in_progress": {
+    "base_merge_commit": "67780e37036d398af13b48ae0b4ad38874c8b68c",
+    "base_pr": 222,
+    "cleanup_pr": null,
+    "patch": "0072-WebUI-Fix-hm_autoconf.patch",
+    "phase": "cleanup-prepared; merge not yet verified"
+  },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
   "verified_at_openccu_commit": "a25acb5a05dbd06b1cba99cbd14caf624aee46e6",

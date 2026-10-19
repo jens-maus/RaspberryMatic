@@ -62,9 +62,8 @@
      
      proc conf_value_DISPLAY.ALARM_COUNT { url ch_id ch_desc_var value_desc_var} {
 -        create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
-+        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
-     }
-     
+-    }
+-    
 -    proc create_objects {collection enum_type names} {
 -        set ids [rega "dom.GetObject($collection).EnumIDs()"]
 -        set i 0
@@ -146,8 +145,9 @@
 -            sv.Internal(0);
 -            
 -        }
--    }
--    
++        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
+     }
+     
 -    
      proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {
          set script "string ch_id=\"$ch_id\";\nstring value_name=\"$value\";\nstring sv_id=$sv_id;\nstring prg_name=\"$prg_name\";\n"
@@ -249,7 +249,19 @@
      }
  
      # We need a catch because OSRAM Lightify causes an error (/tmp/hm_autoconf_xxx.log) because a list must have an even number of elements.
-@@ -592,13 +488,17 @@
+@@ -573,6 +469,11 @@
+           set dev $devmap($ise_dev_id)
+           set dev_address [lindex $dev 0]
+           set if_id [lindex $dev 1]
++          # skip devices of an interface without URL (not in ifmap), so
++          # that they do not abort the configuration of the other devices
++          if {![info exists ifmap($if_id)]} {
++              continue
++          }
+           array_clear channels
+           array set channels [lindex $dev 2]
+           set if_info $ifmap($if_id)
+@@ -592,13 +493,17 @@
                array_clear ch_descr
                array set ch_descr [xmlrpc $url getDeviceDescription $ch_address]
                if [info exist DEVICE_FUNCTIONS($dev_descr(TYPE))] {

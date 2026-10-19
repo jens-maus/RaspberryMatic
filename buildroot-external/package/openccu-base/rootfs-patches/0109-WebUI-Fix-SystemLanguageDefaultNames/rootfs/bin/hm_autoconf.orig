@@ -469,6 +469,11 @@ if { [catch {
           set dev $devmap($ise_dev_id)
           set dev_address [lindex $dev 0]
           set if_id [lindex $dev 1]
+          # skip devices of an interface without URL (not in ifmap), so
+          # that they do not abort the configuration of the other devices
+          if {![info exists ifmap($if_id)]} {
+              continue
+          }
           array_clear channels
           array set channels [lindex $dev 2]
           set if_info $ifmap($if_id)

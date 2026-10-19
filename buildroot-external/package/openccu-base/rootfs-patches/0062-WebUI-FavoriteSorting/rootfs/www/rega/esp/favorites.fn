@@ -259,7 +259,9 @@ function ::SaveFavoriteList()
       foreach(s,system.GetVar("sargs"))
       {
         object oU = oFavorites.Get( "_USER"#s );
-        if( oU && (oU.Get(iOrigID) != null) )
+        ! Only add the favorite for users who do not have it yet, so that
+        ! the users who keep it keep its position
+        if( oU && (!oU.Get(iOrigID)) )
         {
           oU.Add( iOrigID );
           Write( "|add "#iOrigID#" to "#oU.ID()#"|" );

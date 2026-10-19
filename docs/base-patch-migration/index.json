@@ -226,14 +226,14 @@
       "sha256": "29943f4d6fb665316a92a519d305df082b5c2d58ef16736147cf84e485f6451d"
     },
     {
-      "added": 209,
+      "added": 201,
       "files": [
         "www/rega/esp/favorites.fn",
         "www/rega/pages/tabs/user/favOverview.htm"
       ],
       "patch": "0062-WebUI-FavoriteSorting.patch",
       "removed": 138,
-      "sha256": "6966263b81a57834454a2cec682b9382f059f4e06f99dbb5d62e848d016098ac"
+      "sha256": "7e0af6e4aa30944d92beeb4f9aed857366c6484fc67c2cccaa67948d7a0dd7d2"
     },
     {
       "added": 269,

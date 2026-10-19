@@ -18,12 +18,14 @@
            {
              oU.Remove( iOrigID );
              Write( "|rem "#iOrigID#" from "#oU.ID()#"|" );
-@@ -257,7 +259,7 @@
+@@ -257,7 +259,9 @@
        foreach(s,system.GetVar("sargs"))
        {
          object oU = oFavorites.Get( "_USER"#s );
 -        if( oU )
-+        if( oU && (oU.Get(iOrigID) != null) )
++        ! Only add the favorite for users who do not have it yet, so that
++        ! the users who keep it keep its position
++        if( oU && (!oU.Get(iOrigID)) )
          {
            oU.Add( iOrigID );
            Write( "|add "#iOrigID#" to "#oU.ID()#"|" );
@@ -80,7 +82,7 @@
      <td class="CLASS06405">
        <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
        <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-@@ -168,156 +179,204 @@
+@@ -168,156 +179,194 @@
    </tr>
    <%
      integer iCount =  0;
@@ -199,15 +201,6 @@
 +                    Write('<td rowspan="2" id="favPosCount" class="CLASS06313">');
 +                      string iIpP = localCount;
 +                      Write( iIpP );
-+                      if( oFav.MetaData("pos") )
-+                      {
-+                        oFav.MetaData("pos", iIpP);
-+                      }
-+                      else
-+                      {
-+                        oFav.AddMetaData("pos");
-+                        oFav.MetaData("pos", iIpP);
-+                      }
 +                    Write('</td>');
 +                    Write('<td class="tMoveUp CLASS06315" onclick="MoveUp('#oUserFav.ID()#','#oFav.ID()#');"></td>');
 +                  Write('</tr>');
@@ -286,18 +279,21 @@
 +              Write("var tmp = new Object();");
 +              Write("tmp['trid'] = '"#trid#"';");
 +              Write("tmp['id'] = '"#oUserFav.ID()#"';");
-+              if( oFav.MetaData("pos") )
-+              {
-+                string sIPos = oFav.MetaData("pos");
-+                Write("tmp['pos'] = '"#sIPos#"';");
-               }
--              if (bHasOtherOwners) {
--                bEditAllowed = false;
--                bDelAllowed = false;
++              ! Sort key with a fixed number of digits, so that the string
++              ! comparison of IseSort() orders the positions numerically
++              integer iPosKey = 10000 + localCount;
++              Write("tmp['pos'] = '"#iPosKey#"';");
 +              integer iFavColumnCount = oFav.FavColumnCount();
 +              if( iFavColumnCount == 0 )
 +              {
 +                Write("tmp['unit'] = 'Auto.';");
+               }
+-              if (bHasOtherOwners) {
+-                bEditAllowed = false;
+-                bDelAllowed = false;
++              else
++              {
++                Write("tmp['unit'] = '"#iFavColumnCount#"';");
                }
 -            }
 -            if (bEditAllowed) {
@@ -362,10 +358,6 @@
 -            {
 -              if( s == oFav.ID() ) { bEndDevCentral = true; }
 -            }
-+              else
-+              {
-+                Write("tmp['unit'] = '"#iFavColumnCount#"';");
-+              }
 +              Write("tmp['users'] = '"#favUserIds#"';");
 +              Write("tmp['name'] = '"#sJsName#"';");
 +              Write("tmp['colpos'] = '"#oFav.FavColumnAlign().ToString()#"';");
@@ -417,7 +409,7 @@
        }
      }
    %>
-@@ -391,6 +450,16 @@
+@@ -391,6 +440,16 @@
      }
    }
    

@@ -706,7 +706,7 @@
   "in_progress": {
     "base_merge_commit": "81f43cdd5d2f048319a6f88877e9cd34d72be0f0",
     "base_pr": 220,
-    "cleanup_pr": null,
+    "cleanup_pr": 4475,
     "patch": "0062-WebUI-FavoriteSorting.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

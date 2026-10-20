@@ -27837,10 +27837,11 @@ BidcosRfPage =
 				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
 				    	var gatewaysn = gatewayStatus[loop].address;
 				    	if (lgwStatus.serial == gatewaysn) {
-				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
+				    		var dutyCycle = gatewayStatus[loop].dutyCycle;
+				    		var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
 				    		lgw.setDCState(textDC);
 
-				    		var textFW = gatewayStatus[loop].fwVersion;
+				    		var textFW = (gatewayStatus[loop].fwVersion == null) ? "" : String(gatewayStatus[loop].fwVersion);
 				    		lgw.setFWState(textFW);
 				    	}
 				    }
@@ -27886,7 +27887,8 @@ BidcosRfPage =
 	   	      	var gatewaysn = gatewayStatus[loop].address;
 
 	   	      	if (cfglan == gatewaysn) {
-	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
+	   	      		var dutyCycle = gatewayStatus[loop].dutyCycle;
+	   	      		var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
 	   	      		rfGateways[i].setDCState(textDC);
 
 	   	      		// HM-CFG-LAN reports its firmware 0.965 as "965"

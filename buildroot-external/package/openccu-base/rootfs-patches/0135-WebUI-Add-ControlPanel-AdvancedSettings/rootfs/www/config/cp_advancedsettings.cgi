@@ -468,7 +468,7 @@ proc action_put_page {} {
         pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
         pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
         pb += "&hbrfethIPAddress="+encodeURIComponent(document.getElementById("text_hbrfethIPAddress").value);
-        pb += "&systemName="+escape(document.getElementById("text_systemName").value);
+        pb += "&systemName="+escape(document.getElementById("text_systemName").value).replace(/\+/g, "%2B");
 
         var opts = {
           postBody: pb,
@@ -544,6 +544,14 @@ proc action_save_settings {} {
   import customStoragePath
   import hbrfethIPAddress
   import systemName
+
+  # validate the input before anything is changed, so that a rejected
+  # save does not apply the form only partially
+  set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
+  if {$cronBackupMaxBackups != "" && ![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
+    puts "error cronBackupMaxBackups: invalid number"
+    return
+  }
   
   if {$systemName == ""} {
     append errMsg [set_systemname "ReGaRA Demo"]
@@ -570,7 +578,15 @@ proc action_save_settings {} {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
   if {$mediolaDisabled != $mediolaDisabledCurrent} {
-    catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null}
+    if {[catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null} e]} {
+      append errMsg "error restart S97NeoServer: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$mediolaDisabledCurrent} {
+        append errMsg [createfile $MEDIOLAFILENAME]
+      } else {
+        append errMsg [deletefile $MEDIOLAFILENAME]
+      }
+    }
   }
   
   set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
@@ -580,7 +596,15 @@ proc action_save_settings {} {
     append errMsg [deletefile $CLOUDMATICFILENAME]
   }
   if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
-    catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null}
+    if {[catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null} e]} {
+      append errMsg "error restart S97CloudMatic: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$cloudmaticDisabledCurrent} {
+        append errMsg [createfile $CLOUDMATICFILENAME]
+      } else {
+        append errMsg [deletefile $CLOUDMATICFILENAME]
+      }
+    }
   }
 
   if {$noCronBackup} {
@@ -626,7 +650,15 @@ proc action_save_settings {} {
     append errMsg [deletefile $ALLOWEXTERNALACCESSFILENAME]
   }
   if {$allowExternalAccess != $allowExternalAccessCurrent} {
-    catch {exec /bin/setfirewall.tcl 2>/dev/null >/dev/null}
+    if {[catch {exec /bin/setfirewall.tcl 2>/dev/null >/dev/null} e]} {
+      append errMsg "error setfirewall: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$allowExternalAccessCurrent} {
+        append errMsg [createfile $ALLOWEXTERNALACCESSFILENAME]
+      } else {
+        append errMsg [deletefile $ALLOWEXTERNALACCESSFILENAME]
+      }
+    }
   }
 
   if {$noFSTRIM} {
@@ -672,7 +704,9 @@ proc action_save_settings {} {
   }
   
   # reload monit
-  catch { exec /usr/bin/monit reload }
+  if {[catch {exec /usr/bin/monit reload 2>/dev/null >/dev/null} e]} {
+    append errMsg "error monit reload: $e\n"
+  }
 
   puts "$errMsg"
 }

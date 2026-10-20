@@ -544,6 +544,14 @@ proc action_save_settings {} {
   import customStoragePath
   import hbrfethIPAddress
   import systemName
+
+  # validate the input before anything is changed, so that a rejected
+  # save does not apply the form only partially
+  set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
+  if {$cronBackupMaxBackups != "" && ![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
+    puts "error cronBackupMaxBackups: invalid number"
+    return
+  }
   
   if {$systemName == ""} {
     append errMsg [set_systemname "ReGaRA Demo"]
@@ -632,6 +640,12 @@ proc action_save_settings {} {
   if {$allowExternalAccess != $allowExternalAccessCurrent} {
     if {[catch {exec /bin/setfirewall.tcl 2>/dev/null >/dev/null} e]} {
       append errMsg "error setfirewall: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$allowExternalAccessCurrent} {
+        append errMsg [createfile $ALLOWEXTERNALACCESSFILENAME]
+      } else {
+        append errMsg [deletefile $ALLOWEXTERNALACCESSFILENAME]
+      }
     }
   }
 
@@ -653,11 +667,8 @@ proc action_save_settings {} {
     append errMsg [deletefile $TWEAKFILENAME]
   }
   
-  set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
   if { $cronBackupMaxBackups == "" } {
     append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
-  } elseif {![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
-    append errMsg "error cronBackupMaxBackups: invalid number\n"
   } else {
     append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
   }

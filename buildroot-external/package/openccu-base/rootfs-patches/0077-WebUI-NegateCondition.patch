@@ -115,7 +115,7 @@
          if( sValueUnit == "100%" )
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -821,6 +821,7 @@
+@@ -872,6 +872,7 @@
      "ruleConditionLblTimeDuringNight" : "nachts",
      "ruleConditionLblTimeClock" : "Uhr",
      "ruleConditionLblTimeIteration" : "Wiederholungen",
@@ -125,7 +125,7 @@
      "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -856,6 +856,7 @@
+@@ -907,6 +907,7 @@
      "ruleConditionLblTimeDuringNight" : "at night",
      "ruleConditionLblTimeClock" : "o'clock",
      "ruleConditionLblTimeIteration" : "repetitions",

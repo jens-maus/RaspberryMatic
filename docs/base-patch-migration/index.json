@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "65e3a1beefea89542c7169632d52fcfe5ffca33e344ca5274cdc229fef397159"
+      "sha256": "8c831f8a0f15dab0878700b8f62a8dafcca83c9e500c7ccc00c882b675accb2b"
     },
     {
       "added": 370,
@@ -121,7 +121,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 656,
-      "sha256": "5d62ffc81f1078b38713821de468071ca87ad0b842b1f1bc818c235b3816ad8e"
+      "sha256": "665378165824c2f781e6453e15defadae1ba4b5f3f3517b2af1833a45936457c"
     },
     {
       "added": 138,
@@ -131,7 +131,7 @@
       ],
       "patch": "0042-WebUI-HeatingControl-HumidityBatteryValveState.patch",
       "removed": 19,
-      "sha256": "006521fad5dd8c1d9ba70efc831c43f8f24af4d81ad7bff4da0ba39e2ced76f9"
+      "sha256": "3c13e4282add2d8f7db4dd220ae5484554e69033531d4f12447b4d7bb04c1ea7"
     },
     {
       "added": 128,
@@ -171,7 +171,7 @@
       ],
       "patch": "0054-WebUI-AddTimeZones.patch",
       "removed": 155,
-      "sha256": "20181c20e725115e8354cf0a9a27fafb6cc570b47b30b9c774dbef4d1497139b"
+      "sha256": "8ad411da289938c8c27851c88fc729a72c33765c2993ccd28d664e29386bdec3"
     },
     {
       "added": 123,
@@ -182,7 +182,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "e52c17f2069078903ef862482b3b0f8d2a71d73ca914a9ed3ec0d429eb8052ae"
+      "sha256": "0a311bbc02399ef00e80c9a709ac759ead58ce163335ca63f9aa511c170a9d3a"
     },
     {
       "added": 262,
@@ -196,7 +196,7 @@
       ],
       "patch": "0057-WebUI-ImprovedDutyCycleDisplay.patch",
       "removed": 106,
-      "sha256": "5261653a163a8cd5ca395dfe1c30f7ebae8a2bf0eb81c0c5d818752bad17e622"
+      "sha256": "1286334fde91da642f8a06ff6cc3d92d8fd4b37bdcd4906f2f386cb1d9d6cdf4"
     },
     {
       "added": 357,
@@ -229,7 +229,7 @@
       ],
       "patch": "0077-WebUI-NegateCondition.patch",
       "removed": 5,
-      "sha256": "e3c81f384387bb30dbfeddae8342e67d9376d3e20dbcadc781d22d74813b4257"
+      "sha256": "3e81e05b5ad84a92d216ff1298a9db3e24f8d54639b94ab7714178706f21584f"
     },
     {
       "added": 74,
@@ -336,7 +336,7 @@
       ],
       "patch": "0119-WebUI-Fix-ProofAndSetValue.patch",
       "removed": 70,
-      "sha256": "afecbaa64a3d38a138a3ca33e2310fb0812468e78f0a56ceaac1b42680990c0e"
+      "sha256": "a37f3cd7df5c882d1a618c2158df8c5b231eda887f6495064588bbe3bb4f8e4d"
     },
     {
       "added": 38,
@@ -350,7 +350,7 @@
       ],
       "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
       "removed": 16,
-      "sha256": "e6b71aac8209b77ef9454edd24c5b5d34275456ddab8a4546b65eebe5463abe4"
+      "sha256": "e49c33b1d985d032a415732e1590b3fe55093d03ec56ed43e66748e6cce62bf6"
     },
     {
       "added": 76,
@@ -393,23 +393,7 @@
       ],
       "patch": "0132-WebUI-Fix-UnitDisplay.patch",
       "removed": 96,
-      "sha256": "9f5dc3fa76c3635b5a7e645c161b3d4c493ac637937759094e25a1f185fc3e6a"
-    },
-    {
-      "added": 897,
-      "files": [
-        "www/config/control_panel.cgi",
-        "www/config/cp_advancedsettings.cgi",
-        "www/rega/login.htm",
-        "www/rega/logout.htm",
-        "www/rega/pages/index.htm",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.js",
-        "www/webui/webui.js"
-      ],
-      "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
-      "removed": 17,
-      "sha256": "e7ee5a164dddb611d3ecb3d6a601642ace2cce8e398242cf25bd182ace8fece2"
+      "sha256": "726d6e2d2109b8c14ec214931147cf5faa196ff17c41c642ab510067e378860d"
     },
     {
       "added": 72,
@@ -626,5 +610,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "2c3d7da00d3ba79981ae25f452f10946d23afa988e08453e2d8f5df9e16d3d6a"
+  "series_sha256": "f929f7005092e426d6d1244d441a6be41f22901c9bc0bb201e1b237a509b2028"
 }

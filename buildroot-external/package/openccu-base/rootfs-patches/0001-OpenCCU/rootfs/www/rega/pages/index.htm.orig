@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css" />
     <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css" />
 
-    <title>HomeMatic WebUI</title>
+    <title><% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('OpenCCU WebUI'); } else { Write(system.Name().Replace('&','&amp;').Replace('<','&lt;').Replace('>','&gt;')); } %></title>
 
 
     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>

@@ -204,7 +204,7 @@
      }
      /* ELV --> */
      
-@@ -37231,6 +37282,28 @@
+@@ -37241,6 +37292,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -233,7 +233,7 @@
    },
    
  
-@@ -37602,6 +37675,15 @@
+@@ -37612,6 +37685,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -249,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -37711,6 +37793,12 @@
+@@ -37721,6 +37803,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -51293,6 +51381,9 @@
+@@ -51308,6 +51396,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -51424,6 +51515,9 @@
+@@ -51439,6 +51530,9 @@
    ShowPopup: function()
    {
      this.show();

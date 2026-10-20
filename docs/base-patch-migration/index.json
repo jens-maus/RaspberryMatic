@@ -396,7 +396,7 @@
       "sha256": "9f5dc3fa76c3635b5a7e645c161b3d4c493ac637937759094e25a1f185fc3e6a"
     },
     {
-      "added": 836,
+      "added": 847,
       "files": [
         "www/config/control_panel.cgi",
         "www/config/cp_advancedsettings.cgi",
@@ -409,7 +409,7 @@
       ],
       "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
       "removed": 16,
-      "sha256": "bb689fb901ccc801738c47b8344809669b9df910565c036c51f5e9ac72035ae7"
+      "sha256": "a3af2fde4cf6fdb7e717f0f10c31e1545ae350800e91915b134a5c70f1564f67"
     },
     {
       "added": 72,

@@ -468,7 +468,7 @@ proc action_put_page {} {
         pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
         pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
         pb += "&hbrfethIPAddress="+encodeURIComponent(document.getElementById("text_hbrfethIPAddress").value);
-        pb += "&systemName="+escape(document.getElementById("text_systemName").value);
+        pb += "&systemName="+escape(document.getElementById("text_systemName").value).replace(/\+/g, "%2B");
 
         var opts = {
           postBody: pb,
@@ -570,7 +570,9 @@ proc action_save_settings {} {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
   if {$mediolaDisabled != $mediolaDisabledCurrent} {
-    catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null}
+    if {[catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null} e]} {
+      append errMsg "error restart S97NeoServer: $e\n"
+    }
   }
   
   set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
@@ -580,7 +582,9 @@ proc action_save_settings {} {
     append errMsg [deletefile $CLOUDMATICFILENAME]
   }
   if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
-    catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null}
+    if {[catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null} e]} {
+      append errMsg "error restart S97CloudMatic: $e\n"
+    }
   }
 
   if {$noCronBackup} {
@@ -626,7 +630,9 @@ proc action_save_settings {} {
     append errMsg [deletefile $ALLOWEXTERNALACCESSFILENAME]
   }
   if {$allowExternalAccess != $allowExternalAccessCurrent} {
-    catch {exec /bin/setfirewall.tcl 2>/dev/null >/dev/null}
+    if {[catch {exec /bin/setfirewall.tcl 2>/dev/null >/dev/null} e]} {
+      append errMsg "error setfirewall: $e\n"
+    }
   }
 
   if {$noFSTRIM} {
@@ -647,8 +653,11 @@ proc action_save_settings {} {
     append errMsg [deletefile $TWEAKFILENAME]
   }
   
+  set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
   if { $cronBackupMaxBackups == "" } {
     append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
+  } elseif {![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
+    append errMsg "error cronBackupMaxBackups: invalid number\n"
   } else {
     append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
   }
@@ -672,7 +681,9 @@ proc action_save_settings {} {
   }
   
   # reload monit
-  catch { exec /usr/bin/monit reload }
+  if {[catch {exec /usr/bin/monit reload 2>/dev/null >/dev/null} e]} {
+    append errMsg "error monit reload: $e\n"
+  }
 
   puts "$errMsg"
 }

@@ -33565,7 +33565,7 @@ loadNewLinkPage = function()
 setPath = function (path) {
   var title=document.title;
   if (title != 'OpenCCU WebUI') {
-    title = '[' + title + '] ';
+    title = '[' + title.escapeHTML() + '] ';
   } else {
     title = '';
   }
@@ -33573,7 +33573,7 @@ setPath = function (path) {
   if ($("PagePath")) {
     var s = '';
     if (path.length > 0) {
-      s = "<span onclick='WebUI.enter(StartPage);'>" + title + translateKey('startPage') + "&nbsp;&gt " + path;
+      s = "<span onclick='WebUI.enter(StartPage);'>" + title + translateKey('startPage') + "</span>&nbsp;&gt; " + path;
     } else {
       s = "<span id='PagePathSpan'>" + title + translateKey('startPage') + "</span>";
     }

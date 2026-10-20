@@ -724,7 +724,7 @@
   "in_progress": {
     "base_merge_commit": "2519b3975a1d36421aaf9fb1396f8ff6f99d10d0",
     "base_pr": 227,
-    "cleanup_pr": null,
+    "cleanup_pr": 4490,
     "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

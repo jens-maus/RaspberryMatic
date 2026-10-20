@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- /dev/null
 +++ b/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,707 @@
+@@ -0,0 +1,719 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -632,6 +632,12 @@
 +  if {$mediolaDisabled != $mediolaDisabledCurrent} {
 +    if {[catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null} e]} {
 +      append errMsg "error restart S97NeoServer: $e\n"
++      # restore the previous state, so that the next save tries again
++      if {$mediolaDisabledCurrent} {
++        append errMsg [createfile $MEDIOLAFILENAME]
++      } else {
++        append errMsg [deletefile $MEDIOLAFILENAME]
++      }
 +    }
 +  }
 +  
@@ -644,6 +650,12 @@
 +  if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
 +    if {[catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null} e]} {
 +      append errMsg "error restart S97CloudMatic: $e\n"
++      # restore the previous state, so that the next save tries again
++      if {$cloudmaticDisabledCurrent} {
++        append errMsg [createfile $CLOUDMATICFILENAME]
++      } else {
++        append errMsg [deletefile $CLOUDMATICFILENAME]
++      }
 +    }
 +  }
 +

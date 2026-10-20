@@ -580,6 +580,12 @@ proc action_save_settings {} {
   if {$mediolaDisabled != $mediolaDisabledCurrent} {
     if {[catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null} e]} {
       append errMsg "error restart S97NeoServer: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$mediolaDisabledCurrent} {
+        append errMsg [createfile $MEDIOLAFILENAME]
+      } else {
+        append errMsg [deletefile $MEDIOLAFILENAME]
+      }
     }
   }
   
@@ -592,6 +598,12 @@ proc action_save_settings {} {
   if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
     if {[catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null} e]} {
       append errMsg "error restart S97CloudMatic: $e\n"
+      # restore the previous state, so that the next save tries again
+      if {$cloudmaticDisabledCurrent} {
+        append errMsg [createfile $CLOUDMATICFILENAME]
+      } else {
+        append errMsg [deletefile $CLOUDMATICFILENAME]
+      }
     }
   }
 

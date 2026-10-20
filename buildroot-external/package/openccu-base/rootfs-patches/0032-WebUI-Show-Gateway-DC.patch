@@ -9,7 +9,7 @@
    m_gatewayTableActionHeader: null,
    m_gatewayTableBody: null,
    m_optionsButtonBar: null,
-@@ -27149,7 +27151,21 @@
+@@ -27149,7 +27151,19 @@
      //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
      this.m_gatewayTableStateHeader.appendChild(document.createTextNode(translateKey("thState")));
      this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableStateHeader);
@@ -18,26 +18,24 @@
 +    /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
 +    this.m_gatewayTableDCStateHeader = document.createElement("th");
 +    this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
-+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
-+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
++    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode(translateKey("lblDutyCycle")));
 +    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
 +
 +    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
 +    this.m_gatewayTableFWStateHeader = document.createElement("th");
 +    this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
-+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
-+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
++    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode(translateKey("thFirmware")));
 +    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
 +
      /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
      this.m_gatewayTableActionHeader = document.createElement("th");
      this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
-@@ -27469,6 +27485,16 @@
+@@ -27469,6 +27483,16 @@
  				    	 lgw = rfGateways[j];
  				    	}
  				    }
-+				    for (var loop = 0; loop < gatewayStatus.length; loop++) {
-+				    	gatewaysn = gatewayStatus[loop].address;
++				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
++				    	var gatewaysn = gatewayStatus[loop].address;
 +				    	if (lgwStatus.serial == gatewaysn) {
 +				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
 +				    		lgw.setDCState(textDC);
@@ -49,24 +47,27 @@
  		        	if(lgw) 
  		        	{
  					  if(lgwStatus.connstat == "NO_ERROR") {
-@@ -27502,6 +27528,25 @@
+@@ -27502,6 +27526,28 @@
  		  {
  			  var text = "";
  	   	      var status = rfGateways[i].determineState(gatewayStatus);
 +	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
 +
 +	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
-+	   	      	gatewaysn = gatewayStatus[loop].address;
++	   	      	var gatewaysn = gatewayStatus[loop].address;
 +
 +	   	      	if (cfglan == gatewaysn) {
 +	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
 +	   	      		rfGateways[i].setDCState(textDC);
 +
-+	   	      		var textFW = gatewayStatus[loop].fwVersion;
-+	   	      		if (textFW < "965") {
-+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion + " (Update: 0.965)";
-+	   	      		} else {
-+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion;
++	   	      		// HM-CFG-LAN reports its firmware 0.965 as "965"
++	   	      		var fwVersion = String(gatewayStatus[loop].fwVersion || "");
++	   	      		var textFW = fwVersion;
++	   	      		if (/^[0-9]+$/.test(fwVersion)) {
++	   	      			textFW = "0." + fwVersion;
++	   	      			if (parseInt(fwVersion, 10) < 965) {
++	   	      				textFW += " (Update: 0.965)";
++	   	      			}
 +	   	      		}
 +	   	      		rfGateways[i].setFWState(textFW);
 +	   	      	}
@@ -75,7 +76,7 @@
  		      if (status)
  		      {
  		        text = (status.isConnected) ? translateKey("lanGatewayLblConnected") : translateKey("lanGatewayLblNotConnected");
-@@ -27702,6 +27747,8 @@
+@@ -27702,6 +27748,8 @@
    m_keyLabel: null,
    m_ipLabel: null,
    m_stateLabel: null,
@@ -84,7 +85,7 @@
    m_actionCell: null,
    m_deleteButton: null,
    m_onDeleteHandler: null,
-@@ -27754,6 +27801,16 @@
+@@ -27754,6 +27802,16 @@
      this.m_stateLabel.className = "bidcosrf_tablecell";
      this.m_element.appendChild(this.m_stateLabel);
      
@@ -101,7 +102,7 @@
      /* Aktion */
      this.m_actionCell = document.createElement("td");
      this.m_actionCell.className = "bidcosrf_actioncell";
-@@ -27893,6 +27950,18 @@
+@@ -27893,6 +27951,18 @@
      return this;
    },
    

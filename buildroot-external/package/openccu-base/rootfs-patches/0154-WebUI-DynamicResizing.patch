@@ -1011,7 +1011,7 @@
  }();
  getGatewayStatus = function()
  {
-@@ -27851,10 +27602,6 @@
+@@ -27849,10 +27600,6 @@
      InterfaceMonitor.start();
    },
    

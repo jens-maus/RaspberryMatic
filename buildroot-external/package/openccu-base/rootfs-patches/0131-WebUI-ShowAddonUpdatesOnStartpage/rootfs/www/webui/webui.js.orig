@@ -27623,15 +27623,13 @@ BidcosRfPage =
     /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableDCStateHeader = document.createElement("th");
     this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
-    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
-    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode(translateKey("lblDutyCycle")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
 
     /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableFWStateHeader = document.createElement("th");
     this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
-    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
-    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode(translateKey("thFirmware")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
 
     /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
@@ -27953,8 +27951,8 @@ BidcosRfPage =
 				    	 lgw = rfGateways[j];
 				    	}
 				    }
-				    for (var loop = 0; loop < gatewayStatus.length; loop++) {
-				    	gatewaysn = gatewayStatus[loop].address;
+				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
+				    	var gatewaysn = gatewayStatus[loop].address;
 				    	if (lgwStatus.serial == gatewaysn) {
 				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
 				    		lgw.setDCState(textDC);
@@ -27999,17 +27997,20 @@ BidcosRfPage =
 	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
 
 	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
-	   	      	gatewaysn = gatewayStatus[loop].address;
+	   	      	var gatewaysn = gatewayStatus[loop].address;
 
 	   	      	if (cfglan == gatewaysn) {
 	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
 	   	      		rfGateways[i].setDCState(textDC);
 
-	   	      		var textFW = gatewayStatus[loop].fwVersion;
-	   	      		if (textFW < "965") {
-	   	      			textFW = "0." + gatewayStatus[loop].fwVersion + " (Update: 0.965)";
-	   	      		} else {
-	   	      			textFW = "0." + gatewayStatus[loop].fwVersion;
+	   	      		// HM-CFG-LAN reports its firmware 0.965 as "965"
+	   	      		var fwVersion = String(gatewayStatus[loop].fwVersion || "");
+	   	      		var textFW = fwVersion;
+	   	      		if (/^[0-9]+$/.test(fwVersion)) {
+	   	      			textFW = "0." + fwVersion;
+	   	      			if (parseInt(fwVersion, 10) < 965) {
+	   	      				textFW += " (Update: 0.965)";
+	   	      			}
 	   	      		}
 	   	      		rfGateways[i].setFWState(textFW);
 	   	      	}

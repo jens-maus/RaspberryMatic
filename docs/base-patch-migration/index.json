@@ -350,7 +350,7 @@
       ],
       "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
       "removed": 16,
-      "sha256": "eede4563238ea8019385368a032f906e972be59c4569daaed8fcf9254cffb8c7"
+      "sha256": "e6b71aac8209b77ef9454edd24c5b5d34275456ddab8a4546b65eebe5463abe4"
     },
     {
       "added": 76,
@@ -396,7 +396,7 @@
       "sha256": "9f5dc3fa76c3635b5a7e645c161b3d4c493ac637937759094e25a1f185fc3e6a"
     },
     {
-      "added": 870,
+      "added": 869,
       "files": [
         "www/config/control_panel.cgi",
         "www/config/cp_advancedsettings.cgi",
@@ -408,8 +408,8 @@
         "www/webui/webui.js"
       ],
       "patch": "0135-WebUI-Add-ControlPanel-AdvancedSettings.patch",
-      "removed": 16,
-      "sha256": "fc59fbe83b0773562dbba3c4f9bde2175790a87f0d5ab99ef1ec98c3f809d728"
+      "removed": 15,
+      "sha256": "f229290964ae3329959d0e05a358beb23f8f33138376042549c32b2a71b48dbf"
     },
     {
       "added": 72,

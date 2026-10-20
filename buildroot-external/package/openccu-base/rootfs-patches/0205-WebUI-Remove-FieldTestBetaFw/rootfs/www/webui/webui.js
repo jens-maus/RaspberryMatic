@@ -27964,6 +27964,10 @@ BidcosRfPage =
 				    	 lgw = rfGateways[j];
 				    	}
 				    }
+				    if (lgw) {
+				    	lgw.setDCState("");
+				    	lgw.setFWState("");
+				    }
 				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
 				    	var gatewaysn = gatewayStatus[loop].address;
 				    	if (lgwStatus.serial == gatewaysn) {
@@ -28008,6 +28012,9 @@ BidcosRfPage =
 			  var text = "";
 	   	      var status = rfGateways[i].determineState(gatewayStatus);
 	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
+
+	   	      rfGateways[i].setDCState("");
+	   	      rfGateways[i].setFWState("");
 
 	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
 	   	      	var gatewaysn = gatewayStatus[loop].address;

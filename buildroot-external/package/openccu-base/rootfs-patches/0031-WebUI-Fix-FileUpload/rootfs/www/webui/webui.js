@@ -27037,6 +27037,8 @@ BidcosRfPage =
   m_gatewayTableKeyHeader: null,
   m_gatewayTableIPHeader: null,
   m_gatewayTableStateHeader: null,
+  m_gatewayTableDCStateHeader: null,
+  m_gatewayTableFWStateHeader: null,
   m_gatewayTableActionHeader: null,
   m_gatewayTableBody: null,
   m_optionsButtonBar: null,
@@ -27149,7 +27151,19 @@ BidcosRfPage =
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableStateHeader.appendChild(document.createTextNode(translateKey("thState")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableStateHeader);
-    
+
+    /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableDCStateHeader = document.createElement("th");
+    this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode(translateKey("lblDutyCycle")));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
+
+    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableFWStateHeader = document.createElement("th");
+    this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode(translateKey("thFirmware")));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
+
     /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableActionHeader = document.createElement("th");
     this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
@@ -27469,6 +27483,21 @@ BidcosRfPage =
 				    	 lgw = rfGateways[j];
 				    	}
 				    }
+				    if (lgw) {
+				    	lgw.setDCState("");
+				    	lgw.setFWState("");
+				    }
+				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
+				    	var gatewaysn = gatewayStatus[loop].address;
+				    	if (lgwStatus.serial == gatewaysn) {
+				    		var dutyCycle = gatewayStatus[loop].dutyCycle;
+				    		var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
+				    		lgw.setDCState(textDC);
+
+				    		var textFW = (gatewayStatus[loop].fwVersion == null) ? "" : String(gatewayStatus[loop].fwVersion);
+				    		lgw.setFWState(textFW);
+				    	}
+				    }
 		        	if(lgw) 
 		        	{
 					  if(lgwStatus.connstat == "NO_ERROR") {
@@ -27502,6 +27531,32 @@ BidcosRfPage =
 		  {
 			  var text = "";
 	   	      var status = rfGateways[i].determineState(gatewayStatus);
+	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
+
+	   	      rfGateways[i].setDCState("");
+	   	      rfGateways[i].setFWState("");
+
+	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
+	   	      	var gatewaysn = gatewayStatus[loop].address;
+
+	   	      	if (cfglan == gatewaysn) {
+	   	      		var dutyCycle = gatewayStatus[loop].dutyCycle;
+	   	      		var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
+	   	      		rfGateways[i].setDCState(textDC);
+
+	   	      		// HM-CFG-LAN reports its firmware 0.965 as "965"
+	   	      		var fwVersion = String(gatewayStatus[loop].fwVersion || "");
+	   	      		var textFW = fwVersion;
+	   	      		if (/^[0-9]+$/.test(fwVersion)) {
+	   	      			textFW = "0." + fwVersion;
+	   	      			if (parseInt(fwVersion, 10) < 965) {
+	   	      				textFW += " (Update: 0.965)";
+	   	      			}
+	   	      		}
+	   	      		rfGateways[i].setFWState(textFW);
+	   	      	}
+	   	  	  }
+
 		      if (status)
 		      {
 		        text = (status.isConnected) ? translateKey("lanGatewayLblConnected") : translateKey("lanGatewayLblNotConnected");
@@ -27702,6 +27757,8 @@ BidcosRfPage.Gateway.prototype =
   m_keyLabel: null,
   m_ipLabel: null,
   m_stateLabel: null,
+  m_stateDCLabel: null,
+  m_stateFWLabel: null,
   m_actionCell: null,
   m_deleteButton: null,
   m_onDeleteHandler: null,
@@ -27754,6 +27811,16 @@ BidcosRfPage.Gateway.prototype =
     this.m_stateLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateLabel);
     
+    /* DutyCycle Status */
+    this.m_stateDCLabel = document.createElement("td");
+    this.m_stateDCLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateDCLabel);
+    
+    /* Firmware Status */
+    this.m_stateFWLabel = document.createElement("td");
+    this.m_stateFWLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateFWLabel);
+
     /* Aktion */
     this.m_actionCell = document.createElement("td");
     this.m_actionCell.className = "bidcosrf_actioncell";
@@ -27893,6 +27960,18 @@ BidcosRfPage.Gateway.prototype =
     return this;
   },
   
+  setDCState: function(state)
+  {
+    this.m_stateDCLabel.innerHTML = "";
+    this.m_stateDCLabel.appendChild(document.createTextNode(state));
+  },
+  
+  setFWState: function(state)
+  {
+    this.m_stateFWLabel.innerHTML = "";
+    this.m_stateFWLabel.appendChild(document.createTextNode(state));
+  },
+
   getElement: function()
   {
     return this.m_element;

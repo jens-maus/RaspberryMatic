@@ -770,7 +770,7 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -468,6 +468,8 @@
+@@ -472,6 +472,8 @@
      "lblMenuStatusControlSysProtocolTime" : "Zeit",
      "lblMenuStatusControlSysProtocolChannelSysvar" : "Kanal / Systemvariable",
      "lblMenuStatusControlSysProtocolActivity" : "Aktivit%E4t",
@@ -779,7 +779,7 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -630,6 +632,55 @@
+@@ -634,6 +636,55 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -835,7 +835,7 @@
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
      "dialogSettingsNetworkTDIPSettings" : "IP-Einstellungen",
-@@ -786,7 +837,7 @@
+@@ -791,7 +842,7 @@
      "actionStatusControlLblNotActive" : "nicht aktiv",
      "actionStatusControlLblStart" : "Ausf%FChren",
      "actionStatusControlLblStartThenOnly" : "Ausf%FChren<br/>(nur 1. DANN)",
@@ -844,14 +844,14 @@
      "actionStatusControlLblOn" : "Ein",
      "actionStatusControlLblOff" : "Aus",
      "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
-@@ -1037,4 +1088,3 @@
+@@ -1042,4 +1093,3 @@
      "HelpTitle" : "Hilfe"
    }
  });
 -
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -467,6 +467,8 @@
+@@ -471,6 +471,8 @@
      "lblMenuStatusControlSysProtocolTime" : "Time",
      "lblMenuStatusControlSysProtocolChannelSysvar" : "Channel / system variable",
      "lblMenuStatusControlSysProtocolActivity" : "Activity",
@@ -860,7 +860,7 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -630,6 +632,55 @@
+@@ -634,6 +636,55 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -916,14 +916,14 @@
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",
      "dialogSettingsNetworkTDIPSettings" : "IP settings",
-@@ -1113,4 +1164,3 @@
+@@ -1119,4 +1170,3 @@
      "HelpTitle" : "Help"
    }
  });
 -
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -33747,15 +33747,25 @@
+@@ -33803,15 +33803,25 @@
  };
  
  setPath = function (path) {
@@ -956,7 +956,7 @@
  
  
  
-@@ -35685,7 +35695,7 @@
+@@ -35757,7 +35767,7 @@
  
  
  showDutyCycle = function() {
@@ -965,7 +965,7 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
-@@ -51331,6 +51341,11 @@
+@@ -51410,6 +51420,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

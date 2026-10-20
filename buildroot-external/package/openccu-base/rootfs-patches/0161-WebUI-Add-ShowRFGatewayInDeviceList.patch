@@ -153,7 +153,7 @@
            <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
-@@ -12371,6 +12371,7 @@
+@@ -12372,6 +12372,7 @@
  
  
        this.interfaceName = data["interface"];
@@ -161,7 +161,7 @@
        this.isReadyConfig = data["isReady"];
        this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
        this.deviceType = deviceType;
-@@ -12619,6 +12620,13 @@
+@@ -12620,6 +12621,13 @@
      this.rssiPeerColor = getColorCode(this.RSSI_PEER);
    },
  
@@ -175,7 +175,7 @@
    /**
     * Legt den Namen des Geräts fest.
     **/
-@@ -12831,6 +12839,7 @@
+@@ -12832,6 +12840,7 @@
      {
        var id = data["id"];
        device = this.devices[id];
@@ -183,7 +183,7 @@
  
        if (typeof(device) != "undefined") 
        {
-@@ -12943,6 +12952,49 @@
+@@ -12944,6 +12953,49 @@
      return singles;
    },
    
@@ -233,7 +233,7 @@
    /**
     * Lädt die Geräteliste erneut
     **/
-@@ -12993,6 +13045,7 @@
+@@ -12994,6 +13046,7 @@
          {
            var id = data["id"];
            var device = self.devices[id];
@@ -241,7 +241,7 @@
  
            if (typeof(device) != "undefined")
            {
-@@ -13052,6 +13105,16 @@
+@@ -13053,6 +13106,16 @@
        }
      });
    },
@@ -258,7 +258,7 @@
  
    /**
     * Startet die Akualisierung eines Geräts.
-@@ -26289,7 +26352,7 @@
+@@ -26290,7 +26353,7 @@
              (this.TypeNameFilter.match(device.typeName))                 &&
              (this.DescriptionFilter.match(translateKey(device.typeDescription)))       &&
              (this.AddressFilter.match(device.address))                   &&
@@ -267,7 +267,7 @@
              (this.ModeFilter.matchStringArray(device.modes)) &&
              (this.RoomFilter.matchArray(device.rooms))                   &&
              (this.FuncFilter.matchArray(device.subsections)));
-@@ -28521,6 +28584,7 @@
+@@ -28522,6 +28585,7 @@
        //jQuery("."+gateway.getAddress()).attr("class","bidcosrf_tablecell " + gateway.getAddress().replace(/\s+/g,""));
        this.setGateway(gateway.getAddress());
        this.setRoaming(roaming);

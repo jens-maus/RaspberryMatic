@@ -1,6 +1,6 @@
 --- a/www/rega/esp/system.fn
 +++ b/www/rega/esp/system.fn
-@@ -1288,7 +1288,13 @@
+@@ -1289,7 +1289,13 @@
    Write("<td>");
    string sClass = "ControlBtnOff";
    if( objProg.Active() ) { sClass = "ControlBtnOn"; }
@@ -15,7 +15,7 @@
      Write("<tr>");
      Write("<td  class='CLASS02103'>");
          Write("<div align='center'>");
-@@ -1297,7 +1303,11 @@
+@@ -1298,7 +1304,11 @@
        Write("</td>");
      Write("</tr>");
      !Write("<tr><td>Aktiv</td></tr>");
@@ -28,7 +28,7 @@
      Write("</table>");
    Write("</td>");
    if (system.GetVar("iStatusOnly") == 0)
-@@ -1306,15 +1316,17 @@
+@@ -1307,15 +1317,17 @@
      !Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>Start</div>");
      Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
      Write("<script type='text/javascript'>");
@@ -62,7 +62,7 @@
        <tbody>
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -778,8 +778,11 @@
+@@ -787,8 +787,11 @@
      "dialogBackspacePrevent" : "Bitte verwenden Sie zum Navigieren die Bedienelemente der Weboberfl%E4che.",
      "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
@@ -78,7 +78,7 @@
      "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -805,8 +805,11 @@
+@@ -815,8 +815,11 @@
  
      "commentActionStatusControl" : "***********************************************",
  
@@ -94,7 +94,7 @@
      "actionStatusControlLblShortKeyPress" : "Short<br/>button press",
 --- a/www/webui/style.css
 +++ b/www/webui/style.css
-@@ -5110,9 +5110,11 @@
+@@ -5114,9 +5114,11 @@
  
  .CLASS02104 {
  	cursor:pointer;
@@ -109,7 +109,7 @@
  .CLASS02105 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -34725,14 +34725,14 @@
+@@ -34822,14 +34822,14 @@
    return arTmp[0]+':'+arTmp[1];
  };
  
@@ -126,7 +126,7 @@
    pb += "}";
    var opts = {postBody: ReGa.encode(pb)};
    if(dbg)alert(pb);
-@@ -38167,13 +38167,15 @@
+@@ -38271,13 +38271,15 @@
   **/
  iseButtonProg = Class.create();
  iseButtonProg.prototype = {
@@ -144,7 +144,7 @@
      if ( progActive ) { ControlBtn.on(this.actBtn); }
      
      // Add event handlers
-@@ -38184,7 +38186,7 @@
+@@ -38288,7 +38290,7 @@
    onClickStart: function() 
    {
      ControlBtn.pushed(this.startBtn);

@@ -809,7 +809,7 @@
       jQuery.each(jElm, function (index, elm) {
         var text = jQuery(elm).find("option:selected").text();
         // create test element
-        var _test = jQuery("<span>").html(text).css({
+        var _test = jQuery("<span>").text(text).css({
           "font-size": jQuery(elm).css("font-size"), // ensures same size text
           "visibility": "hidden"               // prevents FOUC
         });
@@ -852,7 +852,7 @@
   ShowSysVarChooser = function(scid)
   {
     dlgResult = "";
-    CreatePopup(ID_SYS_VARS_SELECTION,1);
+    CreatePopup(ID_SYS_VARS_SELECTION,0);
     PopupClose = function()
     {
       dlgPopup.hide();
@@ -1153,7 +1153,7 @@
         <td class="tBodyCell taCenter" id="prg<% Write(oPrg.ID()); %>desc" onclick="textEditInfo('prg<% Write(oPrg.ID()); %>desc', <% Write(oPrg.ID()); %>,true);"><% Write( oPrg.PrgInfo() ); %></td>
         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteConditionText()"); Write(sRet); %></td>
         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteDestinationText()"); Write(sRet); %></td>
-        <td class="tBodyCell"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label></td>
+        <td class="tBodyCell"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label><br/><input type="checkbox" onchange="isePrograms.SetExecuteOnStartup(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_executeonstartup" <% if( oPrg.ExecuteOnStartup() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_executeonstartup">${lblExecuteOnStartup}</label></td>
       </tr>
       <tr>
         <td colspan="5">

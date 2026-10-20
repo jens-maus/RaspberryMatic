@@ -347,7 +347,8 @@ proc action_put_page {} {
     set styleMaxWidth ""
     #set styleMaxWidth "style=max-width:70px;"
 
-    table {class="popupTable CLASS20901 j_translate"} {border="1"} {
+    division {style="height:80vh;width:100%;overflow:auto;"} {
+    table {class="popupTable CLASS20901 j_translate"} {border="1"} {height="100%"} {
       table_row {class="CLASS20902"} {
         table_data {class="CLASS20903"} $styleMaxWidth {
           #puts "Zentralen-<br>"
@@ -665,6 +666,7 @@ proc action_put_page {} {
           puts "\${dialogSettingsCMHintErrorLog}"
         }
       }
+    }
     }
     checkIfFwOnly
   }
@@ -1268,8 +1270,7 @@ proc action_update_start {} {
     exec /bin/kill -SIGQUIT 1
   } else {
     exec touch /usr/local/.recoveryMode
-    exec sleep 5
-    exec /sbin/reboot
+    exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
   }
 
 }
@@ -1280,8 +1281,7 @@ proc action_reboot {} {
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
   catch { exec lcdtool {Reboot...       } }
-  exec sleep 5
-  exec /sbin/reboot
+  exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
 }
 proc action_shutdown {} {
   puts ""
@@ -1289,9 +1289,8 @@ proc action_shutdown {} {
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
   catch { exec lcdtool {Shutdown...       } }
-  exec sleep 5
   catch { exec touch /tmp/shutdown }
-  exec /sbin/poweroff
+  exec /sbin/poweroff -d 2 2>/dev/null >/dev/null &
 }
 
 proc get_logserver {} {
@@ -1350,15 +1349,16 @@ proc action_download_logfile {} {
   puts "Content-Type:application/x-download"
   puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.log\n"
   
-  cd /var/log
-  foreach f {messages.1 messages.0 messages hmserver.log.1 hmserver.log} {
+  foreach f [lsort [glob -nocomplain -directory /var/log * .*]] {
     catch {
-      set fd [open $f r]
-      puts -nonewline "\r\n***** $f *****\r\n"
-      while { ! [eof $fd]} {
-        puts -nonewline "[gets $fd]\r\n"
+      if {[file extension $f] != ".gz" && [file type $f] == "file"} {
+        set fd [open $f r]
+        puts -nonewline "\r\n***** $f *****\r\n"
+        while { ! [eof $fd]} {
+          puts -nonewline "[gets $fd]\r\n"
+        }
+        close $fd
       }
-      close $fd
     }
   }
 }

@@ -22,7 +22,7 @@
     object oTmpArray = dom.GetObject( ID_ROOMS );
     if( oTmpArray )
     {
-      oTmpArray.SortByName();
+      oTmpArray.SortByName(soAsc,stNatural);
       string sTmp;
       foreach(sTmp,oTmpArray.EnumIDs())
       {
@@ -71,7 +71,14 @@
               if (devId != ID_ERROR)
               {
                 object dev = dom.GetObject(devId);
-                Write("tmp['desc'] = DEV_getDescription('"#dev.Label()#"');");
+                if (dev)
+                {
+                  Write("tmp['desc'] = DEV_getDescription('"#dev.Label()#"');");
+                }
+                else
+                {
+                  Write("tmp['desc'] = '';");
+                }
               }
               
               Write("tmp['type'] = '"#o3.Label()#"';");
@@ -366,19 +373,12 @@ if ( oUser )
       Write("</td>");
       
       string sEnumPrgFilter = "";
-      integer iLinkCount = 0;
-      integer iProgCount = 0;
       string tmp = "";
       foreach( tmp, elem.EnumEnabledIDs() )
       {
         object chnTmp = dom.GetObject(tmp);
         if( chnTmp )
         {
-          iLinkCount = iLinkCount + chnTmp.ChnLinkCount();
-          if( chnTmp.ChnDPUsageCount() != ID_ERROR )
-          {
-            iProgCount = iProgCount + chnTmp.ChnDPUsageCount();
-          }
           if( !sEnumPrgFilter.Length() )
           {
             sEnumPrgFilter = chnTmp.ChnEnumDPUsagePrograms();

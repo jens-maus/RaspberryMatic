@@ -528,6 +528,7 @@ jQuery.extend(true, langJSON, {
 	  "forward" : "Forward to start page",
     "unknownMessage" : "unknown message",
     "alarmTriggerTimeModule" : "Time module",
+    "lblExecuteOnStartup" : "Run at startup",
     "dialogEulaTitle" : "End User License Agreement",
     "acceptEula": "I accept the terms of the license agreement",
     "dialogEulaBtnInstall" : "Install",

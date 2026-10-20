@@ -28,6 +28,7 @@ function ::TestRunning()
       Call("/esp/TimeStamp.fn::TimeStampToString3()");
       Write( sTimestamp );
     }    
+  }
 }
 
 function ::SetScreenSize()
@@ -443,7 +444,7 @@ function ::UpdateUI()
 
 
   Write( 'if(urlParamInterfaces == "true") showInterfaces();');
-  Write( 'if(showAPITools == "true" || (homematic("system.getTweak",{"key" : "showAPITools"}))) showHmAPITools();');
+  Write( 'if(showAPITools == "true") showHmAPITools();');
 
   !###################
   !# Systemvariablen #
@@ -682,7 +683,7 @@ function ::getChnNameById()
 
 ![sPageId], [sType], [sFilter]
 function ::saveSFilter() {
-  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId");
+  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId"));
   string s = system.GetVar("sFilter");
   Write(system.GetVar("sType"));
   uidata.DataValue(system.GetVar("sPageId"), system.GetVar("sType"), s);
@@ -1214,7 +1215,7 @@ function ::deleteUser()
   }
 }
 
-function ExecuteProgram()
+function ::ExecuteProgram()
 {
   object obj = dom.GetObject( system.GetVar("dpid") );
   if (obj)

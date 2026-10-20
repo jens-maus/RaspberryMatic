@@ -26,7 +26,7 @@ bNecc = false; // to reload page in neccecary
     object oTmpArray = dom.GetObject( ID_FUNCTIONS );
     if( oTmpArray )
     {
-      oTmpArray.SortByName();
+      oTmpArray.SortByName(soAsc,stNatural);
       string sTmp;
       foreach(sTmp,oTmpArray.EnumIDs())
       {

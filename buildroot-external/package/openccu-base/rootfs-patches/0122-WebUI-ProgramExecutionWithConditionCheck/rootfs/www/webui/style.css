@@ -1559,6 +1559,10 @@ div.caption  { display: table-caption; }
   color: $_(textColorB); /* black */
 }
 
+.LightGrayBkg {
+  background-color: #DDD;
+  color: $_(textColorB); /* black */
+}
 
 .OUCFMprop {
   text-align:left;
@@ -6978,6 +6982,7 @@ color: $_(textColorA); /* white */
 	height:20px ! important;
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05203 {
@@ -6991,6 +6996,7 @@ color: $_(textColorA); /* white */
 .CLASS05205 {
 	height:20px ! important;
 	background-color:$_(clickable);
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05206 {
@@ -7006,7 +7012,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS05209 {
-	text-align:left;
+	text-align: center;
 	padding-left:5px;
 	border:solid 1px $_(black); /* black */
 -ms-word-break: break-all;
@@ -9255,7 +9261,8 @@ color: $_(textColorA); /* white */
   border:solid 1px $_(black);
 }
 
-.CodeMirror {
+.CodeMirror,
+.cm-editor {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   text-align: left;
@@ -9263,6 +9270,7 @@ color: $_(textColorA); /* white */
   resize: vertical;
 }
 
-.CodeMirror-gutter-wrapper {
+.CodeMirror-gutter-wrapper,
+.cm-gutters {
   font-family: monospace;
 }

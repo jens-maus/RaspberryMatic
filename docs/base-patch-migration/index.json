@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "e76f9f3415ea4f0d934d6194858db097bc41f436ff1dbefb99f006af45c94ff1"
+      "sha256": "340aef712f3f11e911259816297c126c1cf8c06fcff81b7a16637938f628a674"
     },
     {
       "added": 370,
@@ -45,15 +45,6 @@
       "patch": "0031-WebUI-Fix-FileUpload.patch",
       "removed": 317,
       "sha256": "6bdcbc5fd180b535b970c3aa28b29f7d815b99a99cf351aedc53082306eabaf4"
-    },
-    {
-      "added": 78,
-      "files": [
-        "www/webui/webui.js"
-      ],
-      "patch": "0032-WebUI-Show-Gateway-DC.patch",
-      "removed": 1,
-      "sha256": "884438b4fb315e42b5d07d9dfb411e29b36ddcc71089a5e53c91e32377229db5"
     },
     {
       "added": 277,
@@ -635,5 +626,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "2874de48daf8453a60974d352ad272f602ef1a8d40ce89ca247d43996003dcd6"
+  "series_sha256": "2c3d7da00d3ba79981ae25f452f10946d23afa988e08453e2d8f5df9e16d3d6a"
 }

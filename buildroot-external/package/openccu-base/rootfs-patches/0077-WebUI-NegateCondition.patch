@@ -1,6 +1,6 @@
 --- a/www/rega/esp/programs.fn
 +++ b/www/rega/esp/programs.fn
-@@ -72,8 +72,9 @@
+@@ -80,8 +80,9 @@
  
                    if( !bSysVarGeneric )
                    {
@@ -11,7 +11,7 @@
                    }
  
                    !SPHM-934
-@@ -87,7 +88,7 @@
+@@ -95,7 +96,7 @@
                          sVN0 = sVN0.Replace("&", "&amp;");
                          sVN0 = sVN0.Replace("<", "&lt;");
                          sVN0 = sVN0.Replace(">", "&gt;");
@@ -20,7 +20,7 @@
                        }
                        if( iRV1 == 1 )
                        {
-@@ -95,7 +96,7 @@
+@@ -103,7 +104,7 @@
                          sVN1 = sVN1.Replace("&", "&amp;");
                          sVN1 = sVN1.Replace("<", "&lt;");
                          sVN1 = sVN1.Replace(">", "&gt;");
@@ -65,7 +65,7 @@
 \ No newline at end of file
 --- a/www/rega/esp/sico.inc
 +++ b/www/rega/esp/sico.inc
-@@ -65,11 +65,20 @@
+@@ -76,11 +76,20 @@
        boolean isGenericValueType = ((oLV.ValueType() == ivtFloat) || (oLV.ValueType() == ivtInteger));
        boolean bSysVarGeneric = ( (iLVT == ivtSystemId) && (isGenericValueType)  && (oLV.ValueSubType() == istGeneric ) );
        boolean bSysVarString  = ( (iLVT == ivtSystemId) && (oLV.ValueType() == ivtString) && (oLV.ValueSubType() == istChar8859) );
@@ -87,7 +87,7 @@
  !        Write("<input type='text' onblur='javascript:alert(\"blur\");' class='SelectBox' />");
          Write("<input type='text' onblur='iseSingleCondition.SetRightValue(" # oSC.ID() # ",this.value);' value='" # iRV1 # "' class='SelectBox' />");
  
-@@ -78,7 +87,7 @@
+@@ -89,7 +98,7 @@
        if( (!bSysVarGeneric) && (!bSysVarString) )
        {
          !Write( ' <i>bei</i> ' );
@@ -96,7 +96,7 @@
          Write( '<select id="selectConditionWhen'#oSC.ID()#'" name="selectConditionWhen" onchange="SetLeftValue('#oSC.ID()#',this.value); setOptionWidthSelectConditionWhen();" class="SelectBox">' );
        }
  
-@@ -300,9 +309,16 @@
+@@ -337,9 +346,16 @@
        if( (!bOptionList) && (!bBinary) && (!bSpecial) && (!bSysVarString) )
        {
          !Write( ' <i>im Wertebereich</i> ' );
@@ -115,7 +115,7 @@
          if( sValueUnit == "100%" )
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -811,6 +811,7 @@
+@@ -821,6 +821,7 @@
      "ruleConditionLblTimeDuringNight" : "nachts",
      "ruleConditionLblTimeClock" : "Uhr",
      "ruleConditionLblTimeIteration" : "Wiederholungen",
@@ -125,7 +125,7 @@
      "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -845,6 +845,7 @@
+@@ -856,6 +856,7 @@
      "ruleConditionLblTimeDuringNight" : "at night",
      "ruleConditionLblTimeClock" : "o'clock",
      "ruleConditionLblTimeIteration" : "repetitions",
@@ -135,7 +135,7 @@
      "ruleConditionSelectCheckOnly" : "check only",
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31290,6 +31290,24 @@
+@@ -31364,6 +31364,24 @@
      new Ajax.Request(url,opts);        
    },
  

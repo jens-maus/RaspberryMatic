@@ -626,7 +626,7 @@
    setFooter("");
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -63,10 +63,11 @@
+@@ -65,10 +65,11 @@
      "submenuFavorites" : "Favoriten",
      "submenuCreateFavorite" : "Favoriten erstellen",
      "submenuPrograms" : "Programme",
@@ -640,7 +640,7 @@
      "submenuDeviceInbox" : "Ger%E4te - Posteingang",
      "submenuUserManagement" : "Benutzerverwaltung",
      "submenuSysControl" : "Systemsteuerung",
-@@ -110,7 +111,7 @@
+@@ -116,7 +117,7 @@
      "thValues" : "Werte",
      "thUnit" : "Ma%DFeinheit",
      "thLastUpdate" : "Letzte<br/>Aktualisierung",
@@ -649,7 +649,7 @@
      "thFilter" : "Filter",
      "thDescription" : "Beschreibung",
      "thActivity" : "Aktivit%E4t",
-@@ -322,7 +323,7 @@
+@@ -331,7 +332,7 @@
      "lblSettingsFunctions5" : "Gewerkeigenschaften bearbeiten",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",
      "commentSettingsBtnSysVar" : "***********************************************",
@@ -658,7 +658,7 @@
      "lblSettingsSysVar1" : "%DCbersicht aller Systemvariablen",
      "lblSettingsSysVar2" : "Bestehende Systemvariablen bearbeiten",
      "lblSettingsSysVar3" : "Neue Systemvariablen anlegen",
-@@ -448,7 +449,7 @@
+@@ -457,7 +458,7 @@
      "lblMenuStatusControlFavorites1" : "%DCbersicht aller verf%FCgbaren Favoriten",
      "btnMenuStatusControlPrograms" : "Programme",
      "lblMenuStatusControlPrograms1" : "Direkter Zugriff auf alle Programme",
@@ -669,7 +669,7 @@
      "lblMenuStatusControlSysProtocolTime" : "Zeit",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -62,10 +62,11 @@
+@@ -64,10 +64,11 @@
      "submenuFavorites" : "Favourites",
      "submenuCreateFavorite" : "Create favourites",
      "submenuPrograms" : "Programs",
@@ -683,7 +683,7 @@
      "submenuDeviceInbox" : "Device inbox",
      "submenuUserManagement" : "User management",
      "submenuSysControl" : "Control panel",
-@@ -321,7 +322,7 @@
+@@ -330,7 +331,7 @@
      "lblSettingsFunctions5" : "Edit function properties",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",
      "commentSettingsBtnSysVar" : "***********************************************",
@@ -692,7 +692,7 @@
      "lblSettingsSysVar1" : "Overview of all system variables",
      "lblSettingsSysVar2" : "Edit existing system variables",
      "lblSettingsSysVar3" : "Create new system variables",
-@@ -447,7 +448,7 @@
+@@ -456,7 +457,7 @@
      "lblMenuStatusControlFavorites1" : "Overview of all functions available",
      "btnMenuStatusControlPrograms" : "Programs",
      "lblMenuStatusControlPrograms1" : "Direct access to all programs",
@@ -790,7 +790,7 @@
    height:100%;
    table-layout: fixed;
  }
-@@ -1452,7 +1452,7 @@
+@@ -1463,7 +1463,7 @@
  
  .sysConfigHeight
  {
@@ -799,7 +799,7 @@
  }
  
  .posPreBtn
-@@ -2666,8 +2666,8 @@
+@@ -2681,8 +2681,8 @@
  
    background-color: $_(subMenuBackground);
    font-weight: bold;
@@ -810,7 +810,7 @@
    text-align:left;
    vertical-align:middle;
    color: $_(textColorB); /* black */
-@@ -2681,6 +2681,12 @@
+@@ -2696,6 +2696,12 @@
    /* border: 2px solid $_(subMenuHighlight); */
    /* line-height: 30px; */
  }
@@ -823,7 +823,7 @@
  #webuiloader_wrapper {
    width: 100%;
    height: 100%;
-@@ -7011,11 +7017,12 @@
+@@ -7030,11 +7036,12 @@
  /* rega\pages\tabs\admin\linkprog.htm */
  
  .CLASS05400 {
@@ -837,7 +837,7 @@
  }
  
  .CLASS05402 {
-@@ -7026,16 +7033,54 @@
+@@ -7045,16 +7052,54 @@
  	text-align:center ! important;
  }
  
@@ -893,7 +893,7 @@
  /* rega\pages\tabs\favorites.htm */
  
  .CLASS05600 {
-@@ -7115,11 +7160,26 @@
+@@ -7134,11 +7179,26 @@
  /* pages\tabs\statusview.htm */
  
  .CLASS05700 {
@@ -921,7 +921,7 @@
  }
  
  .CLASS05702 {
-@@ -7256,13 +7316,32 @@
+@@ -7275,13 +7335,32 @@
  /* rega\pages\tabs\user\systemConfigUser.htm */
  
  .CLASS06100 {
@@ -957,7 +957,7 @@
  .CLASS06200 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25158,19 +25158,19 @@
+@@ -25183,19 +25183,19 @@
      var _submenuItem_ = submenuItem;
      var _menuItem_ = menuItem;
      
@@ -983,7 +983,7 @@
    },
    
    /**
-@@ -25206,12 +25206,11 @@
+@@ -25231,12 +25231,11 @@
        submenuElement.className = "MainMenuSubMenu";
        Element.setStyle(submenuElement, {display: "none"});
        

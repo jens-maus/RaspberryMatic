@@ -1564,7 +1564,7 @@ proc read_version { filename } {
 
 proc action_reboot {} {
   puts ""
-  exec /sbin/reboot
+  exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
 }
 
 proc _version_compare { v1 v2 } {

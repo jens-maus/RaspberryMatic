@@ -1,6 +1,6 @@
 --- a/www/rega/esp/system.fn
 +++ b/www/rega/esp/system.fn
-@@ -301,7 +301,7 @@
+@@ -302,7 +302,7 @@
  
    string sTime = system.Date( "%H:%M" );
    string sDate = system.Date( "%d.%m.%Y" );
@@ -154,7 +154,7 @@
    margin:0;
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25887,14 +25887,18 @@
+@@ -25895,14 +25895,18 @@
    showUpdate: function() {
      var fn = function() {
        var result = homematic.com.isUpdateAvailable();

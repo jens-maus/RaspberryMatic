@@ -1,6 +1,6 @@
 --- a/www/rega/esp/system.fn
 +++ b/www/rega/esp/system.fn
-@@ -1341,13 +1341,14 @@
+@@ -1342,13 +1342,14 @@
  ! [userId], [opt: sTmpVars]
  function ::BuildUserSvTable() {
    WriteLine('<table cellpadding="3" cellspacing="1" class="CLASS02105" width="100%">');
@@ -16,7 +16,7 @@
    WriteLine('</tr> ');
    
    string enumTmp = "";
-@@ -1413,6 +1414,13 @@
+@@ -1414,6 +1415,13 @@
              WriteLine("onclick='delFromTmpVars("#tmp#");'>${btnRemove}</div>");
            }
          WriteLine("</td>");
@@ -30,7 +30,7 @@
        WriteLine("</tr>");
      }
    }
-@@ -1440,6 +1448,25 @@
+@@ -1441,6 +1449,25 @@
    return;
  }
  
@@ -58,7 +58,7 @@
   object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
 --- a/www/rega/esp/system.htm
 +++ b/www/rega/esp/system.htm
-@@ -29,6 +29,7 @@
+@@ -30,6 +30,7 @@
    if( action == "BuildUserSvTable"           ) { Call( "system.fn::BuildUserSvTable()" );           }
    if( action == "AddSysVarAndBuildTable"     ) { Call( "system.fn::AddSysVarAndBuildTable()" );     }
    if( action == "UserDeleteSysVarBuildTable" ) { Call( "system.fn::UserDeleteSysVarBuildTable()" ); }
@@ -68,7 +68,7 @@
    if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
 --- a/www/webui/style.css
 +++ b/www/webui/style.css
-@@ -1454,6 +1454,30 @@
+@@ -1455,6 +1455,30 @@
    cursor:pointer;
  }
  
@@ -101,7 +101,7 @@
    width: 100%;
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31817,6 +31817,27 @@
+@@ -31891,6 +31891,27 @@
      new Ajax.Updater("userSysVarTbl", url, opts);
    },
    

@@ -48,6 +48,7 @@ jQuery.extend(true,langJSON, {
     "firmwareAvailOnCCU" : "Firmware verf%FCgbar<br/>auf der " + HMIdentifier.de.CCUShortName,
     "newFirmwareAvailable" : "Neue Firmware verf%FCgbar",
     "login" : "Anmelden",
+    "logoutInProgress" : "Abmeldevorgang l%E4uft...",
     "alarmMsg" : "Alarmmeldungen",
     "serviceMsg" : "Servicemeldungen",
     "logout" : "Abmelden",

@@ -21,6 +21,7 @@
   if( action == "saveSysVar"                 ) { Call( "system.fn::saveSysVar()" );                 }
   if( action == "saveDpProto"                ) { Call( "system.fn::saveDpProto()" );                }
   if( action == "saveDpVisibility"           ) { Call( "system.fn::saveDpVisibility()" );           }
+  if( action == "saveDpInternal"             ) { Call( "system.fn::saveDpInternal()" );             }
   if( action == "saveTimeModule"             ) { Call( "system.fn::saveTimeModule()" );             }
   if( action == "saveUser"                   ) { Call( "system.fn::saveUser()" );                   }
   if( action == "saveUserPwd"                ) { Call( "system.fn::saveUserPwd()" );                }
@@ -33,4 +34,6 @@
   if( action == "getLastTimeOfChn"           ) { Call( "system.fn::getLastTimeOfChn()" );           }
   if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
   if( action == "keepAlive"                  ) { Call( "system.fn::keepAlive()");                   }
+  if( action == "ShowInternalSystemVars"     ) { Call( "system.fn::ShowInternalSystemVars()");      }
+  if( action == "ShowInternalDeviceChannels" ) { Call( "system.fn::ShowInternalDeviceChannels()");  }
 %>

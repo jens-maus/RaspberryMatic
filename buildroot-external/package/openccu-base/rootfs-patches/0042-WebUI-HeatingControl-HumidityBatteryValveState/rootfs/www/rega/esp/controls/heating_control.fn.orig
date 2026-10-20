@@ -697,7 +697,7 @@ function ::CreateBWTHSwitchState() {
   WriteLine("<td>");
     WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
       WriteLine("<tr>");
-        WriteLine("<td><div id='idValveState'></div></td>");
+        WriteLine("<td><div id='idValveState"#chnId#"'></div></td>");
       WriteLine("</tr>");
     WriteLine("</table>");
   WriteLine("</td>");
@@ -726,7 +726,7 @@ function ::CreateBWTHSwitchState() {
 
     WriteLine("}");
 
-    WriteLine("jQuery('#idValveState').text(lblValveState);");
+    WriteLine("jQuery('#idValveState"#chnId#"').text(lblValveState);");
 
   WriteLine("</script>");
 

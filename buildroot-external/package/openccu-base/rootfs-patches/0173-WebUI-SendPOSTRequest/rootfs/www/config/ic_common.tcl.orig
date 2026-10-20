@@ -1250,7 +1250,7 @@ proc cmd_link_paramset2 {iface address pps_descr pps ps_type {pnr 0}} {
                 } else  {
                   set selected ""
                 }
-                append s "<option value=\"$sv_value\" $selected class=\"stringtable_value\">$v</option>"
+                append s "<option value=\"$sv_value\" $selected class=\"_stringtable_value\">$v</option>"
                 incr i
                 set selected selected=\"selected\"
                 set hidden ""

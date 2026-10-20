@@ -55,7 +55,7 @@
    color: $_(textColorA); /* white */
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -9637,10 +9637,10 @@
+@@ -9670,10 +9670,10 @@
    
    
    var m_name     = name;
@@ -67,7 +67,7 @@
    var m_textId = m_id + "Text";
  
    var isSet = function()
-@@ -9745,6 +9745,7 @@
+@@ -9778,6 +9778,7 @@
        }
      }
      if ($(m_id))     { $(m_id).hide(); }
@@ -75,7 +75,7 @@
      if (m_callback)  { m_callback(); }
    };
    
-@@ -9763,6 +9764,7 @@
+@@ -9796,6 +9797,7 @@
    this.reset = function()
    {
      m_value = "";
@@ -83,7 +83,7 @@
      this.close();
    };
  
-@@ -9785,7 +9787,6 @@
+@@ -9818,7 +9820,6 @@
    /*# Initialisierung #*/
    /*###################*/
    
@@ -91,7 +91,7 @@
    
  };
  
-@@ -9809,7 +9810,28 @@
+@@ -9842,7 +9843,28 @@
      this.callback = callback;
      this.id       = name.replace(/\./g, "_");
      this.formId   = this.id + "Form";
@@ -121,7 +121,7 @@
    },
  
    /**
-@@ -9920,16 +9942,20 @@
+@@ -9953,16 +9975,20 @@
      if ($(this.formId))
      {
        var values = $(this.formId).values;
@@ -142,7 +142,7 @@
        if (this.callback) { this.callback(); }
      }
    },
-@@ -9965,7 +9991,8 @@
+@@ -9998,7 +10024,8 @@
      {
        this.list[i]._selected = false;
      }
@@ -152,7 +152,7 @@
      this.close();
    }
    
-@@ -26772,6 +26799,7 @@
+@@ -26806,6 +26833,7 @@
      jQuery("#DeviceListPage_FuncFilter").draggable();
  
      DeviceList.updateDeviceStatus();
@@ -160,7 +160,7 @@
    },
    
    onRemoveDevice: function(whatEver)
-@@ -32280,6 +32308,9 @@
+@@ -32354,6 +32382,9 @@
    },  
    ShowPopup: function() {
      this.show();
@@ -170,7 +170,7 @@
    },
    
    restorePrevious: function() {
-@@ -33201,11 +33232,31 @@
+@@ -33259,11 +33290,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -204,7 +204,7 @@
      }
      /* ELV --> */
      
-@@ -37133,6 +37184,28 @@
+@@ -37221,6 +37272,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -233,7 +233,7 @@
    },
    
  
-@@ -37504,6 +37577,15 @@
+@@ -37592,6 +37665,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -249,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -37613,6 +37695,12 @@
+@@ -37701,6 +37783,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -51169,6 +51257,9 @@
+@@ -51283,6 +51371,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -51296,6 +51387,9 @@
+@@ -51414,6 +51505,9 @@
    ShowPopup: function()
    {
      this.show();

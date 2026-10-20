@@ -1,6 +1,6 @@
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -8343,8 +8343,7 @@
+@@ -8350,8 +8350,7 @@
      var strA = this.toLowerCase();
      var strB = other.toLowerCase();
    
@@ -10,7 +10,7 @@
    }
    
    return 0;
-@@ -35040,52 +35039,12 @@
+@@ -35083,52 +35082,12 @@
  
  iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
  {

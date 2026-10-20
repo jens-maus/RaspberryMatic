@@ -28,6 +28,7 @@ function ::TestRunning()
       Call("/esp/TimeStamp.fn::TimeStampToString3()");
       Write( sTimestamp );
     }    
+  }
 }
 
 function ::SetScreenSize()
@@ -312,6 +313,8 @@ function ::UpdateUI()
     Write( 'if( $("presence") ) $("presence").innerHTML = "'#oPresence.ValueName()#'";' );
   }
   
+  WriteLine("resetReGaSaveButton();");
+  
   integer iAlCount = 0;
   object svCollection = dom.GetObject( ID_SYSTEM_VARIABLES );
   string sSVID;
@@ -441,7 +444,7 @@ function ::UpdateUI()
 
 
   Write( 'if(urlParamInterfaces == "true") showInterfaces();');
-  Write( 'if(showAPITools == "true" || (homematic("system.getTweak",{"key" : "showAPITools"}))) showHmAPITools();');
+  Write( 'if(showAPITools == "true") showHmAPITools();');
 
   !###################
   !# Systemvariablen #
@@ -465,7 +468,14 @@ function ::UpdateUI()
       boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
       boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
       Call( "/esp/system.fn::getSysVarValAsString()" );
-      WriteLine("updateSysVar('" # svId # "', '" # sSysVarVal # "');");
+      ! Escape unwanted chars
+      sSysVarVal = sSysVarVal.Replace("\\", "\\\\");
+      sSysVarVal = sSysVarVal.Replace("`", "\\`");
+      sSysVarVal = sSysVarVal.Replace("${", "\\${");
+      WriteLine("if ($('SYSVAR_" # svId # "')) {");
+      ! use javascript string literal char (`) to ensure proper char escaping
+      WriteLine("  $('SYSVAR_" # svId # "').innerHTML = translateString(`" # sSysVarVal # "`);");
+      WriteLine("}");
     }    
   }
 
@@ -537,7 +547,7 @@ function ::UpdateUI()
   foreach( s, dom.TestRunningIDs().EnumIDs() )
   {
     object oTestChannel = dom.GetObject( s );
-    if( oTestChannel )
+    if( (oTestChannel) && (oTestChannel.IsTypeOf( OT_CHANNEL )) )
     {
       Write("if($('TestButtonCH"#s#"'))$('TestButtonCH"#s#"').className = 'TestButtonDisabled';" );
       Write("if($('OkButtonCH"#s#"'))$('OkButtonCH"#s#"').className = 'OkButtonRunning';" );
@@ -673,7 +683,7 @@ function ::getChnNameById()
 
 ![sPageId], [sType], [sFilter]
 function ::saveSFilter() {
-  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId");
+  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId"));
   string s = system.GetVar("sFilter");
   Write(system.GetVar("sType"));
   uidata.DataValue(system.GetVar("sPageId"), system.GetVar("sType"), s);
@@ -966,7 +976,9 @@ function ::saveTimeModule()
     sCI=sCI#"Try to set SunOffsetType to ["#system.GetVar("tmSot")#"] ";
     tmObj.SunOffsetType( system.GetVar("tmSot") );
     if( tmObj.SunOffsetType() == system.GetVar("tmSot") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
-    
+
+    if( tmObj.SunOffsetType() != sotNone ) { tmObj.TimeSeconds( system.GetVar("tmTime") ); }
+
     Write( 'dlgResult = '#tmObj.ID()#';' );
     Write( 'PopupClose();' );
   }
@@ -1022,17 +1034,21 @@ function ::TmToString() {
         sTm = sTm # s.Format("%H:%M") # " ${ruleConditionLblTimeClock} ";
       }
     }
-    if (tm.SunOffsetType() == sotAfterSunrise)
+    elseif ((tm.SunOffsetType() == sotSunrise) ||
+            (tm.SunOffsetType() == sotBeforeSunrise) ||
+            (tm.SunOffsetType() == sotAfterSunrise))
     {
       !sTm = sTm # "tagsüber ";
       sTm = sTm # "${ruleConditionLblTimeDuringDay} ";
     }
-    if (tm.SunOffsetType() == sotAfterSunset)
+    elseif ((tm.SunOffsetType() == sotSunset) ||
+            (tm.SunOffsetType() == sotBeforeSunset) ||
+            (tm.SunOffsetType() == sotAfterSunset))
     {
       !sTm = sTm # "nachts ";
       sTm = sTm # "${ruleConditionLblTimeDuringNight} ";
     }
-    if (tm.CalDuration() != 0) {
+    if ((tm.SunOffsetType() == sotNone) && (tm.CalDuration() != 0)) {
       sTm = sTm # "${lblTo} ";
       sTm = sTm # (tm.TimeSeconds() + tm.CalDuration()).ToTime().Format("%H:%M");
       sTm = sTm # " ${ruleConditionLblTimeClock} ";
@@ -1122,7 +1138,13 @@ function ::saveUser() {
   user.UserFirstName(system.GetVar("firstName"));
   user.UserLastName(system.GetVar("lastName"));
   user.UserEasyLinkMode(system.GetVar("bEasy"));
-  user.UserLevel(system.GetVar("level"));
+  if (user.ID() == 1004) {
+    user.UserLevel(iulAdmin);
+  } else {
+    if (oUser.UserLevel() == iulAdmin) {
+      user.UserLevel(system.GetVar("level"));
+    }
+  }
   user.UserPhoneNumber(system.GetVar("phone"));
   user.UserMailAddress(system.GetVar("mail"));
   boolean bLogin = false;
@@ -1167,7 +1189,7 @@ function ::deleteUser()
     oUser = dom.GetObject( system.GetVar("userid") );
     if( oUser )
     {
-      if( !oUser.Unerasable() )
+      if( (!oUser.Unerasable()) || (oUser.ID() == 1004) )
       {
         object oFavorites = dom.GetObject( ID_FAVORITES );
         if( oFavorites )
@@ -1187,7 +1209,7 @@ function ::deleteUser()
   }
 }
 
-function ExecuteProgram()
+function ::ExecuteProgram()
 {
   object obj = dom.GetObject( system.GetVar("dpid") );
   if (obj)
@@ -1540,4 +1562,61 @@ function ::writeWarnStateJS()
 
 function ::keepAlive()
 {
+}
+
+function ::ShowInternalSystemVars()
+{
+  if( system.IsSessionVar("sessionSISV") )
+  {
+    string sEnable = system.GetSessionVar("sessionSISV");
+    if( sEnable == "1" )
+    {
+      system.SetSessionVar("sessionSISV","0");
+    }
+    else
+    {
+      system.SetSessionVar("sessionSISV","1");
+    }
+  }
+  else
+  {
+    system.SetSessionVar("sessionSISV","1");
+  }
+}
+
+function ::ShowInternalDeviceChannels()
+{
+  if( system.IsSessionVar("sessionSIDC") )
+  {
+    string sEnable = system.GetSessionVar("sessionSIDC");
+    if( sEnable == "1" )
+    {
+      system.SetSessionVar("sessionSIDC","0");
+    }
+    else
+    {
+      system.SetSessionVar("sessionSIDC","1");
+    }
+  }
+  else
+  {
+    system.SetSessionVar("sessionSIDC","1");
+  }
+}
+
+! [id], [iInternal]                                 
+function ::saveDpInternal() {
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( oUser.UserLevel() == iulAdmin )           
+  {                                                   
+    object obj = dom.GetObject(system.GetVar("dpId"));
+    if (obj) {
+      boolean b = false;
+      if (system.GetVar("iInternal") == 1) {
+        b = true;         
+      }
+      obj.Internal(b);            
+    }
+  }                                                                        
+  return;
 }

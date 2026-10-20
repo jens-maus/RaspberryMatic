@@ -73,7 +73,7 @@
      s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04801' onclick='new HMScriptExecutor();'>${footerBtnTestScript}</div></td>";
 --- a/www/rega/pages/tabs/control/devices.htm
 +++ b/www/rega/pages/tabs/control/devices.htm
-@@ -90,7 +90,7 @@
+@@ -91,7 +91,7 @@
                            Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                            Write(devs.Name());
                            Write("</td>");
@@ -84,7 +84,7 @@
                            Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
 --- a/www/rega/pages/tabs/control/hdevichannels.htm
 +++ b/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -193,7 +193,11 @@
+@@ -198,7 +198,11 @@
              string trId = device.ID()#tmp;
              boolean showExtDesc = false;
              Write("<tr id='"#trId#"'>");
@@ -99,7 +99,7 @@
  
 --- a/www/rega/pages/tabs/control/hfuncchannels.htm
 +++ b/www/rega/pages/tabs/control/hfuncchannels.htm
-@@ -149,7 +149,11 @@
+@@ -153,7 +153,11 @@
            if( bShow && chn.ReadyConfig() && oDev.ReadyConfig())
            {
              boolean showExtDesc = false;
@@ -114,7 +114,7 @@
  
 --- a/www/rega/pages/tabs/control/hroomchannels.htm
 +++ b/www/rega/pages/tabs/control/hroomchannels.htm
-@@ -154,7 +154,11 @@
+@@ -158,7 +158,11 @@
              string trId = room.ID()#tmp;
              boolean showExtDesc = false;
              Write("<tr id='"#trId#"'>");
@@ -180,7 +180,7 @@
  .CLASS05005 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31357,7 +31357,7 @@
+@@ -31411,7 +31411,7 @@
      };
      new Ajax.Request(url,opts);
    },
@@ -189,7 +189,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31369,12 +31369,12 @@
+@@ -31423,12 +31423,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -204,7 +204,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31387,12 +31387,12 @@
+@@ -31441,12 +31441,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -219,7 +219,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31404,7 +31404,7 @@
+@@ -31458,7 +31458,7 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}

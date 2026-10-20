@@ -250,7 +250,7 @@
            {var virtualChannel = \"\"}\n
            {var classExpertOnly = \"hidden j_expertChannel\"}\n
            {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
-@@ -6265,6 +6263,8 @@
+@@ -6271,6 +6269,8 @@
  elvST['COND_TX_THRESHOLD_LO_POWER'] = '${stringTableCondThresholdLoPower}';
  elvST['CONFIG_PENDING=FALSE'] = '${stringTableConfigPendingFalse}';
  elvST['CONFIG_PENDING=TRUE'] = '${stringTableConfigPendingTrue}';
@@ -259,7 +259,7 @@
  elvST['CONF_BUTTON_TIME'] = '${stringTableConfButtonTime}';
  elvST['CONF_BUTTON_TIME=PERMANENT'] = '${stringTableConfButtonTimePermanent}';
  elvST['CONTROL_MODE=AUTO-MODE'] = '${stringTableClimateControlRTTransceiverAutoMode}';
-@@ -11792,6 +11792,7 @@
+@@ -11828,6 +11828,7 @@
        this.isWritable = data["isWritable"];      
        this.isEventable = data["isEventable"];
        this.isActive = data["isChannelActive"];
@@ -267,7 +267,7 @@
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
-@@ -15059,9 +15060,7 @@
+@@ -15088,9 +15089,7 @@
        var self = this;
        if (this.match(channel)) {
          if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
@@ -278,7 +278,7 @@
          } else {
            result.push(channel);
          }
-@@ -26453,7 +26452,6 @@
+@@ -26491,7 +26490,6 @@
      var result = true;
      switch (channel.channelType) {
        case "ALARM_COND_SWITCH_TRANSMITTER":

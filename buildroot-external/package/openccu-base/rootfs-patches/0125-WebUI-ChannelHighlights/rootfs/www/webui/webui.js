@@ -47,7 +47,7 @@ CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n
       {eval}actualDeviceAddress = \"\";{\/eval}\n
 \n
       {for channel in channels}\n
-        {if channel.device.inInbox != true}\n
+        {if ((channel.device.inInbox != true) && (channel.address != \"BidCoS-RF:0\")) }\n
           {var virtualChannel = \"\"}\n
           {var classExpertOnly = \"hidden j_expertChannel\"}\n
           {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
@@ -92,6 +92,8 @@ CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n
           {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
           {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n
 \n
+          {if (channel.index == 0)} {var virtualChannel = classExpertOnly} {\/if}\n
+          \n
           {if channel.channelType != \"_MAINTENANCE\"}\n
               <tr class=\"ChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onclick=\"ChannelChooser.select(this.id);\" onmouseover=\"this.className=\'ChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'ChannelChooserRow\';\">\n
                 <td class=\"ChannelChooserCell\">${channel.name}<br\/><br\/><span class=\"j_extChnDescr\">${channel.typeDescription}_${channel.address}<\/span><\/td>\n
@@ -257,6 +259,7 @@ DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n
         <tr id=\"btnEnableDeviceLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"DeviceConfigDialog_isLogged\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isLoggingChanged=true;\" {if device.isLogged} checked=\"checked\" {\/if} {if !device.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n
 \n
         <tr id=\"trAllChnVisible\" class=\"hidden\"><td name=\"lblAllChannelsVisible\">Alle Kan%E4le sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\"\/><\/td><\/tr>\n
+        <tr id=\"btnEnableDeviceServiceMsg\"><td name=\"generalDeviceChannelConfigLblServiceMsg\">Servicemeldungen:<\/td><td><input id=\"DeviceConfigDialog_enabledServiceMsg\" type=\"checkbox\" onclick=\"DeviceConfigDialog.enabledServiceMsgChanged=true;\" {if device.enabledServiceMsg} checked=\"checked\" {\/if} \/><\/td><\/tr>\n
       <\/table>\n
     <\/div>\n
     \n
@@ -267,12 +270,42 @@ DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n
         <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n
           <tr>\n
             <td width=\"50%\"><div id=\"DeviceConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"DeviceConfigDialog.startTest();\">Test starten<\/div><\/td>\n
-            <td width=\"50%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n
+            <td width=\"40%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n
+\n
+			<td width=\"40%\"><div id=\"DeviceConfigDialogTestHint\"><img id=\"DeviceConfigDialogTestHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceConfigHint', '400', '200')\"><\/div><\/td>\n
+\n
           <\/tr>\n
         <\/table>\n
-        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n
-          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n
-        <\/div>\n
+      <\/div>\n
+    <\/div>\n
+	\n
+    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n
+      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblRenameChannel\">Funktionstest<\/div>\n
+      <hr \/>\n
+      <div>\n
+        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n
+          <tr>\n
+		    <td width=\"50%\"><div id=\"DeviceConfigDialogRenameChannelButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnRenameChannels\" onclick=\"DeviceConfigDialog.renameChannels();\">Kanäle umbenennen<\/div><\/td>\n
+\n
+			<td width=\"40%\"><\/td>\n
+\n
+			<td width=\"40%\"><div id=\"DeviceConfigDialogRenameChannelButtonHint\"><img id=\"DeviceConfigDialogRenameChannelButtonHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceRenameChannelHint', '400', '100')\"><\/div><\/td>\n
+\n
+          <\/tr>\n
+\n
+		  <tr>			\n
+		    <td width=\"80%\" name=\"generalDeviceChannelConfigLblSeparator\">Trennzeichen:<\/td><td width=\"20%\"><input id=\"DeviceConfigDialog_DeviceChannelsRenameSeparator\" size=\"2\" type=\"text\" value=\":\"\/><\/td>\n
+          <\/tr>\n
+\n
+		  <tr>\n
+\n
+		    <td width=\"50%\" name=\"generalDeviceChannelConfigLblRenameChannelIncludingOwn\">inkl. eigener Namen:<\/td><td><input id=\"DeviceConfigDialog_renameChannelIncludingOwn\" type=\"checkbox\" \/><\/td>\n
+\n
+			<td width=\"50%\"><div id=\"DeviceConfigDialogRenameIncludingOwnHint\"><img id=\"DeviceConfigDialogRenameIncludingOwnHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceRenameChannelIncludingOwnHint', '400', '100')\"><\/div><\/td>\n
+\n
+		  <\/tr>\n
+\n
+        <\/table>\n
       <\/div>\n
     <\/div>\n
 \n
@@ -298,7 +331,7 @@ DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n
     <\/th>\n
   {\/if}\n
 {\/macro}\n
-<table id=\"DeviceListTable\" width=\"97%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
   <colgroup>\n
     <col style=\"width:11%;\"\/>\n
     <col style=\"width:11%;\"\/>\n
@@ -388,24 +421,25 @@ DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n
 <\/table>\n
 \n
 ";
-DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
   <colgroup>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:55px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:55px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:100px;\" \/>\n
   <\/colgroup>\n
   <thead>\n
     <tr>\n
@@ -420,6 +454,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
       <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n
       <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n
       <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n
+      <th class=\"DeviceListHead\"><img name=\"lblRSSI\" src=\"\/ise\/img\/rssi-icon.png\" width=\"24px\" height=\"24px\" alt=\"RSSI\" title=\"RSSI\"\/><\/th>\n
       <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n
       <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n
       <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n
@@ -440,20 +475,17 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
       <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
       <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
       <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
+      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
     <\/tr>\n
   <\/thead>\n
   <tbody>\n
     {for device in devices}\n
       {if !device.inInbox}\n
         <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n
-          {if (device.typeName != \"HmIP-CCU3\") && (device.typeName != \"RPI-RF-MOD\")  && (device.typeName != \"HmIP-HAP\") && (device.typeName != \"HmIP-HAP-A\") && (device.typeName != \"HmIP-HAP2\") && (device.typeName != \"HmIP-HAP2-A\") && (device.typeName != \"HmIP-HAP-B1\") && (device.typeName != \"HmIP-HAP JS1\")}\n
-            <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n
-              <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n
-              <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n
-            <\/td>\n
-            {else}\n
-             <td class=\"DeviceListCell_Invisible\" \/>\n
-          {\/if}\n
+          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n
+            <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n
+            <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n
+          <\/td>\n
           <td class=\"DeviceListCell\" colspan=\"3\">${device.name}<\/td>\n
           <td class=\"DeviceListCell\" >${device.typeName}<\/td>\n
           <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n
@@ -463,6 +495,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
           <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
           <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
           <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+          <td class=\"DeviceListCell\" id=\"DeviceStatus${device.id}\" ><\/td>\n
           <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
           <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
           <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
@@ -493,6 +526,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
             <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
             <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
             <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+            <td class=\"DeviceListCell\" ><\/td>\n
             <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
             <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
             <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
@@ -514,6 +548,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
               <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
               <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
               <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" ><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
@@ -544,6 +579,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
               <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
               <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
               <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
+              <td class=\"DeviceListCell\" ><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
               <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
@@ -559,7 +595,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
     {forelse}\n
       <tr class=\"DeviceListRow\">\n
         <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n
-        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"15\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n
+        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"16\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n
       <\/tr>\n
     {\/for}\n
   <\/tbody>\n
@@ -577,6 +613,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
       <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
       <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
       <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
+      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
       <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
       <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
       <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
@@ -656,7 +693,7 @@ MULTI_CHANNELCHOOSER_JST = "{macro printHead(name, id, langKey)}\n
     <tbody>\n
       {eval}actualDeviceAddress = \"\";{\/eval}\n
       {for channel in channels}\n
-        {if channel.device.inInbox != true}\n
+        {if ((channel.device.inInbox != true) && (channel.address != \"BidCoS-RF:0\"))}\n
           {var virtualChannel = \"\"}\n
           {var classExpertOnly = \"hidden j_expertChannel\"}\n
           {var channelTypeID = channel.deviceType.id.toUpperCase()}\n
@@ -1010,12 +1047,12 @@ DEV_PATHS["HmIP-PMFS"] = new Object();
 DEV_PATHS["HmIP-PMFS"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
 DEV_PATHS["HmIP-PMFS"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
 DEV_HIGHLIGHT["HmIP-PMFS"] = new Object();
-DEV_LIST.push('HMIP-PS-A');
-DEV_DESCRIPTION["HMIP-PS-A"] = "PS";
-DEV_PATHS["HMIP-PS-A"] = new Object();
-DEV_PATHS["HMIP-PS-A"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
-DEV_PATHS["HMIP-PS-A"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
-DEV_HIGHLIGHT["HMIP-PS-A"] = new Object();
+DEV_LIST.push('HmIP-PS-A');
+DEV_DESCRIPTION["HmIP-PS-A"] = "PS";
+DEV_PATHS["HmIP-PS-A"] = new Object();
+DEV_PATHS["HmIP-PS-A"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
+DEV_PATHS["HmIP-PS-A"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
+DEV_HIGHLIGHT["HmIP-PS-A"] = new Object();
 DEV_LIST.push('HMIP-PS');
 DEV_DESCRIPTION["HMIP-PS"] = "PS";
 DEV_PATHS["HMIP-PS"] = new Object();
@@ -3449,6 +3486,12 @@ DEV_PATHS["RPI-RF-MOD"] = new Object();
 DEV_PATHS["RPI-RF-MOD"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
 DEV_PATHS["RPI-RF-MOD"]["250"] = "/config/img/devices/250/CCU3.png";
 DEV_HIGHLIGHT["RPI-RF-MOD"] = new Object();
+DEV_LIST.push('HmIP-RFUSB');
+DEV_DESCRIPTION["HmIP-RFUSB"] = "HmIP-RFUSB";
+DEV_PATHS["HmIP-RFUSB"] = new Object();
+DEV_PATHS["HmIP-RFUSB"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
+DEV_PATHS["HmIP-RFUSB"]["250"] = "/config/img/devices/250/CCU3.png";
+DEV_HIGHLIGHT["HmIP-RFUSB"] = new Object();
 DEV_LIST.push('VIR-HUE-GTW');
 DEV_DESCRIPTION["VIR-HUE-GTW"] = "VIR-HUE-GTW";
 DEV_PATHS["VIR-HUE-GTW"] = new Object();
@@ -6276,6 +6319,8 @@ elvST['COND_TX_THRESHOLD_LO'] = '${stringTableCondThresholdLo}';
 elvST['COND_TX_THRESHOLD_LO_POWER'] = '${stringTableCondThresholdLoPower}';
 elvST['CONFIG_PENDING=FALSE'] = '${stringTableConfigPendingFalse}';
 elvST['CONFIG_PENDING=TRUE'] = '${stringTableConfigPendingTrue}';
+elvST['STICKY_UNREACH=FALSE'] = '${stringTableStickyUnreachFalse}';
+elvST['STICKY_UNREACH=TRUE'] = '${stringTableStickyUnreachTrue}';
 elvST['CONF_BUTTON_TIME'] = '${stringTableConfButtonTime}';
 elvST['CONF_BUTTON_TIME=PERMANENT'] = '${stringTableConfButtonTimePermanent}';
 elvST['CONTROL_MODE=AUTO-MODE'] = '${stringTableClimateControlRTTransceiverAutoMode}';
@@ -8417,21 +8462,10 @@ HttpLoader = new function()
   /*####################*/
   
   /**
-   * Hängt die Version der HomeMatic WebUI an eine URL an,
-   * um Probleme mit dem Browsercache zu umgehen.
-   **/
-  var addVersion = function(url)
-  {
-    if (0 <= url.indexOf("?")) { return url + "&_version_=" + WEBUI_VERSION; }
-    else                       { return url + "?_version_=" + WEBUI_VERSION; }
-  };
-  
-  /**
    * Lädt synchron Daten und gibt das XMLHttpRequest-Objekt zurück.
    **/
   var load = function(method, url, data)
   {
-    url = addVersion(url);
     var xhr = XMLHttpRequest_create();
     
     if (null !== xhr)
@@ -8865,10 +8899,10 @@ ConfigData = Singleton.create({
     this.callback = callback;
     if (this.isPresent === false)
     {
-      //this.isPresent = true;
-      //new ConfigDataLoader(callback);
-      this.configDataLoader.showMessage();
-      this.showMessage = true;
+      this.isPresent = true;
+      new ConfigDataLoader(callback);
+      //this.configDataLoader.showMessage();
+      //this.showMessage = true;
     }
     else
     {
@@ -8902,8 +8936,6 @@ ConfigData = Singleton.create({
       window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
       ConfigData.isPresent = true;
       if (ConfigData.showMessage) { this.hideMessage(); }
-      showDutyCycleHmIP(); // The DeviceList is now available for displaying the duty cycle and carrier sense of the HAP's
-      showCarrierSense();
       if (ConfigData.callback) { ConfigData.callback(); }
     });
   },
@@ -9042,7 +9074,6 @@ WebUI = Singleton.create({
     if(typeof dcTimeout == "undefined") {
       dcTimeout = window.setTimeout(function () {
         showDutyCycle();
-        showCarrierSense();
         delete dcTimeout;
       }, 10);
     }
@@ -9207,6 +9238,7 @@ WebUI = Singleton.create({
 
       var content = document.createElement("div");
       content.id = "content";
+      content.tabIndex = -1;
       Element.setStyle(content, {cursor: "wait"});
       layer0.appendChild(content);
 
@@ -9276,7 +9308,6 @@ WebUI = Singleton.create({
       // Check the dutyCycle and carrierSense periodically
       new PeriodicalExecuter(function () {
         showDutyCycle();
-        showCarrierSense();
       }, checkDutyCycleInterval);
 
       if (getProduct() >= 3) {
@@ -9312,9 +9343,50 @@ WebUI = Singleton.create({
         }
         */
 
+        var toAckName = function(name) {
+          return name.replace(/[ \/\xC4\xD6\xDC\xE4\xF6\xFC\xDF]/g, function(m) {
+                        return {
+                          ' ': ';',
+                          '/': '',
+                          '\xC4': 'AE',
+                          '\xD6': 'OE',
+                          '\xDC': 'UE',
+                          '\xE4': 'ae',
+                          '\xF6': 'oe',
+                          '\xFC': 'ue',
+                          '\xDF': 'ss'
+                        }[m];
+                      }).replace(/[^\x20-\x7e]+/g, '');
+        };
+        var usrName = toAckName(userName);
+
+        // The acknowledgement of the install wizard is stored per user ID
+        // (userAckInstallWizardId_<ID>). Until now, it was stored under the
+        // sanitized user name, and before that under the name decorated with the
+        // role and the UI mode shown in the header (now userNameInfo). Still
+        // accept such a file and store the acknowledgement under the user ID, so
+        // that the wizard does not reappear after the update. The former file is
+        // removed, as accounts whose names sanitize identically shared it: only
+        // the first of them that logs in takes it over.
+        var hasUserAckInstallWizard = function() {
+          var ackFile = "/etc/config/userprofiles/userAckInstallWizard";
+          if (homematic('CCU.existsFile', {'file': ackFile + "Id_" + userId})) {
+            return true;
+          }
+          var found = false;
+          var legacyNames = [usrName, toAckName(userNameInfo)];
+          for (var i = 0; i < legacyNames.length; i++) {
+            if (homematic('CCU.existsFile', {'file': ackFile + "_" + legacyNames[i]})) {
+              homematic("CCU.setUserAckInstallWizard", {'legacyName': legacyNames[i]});
+              found = true;
+            }
+          }
+          return found;
+        };
+
         var usrPwd = homematic('User.hasUserPWD', {'userID': userId});
         if (usrPwd == false) {
-          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")});
+          var result = hasUserAckInstallWizard();
           if (!result) {
             var checkUpdateContentRunning = window.setInterval(function () {
               if (!bUpdateContentRunning) {
@@ -9334,9 +9406,14 @@ WebUI = Singleton.create({
 
           // User password set
           // The User will see a hint that new firewall settings are active
-          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")}))) {
+          if ((getUPL() == UPL_USER) && (!hasUserAckInstallWizard())) {
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
-            homematic("CCU.setUserAckInstallWizard", {'userName': userName});
+            homematic("CCU.setUserAckInstallWizard");
+          }
+
+          // open the systemLanguage config dialog if no systemLanguage was selected yet
+          if (homematic('CCU.getSystemLanguage') === 'none') {
+            CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
           }
         }
       }
@@ -9436,6 +9513,12 @@ WebUI = Singleton.create({
     this.currentPageOptions  = options;
     
     this.currentPage.enter(options);
+    window.name = 'ccu-main-window';
+    window.setTimeout(() => {
+      if(jQuery(':focus').length === 0) {
+        jQuery('#content')[0].focus();
+      }
+    }, 200);
   },
   
   reload: function()
@@ -9668,10 +9751,10 @@ StringFilter = function(name, callback)
   
   
   var m_name     = name;
-  var m_value    = "";
   var m_callback = callback;
   
   var m_id     = name.replace(/\,/g, "_");
+  var m_value    = localStorage.getItem(m_id) || "";
   var m_textId = m_id + "Text";
 
   var isSet = function()
@@ -9776,6 +9859,7 @@ StringFilter = function(name, callback)
       }
     }
     if ($(m_id))     { $(m_id).hide(); }
+    localStorage.setItem(m_id, $(m_textId).value);
     if (m_callback)  { m_callback(); }
   };
   
@@ -9794,6 +9878,7 @@ StringFilter = function(name, callback)
   this.reset = function()
   {
     m_value = "";
+    localStorage.removeItem(m_id);
     this.close();
   };
 
@@ -9816,7 +9901,6 @@ StringFilter = function(name, callback)
   /*# Initialisierung #*/
   /*###################*/
   
-  this.reset();
   
 };
 
@@ -9840,7 +9924,28 @@ ListFilter = Class.create({
     this.callback = callback;
     this.id       = name.replace(/\./g, "_");
     this.formId   = this.id + "Form";
-    this.reset();
+    var self = this;
+    function fltrHandler() {
+      self.restoreFilters();
+      eQ3.HomeMatic.Event.unsubscribe('DeviceListPageLoaded', fltrHandler);
+    }
+    eQ3.HomeMatic.Event.subscribe('DeviceListPageLoaded', fltrHandler);
+  },
+
+  restoreFilters: function() {
+    var filterValues = localStorage.getItem(this.id);
+    if(filterValues) {
+      try {
+        filterValues = JSON.parse(filterValues);
+        var values = $(this.formId).values;
+        for (var i = 0, len = values.length; i < len; i++) {
+         if(filterValues.indexOf(values[i].value) !== -1) {
+            values[i].checked = true;
+          }
+        }
+        this.set();
+      } catch(e) { console.log(e); }
+    }
   },
 
   /**
@@ -9951,16 +10056,20 @@ ListFilter = Class.create({
     if ($(this.formId))
     {
       var values = $(this.formId).values;
+      var filterValues = [];
 
       for (var i = 0, len = values.length; i < len; i++)
       {
         this.select(values[i].value, values[i].checked);
+        if(values[i].checked) filterValues.push(values[i].value);
       }
 
       if ($(this.id))    {
         $(this.id).hide();
         try {jQuery("#"+ this.id).draggable("destroy");} catch (e) {}
       }
+      // JSON.stringify encodes an array twice???
+      localStorage.setItem(this.id, JSON.parse(JSON.stringify(filterValues)));
       if (this.callback) { this.callback(); }
     }
   },
@@ -9996,7 +10105,8 @@ ListFilter = Class.create({
     {
       this.list[i]._selected = false;
     }
-    
+
+    localStorage.removeItem(this.id);
     this.close();
   }
   
@@ -10484,7 +10594,13 @@ UI.Text = Class.create(UI.Component, {
     Element.setStyle(this.m_element, {"textAlign": alignment});
     return this;
   },
-  
+
+  setStyle: function(style)
+  {
+    Element.setStyle(this.m_element, style);
+    return this;
+  },
+
   /**
    * Setzt die Breite des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
@@ -10505,7 +10621,13 @@ UI.Text = Class.create(UI.Component, {
     if (height != "auto") { height = parseInt(height) + "px"; }
     Element.setStyle(this.m_element, { height    : height });
     return this;
-  }
+  },
+
+  setClass: function(name)
+  {
+    this.m_element.className = name;
+    return this;
+  },
 });
  
 /**
@@ -10772,6 +10894,16 @@ UI.Textarea = Class.create(UI.InputComponent, {
     return this;
   },
   
+  setID : function(id) {
+    this.m_element.setAttribute("id",id);
+    return this;
+  },
+
+  setName : function(name) {
+    this.m_element.setAttribute("name",name);
+    return this;
+  },
+
   setWrap: function(isWrap)
   {
     if (isWrap) { Element.writeAttribute(this.m_element, "wrap", "soft"); }
@@ -11459,7 +11591,8 @@ DeviceTypeList = Singleton.create({
     "HM-Sec-SD-Team",
     "HM-Sec-SD-2-Team",
     "HmIP-CCU3",
-    "RPI-RF-MOD"
+    "RPI-RF-MOD",
+    "HmIP-RFUSB"
   ],
   
   /**
@@ -11636,14 +11769,16 @@ Channel = Class.create({
         if (typeof devToConfigure != "undefined" || typeof blindChAddress == "undefined" || blindChAddress != devAddress) {
           blindChAddress = devAddress;
           var devDescr = homematic("Interface.getDeviceDescription", {"interface": "HmIP-RF", "address":devAddress});
-          blindFw = devDescr.firmware;
-          arBlindFW = blindFw.split(".");
-          fwGTE16 = (arBlindFW[0] > 1 || ((arBlindFW[0] = 1) && (arBlindFW[1] >= 6)));
-          window.setTimeout(function() {delete blindChAddress; delete blindFw; delete fwGTE16;},10000);
+          if (devDescr) {
+            blindFw = devDescr.firmware;
+            arBlindFW = blindFw.split(".");
+            fwGTE16 = (arBlindFW[0] > 1 || ((arBlindFW[0] = 1) && (arBlindFW[1] >= 6)));
+            window.setTimeout(function() {delete blindChAddress; delete blindFw; delete fwGTE16;},10000);
+          }
         }
 
 
-        if (fwGTE16) {
+        if (typeof fwGTE16 != "undefined" && fwGTE16) {
           homematic("Interface.getMetadata_crRFD", {"interface": "HmIP-RF", "objectId": data["address"], "dataId": "channelMode"}, function(result) {
             if (result == "") {
               self.changedMultiMode = "shutter";
@@ -11748,6 +11883,7 @@ Channel = Class.create({
       this.isWritable = data["isWritable"];      
       this.isEventable = data["isEventable"];
       this.isActive = data["isChannelActive"];
+      this.isInternal = data["isInternal"]
 
       if (typeof data["mode_multi_mode"] != "undefined") {
         this.multiMode = data["mode_multi_mode"];
@@ -12282,6 +12418,7 @@ Device = Class.create({
 
       this.interfaceName = data["interface"];
       this.isReadyConfig = data["isReady"];
+      this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
       this.deviceType = deviceType;
       this.typeName = deviceType.name;
       this.typeDescription = deviceType.description;
@@ -12373,6 +12510,162 @@ Device = Class.create({
   },
 
   /**
+   * Startet die Aktualisierung der Werte des Gerätestatus
+   **/
+  updateStatus:function(deviceStatus, rssiListHmRF)
+  {
+    // catch DUTY_CYCLE or DUTYCYCLE
+    if (typeof(deviceStatus.DUTY_CYCLE) !== "undefined")
+      this.DUTY_CYCLE = !!+deviceStatus.DUTY_CYCLE;
+    if (typeof(deviceStatus.DUTYCYCLE) !== "undefined")
+      this.DUTY_CYCLE = !!+deviceStatus.DUTYCYCLE;
+
+    // catch OPERATING_VOLTAGE
+    if (typeof(deviceStatus.OPERATING_VOLTAGE) !== "undefined")
+      this.OPERATING_VOLTAGE = deviceStatus.OPERATING_VOLTAGE;
+
+    // catch SABOTAGE
+    if (typeof(deviceStatus.SABOTAGE) !== "undefined")
+      this.SABOTAGE = !!+deviceStatus.SABOTAGE;
+
+    // catch UNREACH
+    if (typeof(deviceStatus.UNREACH) !== "undefined")
+      this.UNREACH = !!+deviceStatus.UNREACH;
+
+    // catch ERROR_OVERHEAT
+    if (typeof(deviceStatus.ERROR_OVERHEAT) !== "undefined")
+      this.ERROR_OVERHEAT = !!+deviceStatus.ERROR_OVERHEAT;
+
+    // catch LOWBAT or LOW_BAT
+    if (typeof(deviceStatus.LOWBAT) !== "undefined")
+      this.LOWBAT = !!+deviceStatus.LOWBAT;
+    if (typeof(deviceStatus.LOW_BAT) !== "undefined")
+      this.LOWBAT = !!+deviceStatus.LOW_BAT;
+
+    // catch CONFIG_PENDING
+    if (typeof(deviceStatus.CONFIG_PENDING) !== "undefined")
+      this.CONFIG_PENDING = !!+deviceStatus.CONFIG_PENDING;
+
+    // catch UPDATE_PENDING
+    if (typeof(deviceStatus.UPDATE_PENDING) !== "undefined")
+      this.UPDATE_PENDING = !!+deviceStatus.UPDATE_PENDING;
+
+    // catch RSSI_DEVICE and RSSI_PEER
+    // in case of a BidCos-RF device we take the RSSI
+    // values fron the supplied rssiListHmRF
+    if (this.interfaceName === 'BidCos-RF')
+    {
+      if (rssiListHmRF !== null)
+      {
+        var address = this.address;
+        var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
+
+        if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
+            rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
+        {
+          var rssiData = rssiInfo.partner[0].rssiData;
+          this.RSSI_DEVICE = rssiData[0];
+          this.RSSI_PEER = rssiData[1];
+          if(this.RSSI_DEVICE === 65536)
+            this.RSSI_DEVICE = -65535;
+          if(this.RSSI_PEER === 65536)
+            this.RSSI_PEER = -65535;
+        }
+      }
+    }
+    else
+    {
+      if (typeof(deviceStatus.RSSI_DEVICE) !== "undefined")
+        this.RSSI_DEVICE = deviceStatus.RSSI_DEVICE;
+
+      if (typeof(deviceStatus.RSSI_PEER) !== "undefined")
+        this.RSSI_PEER = deviceStatus.RSSI_PEER;
+    }
+
+    // update/calculate the web colors for displaying
+    // the RSSI values like in devconfig
+    if (this.RSSI_DEVICE !== null || this.RSSI_PEER !== null)
+      this.updateRssiColors();
+
+    // now we update the table cell with a pregenerated HTML
+    var cell = document.getElementById('DeviceStatus' + this.id);
+    if (cell !== null && typeof(cell) !== 'undefined')
+    {
+      var html = '';
+
+      if (this.enabledServiceMsg === false)
+        html += '<span style="background-color: #FFFF00;">NO&nbsp;SERVICEMSG</span><br/>';
+
+      if (this.CONFIG_PENDING === true)
+        html += '<span style="background-color: #FFFF00;">CONFIG</span><br/>';
+
+      if (this.UPDATE_PENDING === true)
+        html += '<span style="background-color: #FFFF00;">UPDATE</span><br/>';
+
+      if (this.LOWBAT === true)
+        html += '<span style="background-color: #FFFF00;">LOWBAT</span><br/>';
+
+      if (this.UNREACH === true)
+        html += '<span style="background-color: #FFFF00;">UNREACH</span><br/>';
+
+      if (this.ERROR_OVERHEAT === true)
+        html += '<span style="background-color: #FF0000;">OVERHEAT</span><br/>';
+
+      if (this.SABOTAGE === true)
+        html += '<span style="background-color: #FF0000;">SABOTAGE</span><br/>';
+
+      if (this.OPERATING_VOLTAGE && parseFloat(this.OPERATING_VOLTAGE) > 0)
+        html += parseFloat(this.OPERATING_VOLTAGE).toFixed(1) + '&nbsp;V<br/>';
+
+      if (this.RSSI_DEVICE && this.RSSI_DEVICE > -65535)
+        html += this.RSSI_DEVICE + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiDeviceColor + '">&darr;</span><br/>';
+
+      if (this.RSSI_PEER && this.RSSI_PEER > -65535)
+        html += this.RSSI_PEER + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiPeerColor + '">&uarr;</span><br/>';
+
+      if (this.DUTY_CYCLE === true)
+        html += '<span style="background-color: #FFFF00;">DUTYCYCLE</span><br/>';
+
+      cell.innerHTML = html;
+    }
+  },
+
+  /**
+   * Startet die Aktualisierung der RSSI Werte
+   **/
+  updateRssiColors:function()
+  {
+    var getColorCode = function(rssi)
+    {
+      var RSSI_BAD = -120.0;
+      var RSSI_MEDIUM = -100.0;
+      var RSSI_GOOD = -20.0;
+
+      var rssi_color = function(lower_bound, upper_bound, rssi)
+      {
+        var result = 256 * (rssi - lower_bound) / (upper_bound - lower_bound);
+        if (result < 0)   result = 0;
+        if (result > 255) result = 255;
+        return Math.round(result);
+      };
+
+      if (rssi > -65535)
+      {
+        var red = rssi_color(RSSI_GOOD, RSSI_MEDIUM, rssi);
+        var green = rssi_color(RSSI_BAD, RSSI_MEDIUM, rssi);
+        return "#" + ('00'+(red).toString(16)).substr(-2)
+                   + ('00'+(green).toString(16)).substr(-2)
+                   + "00";
+      }
+      else
+        return "#000000";
+    };
+
+    this.rssiDeviceColor = getColorCode(this.RSSI_DEVICE);
+    this.rssiPeerColor = getColorCode(this.RSSI_PEER);
+  },
+
+  /**
    * Legt den Namen des Geräts fest.
    **/
   setName: function(name)
@@ -12400,6 +12693,23 @@ Device = Class.create({
   setLogging: function(isLogged)
   {
   },  
+
+  /**
+   * Legt fest, ob das Geraet Servicemeldungen auslöst oder nicht
+   **/
+  setEnabledServiceMsg: function(enabledServiceMsg)
+  {
+    if (this.enabledServiceMsg != enabledServiceMsg)
+    {
+      var result = homematic("Device.setEnabledServiceMsg", {id: this.id, isEnabled: enabledServiceMsg});
+      if (typeof(result) == "boolean" && result === true)
+      {
+        this.enabledServiceMsg = enabledServiceMsg;
+      }
+    }
+    
+    return this.enabledServiceMsg;
+  },
 
   setDeviceInputCheck: function() {
     this.deviceInputCheck = true;
@@ -12759,6 +13069,36 @@ DeviceList = Singleton.create({
   */
   },
   
+  /**
+   * Startet die Aktualisierung des Status aller Geräte.
+   **/
+  updateDeviceStatus:function()
+  {
+    var _this_ = this;
+
+    homematic("Interface.rssiInfo", {"interface": "BidCos-RF"}, function(rssiInfo) {
+      for (var id in _this_.devices)
+      {
+        var device = _this_.devices[id];
+        if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
+        {
+          homematic("Device.listStatus", {"id": device.id, "address": device.address, "interface": device.interfaceName}, function(data) {
+            if (data !== null && typeof(data) !== 'undefined')
+            {
+              var id = data["ID"];
+              if (id !== null && typeof(id) !== 'undefined')
+              {
+                var device = _this_.devices[id];
+                if (device !== null && typeof(device) !== 'undefined')
+                  device.updateStatus(data, rssiInfo);
+              }
+            }
+          });
+        }
+      }
+    });
+  },
+
   /**
    * Startet die Akualisierung eines Geräts.
    **/
@@ -13995,7 +14335,7 @@ ChannelChooser = Singleton.create({
 
     conInfo("filterHmIPChannels4ProgramConditions");
     // If the channel is visible and no KEY_TRANSCEIVER or *_WEEK_PROFILE then show the channel
-    if (channel.isVisible
+    if (channel
       && (channel.channelType != "KEY_TRANSCEIVER")
       && (channel.channelType != "UNIVERSAL_LIGHT_RECEIVER")
       && (channel.channelType != "DISPLAY_INPUT_TRANSMITTER")
@@ -14010,7 +14350,7 @@ ChannelChooser = Singleton.create({
     // If the channel is a KEY_TRANSCEIVER and the device type no HmIP-PS / PSM (-IT/-CH/-PE/-UK) / PDT /PCBS then show the channel
     // A key press of the internal button doesn't work for the above-named devices
     if ((channel.channelType == "KEY_TRANSCEIVER")
-      && channel.isVisible
+      && channel
       && (channelTypeName != "hmip-ps")
       && (channelTypeName.indexOf("hmip-psm") == -1)
       && (channelTypeName != "hmip-pdt")
@@ -14197,14 +14537,7 @@ ChannelChooser = Singleton.create({
     var channelTypeName = channel.typeName.toLowerCase(),
     oMaintChannel, deviceMode, endOfScreens = false;
 
-    if (channel.isVisible) {
-
-      // Channel 1 of the hmip-esi-ind has only 1 parameter (SELF_CALIBRATION) for the use in a program condition but it's not in use
-      // Therefore we hide the channel
-      if (channelTypeName == "hmip-esi-ind") {
-        return arChannels;
-      }
-
+    if (channel) {
       if (channelTypeName == "hmip-wkp") {
         if ((channel.channelType == "MAINTENANCE") || ((channel.channelType == "ACCESS_TRANSCEIVER") && (channel.index % 2 != 0))) {
           arChannels.push(channel);
@@ -14534,9 +14867,7 @@ ChannelChooser = Singleton.create({
       //channels         : this.filter(this.channels)
     });
 
-    if (! userIsNoExpert) {
-      jQuery(".j_expertChannel").show();
-    }
+    jQuery(".j_expertChannel").show();
 
     translateJSTemplate("#ChannelChooserDialog");
     translatePage(".j_rooms, .j_functions");
@@ -14579,6 +14910,8 @@ ChannelChooser = Singleton.create({
         conInfo(e);
       }
     });
+
+    DeviceList.updateDeviceStatus();
   }
 });
 /**
@@ -14811,9 +15144,7 @@ MultiChannelChooser = Singleton.create({
       var self = this;
       if (this.match(channel)) {
         if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
-          if (channel.index > 0) {
-            this.filterHmIPChannels(channel, result);
-          }
+          this.filterHmIPChannels(channel, result);
         } else {
           result.push(channel);
         }
@@ -15020,9 +15351,7 @@ MultiChannelChooser = Singleton.create({
       channels         : this.filter(this.channels)
     });
 
-    if (! userIsNoExpert) {
-      jQuery(".j_expertChannel").show();
-    }
+    jQuery(".j_expertChannel").show();
 
     // Add extended channel description and hide the second user channel
     jQuery(".j_extChnDescr").each(function(index){
@@ -15056,6 +15385,8 @@ MultiChannelChooser = Singleton.create({
 
     translateJSTemplate("#MultiChannelChooserDialog");
     translatePage(".MultiChannelChooserRow");
+
+    DeviceList.updateDeviceStatus();
   }
     
 });
@@ -15294,10 +15625,13 @@ ChannelConfigDialog = Singleton.create({
 DeviceConfigDialog = Singleton.create({
   LAYER_ID: "DeviceConfigDialogLayer",
   NAME_ID: "DeviceConfigDialog_DeviceName",
+  SEPARATOR_ID: "DeviceConfigDialog_DeviceChannelsRenameSeparator",
   USABLE_ID: "DeviceConfigDialog_isUsable",
   VISIBLE_ID: "DeviceConfigDialog_isVisible",
   LOGGED_ID: "DeviceConfigDialog_isLogged",
+  SERVICEMSG_ID: "DeviceConfigDialog_enabledServiceMsg",
   TEST_RESULT_ID: "DeviceConfigDialogTestResult",
+  RENAME_OWN_ID: "DeviceConfigDialog_renameChannelIncludingOwn",
   RESULT_OK: 1,
   RESULT_ABORT: 0,
   POLL_INTERVAL: 3,
@@ -15322,6 +15656,7 @@ DeviceConfigDialog = Singleton.create({
     this.isVisibilityChanged = false;
     this.isUsabilityChanged = false;
     this.isLoggingChanged = false;   
+    this.enabledServiceMsgChanged = false;
     this.callback = callback;
     this.layer = document.createElement("div");
     this.layer.id = this.LAYER_ID;
@@ -15344,6 +15679,9 @@ DeviceConfigDialog = Singleton.create({
       this.__hideLogging();
     }
     translateJSTemplate("#DeviceConfigDialog");
+	jQuery("#DeviceConfigDialogTestHintImg").attr('title', translateKey("generalDeviceConfigHintTooltip"));
+	jQuery("#DeviceConfigDialogRenameChannelButtonHintImg").attr('title', translateKey("generalDeviceRenameChannelHintTooltip"));
+	jQuery("#DeviceConfigDialogRenameIncludingOwnHintImg").attr('title', translateKey("generalDeviceRenameChannelIncludingOwnHint"));
   },
 
   __hideFunctionTest: function() {
@@ -15388,6 +15726,8 @@ DeviceConfigDialog = Singleton.create({
         if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
         if (this.isLoggingChanged) { channel.setLogging(isLogged); }
       }, this);
+      var enabledServiceMsg = $(this.SERVICEMSG_ID).checked;
+      if (this.enabledServiceMsgChanged) { this.device.setEnabledServiceMsg(enabledServiceMsg); }
 
       this.close(this.RESULT_OK);
     }
@@ -15399,6 +15739,34 @@ DeviceConfigDialog = Singleton.create({
   abort: function()
   {
     this.close(this.RESULT_ABORT);
+  },
+  
+  /**
+  * Benennt alle Channel des Device um
+  **/
+
+  ready: function()
+  {
+    this.ok();
+  },
+  
+  renameChannels: function() {
+    if (confirm("Alle Kanäle umbenennen?")) {
+      var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;
+
+      this.device.channels.each(function(channel) {
+        var chNumber = channel.address.split(':')[1];
+        var origChName = this.device.name+":"+chNumber;
+
+        // Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
+        if (channel.name !== origChName && renameOwnChannelNames === false) return true;
+
+        var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
+        homematic("Channel.setName", {id: channel.id, name: chName});
+        channel.setName(chName);
+      }, this);
+      this.ok();
+    }
   },
   
   /**
@@ -16348,8 +16716,8 @@ HMScriptExecutor = Class.create({
   {
     var screenWidth  = WebUI.getWidth();
     var screenHeight = WebUI.getHeight();
-    var frameWidth   = HMScriptExecutor.CONTENT_WIDTH;
-    var frameHeight  = HMScriptExecutor.CONTENT_HEIGHT;
+    var frameWidth   = parseInt(screenWidth * 0.8);
+    var frameHeight  = parseInt(screenHeight * 0.8);
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
 
@@ -16359,63 +16727,142 @@ HMScriptExecutor = Class.create({
     
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-    
-    this.m_input = new UI.Textarea()
-        .setPosition(5,25)
-        .setWidth(590)
-        .setHeight(200)
-        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");');
-    
-    this.m_output = new UI.Textarea()
-        .setPosition(5,250)
-        .setWidth(590)
-        .setHeight(200); 
-    
+
     this.m_frame = new UI.Frame(true)
       .setTitle(HMScriptExecutor.TITLE)
       .setContentSize(frameWidth, frameHeight)
       .setPosition(frameX, frameY)
       .add(new UI.Text()
-        .setPosition(5,5)
-        .setText(translateKey("dialogScriptExecuterLblInput"))
+        .setStyle('margin-left: 5px')
+        .setHtml('<b>' + translateKey("dialogScriptExecuterLblInput") + '</b>')
+        .setClass("")
       )
-      .add(this.m_input)
+      .add(new UI.Textarea()
+        .setID("code")
+        .setName("code")
+        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");')
+      )
       .add(new UI.Text()
-        .setPosition(5,230)
-        .setText(translateKey("dialogScriptExecuterLblOutput"))
+        .setStyle('margin-left: 5px')
+        .setHtml('<b>' + translateKey("dialogScriptExecuterLblOutput") + '</b>')
+        .setClass("")
       )
-      .add(this.m_output)
+      .add(new UI.Textarea()
+        .setID("output")
+        .setName("output")
+      )
       .add(new UI.Button()
-        .setPosition(5,455)
+        .setPosition(5, frameHeight-30)
         .setText(HMScriptExecutor.TEXT_RUN)
         .setAction(this.run, this)
       )
       .add(new UI.Button()
-        .setPosition(445, 455)
+        .setPosition(frameWidth-155, frameHeight-30)
         .setText(HMScriptExecutor.TEXT_CLOSE)
         .setAction(this.close, this)
       );
       
-      this.m_layer.appendChild(this.m_frame.getElement());
-      Layer.add(this.m_layer);
+    this.m_layer.appendChild(this.m_frame.getElement());
+    Layer.add(this.m_layer);
+
+    this.m_input = CCUCodeMirror6.fromTextArea(document.getElementById('code'), {
+      mode: "text/x-rega",
+      autofocus: true,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      lineWrapping: true,
+      lineNumbers: true,
+      foldGutter: true,
+      indentUnit: 2,
+      tabSize: 2,
+      indentWithTabs: false,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      extraKeys: {"Ctrl-Space": "autocomplete",
+                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+                  "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
+                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
+                  "Alt-F": "findPersistent",
+                  "Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Indent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentMore");
+                        return;
+                      }
+                    }
+                    if (cm.options.indentWithTabs)
+                      cm.execCommand("insertTab");
+                    else
+                      cm.execCommand("insertSoftTab");
+                  },
+                  "Shift-Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Outdent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentLess");
+                        return;
+                      }
+                    }
+                    var charSize = cm.options.tabSize;
+                    if (cm.options.indentWithTabs)
+                      charSize = 1;
+                    var c = cm.getCursor();
+                    var lineText = cm.getRange({line: c.line, ch: c.ch - charSize}, {line: c.line, ch: c.ch});
+                    var m = /^(\s+)/.exec(lineText.reverse());
+                    if(m && m.length == 2)
+                      cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
+                  }}
+    });
+    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
+
+    this.m_output = CCUCodeMirror6.fromTextArea(document.getElementById('output'), {
+      mode: "default",
+      readOnly: true,
+      lineWrapping: true,
+      lineNumbers: false
+    });
+    this.m_output.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.4));
   },
 
   run: function()
   {
+    this.m_output.setValue("");
     var _this_ = this;
-    this.m_output.setText("");
-       
-    homematic("ReGa.runScript", {script: this.m_input.getText()}, function(response, error)
+    var code = this.m_input.getValue();
+    var val = "";
+    var ths = "2459";
+    var src = "";
+    var url = '/esp/system.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "SyntaxCheck";';
+    pb += 'string code = ^'+code.replace(/\^/g, '^#\'^\'#^')+'^;';
+    pb += 'string val = "'+val+'";';
+    pb += 'string ths = "'+ths+'";';
+    pb += 'string src = "'+src+'";';
+    var opt = 
     {
-      if (error === null)
+      postBody: ReGa.encode(pb),
+      onComplete: function(t)
       {
-        _this_.m_output.setText(response);
+        if( iseStripAll(t.responseText).length == 0 )
+        {
+          homematic("ReGa.runScript", {script: code}, function(response, error)
+              {
+                if (error === null)
+                {
+                  _this_.m_output.setValue(response);
+                }
+                });
+              }
+          else
+          {
+          	_this_.m_output.setValue(t.responseText);
       }
-      else
-      {
-        _this_.m_output.setText("Fehler: " + Object.toJSON(error));
-      }
-    });
+    }
+  }
+    new Ajax.Request(url,opt);
   },
   
   close: function()
@@ -16425,8 +16872,8 @@ HMScriptExecutor = Class.create({
   
 });
 
-HMScriptExecutor.CONTENT_WIDTH = 600;
-HMScriptExecutor.CONTENT_HEIGHT = 485;
+HMScriptExecutor.CONTENT_WIDTH = 800;
+HMScriptExecutor.CONTENT_HEIGHT = 500;
 
 /**
  * firewallconfigdialog.js
@@ -16671,7 +17118,7 @@ FirewallConfigDialog = Class.create({
     firewallPolicy = this.m_portListBox.getSelectedItem().id,
     hmscriptAccess = this.m_hmscriptListBox.getSelectedItem().id,
     mediolaAccess = this.m_mediolaListBox.getSelectedItem().id,
-    ips = this.m_ipTextArea.getText(),
+    ips = this.m_ipTextArea.getText().trim(),
     userPorts = this.m_portTextArea.getText().replace(/\s+/g, '').split(";");
 
     // Remove a trailing ; at the end of ips
@@ -20085,7 +20532,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPassword");
         html += "</td>";
         html += "<td>";
-          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' value="+passWord+">";
+          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
       html += "</tr>";
       html += "<tr>";
@@ -20093,7 +20540,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPasswordRepeat");
         html += "</td>";
         html += "<td>";
-         html += "<input id='pwd_2' type='password' value="+passWord+">";
+         html += "<input id='pwd_2' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
 
       html += "</tr>";
@@ -22433,7 +22880,7 @@ SwitchCombinedParamDialog = Class.create({
       durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val();
 
       if (this.isOntimeAvailable()) {
-        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31)) {
+        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31 && durationUnit == 2)) {
           if (! this._deviceIsWindowDrive()) {
             if (! this._deviceIsDali()) {
               result = "S=" + state;
@@ -24802,7 +25249,6 @@ HeaderBar = new function()
     url: "/ise/htm/header.htm",
     dataType: "html",
     async: false,
-    cache: false,
     context: document.body
     }).done(function(response) {
       jQuery("#header").html(response);
@@ -24854,19 +25300,19 @@ MainMenu = Singleton.create({
     var _submenuItem_ = submenuItem;
     var _menuItem_ = menuItem;
     
-    var row = document.createElement("tr");
-
-    var cell = document.createElement("td");
+    var cell = document.createElement("div");
+    var img = document.createElement("img");
+    img.src="../ise/img/menuicons/"+submenuItem.id+".png";
+    cell.appendChild(img);
     cell.className = "MainMenuSubItem";
     cell.id = submenuItem.id;
     //cell.appendChild(document.createTextNode("${"+submenuItem.id+"}"));  
-    cell.appendChild(document.createTextNode(translateKey(submenuItem.id)));
+    cell.appendChild(document.createTextNode(" "+translateKey(submenuItem.id)));
     Event.observe(cell, "mouseover", function() { MainMenu.highlightOn(this); });
     Event.observe(cell, "mouseout", function()  { MainMenu.highlightOff(this); });
     Event.observe(cell, "click", function() { MainMenu.beginHideSubmenu(_menuItem_); _submenuItem_.action.defer(); });
-    row.appendChild(cell);
     
-    return row;
+    return cell;
   },
   
   /**
@@ -24902,12 +25348,11 @@ MainMenu = Singleton.create({
       submenuElement.className = "MainMenuSubMenu";
       Element.setStyle(submenuElement, {display: "none"});
       
-      var table = document.createElement("table");
-      table.border = "0";
-      submenuElement.appendChild(table);
       
-      var tbody =  document.createElement("tbody");
-      table.appendChild(tbody);
+      var tbody =  document.createElement("div");
+      Element.setStyle(tbody, {"display": "flex"});
+      Element.setStyle(tbody, {"flex-direction": "column"});
+      submenuElement.appendChild(tbody);
       
       for (var i = 0, len = submenu.length; i < len; i++)
       {
@@ -25073,8 +25518,8 @@ var preURL = (WEBUI_VERSION.split(".")[0] < 3) ? "" : "ccu3-";
 
 StartPage = Singleton.create(Page, {
   MAINMENU_ID: "MAINMENU_STARTPAGE",
-  downloadURLServer: (isHTTPS) ? "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download" : "http://"+preURL+"update.homematic.com/firmware/download?cmd=download",
-  fieldTestURLServer: (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download" : "http://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download",
+  downloadURLServer: "https://"+preURL+"update.homematic.com/firmware/download?cmd=download",
+  fieldTestURLServer: "https://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download",
   fieldTestActive: "/etc/config/fieldTestActive",
   downloadURL : "",
   prevDownloadURL : "",
@@ -25195,16 +25640,16 @@ StartPage = Singleton.create(Page, {
 
    // WebUI-Version
   showCurrentFirmware: function() {
-    //jQuery("#currentFirmware").text(WEBUI_VERSION);
+    jQuery("#currentFirmware").text(WEBUI_VERSION);
 
-    homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
-      if (result != null) {
-        WEBUI_VERSION = result.firmware;
-      } else {
-        WEBUI_VERSION = "0.0.0";
-      }
-      jQuery("#currentFirmware").text(WEBUI_VERSION);
-    });
+    //homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
+    //  if (result != null) {
+    //    WEBUI_VERSION = result.firmware;
+    //  } else {
+    //    WEBUI_VERSION = "0.0.0";
+    //  }
+    //  jQuery("#currentFirmware").text(WEBUI_VERSION);
+    //});
   },
 
   /*evalVersionAGreaterThanB: function(a, b) {
@@ -25273,6 +25718,15 @@ StartPage = Singleton.create(Page, {
               }
               conInfo("Check firmware version of all devices - number of devices: " + self.devList.length);
               if (self.devList.length > 0) {
+                function sortorder_devList(a , b) {
+                  if (a.type == b.type) {
+                    return (a.address < b.address) ? -1 : 1;
+                  } else {
+                    return (a.type < b.type) ? -1 : 1;
+                  }
+                }
+
+                self.devList.sort(sortorder_devList);
                 self.fetchAndSetDeviceVersion();
               }
             });
@@ -25440,6 +25894,10 @@ ControlPage = new function()
   
   this.leave = function()
   {
+    // open the systemLanguage config dialog if no systemLanguage was selected yet
+    if (homematic('CCU.getSystemLanguage') === 'none') {
+      CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
+    }
   };
 
   this.resize = function()
@@ -25806,7 +26264,7 @@ if (PLATFORM == "Central") {
   TREE_EXPANDED_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
       "</tr>" +
@@ -25814,7 +26272,7 @@ if (PLATFORM == "Central") {
   FLAT_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
       "</tr>" +
@@ -25861,6 +26319,8 @@ if (PLATFORM == "Central") {
     {id: "INTERFACE_BIDCOS_WIRED", name: translateKey("BidCosWired-Filter")}, // BidCos-Wired
     {id: "INTERFACE_HMIP_RF", name: translateKey("HmIPRF")}, // HmIP-RF
     {id: "INTERFACE_VIRTUAL_DEVICES", name: translateKey("VirtualDevices")},
+    {id: "INTERFACE_CUXD", name: "CUxD"}, //
+    {id: "INTERFACE_CCU_JACK", name: "CCU-Jack"}, //
     {id: "INTERFACE_SYSTEM", name: "System"} //
   ],
   
@@ -26089,7 +26549,6 @@ if (PLATFORM == "Central") {
     var result = true;
     switch (channel.channelType) {
       case "ALARM_COND_SWITCH_TRANSMITTER":
-      case "MAINTENANCE":
       case "WEEK_PROGRAM":
         result = false;
         break;
@@ -26471,22 +26930,26 @@ if (PLATFORM == "Central") {
       setFooter(this.FLAT_FOOTER_HTML);
     }
 
-    jQuery(".j_chMode").each(function(){
-      var elm = jQuery(this);
-
-        switch (elm.text()) {
-          case "Gesichert":
-            elm.html(translateKey("lblSecured"));
-            break;
-          case "Standard":
-            elm.html(translateKey("lblStandard"));
-        }
+    var translatedSecure = translateKey("lblSecured");
+    var translatedStandard = translateKey("lblStandard");
+    jQuery(".j_chMode").each(function(i, e){
+      switch (e.textContent) {
+        case "Gesichert":
+          e.textContent = translatedSecure;
+          break;
+        case "Standard":
+          e.textContent = translatedStandard;
+          break;
+      }
     });
 
     translateJSTemplate("#DeviceListTable");
     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
     jQuery("#DeviceListPage_RoomFilter").draggable();
     jQuery("#DeviceListPage_FuncFilter").draggable();
+
+    DeviceList.updateDeviceStatus();
+    eQ3.HomeMatic.Event.fire({type: 'DeviceListPageLoaded'});
   },
   
   onRemoveDevice: function(whatEver)
@@ -27042,6 +27505,8 @@ BidcosRfPage =
   m_gatewayTableKeyHeader: null,
   m_gatewayTableIPHeader: null,
   m_gatewayTableStateHeader: null,
+  m_gatewayTableDCStateHeader: null,
+  m_gatewayTableFWStateHeader: null,
   m_gatewayTableActionHeader: null,
   m_gatewayTableBody: null,
   m_optionsButtonBar: null,
@@ -27154,7 +27619,21 @@ BidcosRfPage =
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableStateHeader.appendChild(document.createTextNode(translateKey("thState")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableStateHeader);
-    
+
+    /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableDCStateHeader = document.createElement("th");
+    this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
+
+    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableFWStateHeader = document.createElement("th");
+    this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
+
     /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableActionHeader = document.createElement("th");
     this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
@@ -27310,7 +27789,7 @@ BidcosRfPage =
     FOOTER_HTML= "" +
       "<table border='0' cellspacing='8'>" +
         "<tr>" +
-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
         "</tr>" +
       "</table>";
 
@@ -27474,6 +27953,16 @@ BidcosRfPage =
 				    	 lgw = rfGateways[j];
 				    	}
 				    }
+				    for (var loop = 0; loop < gatewayStatus.length; loop++) {
+				    	gatewaysn = gatewayStatus[loop].address;
+				    	if (lgwStatus.serial == gatewaysn) {
+				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
+				    		lgw.setDCState(textDC);
+
+				    		var textFW = gatewayStatus[loop].fwVersion;
+				    		lgw.setFWState(textFW);
+				    	}
+				    }
 		        	if(lgw) 
 		        	{
 					  if(lgwStatus.connstat == "NO_ERROR") {
@@ -27507,6 +27996,25 @@ BidcosRfPage =
 		  {
 			  var text = "";
 	   	      var status = rfGateways[i].determineState(gatewayStatus);
+	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
+
+	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
+	   	      	gatewaysn = gatewayStatus[loop].address;
+
+	   	      	if (cfglan == gatewaysn) {
+	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
+	   	      		rfGateways[i].setDCState(textDC);
+
+	   	      		var textFW = gatewayStatus[loop].fwVersion;
+	   	      		if (textFW < "965") {
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion + " (Update: 0.965)";
+	   	      		} else {
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion;
+	   	      		}
+	   	      		rfGateways[i].setFWState(textFW);
+	   	      	}
+	   	  	  }
+
 		      if (status)
 		      {
 		        text = (status.isConnected) ? translateKey("lanGatewayLblConnected") : translateKey("lanGatewayLblNotConnected");
@@ -27645,7 +28153,7 @@ BidcosRfPage =
     var i, len, device;
     this.m_devices = [];
     
-    var devices = DeviceList.listDevices();
+    var devices = DeviceList.listDevices().ex_sortBy("name");
     
     for (i = 0, len = devices.length; i < len; i++)
     {
@@ -27707,6 +28215,8 @@ BidcosRfPage.Gateway.prototype =
   m_keyLabel: null,
   m_ipLabel: null,
   m_stateLabel: null,
+  m_stateDCLabel: null,
+  m_stateFWLabel: null,
   m_actionCell: null,
   m_deleteButton: null,
   m_onDeleteHandler: null,
@@ -27759,6 +28269,16 @@ BidcosRfPage.Gateway.prototype =
     this.m_stateLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateLabel);
     
+    /* DutyCycle Status */
+    this.m_stateDCLabel = document.createElement("td");
+    this.m_stateDCLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateDCLabel);
+    
+    /* Firmware Status */
+    this.m_stateFWLabel = document.createElement("td");
+    this.m_stateFWLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateFWLabel);
+
     /* Aktion */
     this.m_actionCell = document.createElement("td");
     this.m_actionCell.className = "bidcosrf_actioncell";
@@ -27898,6 +28418,18 @@ BidcosRfPage.Gateway.prototype =
     return this;
   },
   
+  setDCState: function(state)
+  {
+    this.m_stateDCLabel.innerHTML = "";
+    this.m_stateDCLabel.appendChild(document.createTextNode(state));
+  },
+  
+  setFWState: function(state)
+  {
+    this.m_stateFWLabel.innerHTML = "";
+    this.m_stateFWLabel.appendChild(document.createTextNode(state));
+  },
+
   getElement: function()
   {
     return this.m_element;
@@ -29317,9 +29849,9 @@ homematic.com =
   {
     this.m_ccuProduct = getProduct();
     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
-    this.m_product ="HM-CCU" + this.m_ccuProduct;
-    this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
-    this.m_fieldTestURLServer = (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com" : "http://fieldtest-ccu3-update.homematic.com";
+    this.m_product = "HM-RASPBERRYMATIC";
+    this.m_URLServer = "https://"+this.preURL+"update.homematic.com";
+    this.m_fieldTestURLServer = "https://fieldtest-ccu3-update.homematic.com";
 
     this.serial = homematic("CCU.getSerial");
     this.serial = ((this.serial != "") && (typeof this.serial != "undefined") && (this.serial != null)) ? this.serial : "0";
@@ -29328,7 +29860,7 @@ homematic.com =
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + this.serial;
+    script.src = "https://openccu.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&p=" + PRODUCT;
     $("body").appendChild(script);
   },
 
@@ -29381,7 +29913,7 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_" + index;
       script.type = "text/javascript";
-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
+      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -29396,9 +29928,9 @@ homematic.com =
       // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
 
       if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
-        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial;
+        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial + "&ts=" + Date.now();
       } else {
-        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION;
+        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION + "&ts=" + Date.now();
       }
       $("body").appendChild(script);
       homematic.com.callback = callback;
@@ -30340,7 +30872,7 @@ ise.Devices.prototype = {
   
   setVisible: function(id, ctrlId, mode) {
     var url = "/esp/devices.htm?sid="+SessionId;
-    var pb = "integer devId = " + id + ";";
+    var pb = "integer devId = " + ((mode) ? DeviceList.getChannel(id).deviceId : id) + ";";
     pb += "string action= 'setVisible';";
 
     if (mode) {
@@ -30441,7 +30973,24 @@ ise.System.prototype = {
     pb += "integer iVisible   = '"+($(ctrlId).checked ? 1 : 0)+"';";
     new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
   },
-  
+
+  saveDpInternal: function(id, ctrlId) {                              
+    var url = "/esp/system.htm?sid="+SessionId;                       
+    var webuiPage = WebUI.currentPage;
+    var page = sActPage;
+    var pageArgs = sActPageArgs;
+    var pb = "string action = 'saveDpInternal';";                     
+    pb += "integer dpId = " + id + ";";             
+    pb += "integer iInternal   = '"+($(ctrlId).checked ? 1 : 0)+"';";
+    new Ajax.Request(url, {
+      postBody: ReGa.encode(pb),
+      onComplete: function() {
+        // reload only if the user did not open another page meanwhile
+        if ((WebUI.currentPage == webuiPage) && (sActPage == page) && (sActPageArgs == pageArgs)) { reloadPage(); }
+      }
+    });
+  },
+
   ClearHistoryData: function()
   {
     var url = "/esp/system.htm?sid="+SessionId;
@@ -30588,6 +31137,25 @@ ise.Programs.prototype = {
       }
     };
     new Ajax.Request(url,opts);    
+  },
+
+  // whether the program is executed at the start of the central unit (ReGaHss)
+  SetExecuteOnStartup: function( id, value )
+  {
+    var url = "/esp/programs.htm?sid="+SessionId;
+    var pb = '';
+    pb += 'string action = "SetExecuteOnStartup";';
+    pb += 'string id = "'+id+'";';
+    pb += 'string value = "'+value+'";';
+    var opts =
+    {
+      postBody: ReGa.encode(pb),
+      onComplete:function(t)
+      {
+        if(dbg){alert( t.responseText );}
+      }
+    };
+    new Ajax.Request(url,opts);
   },
 
   // ### CONDITIONS ###
@@ -30917,6 +31485,24 @@ ise.SingleCondition.prototype =
     new Ajax.Request(url,opts);        
   },
 
+  SetNegateCondition: function(scid,nc) {                                                          
+    var url = "/esp/sico.htm?sid="+SessionId;            
+    var pb = '';                          
+    pb += 'string action = "SetNegateCondition";';                                     
+    pb += 'string scid = "'+scid+'";';               
+    pb += 'string nc = "'+nc+'";';                                                                     
+    var opts =                                                                                     
+    {                                                
+      postBody: ReGa.encode(pb),      
+      onComplete:function(t)                                    
+      {                                          
+        if(dbg){alert( t.responseText );}                                                      
+        ReloadSingleCondition(scid);                                                       
+      }                                              
+    };                                
+    new Ajax.Request(url,opts);                                  
+  },
+  
   SetLeftValue: function(scid,lv)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -31323,7 +31909,7 @@ ise.SingleDestination.prototype =
     var pb = '';
     pb += 'string action = "SetScript";';
     pb += 'string id = "'+id+'";';
-    pb += 'string value = ^'+script+'^;';
+    pb += 'string value = ^'+script.replace(/\^/g, '^#\'^\'#^')+'^;';
     var opts =
     {
       postBody: ReGa.encode(pb),
@@ -31368,7 +31954,23 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-  
+
+  sortSysVarTable: function(uid) {                                                                 
+    var url = "/esp/system.htm?sid="+SessionId;      
+    var pb = "((dom.GetObject(ID_USERS)).Get(" + uid + ")).UserSharedObjects().SortByName();";
+    pb += "string action = 'BuildUserSvTable';";                
+    pb += "integer userId = "+ uid +";";         
+    var opts = {                                                                               
+      postBody: ReGa.encode(pb),                                                           
+      onComplete: function(response) {               
+        if (200 == response.status) { 
+          translatePage("#userSysVarTbl");                       
+        }                                        
+      }                                                                                        
+    };                                                                                     
+    new Ajax.Updater("userSysVarTbl", url, opts);
+  },
+    
   addSysVarBuildTable: function(uid, newVarId) {
     //var url = "/esp/system.htm?sid="+SessionId+"&curDateTime="+new Date().getTime();
     var url = "/esp/system.htm?sid="+SessionId;
@@ -31410,6 +32012,27 @@ ise.User.prototype =
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
   
+  MoveSysVar: function(uid, svId, dir) {
+    var url = "/esp/system.htm?sid=" + SessionId;
+    var pb = "string action = 'UserMoveSysVarBuildTable';";
+    pb += "integer userId = "+ uid +";";
+    pb += "integer svId = " + svId + ";";
+    pb += "integer svMoveDirection = " + dir + ";";
+    var opts = {
+      postBody: ReGa.encode(pb),
+      onSuccess: function(t) {
+        // funktioniert seltsamerweise nur durch den "Updater"-Aufruf nicht
+        $("userSysVarTbl").innerHTML = t.responseText;
+      },
+      onComplete: function(response) {
+        if (200 == response.status) {
+          translatePage("#userSysVarTbl");
+        }
+      }
+    };
+    new Ajax.Updater("userSysVarTbl", url, opts);
+  },
+    
   buildTmpSysVarTable: function(arSysVars) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'BuildUserSvTable';";
@@ -31565,18 +32188,19 @@ iseMessageBox.prototype =
   },
   initPopup: function(id)
   {
+    var screenWidth  = WebUI.getWidth();
+    var screenHeight = WebUI.getHeight();
+
     switch(this.id)
     {
       case ID_ROOMS:
         this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_FUNCTIONS: 
         this.setTitle( translateKey("dialogEditFunction") /*"Gewerk bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_TRANSFER_PARAMETERS:
@@ -31606,14 +32230,22 @@ iseMessageBox.prototype =
         this.setTitle( translateKey("dialogCreateNewSysVar") /*"Systemvariable neu anlegen"*/ );
         this.addToPostBody( 'integer varid = 0;' );
         this.addToPostBody( 'integer createNew = 1;' );
-        this.setWidth(900);
+        this.setWidth(1100);
         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
         break;
       case ID_EDIT_SYSVAR:
         this.setTitle( translateKey("dialogEditSysVar") /*"Systemvariable bearbeiten"*/ );
         this.addToPostBody( 'integer varid = '+this.type+';' );
         this.addToPostBody( 'integer createNew = 0;' );
-        this.setWidth(900);
+        this.setWidth(1100);
+        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+        break;
+      case ID_EDIT_SYSVAR_VALUE:
+        this.setTitle( translateKey("dialogEditSysVarValue") /*"Systemvariablenwert bearbeiten"*/ );
+        this.addToPostBody( 'integer varid = '+this.type+';' );
+        this.addToPostBody( 'integer createNew = 0;' );
+        this.addToPostBody( 'boolean editValueOnly = 1;' );
+        this.setWidth(240);
         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
         break;
       case ID_CREATE_SCRIPT:
@@ -31624,9 +32256,10 @@ iseMessageBox.prototype =
         break;
       case ID_EDIT_SCRIPT:
         this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
+        this.setWidth(parseInt(screenWidth * 0.8));
+        this.setHeight(parseInt(screenHeight * 0.8));
         this.addToPostBody( 'string sdid = "'+this.type+'";' );
-        //this.setWidth(800);
-        this.setWidth('auto');
+        this.addToPostBody( 'string frameHeight = "'+this.height+'";' );
         this.setFile( "/pages/msg/editScript.htm" );
         break;
       case ID_CONTROL_TEST:
@@ -31702,7 +32335,12 @@ iseMessageBox.prototype =
         this.setWidth(800);
         this.setFile( "/pages/msg/autoLoginConfig.htm" );
         break;
-       case ID_CHOOSE_LED:
+      case ID_SYSTEM_LANGUAGE_CONFIG:
+        this.setTitle( translateKey("dialogConfigSystemLanguage") /*"Systemsprache waehlen - Konfiguration" */);
+        this.setWidth(800);
+        this.setFile( "/pages/msg/systemLanguageConfig.htm" );
+        break;
+        case ID_CHOOSE_LED:
         this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
         this.addToPostBody( 'string type = "'+this.type+'";' );
         this.setWidth(800);
@@ -31734,7 +32372,9 @@ iseMessageBox.prototype =
     }
 
     if (this.draggable) {
-      jQuery("#messagebox").draggable();
+      jQuery("#messagebox").draggable({
+        cancel: "input,textarea,button,select,option,.FooterButton,.StdButton,.CodeMirror,.CodeMirror-line,.cm-editor,.cm-line"
+      });
     }
 
   },
@@ -31880,7 +32520,11 @@ iseMessageBox.prototype =
     this.removeMessagebox();
   },
   LoadFromFile: function(fn,pb) {
-    var url = fn+'?sid='+SessionId;
+    var url = fn;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
     var opt = 
     {
@@ -31890,7 +32534,12 @@ iseMessageBox.prototype =
       onComplete: function(trans)
       {
         //$("messagebox").style.width = t.width + "px";
-        jQuery("#messagebox").width(t.width + "px");
+        if(t.width !== "undefined") {
+          jQuery("#messagebox").width(t.width + "px");
+        }
+        if(t.height !== "undefined") {
+          jQuery("#messagebox").height(t.height + "px");
+        }
         jQuery("#tableContainer").css("max-height",(parseInt(jQuery(window).height() * 0.75)) + "px");
         centerMessageBox();
         iseRefr(true);
@@ -31901,6 +32550,9 @@ iseMessageBox.prototype =
   },  
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   },
   
   restorePrevious: function() {
@@ -32254,18 +32906,11 @@ isePropEditorRow.prototype = {
       // Namen im DOM ändern beim Verlassen des Textfeldes
       var changeListener = this.saveNameToDom.bindAsEventListener(this);
       Event.observe($(inputId), 'blur', changeListener);
-      var keypressEvent = this.onKeyPress.bindAsEventListener(this);
-      Event.observe($(inputId), "keyup", keypressEvent);
       
       $(inputId).focus();
     }
   },
   
-  onKeyPress: function(ev) {
-    if (ev.keyCode == Event.KEY_RETURN)
-      this.saveNameToDom();
-  },
-
   saveNameToDom: function () {
     var newName = $("nEdit" + this.id).value;
     if (newName === "") {
@@ -32490,6 +33135,8 @@ iseDOM_BuildLabel = "R1.00.0381.0100";
 dbg = false;
 rfr = true;
 
+ID_EDIT_SYSVAR_VALUE   = 9921;
+
 ID_ROOMS     = 101;  // Rooms collection ID.
 ID_FUNCTIONS = 151;  // Functions collection ID.
 ID_FAVORITES = 201;  // Favorites collection ID.
@@ -32517,6 +33164,7 @@ ID_CHOOSE_LED            = 1022;
 ID_SET_OUCFM_MODE        = 1023;
 ID_SET_STATUS_DISPLAY    = 1024;
 ID_BIDCOS_INTERFACE = 1025;
+ID_SYSTEM_LANGUAGE_CONFIG = 2001;
 
 nUA = navigator.userAgent;
 NAV_IE = false;
@@ -32620,6 +33268,14 @@ setDate = function(date)
   if ($("maindate")) { $("maindate").innerHTML = date; }
 };
 
+resetReGaSaveButton = function () {
+  var btnReGaSave = document.getElementById("btnReGaSave");
+  if (btnReGaSave) {
+    btnReGaSave.style.color=WebUI.getColor("textColorB");
+    btnReGaSave.onclick=function() { LogoClick(); };
+  }
+};
+
 setAlarmMessageCount = function (count) {
   if ($("msgAlarms")) {
     const newMsg = translateKey('alarmMsg') + " (" + count + ")";
@@ -32675,23 +33331,6 @@ ReceiptAlarm = function(id,reload)
   };
   new Ajax.Request(url,opt);
 };
-
-
-/**
- * Aktualisiert Systemvariablen
- **/
-updateSysVar = function(id, value)
-{
-  var PREFIX = "SYSVAR_";
-  var element = $(PREFIX + id);
-  
-  if (element) 
-  {
-    element.innerHTML = "";
-    element.appendChild(document.createTextNode(translateString(value)));
-  }
-};
-
 
 /*setOldEnergyCounterVal = function(chn, value) {
   arrOldEnergyCounterVal[chn] = value;
@@ -32822,11 +33461,31 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
     if (file.substring(0, UI_PATH.length) == UI_PATH)
     {
       //method: 'get' ist für die ELV-CGIs notwendig.
-      opts = {evalScripts: true, method: 'get', onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
+      opts = {
+        evalScripts: true,
+        method: 'get',
+        onComplete:function(){
+          iseRefr(true);
+          bUpdateContentRunning=false;
+          setTimeout(function() {
+            eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+          }, 100);
+        }
+      };
     }
     else
     {
-      opts = {postBody: ReGa.encode(pb),evalScripts: true, onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
+      opts = {
+        postBody: ReGa.encode(pb),
+        evalScripts: true,
+        onComplete:function(){
+          iseRefr(true);
+          bUpdateContentRunning=false;
+          setTimeout(function() {
+            eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+          }, 100);
+        }
+      };
     }
     /* ELV --> */
     
@@ -33119,10 +33778,27 @@ setPath = function (path) {
 
 
 logout = function() {
+  // disable logout button
+  jQuery("#btnLogOut > div").css('color', 'graytext');
+  jQuery("#btnLogOut > div").attr("onclick", "").unbind("click");
+
+  // create ProgressBar
+  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);
+  ProgressBar.show();
+  ProgressBar.StartKnightRiderLight();
+
+  // stop all update monitors
   regaMonitor.stop();
   InterfaceMonitor.stop();
-  // The second url-param has to be appended by a '?' instead of a '&'
-  location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
+
+  // save the regadom first, since Session.logout ends the session
+  homematic('system.saveObjectModel', {}, function() {
+    homematic('Session.logout', {}, function() {
+      ProgressBar.hide();
+      ProgressBar.StopKnightRiderLight();
+      location.href = "/logout.htm?lang="+getLang();
+    });
+  });
 };
 
 
@@ -33145,7 +33821,7 @@ buildPropTable= function(id) {
   var opts = {
     evalScripts: true,
     onComplete: function(trans) {
-      window.setTimeout(centerMessageBox, 200);
+      centerMessageBox();
     }
   };
   var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
@@ -34196,14 +34872,14 @@ convertDomTime = function(s) {
   return arTmp[0]+':'+arTmp[1];
 };
 
-ExecuteProgram = function(dpid)
+ExecuteProgram = function(dpid, thenOnly)
 {
   var url = "/esp/exec.htm?sid=" + SessionId;
   var pb = "";
   pb += "object o = dom.GetObject( "+dpid+" );";
   pb += "if( o )";
   pb += "{";
-  pb += "  o.ProgramExecute();";
+  pb += (thenOnly === true) ? "  o.ProgramExecute();" : "  o.State(1);";
   pb += "}";
   var opts = {postBody: ReGa.encode(pb)};
   if(dbg)alert(pb);
@@ -34645,6 +35321,12 @@ recreateControl = function(chnId,sTimeStamp)
 
 LogoClick = function()
 {
+  var btnReGaSave = document.getElementById("btnReGaSave");
+  if (btnReGaSave) {
+    btnReGaSave.style.color=WebUI.getColor("grayText");
+    btnReGaSave.onclick="";
+  }
+
   //alert( iseUpdateIDArray.join("_") );
   //alert( iseUpdateTMArray.join("_") );
   //loadLinkList();
@@ -34698,11 +35380,11 @@ StartFlashing = function()
       {
         if( $("headerLogo").src.indexOf("_red") >= 0 )
         {
-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
+          $("headerLogo").src = "/ise/img/occu-logo_small.png";
         }
         else
         {
-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
+          $("headerLogo").src = "/ise/img/occu-logo_small_red.png";
         }
       }
     },
@@ -35041,74 +35723,101 @@ showDutyCycle = function() {
     var ifaceBidCosRF = "BidCos-RF",
       ifaceHmIPRF = "HmIP-RF",
       arInterfaceDutyCycle = {},
+      arInterfaceCarrierSense = {},
       showPartingLine = false,
       dcUnit = "%",
       dcNotAvailable = -1,
-      dcAlarm = 89;  // Attention when dc >= 90%
+      csNotAvailable = -1,
+      dcWarn  = 69,  // Warning when dc >= 70%
+      dcAlarm = 89,  // Attention when dc >= 90%
+      csWarn  = 10,  // Warning when cs >= 11%
+      csAlarm = 19;  // Attention when cs >= 20%
 
-    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (BidCosIFaces) {
-      if (BidCosIFaces) {
-        var linkElem = jQuery("#iFaceShowAll");
-        if ((BidCosIFaces.length > 1) && (!linkElem.hasClass("UILink"))) {
-          linkElem
-            .addClass("UILink")
-            .on("click", function () {
-              showDutyCycle(); // actualize the dc value of the start page
-              showDCAllInterfaces();
-            });
-        }
+    homematic("Interface.getDutyCycle", {}, function(dcArray) {
+      if(jQuery.isArray(dcArray)) {
+        jQuery.each(dcArray, function(index, iface) {
+          var dutyCycleValElm = jQuery("#dutyCycleVal"+index),
+            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
+            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+            dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
+            carrierSenseValElm = jQuery("#carrierSenseVal"+index),
+            carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
+            carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
+            trPartingLineElm = jQuery("#partingLine1"),
+            csVal,
+            dcVal;
 
-        jQuery.each(BidCosIFaces, function (index, iFace) {
-          if (iFace.type == "CCU2") {
-            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
-              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
-              dutyCycleValElm = jQuery("#dutyCycleVal"),
-              trDutyCycle = jQuery("[name='trDutyCycle']"),
-              trPartingLineElm = jQuery("#partingLine1"),
-              dcVal,
-              width, value;
+          if (typeof iface.dutyCycle !== "undefined") {
+            dcVal = Math.floor(iface.dutyCycle);
+            csVal = Math.floor(iface.carrierSense);
+            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+            conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
+            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+            arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
+          } else {
+            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
+          }
 
-            if (typeof iFace.dutyCycle != "undefined") {
-              dcVal = parseInt(iFace.dutyCycle);
-              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
-              arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-            } else {
-              conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-              arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
-            }
-
-            if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
-
-              width = parseInt(dutyCycleProgressElem.css("width"));
-              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-
-              window.setTimeout(function () {
-                //dutyCycleProgressBarElm.css("width", value + "px");
-                dutyCycleProgressBarElm.css("margin-left", (width - parseInt(value)) + "px");
-
-              }, 25);
-
-              if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-                trDutyCycle.addClass("attention");
+          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+            if (iface.type === "CCU2") {
+              dutyCycleAddrElm.text("CCU:");
+            } else if(iface.type === "HMIP-HAP") {
+              if(iface.name !== "") {
+                dutyCycleAddrElm.text("HAP ("+iface.name+"):");
               } else {
-                trDutyCycle.removeClass("attention");
+                dutyCycleAddrElm.text("HAP ("+iface.address+"):");
               }
-              trPartingLineElm.show();
-              showPartingLine = true;
-              trDutyCycle.css("visibility", "visible");
+            } else if(iface.name !== "") {
+              dutyCycleAddrElm.text("LGW ("+iface.name+"):");
             } else {
-              trDutyCycle.css("visibility", "hidden");
+              dutyCycleAddrElm.text("LGW ("+iface.address+"):");
             }
 
-            if (!showPartingLine) {
-              trPartingLineElm.hide();
+            dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
+            dutyCycleBar.removeClass("bg-success");
+            dutyCycleBar.removeClass("bg-warning");
+            dutyCycleBar.removeClass("bg-danger");
+
+            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
+              dutyCycleBar.addClass("bg-danger");
+            } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
+              dutyCycleBar.addClass("bg-warning");
+            } else {
+              dutyCycleBar.addClass("bg-success");
             }
-            return false; // Leave each loop
+
+            if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
+              carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
+              carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
+              carrierSenseBar.removeClass("bg-info");
+              carrierSenseBar.removeClass("bg-warning");
+              carrierSenseBar.removeClass("bg-danger");
+
+              if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
+                carrierSenseBar.addClass("bg-danger");
+              } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
+                carrierSenseBar.addClass("bg-warning");
+              } else {
+                carrierSenseBar.addClass("bg-info");
+              }
+            } else {
+              carrierSenseValElm.text("n/a");
+              carrierSenseBar.css("width", "0%");
+            }
+            trPartingLineElm.show();
+            showPartingLine = true;
+            trDutyCycle.css("display", "table-row");
+          } else {
+            trDutyCycle.css("display", "none");
+          }
+
+          if (!showPartingLine) {
+            trPartingLineElm.hide();
           }
         });
       }
-      showDutyCycleHmIP();
     });
   }
 };
@@ -35739,15 +36448,15 @@ getExtendedDescription = function(oChannelDescr)  {
     multiMode = oChannelDescr.multiMode;
   var tmpDev;
 
-  if (typeof channelAddress != "undefined") {
+  if (typeof channelType != "undefined") {
+    chType = channelType;
+  } else if (typeof channelAddress != "undefined") {
     var channel = DeviceList.getChannelByAddress(channelAddress);
     if (channel) {
       chType = channel.channelType;
       channelIsVisible = channel.isVisible;
     }
-  } else if (typeof channelType != "undefined") {
-    chType = channelType;
-  }
+  } 
 
   if (chType == "KEY_TRANSCEIVER") {
     if (deviceType.toLowerCase().indexOf("hmip-asir") != -1) {
@@ -35826,6 +36535,11 @@ getExtendedDescription = function(oChannelDescr)  {
         case "hmip-wgt-a":
         case "hmip-wgtc":
         case "hmip-wgtc-a":
+          if (channel === undefined) { var channel = DeviceList.getChannelByAddress(channelAddress); }
+          if (channel === undefined) {
+            result = translateKey("chType_SWITCH_VIRTUAL_RECEIVER");
+            break;
+          }
           var channelMode = homematic("Interface.getMetadata", {
             "objectId": channel.id,
             "dataId": "channelMode"
@@ -35946,12 +36660,14 @@ getExtendedDescription = function(oChannelDescr)  {
         typeExt = "_" + multiMode;
       } else {
         if (channelAddress != "undefined") {
-          var chn = DeviceList.getChannelByAddress(channelAddress),
-          chnMode = parseInt(chn.multiMode);
+          var chn = DeviceList.getChannelByAddress(channelAddress);
+          if (typeof chn != "undefined") {
+          var chnMode = parseInt(chn.multiMode);
           if (! isNaN(chnMode)) {
             typeExt = "_" + chnMode;
           } else {
             typeExt = "";
+          }
           }
         } else {
           typeExt = "_1";
@@ -36319,51 +37035,14 @@ getDualWhiteControllerDiagramURLs = function() {
   }
 };
 
-getTimeZoneDefinition = function(timeZone) {
-  var tz = [];
-  tz["ACST"] = [9.5, 9.5];
-  tz["ACST/ACDT"] = [9.5, 10.5];
-  tz["AEST"] = [10, 10];
-  tz["AEST/AEDT"] = [10, 11];
-  tz["AKST/AKDT"] = [-9, -8];
-  tz["AST/ADT"] = [-4, -3];
-  tz["AWST/AWDT"] = [8, 9];
-  tz["BRST/BRDT"] = [-3, -2];
-  tz["CET/CEST"] = [1, 2];
-  tz["CST"] = [-6, -6];
-  tz["CST/CDT"] = [-6, -5];
-  tz["EET/EEST"] = [2, 3];
-  tz["EST/EDT"] = [-5, -4];
-  tz["GMT/BST"] = [0, 1];
-  tz["GMT/IST"] = [0, 1];
-  tz["HAW"] = [-10, -10];
-  tz["HKT"] = [8, 8];
-  tz["MSK/MSD"] = [3, 4];
-  tz["RMST/RMDT"] = [3, 4];
-  tz["MST"] = [-7, -7];
-  tz["MST/MDT"] = [-7, -6];
-  tz["NST/NDT"] = [-3.5, -2.5];
-  tz["NZST/NZDT"] = [12, 13];
-  tz["PST/PDT"] = [-8, -7];
-  tz["SGT"] = [8, 8];
-  tz["ULAT/ULAST"] = [8, 9];
-  tz["WET/WEST"] = [0, 1];
-  tz["WIB"] = [7, 7];
-  return tz[timeZone];
-};
-
-getUTCOffset = function(tz) {
-  return getTimeZoneDefinition(tz);
-};
-
-setPositionAllDevices = function(lon, lat, timeZone) {
+setPositionAllDevices = function() {
   if (ConfigData.isPresent) {
 
-    var arUtcOffset = [];
-    arUtcOffset = getUTCOffset(timeZone);
-
-    var utcOffset = arUtcOffset[0] * 60,
-      utcOffsetDST = arUtcOffset[1] * 60;
+  homematic("system.getPositionData", {}, function(posData) {
+    var lon = posData[0].split(":")[1],
+      lat = posData[1].split(":")[1],
+      utcOffset = posData[2].split(":")[1],
+      utcOffsetDST = posData[3].split(":")[1];
 
     jQuery.each(DeviceList.devices, function (index, device) {
       var iFace = device.interfaceName;
@@ -36371,7 +37050,7 @@ setPositionAllDevices = function(lon, lat, timeZone) {
         // Check if the device has the channel *_WEEK_PROFILE
         jQuery.each(device.channels, function (index, channel) {
           if (channel.channelType.indexOf("_WEEK_PROFILE") != -1) {
-            conInfo("Set the position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
+            conInfo("Set utcOffsets+position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
 
             homematic("Interface.putParamset", {
               'interface': iFace,
@@ -36388,7 +37067,7 @@ setPositionAllDevices = function(lon, lat, timeZone) {
               conInfo(result);
             });
           } else if (channel.channelType == "HEATING_CLIMATECONTROL_TRANSCEIVER") {
-            conInfo("Set the position of this device: " + channel.address.split(":")[0] + ":0 - lon: " + lon + " - lat: " + lat + " - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
+            conInfo("Set utcOffsets of this device: " + channel.address.split(":")[0] + ":0 - utcOffset: " + utcOffset + " - utcOffsetDST: " + utcOffsetDST );
 
             homematic("Interface.putParamset", {
               'interface': iFace,
@@ -36406,12 +37085,13 @@ setPositionAllDevices = function(lon, lat, timeZone) {
         });
       }
     });
+  });
   } else {
     window.setTimeout(function() {
       conInfo("ConfigData.isPresent: " + ConfigData.isPresent);
       counterSetPosition++;
       if (counterSetPosition < 30) {
-        setPositionAllDevices(lon, lat, timeZone);
+        setPositionAllDevices();
       }
     }, 2500);
   }
@@ -36421,9 +37101,8 @@ setNewDevicePos2SystemPos = function(oDevice) {
   homematic("system.getPositionData", {}, function(posData) {
     var lon = posData[0].split(":")[1],
       lat = posData[1].split(":")[1],
-      arUtcOffset = getUTCOffset(posData[2].split(":")[1]),
-      utcOffset = arUtcOffset[0] * 60,
-      utcOffsetDST = arUtcOffset[1] * 60;
+      utcOffset = posData[2].split(":")[1],
+      utcOffsetDST = posData[3].split(":")[1];
 
     var iFace = oDevice.iface;
     if (iFace.toLowerCase() == "hmip-rf" && (oDevice.type.toLowerCase() != "hmip-rcv-50") && (oDevice.type.toLowerCase() != "hmip-dld") && (oDevice.type.toLowerCase() != "hmip-dld-a") && (oDevice.type.toLowerCase() != "hmip-dld-s")) {
@@ -36778,6 +37457,7 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
     this.bColLeft = false;
     this.bColCenter = false;
     this.bNameLeft = false;
@@ -36790,6 +37470,28 @@ iseFilter.prototype = {
     this.fltObjType = 0;
     if (fltObjType)
       this.fltObjType = fltObjType;
+
+    var self = this;
+    function fltrHandler() {
+      eQ3.HomeMatic.Event.unsubscribe('ContentLoaded', fltrHandler);
+      self.restoreFilters();
+    }
+    eQ3.HomeMatic.Event.subscribe('ContentLoaded', fltrHandler);
+  },
+
+  restoreFilters: function() {
+    try {
+      var iseSFilters = JSON.parse(localStorage.getItem('iseSFilters_' + this.pageID));
+      Object.keys(iseSFilters).forEach(function(id) {
+        var val = iseSFilters[id];
+        if ($(id)) {
+          $(id).value = val;
+          $(id).nextSiblings()[0].click();
+        }
+      });
+    } catch(e) {
+      console.error(e);
+    }
   },
   
 
@@ -37024,6 +37726,12 @@ iseFilter.prototype = {
             if (!bRet) { bRet = true; }
           }
         }
+        if (this.bTypeString) {
+          if (obj['type'] == "string")
+          {
+            if (!bRet) { bRet = true; }
+          }
+        }
         return bRet;
       }
     }
@@ -37077,6 +37785,7 @@ iseFilter.prototype = {
     if (this.bTypeValueList) return true;
     if (this.bTypeNumber) return true;
     if (this.bTypeAlarm) return true;
+    if (this.bTypeString) return true;
     return false; 
   },
     
@@ -37153,6 +37862,16 @@ iseFilter.prototype = {
     this.bTypeValueList = false;
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
+    this.bTypeString = false;
+    localStorage.removeItem('iseSFilters_' + this.pageID);
+    var filterButtons = document.querySelectorAll('.FilterSetButton[onclick*=' + this.pageID + ']');
+    filterButtons.forEach(function(el) {
+      try {
+        el.parentElement.parentElement.querySelector('.FilterBtn').style.color = '';
+      } catch(e) {
+        console.error(e);
+      }
+    });
     conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };
@@ -37185,6 +37904,7 @@ selectFilters = function(fltObj, divToShow)
       $("cbValueList").checked = fltObj.bTypeValueList;
       $("cbNumber").checked = fltObj.bTypeNumber;
       $("cbAlarm").checked = fltObj.bTypeAlarm;
+      $("cbString").checked = fltObj.bTypeString;
       break;
     case "btnFilterIfaceSub":
       $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
@@ -37261,6 +37981,12 @@ setSFilter = function(fltObj, ctrlId, fId)
 {
   //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
   fltObj.addStringFilter(fId, $(ctrlId).value);
+  try {
+    var iseFilters = JSON.parse(localStorage.getItem('iseSFilters_' + fltObj.pageID)) || {};
+    iseFilters[ctrlId] = $(ctrlId).value;
+    localStorage.setItem('iseSFilters_' + fltObj.pageID, JSON.stringify(iseFilters));
+    $(ctrlId).parentElement.previous().style.color = $(ctrlId).value ? 'red' : 'black';
+  } catch(e) { console.error(e); }
 };
 
 // Integer-Filter (Modus, Iface)
@@ -37311,7 +38037,8 @@ setAFilter = function(fltObj, sId)
       fltObj.bTypeLogic = $("cbLogic").checked;
       fltObj.bTypeValueList = $("cbValueList").checked;
       fltObj.bTypeNumber = $("cbNumber").checked;
-      fltObj.bTypeAlarm = $("cbAlarm").checked; 
+      fltObj.bTypeAlarm = $("cbAlarm").checked;
+      fltObj.bTypeString = $("cbString").checked;
       break;
     case "colPos":
       fltObj.bColLeft = $("cbColLeft").checked; 
@@ -37594,12 +38321,14 @@ iseButtonsKey.prototype = {
  **/
 iseButtonProg = Class.create();
 iseButtonProg.prototype = {
-  initialize: function(id, progActive) {
+  initialize: function(id, progActive, thenOnly) {
     this.id = id;
     this.progActive = progActive;
     
-    this.startBtn = $(id + "Start");
+    this.startBtn = (thenOnly === true) ? $(id + "StartThenOnly") : $(id + "Start");
     this.actBtn = $(id + "Act");
+    
+    this.thenOnly = thenOnly;
     
     if ( progActive ) { ControlBtn.on(this.actBtn); }
     
@@ -37611,7 +38340,7 @@ iseButtonProg.prototype = {
   onClickStart: function() 
   {
     ControlBtn.pushed(this.startBtn);
-    ExecuteProgram(this.id);
+    ExecuteProgram(this.id, this.thenOnly);
     var t = this;
     new PeriodicalExecuter(function(pe)
     {
@@ -38508,6 +39237,15 @@ iseThermostat_2ndGen = Class.create(iseThermostat, {
     if (this.opts.stTemp) {
       this.showActualTemp();
     }
+    if (this.opts.stHum) {                                            
+      this.showActualHumidity();                                      
+    }
+    if (this.opts.stBat) {
+      this.showActualBat();
+    }
+    if (this.opts.stValve !== null) {
+      this.showActualValve();
+    }
     if (this.opts.idComfort && this.opts.idLowering) {
       this.showComfortEco();
     }
@@ -38702,6 +39440,26 @@ iseThermostat_2ndGen = Class.create(iseThermostat, {
     jQuery("#"+this.id +"tblShowTemp").show();
   },
 
+  showActualHumidity: function() {
+    if (parseInt(this.opts.stHum) === 20) {
+      jQuery("#"+this.id +"actHumidity").text('n/a');
+    } else {
+      jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);
+      jQuery("#"+this.id +"actHumidityUnit").show();
+    }
+    jQuery("#"+this.id +"tblShowHumidity").show();
+  }, 
+
+  showActualBat: function() {
+    jQuery("#"+this.id +"actBatteryState").text(this.opts.stBat);
+    jQuery("#"+this.id +"tblShowBatteryState").show();
+  },
+  
+  showActualValve: function() {
+    jQuery("#"+this.id +"actValveState").text(this.opts.stValve);
+    jQuery("#"+this.id +"tblShowValveState").show();
+  },
+  
   showHolidayEndTime: function() {
     var stopTime = this.getHolidayEndTime();
     if (stopTime) {
@@ -38817,6 +39575,8 @@ iseThermostatHMIP.prototype = {
     this.setSControl("ACTUAL_TEMPERATURE", this.ACTUAL_TEMPERATURE);
     this.setSControl("HUMIDITY", this.HUMIDITY);
     this.setSControl("WINDOW_STATE", this.WINDOW_STATE);
+    this.setSControl("BATTERY_STATE", this.BATTERY_STATE);
+    this.setSControl("LEVEL", this.LEVEL);
     this.setSlider();
     this.initElements();
     this.bindEvents();
@@ -38829,6 +39589,8 @@ iseThermostatHMIP.prototype = {
     this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
     //this.FROST_PROTECTION = opts.FROST_PROTECTION;
     this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
+    this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
+    this.LEVEL = this.checkValue(opts.LEVEL, this.unknownState);
     //this.PARTY_MODE = opts.PARTY_MODE;
     this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
     this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);
@@ -40431,10 +41193,10 @@ iseSysProtoLoader.prototype =
       }
       else
       {
-        td = Builder.node('td', {className: "GrayBkg"}, sTime);
+        td = Builder.node('td', {className: "GrayBkg"}, sDate);
         tr.appendChild(td);
   
-        td = Builder.node('td', {className: "GrayBkg"}, sDate);
+        td = Builder.node('td', {className: "GrayBkg"}, sTime);
         tr.appendChild(td);
       }
   
@@ -41295,25 +42057,27 @@ sysVarsPopupLoader.prototype = {
       IseSort(arSysVars,this.colName,false,true);
       for (var i = 0; i < arSysVars.length; i++) 
       {
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid']});
-        var td = Builder.node('td', {className: 'SysVarsTblPopup'}, strCut(translateString(arSysVars[i]['name']), true));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['desc']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['typenames']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['values']));
-        tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['unit']));
-        tr.appendChild(td);
-        
         var sOnclick = "PopupClose();";
         if( this.sec ) sOnclick = "restorePrevious();";
         sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
-      
-        td = Builder.node('td', {className: 'WhiteBkg'}, [
-          Builder.node('div', {className: 'StdButton', onclick:sOnclick}, translateKey('btnSelect'))
-         ]);
+
+        var cName = 'SysVarsTblPopup';
+        if( arSysVars[i]['internal'] === 'true' ) {
+          cName = 'LightGrayBkg SysVarsTblPopup';
+        }
+
+        // Enter and Space select the focused row like a click
+        var sOnkeydown = "if(event.keyCode==13||event.keyCode==32){"+sOnclick+"return false;}";
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, tabIndex:0, onclick:sOnclick, onkeydown:sOnkeydown, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
+        var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['typenames']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['values']));
+        tr.appendChild(td);
+        td = Builder.node('td', {}, translateString(arSysVars[i]['unit']));
         tr.appendChild(td);
 
         tableBody.appendChild(tr);       
@@ -45694,7 +46458,7 @@ iseDoorLockTransceiver.prototype = {
 //Defines
 BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
 HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
-BG_COLOR = WebUI.getColor("channelBackground");//Background
+BG_COLOR = 'inherit'; //Background
 HL_STROKE = 4;//Background
 //-----
 
@@ -45746,8 +46510,8 @@ DrawForm = function(jg, formname, devtype, size, x_offset, y_offset)
   
   if (!form) return;
 
-  if (!x_offset) x_offset = 0;
-  if (!y_offset) y_offset = 0;
+  if (!x_offset) x_offset = 0.032;  // workaround css offsets
+  if (!y_offset) y_offset = -0.005; // workaround css offsets
 
   switch (form[gd_type])
   {
@@ -45843,7 +46607,7 @@ picDivShow = function(jg, devtype, size, formname, divelem)
     previewPicTimer = window.setTimeout(function () {
       HideElement('picDiv');
       delete previewPicTimer;
-    }, 10000);
+    }, 3000);
   }
 };
 
@@ -46052,9 +46816,6 @@ SendRequest = function(scriptname, html_container_id, callback)
 {
   scriptname = Get_ReGa_Path(scriptname);
   var params = poststr;
-
-  if (params === "") { params += "?AvoidBrowserCache=" + Math.random(); }
-  else               { params += "&AvoidBrowserCache=" + Math.random(); }
 
   if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
   else                                                   { id = Get_UI_CONTENTBOX_ID(); }
@@ -46602,7 +47363,7 @@ RemoveLink = function(iface, sender_address, receiver_address, sender_type, redi
 {
   var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_type != "HmIP-SMI55-A") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
 
-  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink, function(result) {
+  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink.replace('%s', sender_address+' - '+receiver_address), function(result) {
     if (result == YesNoDialog.RESULT_YES)
     {
       ResetPostString();
@@ -46925,50 +47686,65 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, convInt2Floa
     srcElm.value = value;
   }
 
+  var parsedValue;
+  var parsedMin = parseFloat(min);
+  var parsedMax = parseFloat(max);
+
+  var minSplit = min.toString().split(".");
+  var maxSplit = max.toString().split(".");
+  var digits = 0;
+
+  if(minSplit.length === 2) {
+    digits = Math.max(digits, minSplit[1].length);
+  }
+  if(maxSplit.length === 2) {
+    digits = Math.max(digits, maxSplit[1].length);
+  }
+
   // Check if float is allowed
   try {
     if (min.toString().indexOf(".") == -1 && max.toString().indexOf(".") == -1) {
       min = parseInt(min);
       max = parseInt(max);
-      value = (roundValue05(parseInt(value)));
+      value = Math.round(parseFloat(value));
     } else {
-      min = parseFloat(parseFloat(min).toFixed(fixedDecimalPoint));
-      max = parseFloat(parseFloat(max).toFixed(fixedDecimalPoint));
-      value = parseFloat(parseFloat(value).toFixed(fixedDecimalPoint));
+      min = parseFloat(parseFloat(min).toFixed(digits));
+      max = parseFloat(parseFloat(max).toFixed(digits));
+      var roundFactor = Math.pow(10, digits);
+      value = Math.round(parseFloat(value) * roundFactor) / roundFactor;
 
       if (value < min || isNaN(min)) {value = min;} else if (value > max) {value = max;}
-
-      srcElm.value = parseFloat(value);
     }
+    parsedValue = parseFloat(value);
   } catch(e) {conInfo(e);}
 
   if (typeof value == "undefined")
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
   else if (isNaN(value))
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value < min)
+  else if (parsedValue < parsedMin)
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value > max)
+  else if (parsedValue > parsedMax)
   {
-    finalVal = max;
+    finalVal = parsedMax;
     ok = false;
   }
 
   if (ok)
   {
     srcElm.style.backgroundColor = "#fffffe";
-    dstElm.value = value * dstValueFactor;
+    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
     if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
-      srcElm.value = dstElm.value;
+      srcElm.value = parsedValue.toFixed(digits);
     }
     srcElm.setAttribute("valvalid", "true");
   }
@@ -46976,9 +47752,9 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, convInt2Floa
   {
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
-    dstElm.value = finalVal * dstValueFactor;
+    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
     if ((typeof _iface == "undefined") || (_iface != "BidCos-RF")) {
-      srcElm.value = dstElm.value;
+      srcElm.value = finalVal.toFixed(digits);
     }
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
   }
@@ -49209,21 +49985,26 @@ ToggleChannelView = function()
 
 
 isDutyCycleOK4DevUpdate = function() {
-  var ifaceBidCosRF = "BidCos-RF";
-  var BidCosIFaces = homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF});
+  var iface = homematic("Interface.listBidcosInterfaces", {"interface": "BidCos-RF"});
   var dcVal = 0,
     dcWarningLevel = 80,
     dcOK = true;
 
-  jQuery.each(BidCosIFaces, function (index, iFace) {
-    if (iFace.type == "CCU2") {
-      dcVal = (typeof iFace.dutyCycle != "undefined") ? parseInt(iFace.dutyCycle) : 0;
-      if (dcVal >= dcWarningLevel) {
-        dcOK = false;
+  if(iface === null || iface.length === 0) {
+    iface = homematic("Interface.listBidcosInterfaces", {"interface": "HmIP-RF"});
+  }
+
+  if(iface !== null) {
+    jQuery.each(iface, function (index, iFace) {
+      if (iFace.type == "CCU2") {
+        dcVal = (typeof iFace.dutyCycle != "undefined") ? parseInt(iFace.dutyCycle) : 0;
+        if (dcVal >= dcWarningLevel) {
+          dcOK = false;
+        }
+        return false; //leave each loop
       }
-      return false; //leave each loop
-    }
-  });
+    });
+  }
   return dcOK;
 };
 
@@ -50588,8 +51369,8 @@ showNewFirmwareDownload = function() {
   CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
 };
 
-CreateCPPopup = function(src, pb) {
-  dlgPopup = new cpMessageBox(src, pb);
+CreateCPPopup = function(src, pb, errorLbl) {
+  dlgPopup = new cpMessageBox(src, pb, errorLbl);
 
   PopupClose = function() {
     dlgPopup.close();
@@ -50629,7 +51410,7 @@ cpMessageBox = Class.create();
 
 cpMessageBox.prototype =
 {
-  initialize: function(src, pb)
+  initialize: function(src, pb, errorLbl)
   {
     if ( $('messagebox') ){
       $("messagebox").hide();
@@ -50641,7 +51422,7 @@ cpMessageBox.prototype =
     this.setWidth(800);
 
     this.createMessagebox();
-    this.LoadFromFile(src, pb);
+    this.LoadFromFile(src, pb, errorLbl);
   },
 
   getViewPortDim : function()
@@ -50765,9 +51546,22 @@ cpMessageBox.prototype =
     this.removeMessagebox();
   },
   
-  LoadFromFile: function(src, pb) {
-    var url = src+'?sid='+SessionId;
+  LoadFromFile: function(src, pb, errorLbl) {
+    var url = src;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
+    var showLoadError = function(statusText) {
+      $('centerbox').hide();
+      $('trlayer').hide();
+      if(typeof errorLbl != 'undefined') {
+        MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
+      } else {
+        Ajax_failure(url, statusText);
+      }
+    };
     var opt = 
     {
       method: 'post',
@@ -50775,8 +51569,16 @@ cpMessageBox.prototype =
       postBody: pb,
       sendXML: false,
       onComplete: function(trans) {
+        // Prototype treats status 0 (e.g. a network error) as success and does not call onFailure
+        if(trans.status == 0) {
+          showLoadError(trans.statusText);
+          return;
+        }
         centerMessageBox();
         $('messagebox').style.display="";
+      },
+      onFailure: function(response) {
+        showLoadError(response.statusText);
       }
     };
     new Ajax.Updater('messagebox',url,opt);
@@ -50784,6 +51586,9 @@ cpMessageBox.prototype =
   
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 
@@ -50892,7 +51697,11 @@ cpMessageBox2.prototype =
   
   LoadFromFile: function(src, pb)
   {
-    var url = src+'?sid='+SessionId;
+    var url = src;
+    if(url.indexOf('?sid=') === -1)
+    {                                                                                 
+      url = url+'?sid='+SessionId;                                                  
+    }                                                                 
     var t = this;
     var opt = 
     {
@@ -50911,6 +51720,9 @@ cpMessageBox2.prototype =
   ShowPopup: function()
   {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 /**
@@ -52347,6 +53159,7 @@ ShowHintIfProgramExists = function(id, ch) {
     } else {
       if((arChnHasLinks[parseInt(ch)] != true) && (! wgtHasLinksOrPrograms)) {
         var elm = jQuery(".j_multiMode_" + ch).find("[name='CHANNEL_OPERATION_MODE']")[0];
+        if (elm === undefined) elm = jQuery("#separate_CHANNEL_" + ch + "_1");
         jQuery(elm).prop("disabled", false);
       }
     }

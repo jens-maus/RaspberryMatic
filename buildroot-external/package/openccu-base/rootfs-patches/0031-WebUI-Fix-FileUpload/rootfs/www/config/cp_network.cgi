@@ -215,7 +215,8 @@ proc action_put_page {} {
     puts "\${dialogSettingsNetworkTitle}"
   }
   division {class="CLASS21114 j_translate"} {
-    table {class="popupTable"} {border=1} {width="100%"} {
+    division {style="height:80vh;width:100%;overflow:auto;"} {
+    table {class="popupTable"} {border=1} {width="100%"} {height="100%"} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           #puts "IP-<br/>Einstellungen"
@@ -419,6 +420,7 @@ proc action_put_page {} {
           p {${dialogSettingsNetworkHintCertificateP3}}
         }
       }
+    }
     }
   }
   division {class="popupControls"} {
@@ -686,11 +688,13 @@ proc read_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var
   if {! [get_property $netconfig "HOSTNAME" hostname] } {return 0}
   if {! [get_property $netconfig "MODE" mode] } {return 0}
   set dhcp [expr {"$mode"=="DHCP"}]
-  if {! [get_property $netconfig "IP" ip] } {return 0}
-  if {! [get_property $netconfig "NETMASK" mask] } {return 0}
-  if {! [get_property $netconfig "GATEWAY" gw] } {return 0}
-  get_property $netconfig "NAMESERVER1" dns1
-  get_property $netconfig "NAMESERVER2" dns2
+  set current_prefix ""
+  if {$dhcp} { set current_prefix "CURRENT_" }
+  if {! [get_property $netconfig "${current_prefix}IP" ip] } {return 0}
+  if {! [get_property $netconfig "${current_prefix}NETMASK" mask] } {return 0}
+  if {! [get_property $netconfig "${current_prefix}GATEWAY" gw] } {return 0}
+  get_property $netconfig "${current_prefix}NAMESERVER1" dns1
+  get_property $netconfig "${current_prefix}NAMESERVER2" dns2
   return 1
 }
 
@@ -708,12 +712,13 @@ proc write_config {dhcp hostname ip mask gw dns1 dns2} {
     set_property netconfig "MODE" "MANUAL"
   }
   set_property netconfig "HOSTNAME" $hostname
-  set_property netconfig "IP" $ip
-  set_property netconfig "NETMASK" $mask
-  set_property netconfig "GATEWAY" $gw
-
-  set_property netconfig "NAMESERVER1" $dns1
-  set_property netconfig "NAMESERVER2" $dns2
+  if {! $dhcp} {
+    set_property netconfig "IP" $ip
+    set_property netconfig "NETMASK" $mask
+    set_property netconfig "GATEWAY" $gw
+    set_property netconfig "NAMESERVER1" $dns1
+    set_property netconfig "NAMESERVER2" $dns2
+  }
 
   catch {set fd [open "/etc/config/netconfig" w]}
   if { $fd <0 } { return 0 }

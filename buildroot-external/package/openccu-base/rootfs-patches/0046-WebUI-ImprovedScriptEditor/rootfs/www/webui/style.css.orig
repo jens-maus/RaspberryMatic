@@ -461,7 +461,7 @@ a img {
 
   color: $_(textColorB); /* black */
   font-weight: bold;
-  width: 165px;
+  width: 190px;
   /* height: 52px; */
   /* line-height: 52px; */
   text-align: center;
@@ -1281,6 +1281,7 @@ a img {
   background-color: $_(active); /* #565657 */
   text-align: center;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 
 .tBodyCell
@@ -1289,6 +1290,16 @@ a img {
   height: 40px;
   border: solid 1px $_(black); /* black */
   color: $_(textColorB); /* black */
+  padding: 4px;
+  text-align: left;
+}
+
+.tBodyCellInactive
+{
+  background-color: $_(pgmBackColorInactive); /* #f0f0f0 */
+  height: 40px;
+  border: solid 1px $_(black); /* black */
+  color: $_(pgmTextColorInactive); /* #bcc7cb */
   padding: 4px;
   text-align: left;
 }
@@ -1526,6 +1537,10 @@ div.caption  { display: table-caption; }
   color: $_(textColorB); /* black */
 }
 
+.LightGrayBkg {
+  background-color: #DDD;
+  color: $_(textColorB); /* black */
+}
 
 .OUCFMprop {
   text-align:left;
@@ -5099,6 +5114,8 @@ application {
 .CLASS02105 {
 	text-align:center;
 	background-color: $_(black); /* #000000 */
+	table-layout: fixed;
+	word-wrap:break-word;
 }
 
 .CLASS02106 {
@@ -6979,6 +6996,7 @@ color: $_(textColorA); /* white */
 	height:20px ! important;
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05203 {
@@ -6992,6 +7010,7 @@ color: $_(textColorA); /* white */
 .CLASS05205 {
 	height:20px ! important;
 	background-color:$_(clickable);
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05206 {
@@ -7008,7 +7027,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS05209 {
-	text-align:left;
+	text-align: center;
 	padding-left:5px;
 	border:solid 1px $_(black); /* black */
 -ms-word-break: break-all;

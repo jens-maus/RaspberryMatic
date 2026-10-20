@@ -28,6 +28,7 @@ function ::TestRunning()
       Call("/esp/TimeStamp.fn::TimeStampToString3()");
       Write( sTimestamp );
     }    
+  }
 }
 
 function ::SetScreenSize()
@@ -443,7 +444,7 @@ function ::UpdateUI()
 
 
   Write( 'if(urlParamInterfaces == "true") showInterfaces();');
-  Write( 'if(showAPITools == "true" || (homematic("system.getTweak",{"key" : "showAPITools"}))) showHmAPITools();');
+  Write( 'if(showAPITools == "true") showHmAPITools();');
 
   !###################
   !# Systemvariablen #
@@ -682,7 +683,7 @@ function ::getChnNameById()
 
 ![sPageId], [sType], [sFilter]
 function ::saveSFilter() {
-  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId");
+  object uidata = dom.GetObject(system.GetSessionVar("sessionUiDataId"));
   string s = system.GetVar("sFilter");
   Write(system.GetVar("sType"));
   uidata.DataValue(system.GetVar("sPageId"), system.GetVar("sType"), s);
@@ -1214,7 +1215,7 @@ function ::deleteUser()
   }
 }
 
-function ExecuteProgram()
+function ::ExecuteProgram()
 {
   object obj = dom.GetObject( system.GetVar("dpid") );
   if (obj)
@@ -1606,4 +1607,61 @@ function ::writeWarnStateJS()
 
 function ::keepAlive()
 {
+}
+
+function ::ShowInternalSystemVars()
+{
+  if( system.IsSessionVar("sessionSISV") )
+  {
+    string sEnable = system.GetSessionVar("sessionSISV");
+    if( sEnable == "1" )
+    {
+      system.SetSessionVar("sessionSISV","0");
+    }
+    else
+    {
+      system.SetSessionVar("sessionSISV","1");
+    }
+  }
+  else
+  {
+    system.SetSessionVar("sessionSISV","1");
+  }
+}
+
+function ::ShowInternalDeviceChannels()
+{
+  if( system.IsSessionVar("sessionSIDC") )
+  {
+    string sEnable = system.GetSessionVar("sessionSIDC");
+    if( sEnable == "1" )
+    {
+      system.SetSessionVar("sessionSIDC","0");
+    }
+    else
+    {
+      system.SetSessionVar("sessionSIDC","1");
+    }
+  }
+  else
+  {
+    system.SetSessionVar("sessionSIDC","1");
+  }
+}
+
+! [id], [iInternal]                                 
+function ::saveDpInternal() {
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( oUser.UserLevel() == iulAdmin )           
+  {                                                   
+    object obj = dom.GetObject(system.GetVar("dpId"));
+    if (obj) {
+      boolean b = false;
+      if (system.GetVar("iInternal") == 1) {
+        b = true;         
+      }
+      obj.Internal(b);            
+    }
+  }                                                                        
+  return;
 }

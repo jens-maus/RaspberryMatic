@@ -92,6 +92,27 @@ proc read_var_from_file { filename varname } {
   return $var
 }
 
+# set (or remove, if value is empty) only the line of the given key in a
+# key=value file such as /etc/config/tweaks and keep all other lines
+proc set_var_in_file { filename varname value } {
+  set lines {}
+  if { [file exists $filename] } {
+    set fd -1
+    catch { set fd [open $filename r] }
+    if { $fd < 0 } { return "$filename read error\n" }
+    set content [string trimright [read $fd] "\n"]
+    close $fd
+    if { $content != "" } {
+      foreach line [split $content "\n"] {
+        if { ![regexp "^ *$varname *=" $line] } { lappend lines $line }
+      }
+    }
+  }
+  if { $value != "" } { lappend lines "$varname=$value" }
+  if { [llength $lines] == 0 } { return [deletefile $filename] }
+  return [writefile $filename [join $lines "\n"]]
+}
+
 proc readfile { filename } {
   set content ""
   if { [file exists $filename] } {
@@ -522,6 +543,8 @@ proc action_put_page {} {
 }
 
 proc action_save_settings {} {
+  http_head
+
   global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME ALLOWEXTERNALACCESSFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
@@ -549,7 +572,7 @@ proc action_save_settings {} {
   # save does not apply the form only partially
   set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
   if {$cronBackupMaxBackups != "" && ![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
-    puts "error cronBackupMaxBackups: invalid number"
+    puts -nonewline "error cronBackupMaxBackups: invalid number"
     return
   }
   
@@ -674,9 +697,9 @@ proc action_save_settings {} {
   }
 
   if {$devConfig} {
-    append errMsg [writefile $TWEAKFILENAME "CP_DEVCONFIG=1"]
+    append errMsg [set_var_in_file $TWEAKFILENAME CP_DEVCONFIG 1]
   } else {
-    append errMsg [deletefile $TWEAKFILENAME]
+    append errMsg [set_var_in_file $TWEAKFILENAME CP_DEVCONFIG ""]
   }
   
   if { $cronBackupMaxBackups == "" } {
@@ -708,7 +731,10 @@ proc action_save_settings {} {
     append errMsg "error monit reload: $e\n"
   }
 
-  puts "$errMsg"
+  # an empty response means success for the dialog
+  if {$errMsg != ""} {
+    puts -nonewline $errMsg
+  }
 }
 
 cgi_eval {

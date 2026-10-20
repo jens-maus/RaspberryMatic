@@ -101,7 +101,7 @@
    width: 100%;
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31892,6 +31892,27 @@
+@@ -31899,6 +31899,27 @@
      new Ajax.Updater("userSysVarTbl", url, opts);
    },
    

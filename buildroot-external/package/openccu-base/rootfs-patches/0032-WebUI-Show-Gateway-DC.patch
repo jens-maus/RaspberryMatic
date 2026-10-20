@@ -30,10 +30,14 @@
      /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
      this.m_gatewayTableActionHeader = document.createElement("th");
      this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
-@@ -27469,6 +27483,16 @@
+@@ -27469,6 +27483,20 @@
  				    	 lgw = rfGateways[j];
  				    	}
  				    }
++				    if (lgw) {
++				    	lgw.setDCState("");
++				    	lgw.setFWState("");
++				    }
 +				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
 +				    	var gatewaysn = gatewayStatus[loop].address;
 +				    	if (lgwStatus.serial == gatewaysn) {
@@ -47,11 +51,14 @@
  		        	if(lgw) 
  		        	{
  					  if(lgwStatus.connstat == "NO_ERROR") {
-@@ -27502,6 +27526,28 @@
+@@ -27502,6 +27530,31 @@
  		  {
  			  var text = "";
  	   	      var status = rfGateways[i].determineState(gatewayStatus);
 +	   	      var cfglan = rfGateways[i].getAddress(gatewayStatus);
++
++	   	      rfGateways[i].setDCState("");
++	   	      rfGateways[i].setFWState("");
 +
 +	   	      for (var loop = 0; loop < gatewayStatus.length; loop++) {
 +	   	      	var gatewaysn = gatewayStatus[loop].address;
@@ -76,7 +83,7 @@
  		      if (status)
  		      {
  		        text = (status.isConnected) ? translateKey("lanGatewayLblConnected") : translateKey("lanGatewayLblNotConnected");
-@@ -27702,6 +27748,8 @@
+@@ -27702,6 +27755,8 @@
    m_keyLabel: null,
    m_ipLabel: null,
    m_stateLabel: null,
@@ -85,7 +92,7 @@
    m_actionCell: null,
    m_deleteButton: null,
    m_onDeleteHandler: null,
-@@ -27754,6 +27802,16 @@
+@@ -27754,6 +27809,16 @@
      this.m_stateLabel.className = "bidcosrf_tablecell";
      this.m_element.appendChild(this.m_stateLabel);
      
@@ -102,7 +109,7 @@
      /* Aktion */
      this.m_actionCell = document.createElement("td");
      this.m_actionCell.className = "bidcosrf_actioncell";
-@@ -27893,6 +27951,18 @@
+@@ -27893,6 +27958,18 @@
      return this;
    },
    

@@ -713,18 +713,18 @@
       "base_pr": 222,
       "cleanup_pr": 4478,
       "patch": "0072-WebUI-Fix-hm_autoconf.patch"
+    },
+    {
+      "base_merge_commit": "7a0f77146bb398c50e28579a31a7968a00448e23",
+      "base_pr": 225,
+      "cleanup_pr": 4483,
+      "patch": "0032-WebUI-Show-Gateway-DC.patch"
     }
   ],
-  "in_progress": {
-    "base_merge_commit": "7a0f77146bb398c50e28579a31a7968a00448e23",
-    "base_pr": 225,
-    "cleanup_pr": 4483,
-    "patch": "0032-WebUI-Show-Gateway-DC.patch",
-    "phase": "cleanup-prepared; merge not yet verified"
-  },
+  "in_progress": null,
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "43540fc735ceef7cbaa9825ecdbdce377172b354",
-  "verified_base_pin": "49eaef8dfd4ec6d872fe99860d26889cfbffb6ca",
-  "verified_source_sha256": "54608ffa120ecbc9d6ec6b5b2f78efde901097a8ad594288ff3a4a3f8514551e"
+  "verified_at_openccu_commit": "c5d7e86dc184fee463c74a688074cb88acd58676",
+  "verified_base_pin": "f45863feafb6e63aa3ff47c6cf7149879f330c14",
+  "verified_source_sha256": "6a7eec68d43b54df21ef56ac09dafe02176cb47c1f0ec839d13e3b086908aefb"
 }

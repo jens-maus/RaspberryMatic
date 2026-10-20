@@ -267,7 +267,7 @@
              (this.ModeFilter.matchStringArray(device.modes)) &&
              (this.RoomFilter.matchArray(device.rooms))                   &&
              (this.FuncFilter.matchArray(device.subsections)));
-@@ -28522,6 +28585,7 @@
+@@ -28523,6 +28586,7 @@
        //jQuery("."+gateway.getAddress()).attr("class","bidcosrf_tablecell " + gateway.getAddress().replace(/\s+/g,""));
        this.setGateway(gateway.getAddress());
        this.setRoaming(roaming);

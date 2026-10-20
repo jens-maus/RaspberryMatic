@@ -35883,7 +35883,7 @@ showDutyCycle = function() {
 showDutyCycleHmIP = function() {
   // Currently only in use for HAPs. Here we collect the available HAP addresses.
   // The display of the HAP-DutyCycle is done in showDCAllInterfaces()
-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
+  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
     var linkElem = jQuery("#iFaceShowAll"),
       arRelevantAddresses = [];
 
@@ -35908,7 +35908,7 @@ showDutyCycleHmIP = function() {
 
 //Attention: To work properly Adapter.Local.Device.Enabled of the crRFD.conf must be set to true
 showCarrierSense = function() {
-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
+  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
     var ccuAddress = homematic("CCU.getSerial"),
       linkElem = jQuery("#lblCarrierSense"),
       arHAPAddresses = [];

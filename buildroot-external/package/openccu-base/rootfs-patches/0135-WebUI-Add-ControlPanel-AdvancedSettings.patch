@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- /dev/null
 +++ b/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,719 @@
+@@ -0,0 +1,745 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -142,6 +142,27 @@
 +  }
 +
 +  return $var
++}
++
++# set (or remove, if value is empty) only the line of the given key in a
++# key=value file such as /etc/config/tweaks and keep all other lines
++proc set_var_in_file { filename varname value } {
++  set lines {}
++  if { [file exists $filename] } {
++    set fd -1
++    catch { set fd [open $filename r] }
++    if { $fd < 0 } { return "$filename read error\n" }
++    set content [string trimright [read $fd] "\n"]
++    close $fd
++    if { $content != "" } {
++      foreach line [split $content "\n"] {
++        if { ![regexp "^ *$varname *=" $line] } { lappend lines $line }
++      }
++    }
++  }
++  if { $value != "" } { lappend lines "$varname=$value" }
++  if { [llength $lines] == 0 } { return [deletefile $filename] }
++  return [writefile $filename [join $lines "\n"]]
 +}
 +
 +proc readfile { filename } {
@@ -574,6 +595,8 @@
 +}
 +
 +proc action_save_settings {} {
++  http_head
++
 +  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME ALLOWEXTERNALACCESSFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
 +  set errMsg ""
 +
@@ -601,7 +624,7 @@
 +  # save does not apply the form only partially
 +  set cronBackupMaxBackups [string trim $cronBackupMaxBackups]
 +  if {$cronBackupMaxBackups != "" && ![regexp {^[0-9]+$} $cronBackupMaxBackups]} {
-+    puts "error cronBackupMaxBackups: invalid number"
++    puts -nonewline "error cronBackupMaxBackups: invalid number"
 +    return
 +  }
 +  
@@ -726,9 +749,9 @@
 +  }
 +
 +  if {$devConfig} {
-+    append errMsg [writefile $TWEAKFILENAME "CP_DEVCONFIG=1"]
++    append errMsg [set_var_in_file $TWEAKFILENAME CP_DEVCONFIG 1]
 +  } else {
-+    append errMsg [deletefile $TWEAKFILENAME]
++    append errMsg [set_var_in_file $TWEAKFILENAME CP_DEVCONFIG ""]
 +  }
 +  
 +  if { $cronBackupMaxBackups == "" } {
@@ -760,7 +783,10 @@
 +    append errMsg "error monit reload: $e\n"
 +  }
 +
-+  puts "$errMsg"
++  # an empty response means success for the dialog
++  if {$errMsg != ""} {
++    puts -nonewline $errMsg
++  }
 +}
 +
 +cgi_eval {
@@ -823,7 +849,7 @@
 +    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet %DCberwachung",
 +    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "USB3 %DCberpr%FCfung (RaspberryPi4)",
 +    "dialogSettingsAdvancedSettingsHintWatchDogCheck1" : "<b>Internet %DCberwachung:</b><br/>Die Internetverbindung wird in regelm%E4%DFigen Abst%E4nden kontrolliert und bei Ausfall eine WebUI Alarmmeldung erzeugt.",
-+    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>USB3 %DCberpr%FCfung (RaspberryPi4):</b><br/>Bei Nutzung eines RaspberryPi4 wird eine WebUI Alarmmeldung erzeugt, wenn dort ein USB3 Anschluss (Blau) gleichzeitig mit einem Funkmodul auf dem GPIO Bus genutzt wird. Diese Nutzungskombination ist daf%FCr bekannt, das hierbei starke Funkst%F6rungen auftreten die die Kommunikation mit HomeMatic/homematicIP Ger%E4ten negativ beeintr%E4chtigt.",
++    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>USB3 %DCberpr%FCfung (RaspberryPi4):</b><br/>Bei Nutzung eines RaspberryPi4 wird eine WebUI Alarmmeldung erzeugt, wenn dort ein USB3 Anschluss (Blau) gleichzeitig mit einem Funkmodul auf dem GPIO Bus genutzt wird. Diese Nutzungskombination ist daf%FCr bekannt, dass hierbei starke Funkst%F6rungen auftreten die die Kommunikation mit HomeMatic/homematicIP Ger%E4ten negativ beeintr%E4chtigt.",
 +    "dialogSettingsAdvancedSettingsSystem" : "System-Optionen",
 +    "dialogSettingsAdvancedSettingsMediola" : "Mediola NEO-Server Autostart",
 +    "dialogSettingsAdvancedSettingsCloudmatic" : "CloudMatic Autostart",
@@ -844,11 +870,11 @@
 +    "dialogSettingsAdvancedSettingsHintSystem1" : "<b>Automatische Backups:</b><br/>Automatische Generierung von Backups (jede Nacht um 00:07).",
 +    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>Backup-Speicherpfad:</b><br/>Speicherpfad zur Ablage der automatischen Backups (*.sbk). Systemvorgabe: angeschlossenes USB-Medium (bei Nutzung einer SD-Karte als zentrales Speichermedium).",
 +    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>Backup-Anzahl (max.):</b><br/>Maximale Anzahl der im Speicherpfad aufzubewahrenden Backupdateien (Systemvorgabe: 30). Bei Eingabe von 0 findet keinerlei L%F6schung alter Backupdaten statt.",
-+    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>Duty-Cycle Systemvariablen:</b><br/>Es werden automatisch Systemvariablen mit den DutyCycle-Werten aller genutzen Funk-Interfaces angelegt und regelm%E4%DFig aktualisiert.",
++    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>Duty-Cycle Systemvariablen:</b><br/>Es werden automatisch Systemvariablen mit den DutyCycle-Werten aller genutzten Funk-Interfaces angelegt und regelm%E4%DFig aktualisiert.",
 +    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>LED-Nutzung (Funkmodul):</b><br/>Bei Einsatz eines RPI-RF-MOD/HmIP-CCU3 Funkmodules oder eines HM-LGW-O-TW-W-EU wird die LED zur Statusanzeige von Alarm- und Servicemeldungen genutzt.",
 +    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>LED-Nutzung (Onboard):</b><br/>Bei Existenz von LEDs des genutzten Systemboards (z.B. RaspberryPi, CCU3) werden diese LEDs zur Darstellung des aktuellen Systemstatus verwendet.",
-+    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Speicher%FCberpr%FCfung (Bad-Blocks):</b><br/>Zur %DCberpr%FCfung des Gesundheitsstatus des eingesetzten Systemspeichers wird jede Nacht um 01:59 ein sogn. 'Bad-Blocks' Check durchgef%FChrt und bei Auftreten eines Fehlers eine WebUI Alarmmeldung erzeugt.",
-+    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterst%FCtzten Speichermedien (z.B. SSD) eventl. ungenutze Speicherbl%F6cke freigegeben.",
++    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Speicher%FCberpr%FCfung (Bad-Blocks):</b><br/>Zur %DCberpr%FCfung des Gesundheitsstatus des eingesetzten Systemspeichers wird jede Nacht um 01:59 ein sog. 'Bad-Blocks' Check durchgef%FChrt und bei Auftreten eines Fehlers eine WebUI Alarmmeldung erzeugt.",
++    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterst%FCtzten Speichermedien (z.B. SSD) eventl. ungenutzte Speicherbl%F6cke freigegeben.",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Alternativer Speicherpfad:</b><br/>F%FCr die Speicherung von gr%F6%DFeren Datenmengen (z.B. Diagramm Daten, Add-on Datenablage, etc.) kann hier als Alternative zur Systemvorgabe (z.B. auf einem angeschlossenem USB-Medium) ein eigener Speicherpfad angegeben werden (ben%F6tigt Neustart).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der Mediola NEO Server gestartet, wenn dieser in seiner Konfiguration aktiviert wurde.",
 +    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Systemname:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers, Browser-Tabs sowie auf der Startseite angezeigt wird.",
@@ -890,7 +916,7 @@
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
 +    "commentSettingsDialogAdvancedSettings" : "***********************************************",
-+    "dialogSettingsAdvancedSettingsTitle" : HMIdentifier.de.CCUShortName + " - Advanced settings",
++    "dialogSettingsAdvancedSettingsTitle" : HMIdentifier.en.CCUShortName + " - Advanced settings",
 +    "dialogSettingsAdvancedSettingsWatchDog" : "WatchDog Options",
 +    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet Monitoring",
 +    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "USB3 Monitoring (RaspberryPi4)",
@@ -917,9 +943,9 @@
 +    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>Backup Storage Path:</b><br/>Storage location where automatic backups files (*.sbk) are stored. Default: connected USB media (when using a SD card as the central storage).",
 +    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>Backup Quantity (max.):</b><br/>Maximum number of backups to retain until older ones are purged (default: 30). Use 0 to disable automatic purge, keeping all backup data files.",
 +    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>Duty-Cycle system variables:</b><br/>System variables containing the duty cycle value for each rf interface are generated and updated periodically.",
-+    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>LED use (RF module):</b><br/>In case of using a RPI-RF-MOD/HmIP-CCU3 rf module or a HM-LGW-O-TW-W-EU the LED will be used to display alarm- oder service messages status.",
++    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>LED use (RF module):</b><br/>In case of using a RPI-RF-MOD/HmIP-CCU3 rf module or a HM-LGW-O-TW-W-EU the LED will be used to display alarm or service messages status.",
 +    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>LED use (Onboard):</b><br/>If the used system board (e.g. RaspberryPi, CCU3) comes with onboard LEDs they will be used to reflect the current system status.",
-+    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Storage check (Bad Blocks):</b><br/>For checking the health status of the used system storage a check will be peformed each night at 01:59 am and in case bad blocks are found a WebUI alarm will be raised.",
++    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Storage check (Bad Blocks):</b><br/>For checking the health status of the used system storage a check will be performed each night at 01:59 am and in case bad blocks are found a WebUI alarm will be raised.",
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Storage check (FSTRIM):</b><br/>If activated, unused filesystem data will be freed each saturday at 04:00 am on supported system drives (e.g. SSD).",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Custom Storage Path:</b><br/>As an alternative to the default of storing larger data to e.g. a connected USB drive, an own directory path can be entered here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostartup:</b><br/>Upon startup of the CCU, the Mediola NEO server process will be automatically started if it has been activated in the configuration.",
@@ -928,10 +954,10 @@
 +    "dialogSettingsAdvancedSettingsHintSystem16" : "<b>Protect from external internet access:</b><br/>If enabled, an additional local firewall protection for WebUI/services will be setup. If disabled, /etc/config/AllowExternalAccess will be set and the local firewall protection for direct internet access will be disabled.",
 +    "dialogSettingsAdvancedSettingsHintSystem13" : "<b>Check for additional software updates:</b><br/>Checks for new versions of additional software (ccu-addons) once a day and shows it on the startpage.",
 +    "dialogSettingsAdvancedSettingsHintSystem14" : "<b>CloudMatic Autostartup:</b><br/>Upon startup of the CCU, the CloudMatic service will be automatically initialized and started if this is activated here.",
-+    "dialogSettingsAdvancedSettingsHintSystem15" : "<b>IP address (HB-RF-ETH):</b><br/>If available the IP address of a <a href='https://github.com/alexreinert/HB-RF-ETH'>HB-RF-ETH adapter</a> can be configued here (requires reboot).",
++    "dialogSettingsAdvancedSettingsHintSystem15" : "<b>IP address (HB-RF-ETH):</b><br/>If available the IP address of a <a href='https://github.com/alexreinert/HB-RF-ETH'>HB-RF-ETH adapter</a> can be configured here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
-+    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
++    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hidden</i> under the control panel.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
 +    "dialogSettingsAdvancedSettingsSystemName" : "System name",
 +    "dialogSettingsAdvancedSettingsSystemNamePlaceholder" : "<default>",
@@ -990,6 +1016,24 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
+@@ -35873,7 +35883,7 @@
+ showDutyCycleHmIP = function() {
+   // Currently only in use for HAPs. Here we collect the available HAP addresses.
+   // The display of the HAP-DutyCycle is done in showDCAllInterfaces()
+-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
++  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
+     var linkElem = jQuery("#iFaceShowAll"),
+       arRelevantAddresses = [];
+ 
+@@ -35898,7 +35908,7 @@
+ 
+ //Attention: To work properly Adapter.Local.Device.Enabled of the crRFD.conf must be set to true
+ showCarrierSense = function() {
+-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
++  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
+     var ccuAddress = homematic("CCU.getSerial"),
+       linkElem = jQuery("#lblCarrierSense"),
+       arHAPAddresses = [];
 @@ -51420,6 +51430,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };

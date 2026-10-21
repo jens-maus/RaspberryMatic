@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "a03f5e4cec17149ba6ad0e75f596aece1b2545225e931492efcc33e00da163dd"
+      "sha256": "00b1ef0ea711f4204d85f4a97faac2aed86ae8ea5588da7724a9870823f30bd7"
     },
     {
       "added": 370,
@@ -56,7 +56,7 @@
       ],
       "patch": "0038-WebUI-DeviceOverview-StatusColumn.patch",
       "removed": 3,
-      "sha256": "037df9822c91faed09799d433b9a6f46e30e19153bdafb69ffb97386e654168c"
+      "sha256": "7f10aa2636313a797506f02fb6eae019c889acc73290f365a5e7f93b715da7aa"
     },
     {
       "added": 782,
@@ -121,7 +121,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 656,
-      "sha256": "f2172e7f38aa654097690b968fa278d314ce408515aa3abcae46c2cf148dc56c"
+      "sha256": "60968c882820d61b8b77d0d03fea0dd60c6176d3d64a987a633b661005c2a5b3"
     },
     {
       "added": 138,
@@ -131,7 +131,7 @@
       ],
       "patch": "0042-WebUI-HeatingControl-HumidityBatteryValveState.patch",
       "removed": 19,
-      "sha256": "d3596ec0f509e261e770faf97cf5a2038b7b122b14f9aeae1d7a25a5421e397b"
+      "sha256": "2d17ad68b9164e0bdd9d9807ee6dd75328c23a072a8eb79705fd70be87d6b95b"
     },
     {
       "added": 128,
@@ -148,7 +148,7 @@
       ],
       "patch": "0044-WebUI-DisableDeviceServiceMsg.patch",
       "removed": 3,
-      "sha256": "e6caa5706dbcb55109048934745b9fee16264faa29f28fda9e38f9beb38abae4"
+      "sha256": "a8e2b445e0482d309220de8411fa4a4cb2c4099bb8e7c56c64921ee74e7f8921"
     },
     {
       "added": 305,
@@ -160,7 +160,7 @@
       ],
       "patch": "0046-WebUI-ImprovedScriptEditor.patch",
       "removed": 138,
-      "sha256": "4f17ec0f3077bf2cd9b4401433dcde54f7483288024dac78c359a80299a4de7a"
+      "sha256": "5475c8ede4560e6a8629e9ac6c628fa3b51445c76894cfb0eeea1d24d969d60b"
     },
     {
       "added": 751,
@@ -171,7 +171,7 @@
       ],
       "patch": "0054-WebUI-AddTimeZones.patch",
       "removed": 155,
-      "sha256": "7444e8836beb99c81266692de03a1232dd7b2c095cfdf66a7aeb0bc9df135113"
+      "sha256": "a7800b1ef1213c5ef5d4ff631cfead76c97af22847344b25ae4b7abf13640534"
     },
     {
       "added": 123,
@@ -182,7 +182,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "65079f131314123c318ac0d46581f18a6b4612847672873722ce06077eff47ed"
+      "sha256": "3fc30106106bcabde17f4fa154dc55a1d896e610cd3da20312602464e73834ba"
     },
     {
       "added": 262,
@@ -196,7 +196,7 @@
       ],
       "patch": "0057-WebUI-ImprovedDutyCycleDisplay.patch",
       "removed": 106,
-      "sha256": "2a47b7355a153f27b71a7e7413c35a7b9199fb3097308b11fb749c3b619b733e"
+      "sha256": "40cecbb4ef59315d0295af8f4a90a3ad6596fc66f77a5acde9df8fc0fbb3f494"
     },
     {
       "added": 357,
@@ -214,7 +214,7 @@
       ],
       "patch": "0061-WebUI-MenuSortedIcons.patch",
       "removed": 327,
-      "sha256": "e20911794d5dbaceed5c5d173faa0da2041bb7ba6411e2bf77490115dbdbbcc6"
+      "sha256": "1b07bb35ab17d924af0357cce22163b94eb687e0a7fa7baf3bd16169f9889cd3"
     },
     {
       "added": 59,
@@ -229,7 +229,7 @@
       ],
       "patch": "0077-WebUI-NegateCondition.patch",
       "removed": 5,
-      "sha256": "de0f27b6f81fd0b1f93397bab417855bb2b6f4844693f88c469ab9500e66d01d"
+      "sha256": "752102ccb7e495a14a7eedef5680a7307c9a1a054c29dcbbfb6f724bf28237e3"
     },
     {
       "added": 74,
@@ -241,7 +241,7 @@
       ],
       "patch": "0095-WebUI-userSysVarTblMoveUpDown.patch",
       "removed": 1,
-      "sha256": "c99c67483f814994b92f4d8ab93c0e7db715115a616b1208bd1e8badbb2f61cb"
+      "sha256": "43b0347ac94c1486015328cded2bb841b8fbeb93a11ed0de7318d07859d862ad"
     },
     {
       "added": 213,
@@ -254,7 +254,7 @@
       ],
       "patch": "0097-WebUI-SetSysvarValueByUser.patch",
       "removed": 75,
-      "sha256": "73c3901b9876d13b026660931474144cffe1a2107f8201f43cb2d82a7447ecaf"
+      "sha256": "9ebdafa96258a0c57e97748b7c2c761929f1cc0de3e607649af885ec62dba49f"
     },
     {
       "added": 86,
@@ -266,7 +266,7 @@
       ],
       "patch": "0099-WebUI-Add-DeviceRenameAllChannels.patch",
       "removed": 7,
-      "sha256": "57f5775ff3e33e4e1368bdf216e2cd590a35d92f3525ebcec9da4ac7900b54ce"
+      "sha256": "c61272dc438ff2cb6f7c4323b604489c20d7c0f73dc5f5dd534083c8a9cb01da"
     },
     {
       "added": 43,
@@ -285,7 +285,7 @@
       ],
       "patch": "0104-WebUI-Add-AssignFunctionAndRoomToHmRFChan0.patch",
       "removed": 27,
-      "sha256": "09a1d88632d450f03087db54dcf47d416f0ec261ff388dab354d7b7294d9d386"
+      "sha256": "4697fd2167cd0fc98162569b4c34171a35e5df4c6671495d0139c178f623297b"
     },
     {
       "added": 439,
@@ -302,7 +302,7 @@
       ],
       "patch": "0109-WebUI-Fix-SystemLanguageDefaultNames.patch",
       "removed": 2,
-      "sha256": "af09c848650890c4d9281ffb0d58ab1889ae8ea733497f352065462c937fe0c8"
+      "sha256": "628c144cda87fc54b1e962095191087ba7d1f389d8c90ba351029217dd52e6f8"
     },
     {
       "added": 56,
@@ -313,7 +313,7 @@
       ],
       "patch": "0111-WebUI-Fix-Translation-Performance.patch",
       "removed": 24,
-      "sha256": "ca7b30d7c942055d56b2719f3f931f310952c692868d6b28abaca4bc396e726d"
+      "sha256": "c613781ff216299bb8785bb2b62b116caa3829476b3e236176442ebca143750d"
     },
     {
       "added": 211,
@@ -336,7 +336,7 @@
       ],
       "patch": "0119-WebUI-Fix-ProofAndSetValue.patch",
       "removed": 70,
-      "sha256": "a7dfc5a36a0a1b8bcebb0e348429e15356fd54f64646e5c0901ae7315804138a"
+      "sha256": "f515a34bb1045f684fe9c4c82269868a0ee1a1fdc6c4cead756360bc57e78025"
     },
     {
       "added": 38,
@@ -350,7 +350,7 @@
       ],
       "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
       "removed": 16,
-      "sha256": "d9358aac3f29f11e1537e8103aee9164458fcfb1db67508546a33edef17c3079"
+      "sha256": "073ccdae313a6187da961f7840286b0e94708ed8c59c6ccc570d1d1e3b39a6e4"
     },
     {
       "added": 76,
@@ -373,7 +373,7 @@
       ],
       "patch": "0131-WebUI-ShowAddonUpdatesOnStartpage.patch",
       "removed": 0,
-      "sha256": "2beb337823abba8618b35f7e401d63a6f828a206dbd9ebf82bd5b332950a3ed8"
+      "sha256": "c5a8b4a201aa9755ca1deb65a6e3feed135d20eaa52397a1a0fcac05bf132741"
     },
     {
       "added": 102,
@@ -393,7 +393,7 @@
       ],
       "patch": "0132-WebUI-Fix-UnitDisplay.patch",
       "removed": 96,
-      "sha256": "dea40795280a1c36acd51c08a27ca63012d131908a8c1f1ef7401bbb4f98af7b"
+      "sha256": "3b87374c52e469e9151e9aab79496b8b4a56854377ca8df41ed3206a2ea7d605"
     },
     {
       "added": 72,
@@ -422,7 +422,7 @@
       ],
       "patch": "0138-WebUI-Add-SettingsAccessInStatusAndControl.patch",
       "removed": 20,
-      "sha256": "769704c5247c7511abcc511fa563c32755f621b0dab3da75ede246ddd3161ead"
+      "sha256": "7d7cfe5cc09691604b612a401c1d95784ab96ffd6734d88b10d24d6974bfa3c1"
     },
     {
       "added": 6,
@@ -431,7 +431,7 @@
       ],
       "patch": "0145-WebUI-NaturalSorting.patch",
       "removed": 47,
-      "sha256": "00c70e1a51ff0afaaeae772abfe85352cdb9f9074d0705358dc55e325ef66a11"
+      "sha256": "617de27101e9d365a5ae76f36493b0b9017ae6f617a03948c974ad538042e071"
     },
     {
       "added": 45,
@@ -445,7 +445,7 @@
       ],
       "patch": "0146-WebUI-ImprovedStartpageLayout.patch",
       "removed": 33,
-      "sha256": "cdaeda78849bf2c9842efbbad81c36c45196dd455458258e5a6dd73bab98250d"
+      "sha256": "030e3b8bd18c6f521d6521bfc683ec7653a0cf0ad7ed1d87e21d6a4e99278378"
     },
     {
       "added": 10,
@@ -465,7 +465,7 @@
       ],
       "patch": "0150-WebUI-Responsive-ControlPage.patch",
       "removed": 106,
-      "sha256": "84df6a9968c233c1552d0fc1e03f66c38eb4b619e9d20b387f5c08bfeaeb997a"
+      "sha256": "84bf4617a62cecfa3ea2a3f01d85e42678b13d9f11b0908485482063e99671f9"
     },
     {
       "added": 88,
@@ -481,17 +481,7 @@
       ],
       "patch": "0154-WebUI-DynamicResizing.patch",
       "removed": 350,
-      "sha256": "baf3e4fae0ca8d2a59afc8e8838c2405e58c42a8fff201305fe3ad42bc538654"
-    },
-    {
-      "added": 191,
-      "files": [
-        "www/config/ic_deviceparameters.cgi",
-        "www/webui/webui.js"
-      ],
-      "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
-      "removed": 12,
-      "sha256": "c048fde7ad6171dcff8d7d95101f42915a3434611cfee664a209ee221a71936a"
+      "sha256": "9cfbde28b619e20810beb2015cb89cbf07174cabb3e2e9c6373080be641c4760"
     },
     {
       "added": 74,
@@ -507,7 +497,7 @@
       ],
       "patch": "0163-WebUI-ImprovedFileUploadButton.patch",
       "removed": 40,
-      "sha256": "7bf9b6243dd92f6dd5997ee86e7807e3944ea24907ca94b66c1f54d9444ed83c"
+      "sha256": "8e60754fcc321f0db82f155a6c4bb30ce3965ad14ddbc16807d28a983178dc40"
     },
     {
       "added": 68,
@@ -536,7 +526,7 @@
       ],
       "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
       "removed": 7,
-      "sha256": "80060ba12abd924919145c1cdf800f7969740402b89df05827116ff791f5970e"
+      "sha256": "301ea333e1e7e918240504cfaf614c2e478f2900a92da5beb84d21cdf0bfb68b"
     },
     {
       "added": 86,
@@ -581,7 +571,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "737d9a0f5897a598cabb2308ffffcd88d54eaaa1970c675570c4bacd1f3b4143"
+      "sha256": "b2622fae56eef3c87c73e64825ffd748277112c8c1959ff5f5731451f83fd940"
     },
     {
       "added": 4,
@@ -606,9 +596,9 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "e9d9de2d90d3e1ba4c54a62b791e9b79e3290e03e6accca89db405c1e3831f07"
+      "sha256": "c668b3498ca3d2daf65581a6992e88cc673e9a3baffffc4d87a4106d407621c1"
     }
   ],
   "schema": 1,
-  "series_sha256": "f929f7005092e426d6d1244d441a6be41f22901c9bc0bb201e1b237a509b2028"
+  "series_sha256": "2b6f20c0e0a3244011c9dbcc795579440b83164ea2a36b80bf1563345b9403ba"
 }

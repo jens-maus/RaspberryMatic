@@ -204,7 +204,7 @@
        this.deviceType = deviceType;
        this.typeName = deviceType.name;
        this.typeDescription = deviceType.description;
-@@ -12561,6 +12563,23 @@
+@@ -12562,6 +12564,23 @@
    {
    },  
  
@@ -228,7 +228,7 @@
    setDeviceInputCheck: function() {
      this.deviceInputCheck = true;
    },
-@@ -15480,6 +15499,7 @@
+@@ -15557,6 +15576,7 @@
    USABLE_ID: "DeviceConfigDialog_isUsable",
    VISIBLE_ID: "DeviceConfigDialog_isVisible",
    LOGGED_ID: "DeviceConfigDialog_isLogged",
@@ -236,7 +236,7 @@
    TEST_RESULT_ID: "DeviceConfigDialogTestResult",
    RESULT_OK: 1,
    RESULT_ABORT: 0,
-@@ -15505,6 +15525,7 @@
+@@ -15582,6 +15602,7 @@
      this.isVisibilityChanged = false;
      this.isUsabilityChanged = false;
      this.isLoggingChanged = false;   
@@ -244,7 +244,7 @@
      this.callback = callback;
      this.layer = document.createElement("div");
      this.layer.id = this.LAYER_ID;
-@@ -15571,6 +15592,8 @@
+@@ -15648,6 +15669,8 @@
          if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
          if (this.isLoggingChanged) { channel.setLogging(isLogged); }
        }, this);

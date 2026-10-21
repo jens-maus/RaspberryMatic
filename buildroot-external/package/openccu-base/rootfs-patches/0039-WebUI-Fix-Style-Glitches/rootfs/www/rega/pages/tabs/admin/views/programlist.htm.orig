@@ -177,6 +177,12 @@
                             WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
                           WriteLine( '</td>' );
                         WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.ExecuteOnStartup() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetExecuteOnStartup('#o.ID()#',this.checked);" />${lblExecuteOnStartup}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
                       WriteLine( '</table>' );
                     WriteLine( '</td>' );
                   WriteLine( '</tr>' );
@@ -270,6 +276,12 @@
                             WriteLine( '<td class="CLASS04903">' );
                               string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
                               WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
+                            WriteLine( '</td>' );
+                          WriteLine( '</tr>' );
+                          WriteLine( '<tr>' );
+                            WriteLine( '<td class="CLASS04903">' );
+                              string sChecked = ""; if( o.ExecuteOnStartup() ) { sChecked = "checked"; }
+                              WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetExecuteOnStartup('#o.ID()#',this.checked);" />${lblExecuteOnStartup}</label>' );
                             WriteLine( '</td>' );
                           WriteLine( '</tr>' );
                         WriteLine( '</table>' );

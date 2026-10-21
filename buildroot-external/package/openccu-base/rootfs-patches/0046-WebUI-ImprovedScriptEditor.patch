@@ -454,7 +454,7 @@
  	width:200px;
  }
  
-@@ -6811,12 +6783,10 @@
+@@ -6822,12 +6794,10 @@
  
  .CLASS04904 {
  	color: $_(textColorB); /* black */
@@ -467,7 +467,7 @@
  	width:180px;
  }
  
-@@ -6870,7 +6840,6 @@
+@@ -6881,7 +6851,6 @@
  
  .CLASS05007 {
  	color: $_(textColorB); /* black */
@@ -475,7 +475,7 @@
  }
  
  .CLASS05008 {
-@@ -6893,7 +6862,6 @@
+@@ -6904,7 +6873,6 @@
  
  .CLASS05010 {
  	color: $_(textColorB); /* black */
@@ -483,7 +483,7 @@
  	width:100%;
  }
  
-@@ -6903,7 +6871,6 @@
+@@ -6914,7 +6882,6 @@
  
  .CLASS05012 {
  	color: $_(textColorB); /* black */
@@ -491,7 +491,7 @@
  	width:100%;
  }
  
-@@ -7019,7 +6986,6 @@
+@@ -7030,7 +6997,6 @@
  
  .CLASS05207 {
  	line-height:15px;
@@ -499,7 +499,7 @@
  }
  
  .CLASS05208 {
-@@ -7072,7 +7038,6 @@
+@@ -7083,7 +7049,6 @@
  
  .CLASS05305 {
  	line-height:15px;
@@ -507,7 +507,7 @@
  }
  
  /* rega\pages\tabs\admin\linkprog.htm */
-@@ -7210,7 +7175,6 @@
+@@ -7221,7 +7186,6 @@
  
  .CLASS05705 {
  	width:572px;
@@ -515,7 +515,7 @@
  }
  
  .CLASS05706 {
-@@ -7223,7 +7187,6 @@
+@@ -7234,7 +7198,6 @@
  
  .CLASS05707 {
  	width:570px;
@@ -523,7 +523,7 @@
  }
  
  /* rega\pages\tabs\favViewer.htm  */
-@@ -7673,7 +7636,6 @@
+@@ -7684,7 +7647,6 @@
  
  .CLASS06413 {
    line-height:15px;
@@ -531,7 +531,7 @@
  }
  
  .CLASS06414 {
-@@ -8085,7 +8047,6 @@
+@@ -8096,7 +8058,6 @@
  }
  
  .CLASS20801 {
@@ -539,7 +539,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8106,7 +8067,6 @@
+@@ -8117,7 +8078,6 @@
  }
  
  .CLASS20805 {
@@ -547,7 +547,7 @@
  }
  
  .CLASS20806 {
-@@ -8117,7 +8077,6 @@
+@@ -8128,7 +8088,6 @@
    background-color:$_(clickable);
   color: $_(textColorA); /* white */
    vertical-align: middle;
@@ -555,7 +555,7 @@
  }
  
  .CLASS20808 {
-@@ -8133,7 +8092,6 @@
+@@ -8144,7 +8103,6 @@
  .CLASS20810 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -563,7 +563,7 @@
  }
  
  .CLASS20811 {
-@@ -8168,7 +8126,6 @@
+@@ -8179,7 +8137,6 @@
  .CLASS20817 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -571,7 +571,7 @@
  }
  
  .CLASS20818 {
-@@ -8194,7 +8151,6 @@
+@@ -8205,7 +8162,6 @@
  }
  
  .CLASS20901 {
@@ -579,7 +579,7 @@
  }
  
  .CLASS20902 {
-@@ -8236,7 +8192,6 @@
+@@ -8247,7 +8203,6 @@
    color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
    width: 100%;
@@ -587,7 +587,7 @@
  }
  
  .CLASS20910 {
-@@ -8256,7 +8211,6 @@
+@@ -8267,7 +8222,6 @@
  .CLASS20913 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -595,7 +595,7 @@
    width: 100%;
  }
  
-@@ -8269,7 +8223,6 @@
+@@ -8280,7 +8234,6 @@
  }
  
  .CLASS20916 {
@@ -603,7 +603,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8332,7 +8285,6 @@
+@@ -8343,7 +8296,6 @@
  }
  
  .CLASS21101 {
@@ -611,7 +611,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8354,13 +8306,11 @@
+@@ -8365,13 +8317,11 @@
  }
  
  .CLASS21105 {
@@ -625,7 +625,7 @@
    width: 100%;
  }
  
-@@ -8392,7 +8342,6 @@
+@@ -8403,7 +8353,6 @@
  .CLASS21111 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -633,7 +633,7 @@
  }
  
  .CLASS21112 {
-@@ -8447,7 +8396,6 @@
+@@ -8458,7 +8407,6 @@
  }
  
  .CLASS21201 {
@@ -641,7 +641,7 @@
  }
  
  .CLASS21202 {
-@@ -8461,7 +8409,6 @@
+@@ -8472,7 +8420,6 @@
  }
  
  .CLASS21204 {
@@ -649,7 +649,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8560,7 +8507,6 @@
+@@ -8571,7 +8518,6 @@
  
  .CLASS21302 {
   	color: $_(textColorB); /* black */
@@ -657,7 +657,7 @@
    text-align:center;
    margin: 5px;
  }
-@@ -8600,7 +8546,6 @@
+@@ -8611,7 +8557,6 @@
  }
  
  .CLASS21401 {
@@ -665,7 +665,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8622,7 +8567,6 @@
+@@ -8633,7 +8578,6 @@
  }
  
  .CLASS21405 {
@@ -673,7 +673,7 @@
  }
  
  .CLASS21406 {
-@@ -8651,7 +8595,6 @@
+@@ -8662,7 +8606,6 @@
  .CLASS21410 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -681,7 +681,7 @@
  }
  
  .CLASS21411 {
-@@ -8678,7 +8621,6 @@
+@@ -8689,7 +8632,6 @@
  }
  
  .CLASS21501 {
@@ -689,7 +689,7 @@
  }
  
  .CLASS21502 {
-@@ -8700,7 +8642,6 @@
+@@ -8711,7 +8653,6 @@
  .CLASS21505 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -697,7 +697,7 @@
  }
  
  .CLASS21506 {
-@@ -8736,7 +8677,6 @@
+@@ -8747,7 +8688,6 @@
  }
  
  .CLASS21601 {
@@ -705,7 +705,7 @@
  }
  
  .CLASS21602 {
-@@ -8750,7 +8690,6 @@
+@@ -8761,7 +8701,6 @@
  }
  
  .CLASS21604 {
@@ -713,7 +713,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8803,7 +8742,6 @@
+@@ -8814,7 +8753,6 @@
  .CLASS21800 {
    width: 100%;
    font-weight: bold;
@@ -721,7 +721,7 @@
    cursor: pointer;
  }
  
-@@ -8852,7 +8790,6 @@
+@@ -8863,7 +8801,6 @@
  
  .CLASS21901 {
    line-height:15px;
@@ -729,7 +729,7 @@
  }
  
  .CLASS21902 {
-@@ -8885,7 +8822,7 @@
+@@ -8896,7 +8833,7 @@
  
  .CLASS21906 {
    color: $_(red);
@@ -738,7 +738,7 @@
    font-weight: bold;
  }
  
-@@ -9039,7 +8976,6 @@
+@@ -9050,7 +8987,6 @@
  
  .CLASS22100 {
    line-height:14px;
@@ -746,7 +746,7 @@
  }
  
  .CLASS22101 {
-@@ -9233,3 +9169,16 @@
+@@ -9244,3 +9180,16 @@
    border:solid 1px $_(black);
  }
  
@@ -812,7 +812,7 @@
    setWrap: function(isWrap)
    {
      if (isWrap) { Element.writeAttribute(this.m_element, "wrap", "soft"); }
-@@ -16554,8 +16576,8 @@
+@@ -16631,8 +16653,8 @@
    {
      var screenWidth  = WebUI.getWidth();
      var screenHeight = WebUI.getHeight();
@@ -823,7 +823,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -16565,63 +16587,142 @@
+@@ -16642,63 +16664,142 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -998,7 +998,7 @@
    },
    
    close: function()
-@@ -16631,8 +16732,8 @@
+@@ -16708,8 +16809,8 @@
    
  });
  
@@ -1009,7 +1009,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -31868,6 +31969,9 @@
+@@ -31952,6 +32053,9 @@
    },
    initPopup: function(id)
    {
@@ -1019,7 +1019,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -31925,9 +32029,10 @@
+@@ -32009,9 +32113,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -1032,7 +1032,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -32035,7 +32140,9 @@
+@@ -32119,7 +32224,9 @@
      }
  
      if (this.draggable) {
@@ -1043,7 +1043,7 @@
      }
  
    },
-@@ -32195,7 +32302,12 @@
+@@ -32279,7 +32386,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

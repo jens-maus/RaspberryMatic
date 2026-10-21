@@ -47,7 +47,7 @@
        "The latest firmware version of the device is alreay installed on the  " + HMIdentifier.en.CCUShortName + ".\n"+
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -18775,6 +18775,20 @@
+@@ -18779,6 +18779,20 @@
    MessageBox.show(title, content,'', 475, 450);
  };
  
@@ -68,7 +68,7 @@
  StatusDisplayDialogAcousticEPaper = Class.create({
   
    initialize: function(title, content, value, callback, contentType) {
-@@ -25731,11 +25745,28 @@
+@@ -25735,11 +25749,28 @@
      return false;
    },*/
  
@@ -97,7 +97,7 @@
        this.newFwCounter = 0;
        this.devIndex = 0;
        if (this.devList.length == 0) {
-@@ -25845,12 +25876,23 @@
+@@ -25849,12 +25880,23 @@
          newFW = resultMajorMinor;
        }
  
@@ -123,7 +123,7 @@
          }
          self.newFwCounter++;
        }
-@@ -25859,6 +25901,40 @@
+@@ -25863,6 +25905,40 @@
      if (self.devIndex < self.devList.length) {
        self.fetchAndSetDeviceVersion();
      } else {
@@ -164,7 +164,7 @@
        self.fetchDeviceList = false;
        self.deleteScriptElements();
        if (self.newFwCounter > 0) {
-@@ -25885,26 +25961,41 @@
+@@ -25889,26 +25965,41 @@
    },
  
    showAvailableDeviceFirmware: function() {

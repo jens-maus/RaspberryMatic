@@ -957,7 +957,7 @@
  .CLASS06200 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25260,19 +25260,19 @@
+@@ -25264,19 +25264,19 @@
      var _submenuItem_ = submenuItem;
      var _menuItem_ = menuItem;
      
@@ -983,7 +983,7 @@
    },
    
    /**
-@@ -25308,12 +25308,11 @@
+@@ -25312,12 +25312,11 @@
        submenuElement.className = "MainMenuSubMenu";
        Element.setStyle(submenuElement, {display: "none"});
        

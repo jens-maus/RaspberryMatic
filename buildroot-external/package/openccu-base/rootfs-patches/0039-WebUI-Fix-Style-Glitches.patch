@@ -3788,7 +3788,7 @@
          "</tr>" +
        "</table>";
  
-@@ -31896,13 +31896,11 @@
+@@ -31849,13 +31849,11 @@
        case ID_ROOMS:
          this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
          this.setWidth75Perc();
@@ -3802,7 +3802,7 @@
          this.setFile( "/pages/msg/popupPropEditor.htm" );
          break;
        case ID_TRANSFER_PARAMETERS:
-@@ -33486,7 +33484,7 @@
+@@ -33439,7 +33437,7 @@
    var opts = {
      evalScripts: true,
      onComplete: function(trans) {
@@ -3811,7 +3811,7 @@
      }
    };
    var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;
-@@ -46061,7 +46059,7 @@
+@@ -46014,7 +46012,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3820,7 +3820,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -46113,8 +46111,8 @@
+@@ -46066,8 +46064,8 @@
    
    if (!form) return;
  
@@ -3831,7 +3831,7 @@
  
    switch (form[gd_type])
    {
-@@ -46210,7 +46208,7 @@
+@@ -46163,7 +46161,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

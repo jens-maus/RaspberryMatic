@@ -214,7 +214,7 @@
 +}
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -38871,6 +38871,15 @@
+@@ -38824,6 +38824,15 @@
      if (this.opts.stTemp) {
        this.showActualTemp();
      }
@@ -230,7 +230,7 @@
      if (this.opts.idComfort && this.opts.idLowering) {
        this.showComfortEco();
      }
-@@ -39065,6 +39074,26 @@
+@@ -39018,6 +39027,26 @@
      jQuery("#"+this.id +"tblShowTemp").show();
    },
  
@@ -257,7 +257,7 @@
    showHolidayEndTime: function() {
      var stopTime = this.getHolidayEndTime();
      if (stopTime) {
-@@ -39180,6 +39209,8 @@
+@@ -39133,6 +39162,8 @@
      this.setSControl("ACTUAL_TEMPERATURE", this.ACTUAL_TEMPERATURE);
      this.setSControl("HUMIDITY", this.HUMIDITY);
      this.setSControl("WINDOW_STATE", this.WINDOW_STATE);
@@ -266,7 +266,7 @@
      this.setSlider();
      this.initElements();
      this.bindEvents();
-@@ -39192,6 +39223,8 @@
+@@ -39145,6 +39176,8 @@
      this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
      //this.FROST_PROTECTION = opts.FROST_PROTECTION;
      this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);

@@ -27953,6 +27953,18 @@ BidcosRfPage =
  //   }
   },
   
+  // Text for the connection state of a LAN gateway (Interface.getLGWConnectionStatus)
+  getLGWConnectionText: function(connstat)
+  {
+    if (connstat == "NO_ERROR") {
+      return translateKey("lanGatewayLblConnected");
+    }
+    if (connstat == "WRONG_KEY") {
+      return translateKey("errorWrongPassword");
+    }
+    return translateKey("lanGatewayLblNotConnected");
+  },
+  
   onUpdate: function()
   { 
     var that = this;
@@ -27976,61 +27988,29 @@ BidcosRfPage =
         for (var i = 0, len = rfGateways.length; i < len; i++)
         {
    	      if(globalLGWTypes.HMLGW2 == rfGateways[i].getType()) {//NEW RF Gateway
-   	        //var hmlgw2GW = rfGateways[i];
-   	        var lgwStatus = null;
-		    homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-RF", "serial" : rfGateways[i].getAddress()}, function(lgwStatus) {
-		        var textB = "";
-		        var lgw = null;
-		        if(lgwStatus) 
+   	        // Keep the gateway of this request, the loop variable is stale in the callback
+   	        (function(lgw) {
+		      homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-RF", "serial" : lgw.getAddress()}, function(lgwStatus) {
+		        var textB = translateKey("lanGatewayLblNotActive");
+		        lgw.setDCState("");
+		        lgw.setFWState("");
+		        if (lgwStatus && lgwStatus.serial == lgw.getAddress())
 		        {
-				    for(var j = 0; j < rfGateways.length; j++) {
-				    	if(rfGateways[j].getAddress() == lgwStatus.serial) {
-				    	 lgw = rfGateways[j];
-				    	}
-				    }
-				    if (lgw) {
-				    	lgw.setDCState("");
-				    	lgw.setFWState("");
-				    }
-				    for (var loop = 0; lgw && loop < gatewayStatus.length; loop++) {
-				    	var gatewaysn = gatewayStatus[loop].address;
-				    	if (lgwStatus.serial == gatewaysn) {
-				    		var dutyCycle = gatewayStatus[loop].dutyCycle;
-				    		var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
-				    		lgw.setDCState(textDC);
+		          for (var loop = 0; loop < gatewayStatus.length; loop++) {
+		            if (lgwStatus.serial == gatewayStatus[loop].address) {
+		              var dutyCycle = gatewayStatus[loop].dutyCycle;
+		              var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";
+		              lgw.setDCState(textDC);
 
-				    		var textFW = (gatewayStatus[loop].fwVersion == null) ? "" : String(gatewayStatus[loop].fwVersion);
-				    		lgw.setFWState(textFW);
-				    	}
-				    }
-		        	if(lgw) 
-		        	{
-					  if(lgwStatus.connstat == "NO_ERROR") {
-					    textB = translateKey("lanGatewayLblConnected");
-					  }
-					  else if(lgwStatus.connstat == "CONNECT_FAILED") {
-					    textB = translateKey("lanGatewayLblNotConnected");
-					  }
-					  else if(lgwStatus.connstat == "WRONG_KEY") {
-					    textB = translateKey("errorWrongPassword");
-					  }
-					  else if(lgwStatus.connstat == "") {
-					  	textB = translateKey("lanGatewayLblNotConnected");
-					  }
-					  else {
-					    textB = translateKey("lanGatewayLblNotConnected");
-					  }
-					}
-					else 
-					{
-				      textB = translateKey("lanGatewayLblNotActive");
-					}
-					lgw.setState(textB);
-			  }//if lgwstatus
-			  else {
-			  	lgw.setState(translateKey("lanGatewayLblNotActive"));
-			  }
-		    });
+		              var textFW = (gatewayStatus[loop].fwVersion == null) ? "" : String(gatewayStatus[loop].fwVersion);
+		              lgw.setFWState(textFW);
+		            }
+		          }
+		          textB = BidcosRfPage.getLGWConnectionText(lgwStatus.connstat);
+		        }
+		        lgw.setState(textB);
+		      });
+   	        })(rfGateways[i]);
    	      }
 		  else //all other rf gateways
 		  {
@@ -28095,44 +28075,17 @@ BidcosRfPage =
     /* Wired Gateways */
     for(var k = 0, length = wiredGateways.length; k < length ; k++)
     {
-      	var wiredLGW = wiredGateways[k];
-		    homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-Wired", "serial" : wiredLGW.getAddress()}, function(lgwStatus) {
-		    var textB = "";
-		    var lgw = null;
-		    if(lgwStatus) 
-		    {
-				for(var j = 0; j < wiredGateways.length; j++) {
-					if(wiredGateways[j].getAddress() == lgwStatus.serial) {
-					 lgw = wiredGateways[j];
-					}
-				}
-		    	if(lgw) 
-		    	{
-				  if(lgwStatus.connstat == "NO_ERROR") {
-					textB = translateKey("lanGatewayLblConnected");
-				  }
-				  else if(lgwStatus.connstat == "CONNECT_FAILED") {
-					textB = translateKey("lanGatewayLblNotConnected");
-				  }
-				  else if(lgwStatus.connstat == "WRONG_KEY") {
-					textB = translateKey("errorWrongPassword");
-				  }
-				  else if(lgwStatus.connstat == "") {
-				  	textB = translateKey("lanGatewayLblNotConnected");
-				  }
-				  else {
-					textB = translateKey("lanGatewayLblNotConnected");
-				  }
-				}
-				else {
-				  textB = translateKey("lanGatewayLblNotActive");
-				}
-				lgw.setState(textB);
-		  }//if lgwstatus
-		  else {
-		  	lgw.setState(translateKey("lanGatewayLblNotActive"));
+      // Keep the gateway of this request, the loop variable is stale in the callback
+      (function(lgw) {
+		homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-Wired", "serial" : lgw.getAddress()}, function(lgwStatus) {
+		  var textB = translateKey("lanGatewayLblNotActive");
+		  if (lgwStatus && lgwStatus.serial == lgw.getAddress())
+		  {
+		    textB = BidcosRfPage.getLGWConnectionText(lgwStatus.connstat);
 		  }
+		  lgw.setState(textB);
 		});
+      })(wiredGateways[k]);
     }
   },
   

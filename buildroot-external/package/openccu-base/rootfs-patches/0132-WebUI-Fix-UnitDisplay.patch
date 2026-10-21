@@ -457,7 +457,7 @@
      }
      selBox += "</select>";
  
-@@ -31793,7 +31793,7 @@
+@@ -31746,7 +31746,7 @@
        value = min;
      }
  
@@ -466,7 +466,7 @@
        value = roundValue05(value);
      }
  
-@@ -39102,7 +39102,7 @@
+@@ -39055,7 +39055,7 @@
      this.min = min;
      this.max = max;
      this.factor = 100/(max-min);
@@ -475,7 +475,7 @@
      this.statusOFF = "OFF";
      this.statusON = "ON";
      this.opts = opts;
-@@ -39602,7 +39602,7 @@
+@@ -39555,7 +39555,7 @@
      this.max = (this.confTempMax > 30) ? 30 : this.confTempMax;
      this.off = (this.confTempMin < 5) ? this.offTemp : this.confTempMin;
      this.on = (this.confTempMax > 30) ? this.onTemp : this.confTempMax;
@@ -484,7 +484,7 @@
      this.factor = 100/(this.max-this.min);
      this.iViewOnly = false;
      this.bSliderPosFlag = false;
-@@ -40136,7 +40136,7 @@
+@@ -40089,7 +40089,7 @@
      this.min = min;
      this.max = max;
      this.factor = 100/(max-min);
@@ -493,7 +493,7 @@
      if(bSliderPosFlag) 
      {
          this.bSliderPosFlag = bSliderPosFlag;
-@@ -42215,12 +42215,19 @@
+@@ -42168,12 +42168,19 @@
    var isFarVal = false;
    if (!checkDecimal(tmpInput)) {
      // Zeichen für Temperaturangaben rausfiltern
@@ -513,7 +513,7 @@
      if (tmpInput.indexOf('°F') != -1) {
        tmpInput = tmpInput.substr(0, tmpInput.indexOf('°F'));
        isFarVal = true;      
-@@ -43060,7 +43067,7 @@
+@@ -43013,7 +43020,7 @@
    },
  
    changeToKilo: function() {
@@ -522,7 +522,7 @@
    },
  
    setEnergyCounterPanel: function() {
-@@ -43136,8 +43143,8 @@
+@@ -43089,8 +43096,8 @@
            energyCostCCU = ((energyConsumptionCCU * this.EnergyPrice) / unitFactorCCU).toFixed(2) + " " + this.energyConfig.currency,
            energyCostDevice = ((energyConsumptionDevice * this.EnergyPrice) / unitFactorDevice).toFixed(2) + " " + this.energyConfig.currency;
          if (this.measurementType == this.sensorTypeID.gas) {
@@ -533,7 +533,7 @@
          } else {
            j_energyCostCCU.text(energyCostCCU).show();
            j_energyCostDevice.text(energyCostDevice).show();
-@@ -51011,7 +51018,7 @@
+@@ -50964,7 +50971,7 @@
        //msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\"starttime_"   +dayidx +"_"+i+"\" disabled=\"disabled\" type=\"text\" value=\""+ this.tom_toTime( endtime) +"\">Uhr</td>";
        msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\""+prgNr+"starttime_" + dayidx + "_" + i + "\" disabled=\"disabled\" type=\"text\" value=\"" + this.tom_toTime(endtime) + "\">" + translateKey('lblProgramTimeExtension') + "</td>";
        msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\""+prgNr+"endtime_" + dayidx + "_" + i + "\" " + (i == timeouts.length - 1 ? 'disabled=\"disabled\"' : '') + " type=\"text\" value=\"" + this.tom_toTime(timeouts[i][tom_endtime]) + "\" onblur=\""+prgNr+"tom.tom_checkAndSetTime ('" + day + "', this, " + i + "); document.getElementById('"+prgNr+"starttime_" + dayidx + "_" + (i + 1) + "').value=this.value; \">" + translateKey('lblProgramTimeExtension') + "</td>";

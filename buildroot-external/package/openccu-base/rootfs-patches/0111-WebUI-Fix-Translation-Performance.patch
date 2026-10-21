@@ -106,7 +106,7 @@
      }
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -26961,16 +26961,17 @@
+@@ -26978,16 +26978,17 @@
        setFooter(this.FLAT_FOOTER_HTML);
      }
  

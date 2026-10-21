@@ -154,7 +154,7 @@
    margin:0;
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25976,14 +25976,18 @@
+@@ -25993,14 +25993,18 @@
    showUpdate: function() {
      var fn = function() {
        var result = homematic.com.isUpdateAvailable();

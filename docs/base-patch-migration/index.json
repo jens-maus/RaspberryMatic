@@ -484,14 +484,14 @@
       "sha256": "baf3e4fae0ca8d2a59afc8e8838c2405e58c42a8fff201305fe3ad42bc538654"
     },
     {
-      "added": 165,
+      "added": 168,
       "files": [
         "www/config/ic_deviceparameters.cgi",
         "www/webui/webui.js"
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
       "removed": 10,
-      "sha256": "30d6114d814b9bb676512bfd3d6d3cb6995764af4c66684b604991315c2ff7d8"
+      "sha256": "1f0e9b4228f1f7dae4af7d5a9c9c46a31f549c6ca42845e8d07e6349c692f902"
     },
     {
       "added": 74,

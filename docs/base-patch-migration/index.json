@@ -491,7 +491,7 @@
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
       "removed": 10,
-      "sha256": "5e7a8d4304901fe97ad6d76439508c7e7341a8c6cbbba52a866c682739f460f6"
+      "sha256": "f3c5b49e9116c0e1ae8efc622992688011459a9e9bcad5330baa160e8951e302"
     },
     {
       "added": 74,

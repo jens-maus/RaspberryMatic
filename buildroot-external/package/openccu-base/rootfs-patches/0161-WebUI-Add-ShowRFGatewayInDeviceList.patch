@@ -156,16 +156,16 @@
            <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
-@@ -12372,6 +12372,7 @@
- 
- 
-       this.interfaceName = data["interface"];
+@@ -12379,6 +12379,7 @@
+       this.typeDescription = deviceType.description;
+       this.isDeletable = deviceType.isDeletable();
+       this.isOperateGroupOnly = (data["operateGroupOnly"] == "true") ? true : false;
 +      this.interfaceDisplayName = data["interface_displayname"];
-       this.isReadyConfig = data["isReady"];
-       this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
-       this.deviceType = deviceType;
-@@ -12620,6 +12621,13 @@
-     this.rssiPeerColor = getColorCode(this.RSSI_PEER);
+       this.deviceInputCheck = false;
+ 
+       if (this.typeName.indexOf("-WGS") != -1) {
+@@ -12674,6 +12675,14 @@
+     return this.deviceInputCheck;
    },
  
 +  updateInterfaceDisplayName: function(interfaceDisplayName) {
@@ -175,10 +175,11 @@
 +      devInterfaceDisplayNameCell.innerHTML = String(interfaceDisplayName).escapeHTML();
 +    }
 +  },
-   /**
-    * Legt den Namen des Geräts fest.
-    **/
-@@ -12832,6 +12840,7 @@
++
+   m_onUpdateChannel: function(channel, eventArgs)
+   {
+     this.update();
+@@ -12832,6 +12841,7 @@
      {
        var id = data["id"];
        device = this.devices[id];
@@ -186,7 +187,7 @@
  
        if (typeof(device) != "undefined") 
        {
-@@ -12944,6 +12953,49 @@
+@@ -12944,6 +12954,58 @@
      return singles;
    },
    
@@ -233,22 +234,6 @@
 +    }
 +    return dispname;
 +  },
-   /**
-    * Lädt die Geräteliste erneut
-    **/
-@@ -12994,6 +13046,7 @@
-         {
-           var id = data["id"];
-           var device = self.devices[id];
-+          data["interface_displayname"] =  self.loadIfDisplayName(data);
- 
-           if (typeof(device) != "undefined")
-           {
-@@ -13053,6 +13106,16 @@
-       }
-     });
-   },
-+  
 +  updateInterfaceDisplayName:function(addr,gwName) {
 +    var _this_ = this;
 +    for (var id in _this_.devices) {
@@ -258,9 +243,17 @@
 +      }
 +    }
 +  },
- 
    /**
-    * Startet die Akualisierung eines Geräts.
+    * Lädt die Geräteliste erneut
+    **/
+@@ -12994,6 +13056,7 @@
+         {
+           var id = data["id"];
+           var device = self.devices[id];
++          data["interface_displayname"] =  self.loadIfDisplayName(data);
+ 
+           if (typeof(device) != "undefined")
+           {
 @@ -26290,7 +26353,7 @@
              (this.TypeNameFilter.match(device.typeName))                 &&
              (this.DescriptionFilter.match(translateKey(device.typeDescription)))       &&

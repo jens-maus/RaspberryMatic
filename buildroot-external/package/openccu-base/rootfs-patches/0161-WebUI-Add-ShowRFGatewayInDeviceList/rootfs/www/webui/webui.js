@@ -12372,7 +12372,6 @@ Device = Class.create({
 
 
       this.interfaceName = data["interface"];
-      this.interfaceDisplayName = data["interface_displayname"];
       this.isReadyConfig = data["isReady"];
       this.enabledServiceMsg = (data["enabledServiceMsg"] == "true") ? true : false;
       this.deviceType = deviceType;
@@ -12380,6 +12379,7 @@ Device = Class.create({
       this.typeDescription = deviceType.description;
       this.isDeletable = deviceType.isDeletable();
       this.isOperateGroupOnly = (data["operateGroupOnly"] == "true") ? true : false;
+      this.interfaceDisplayName = data["interface_displayname"];
       this.deviceInputCheck = false;
 
       if (this.typeName.indexOf("-WGS") != -1) {
@@ -12621,13 +12621,6 @@ Device = Class.create({
     this.rssiPeerColor = getColorCode(this.RSSI_PEER);
   },
 
-  updateInterfaceDisplayName: function(interfaceDisplayName) {
-    this.interfaceDisplayName = interfaceDisplayName;
-    var devInterfaceDisplayNameCell = document.getElementById('DeviceInterfaceDisplayName' + this.id);
-    if (devInterfaceDisplayNameCell !== null && typeof(devInterfaceDisplayNameCell) !== 'undefined') {
-      devInterfaceDisplayNameCell.innerHTML = String(interfaceDisplayName).escapeHTML();
-    }
-  },
   /**
    * Legt den Namen des Geräts fest.
    **/
@@ -12680,6 +12673,14 @@ Device = Class.create({
 
   getDeviceInputCheck: function() {
     return this.deviceInputCheck;
+  },
+
+  updateInterfaceDisplayName: function(interfaceDisplayName) {
+    this.interfaceDisplayName = interfaceDisplayName;
+    var devInterfaceDisplayNameCell = document.getElementById('DeviceInterfaceDisplayName' + this.id);
+    if (devInterfaceDisplayNameCell !== null && typeof(devInterfaceDisplayNameCell) !== 'undefined') {
+      devInterfaceDisplayNameCell.innerHTML = String(interfaceDisplayName).escapeHTML();
+    }
   },
 
   m_onUpdateChannel: function(channel, eventArgs)
@@ -12996,6 +12997,15 @@ DeviceList = Singleton.create({
     }
     return dispname;
   },
+  updateInterfaceDisplayName:function(addr,gwName) {
+    var _this_ = this;
+    for (var id in _this_.devices) {
+      var device = _this_.devices[id];
+      if (device.address === addr) {
+        device.updateInterfaceDisplayName(gwName);
+      }
+    }
+  },
   /**
    * Lädt die Geräteliste erneut
    **/
@@ -13105,16 +13115,6 @@ DeviceList = Singleton.create({
         }
       }
     });
-  },
-  
-  updateInterfaceDisplayName:function(addr,gwName) {
-    var _this_ = this;
-    for (var id in _this_.devices) {
-      var device = _this_.devices[id];
-      if (device.address === addr) {
-        device.updateInterfaceDisplayName(gwName);
-      }
-    }
   },
 
   /**

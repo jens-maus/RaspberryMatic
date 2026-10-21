@@ -491,7 +491,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"
           <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n
           <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n
           <td class=\"DeviceListCell\" >${device.address}${device.rfAddress}<\/td>\n
-          <td class=\"DeviceListCell\" id=\"DeviceInterfaceDisplayName${device.id}\" >${device.interfaceDisplayName}<\/td>\n
+          <td class=\"DeviceListCell\" id=\"DeviceInterfaceDisplayName${device.id}\" >${device.interfaceDisplayName|default:\'\'|h}<\/td>\n
           <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
           <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
           <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -12652,7 +12652,7 @@ Device = Class.create({
     this.interfaceDisplayName = interfaceDisplayName;
     var devInterfaceDisplayNameCell = document.getElementById('DeviceInterfaceDisplayName' + this.id);
     if (devInterfaceDisplayNameCell !== null && typeof(devInterfaceDisplayNameCell) !== 'undefined') {
-      devInterfaceDisplayNameCell.innerHTML = interfaceDisplayName;
+      devInterfaceDisplayNameCell.innerHTML = String(interfaceDisplayName).escapeHTML();
     }
   },
   /**
@@ -12985,8 +12985,8 @@ DeviceList = Singleton.create({
     this.BidCosGateways=[];	   
     this.allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
     var rfGateways = homematic("BidCoS_RF.getConfigurationRF");
-    if (rfGateways) {
-      for (i = 0, len = rfGateways.interfaces.length; i < len; i++) {
+    if (rfGateways && rfGateways.interfaces) {
+      for (var i = 0, len = rfGateways.interfaces.length; i < len; i++) {
         var gateway = rfGateways.interfaces[i];
         if (gateway.type === globalLGWTypes.HMLGW2) {
           this.BidCosGateways.push(
@@ -13001,7 +13001,7 @@ DeviceList = Singleton.create({
         }
       }
       this.BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
-      for (i = 0, len = this.BidCosGateways.length; i < len; i++) {
+      for (var i = 0, len = this.BidCosGateways.length; i < len; i++) {
         DeviceListPage.INTERFACES.push({id:this.BidCosGateways[i].m_userName, name:this.BidCosGateways[i].m_userName});
       }
     }

@@ -484,14 +484,14 @@
       "sha256": "baf3e4fae0ca8d2a59afc8e8838c2405e58c42a8fff201305fe3ad42bc538654"
     },
     {
-      "added": 179,
+      "added": 191,
       "files": [
         "www/config/ic_deviceparameters.cgi",
         "www/webui/webui.js"
       ],
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
-      "removed": 11,
-      "sha256": "e93d1b707af7afb1aba9877c1bef6a88b8e1e3f1f97871d4a0d23b27b4c90ecf"
+      "removed": 12,
+      "sha256": "c048fde7ad6171dcff8d7d95101f42915a3434611cfee664a209ee221a71936a"
     },
     {
       "added": 74,
@@ -545,7 +545,7 @@
       ],
       "patch": "0170-WebUI-RegexSearchInDeviceLists.patch",
       "removed": 11,
-      "sha256": "b9a65f90eaa260acd17903de750cc1ae159429c7e91824b1234dd460290d96e1"
+      "sha256": "ff1f7f385e633139ce060ac4a4a74ab0324534a66961933826b5f30fe2864fc9"
     },
     {
       "added": 60,
@@ -558,7 +558,7 @@
       ],
       "patch": "0171-WebUI-Add-HmIPKeyTransceiverCentralLinkConfiguration.patch",
       "removed": 0,
-      "sha256": "4e1a40c90c774b39be5bc74f55674b5b612b922d47d32a841c8be0f05e3fd80b"
+      "sha256": "75d41c91558897d7b6894f264f45b5a89341f1417d056b40472b269e4b873c73"
     },
     {
       "added": 43,
@@ -570,7 +570,7 @@
       ],
       "patch": "0173-WebUI-SendPOSTRequest.patch",
       "removed": 19,
-      "sha256": "ef9f90ee4203823c74f7af9b7fd2d39902fa3a61d26f550195512c6286f328b4"
+      "sha256": "0e19644c060476d980285a2f5565ba623260f50a521148d2d13b148e504763fd"
     },
     {
       "added": 120,
@@ -581,7 +581,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "17e8d911d619c7ad4c6a7eb16286aae71b53748497b8ee237bd890d093e80efc"
+      "sha256": "737d9a0f5897a598cabb2308ffffcd88d54eaaa1970c675570c4bacd1f3b4143"
     },
     {
       "added": 4,
@@ -606,7 +606,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "121580b6f34e1cbca04ca95cc44438f0562268a2fa252edf7e5b1598e6d84948"
+      "sha256": "e9d9de2d90d3e1ba4c54a62b791e9b79e3290e03e6accca89db405c1e3831f07"
     }
   ],
   "schema": 1,

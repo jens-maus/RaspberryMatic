@@ -12956,6 +12956,14 @@ DeviceList = Singleton.create({
   
   loadBidCosGateways: function()
   {
+    // remove the gateway entries of a previous load from the interface filter
+    if (this.BidCosGatewayFilters) {
+      for (var j = 0; j < this.BidCosGatewayFilters.length; j++) {
+        var idx = DeviceListPage.INTERFACES.indexOf(this.BidCosGatewayFilters[j]);
+        if (idx > -1) { DeviceListPage.INTERFACES.splice(idx, 1); }
+      }
+    }
+    this.BidCosGatewayFilters = [];
     this.BidCosGateways=[];	   
     this.allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
     var rfGateways = homematic("BidCoS_RF.getConfigurationRF");
@@ -12976,7 +12984,9 @@ DeviceList = Singleton.create({
       }
       this.BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
       for (var i = 0, len = this.BidCosGateways.length; i < len; i++) {
-        DeviceListPage.INTERFACES.push({id:this.BidCosGateways[i].m_userName, name:this.BidCosGateways[i].m_userName});
+        var filterEntry = {id:this.BidCosGateways[i].m_userName, name:this.BidCosGateways[i].m_userName};
+        this.BidCosGatewayFilters.push(filterEntry);
+        DeviceListPage.INTERFACES.push(filterEntry);
       }
     }
   },
@@ -13046,9 +13056,9 @@ DeviceList = Singleton.create({
     this.devices  = {};
     this.channels = {};
     this.groups   = {};
-    // refresh the gateway assignments, they may have changed since the last load
+    // refresh the gateways and their assignments, they may have changed since the last load
     if (typeof this.BidCosGateways !== 'undefined') {
-      this.allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
+      this.loadBidCosGateways();
     }
 
     var self=this;
@@ -28550,7 +28560,7 @@ BidcosRfPage.Device.prototype =
         "interfaceId": gateway.getAddress(),
         "roaming": roaming
       });
-      if (result !== true) { return; }
+      if (result !== true) { return false; }
       //jQuery("."+gateway.getAddress()).attr("class","bidcosrf_tablecell " + gateway.getAddress().replace(/\s+/g,""));
       this.setGateway(gateway.getAddress());
       this.setRoaming(roaming);
@@ -29284,7 +29294,8 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
    **/
   ok: function()
   {
-    if (this.m_action) { this.m_action(this); }
+    // keep the dialog open if the assignment was rejected
+    if (this.m_action && this.m_action(this) === false) { return; }
     this.close();
   },
   

@@ -823,7 +823,7 @@
  #webuiloader_wrapper {
    width: 100%;
    height: 100%;
-@@ -7030,11 +7036,12 @@
+@@ -7041,11 +7047,12 @@
  /* rega\pages\tabs\admin\linkprog.htm */
  
  .CLASS05400 {
@@ -837,7 +837,7 @@
  }
  
  .CLASS05402 {
-@@ -7045,16 +7052,54 @@
+@@ -7056,16 +7063,54 @@
  	text-align:center ! important;
  }
  
@@ -893,7 +893,7 @@
  /* rega\pages\tabs\favorites.htm */
  
  .CLASS05600 {
-@@ -7134,11 +7179,26 @@
+@@ -7145,11 +7190,26 @@
  /* pages\tabs\statusview.htm */
  
  .CLASS05700 {
@@ -921,7 +921,7 @@
  }
  
  .CLASS05702 {
-@@ -7275,13 +7335,32 @@
+@@ -7286,13 +7346,32 @@
  /* rega\pages\tabs\user\systemConfigUser.htm */
  
  .CLASS06100 {
@@ -957,7 +957,7 @@
  .CLASS06200 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25183,19 +25183,19 @@
+@@ -25281,19 +25281,19 @@
      var _submenuItem_ = submenuItem;
      var _menuItem_ = menuItem;
      
@@ -983,7 +983,7 @@
    },
    
    /**
-@@ -25231,12 +25231,11 @@
+@@ -25329,12 +25329,11 @@
        submenuElement.className = "MainMenuSubMenu";
        Element.setStyle(submenuElement, {display: "none"});
        

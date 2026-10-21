@@ -267,7 +267,7 @@
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
-@@ -15088,9 +15089,7 @@
+@@ -15186,9 +15187,7 @@
        var self = this;
        if (this.match(channel)) {
          if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
@@ -278,7 +278,7 @@
          } else {
            result.push(channel);
          }
-@@ -26491,7 +26490,6 @@
+@@ -26589,7 +26588,6 @@
      var result = true;
      switch (channel.channelType) {
        case "ALARM_COND_SWITCH_TRANSMITTER":

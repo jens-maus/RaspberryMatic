@@ -1,6 +1,6 @@
 --- a/www/webui/js/lang/de/translate.lang.extension.js
 +++ b/www/webui/js/lang/de/translate.lang.extension.js
-@@ -644,9 +644,14 @@
+@@ -645,9 +645,14 @@
      "dialogRenameVirtualGroupDeviceTitle" : "Umbenennung des virtuellen Ger%E4tes",
      "dialogVirtualGroupDeviceContent" : "M%F6chten Sie das virtuelle Ger%e4t der Gruppe sowie die entsprechenden Kan%E4le mit dem Gruppennamen %FCberschreiben?",
      "dialogShowDeviceFirmwareTitle" : "Es stehen Ger%E4te-Firmware-Updates zur Verf%FCgung",
@@ -18,7 +18,7 @@
      "dialogShowDeviceFirmwareLinkDownload": "Zum Downloadbereich",
      "hintDevFwAlreadyUploaded" : "" +
        "Die aktuellste Firmware des Ger%E4tes befindet sich bereits auf der " + HMIdentifier.de.CCUShortName + ".\n"+
-@@ -1101,4 +1106,4 @@
+@@ -1102,4 +1107,4 @@
  });
  
  langJSON.de.hintActivateDetectorSelfTest += langJSON.de.checkSmokeDetectorSelfTest;
@@ -27,7 +27,7 @@
 +langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
 --- a/www/webui/js/lang/en/translate.lang.extension.js
 +++ b/www/webui/js/lang/en/translate.lang.extension.js
-@@ -644,9 +644,14 @@
+@@ -645,9 +645,14 @@
      "dialogRenameVirtualGroupDeviceTitle" : "Rename the virtual device",
      "dialogVirtualGroupDeviceContent" : "Would you like to rename the virtual device of the group and its channels to the group name?",
      "dialogShowDeviceFirmwareTitle" : "There are new device firmware updates available",
@@ -47,7 +47,7 @@
        "The latest firmware version of the device is alreay installed on the  " + HMIdentifier.en.CCUShortName + ".\n"+
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -18775,6 +18775,20 @@
+@@ -18796,6 +18796,20 @@
    MessageBox.show(title, content,'', 475, 450);
  };
  
@@ -68,7 +68,7 @@
  StatusDisplayDialogAcousticEPaper = Class.create({
   
    initialize: function(title, content, value, callback, contentType) {
-@@ -25731,11 +25745,28 @@
+@@ -25752,11 +25766,28 @@
      return false;
    },*/
  
@@ -97,7 +97,7 @@
        this.newFwCounter = 0;
        this.devIndex = 0;
        if (this.devList.length == 0) {
-@@ -25845,12 +25876,23 @@
+@@ -25866,12 +25897,23 @@
          newFW = resultMajorMinor;
        }
  
@@ -123,7 +123,7 @@
          }
          self.newFwCounter++;
        }
-@@ -25859,6 +25901,40 @@
+@@ -25880,6 +25922,40 @@
      if (self.devIndex < self.devList.length) {
        self.fetchAndSetDeviceVersion();
      } else {
@@ -164,7 +164,7 @@
        self.fetchDeviceList = false;
        self.deleteScriptElements();
        if (self.newFwCounter > 0) {
-@@ -25885,26 +25961,41 @@
+@@ -25906,26 +25982,41 @@
    },
  
    showAvailableDeviceFirmware: function() {

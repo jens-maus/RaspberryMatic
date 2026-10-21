@@ -15,7 +15,7 @@
        puts "  s += \"</tr>\";"
        puts "  s += \"</table>\";"
        puts "  setFooter(s);"
-@@ -62,7 +62,7 @@
+@@ -153,7 +153,7 @@
        puts "  var s = \"\";"
        puts "  s += \"<table cellspacing='8'>\";"
        puts "  s += \"<tr>\";"
@@ -24,7 +24,7 @@
        puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonTake' class='FooterButton' onclick='goBack=true; SaveDeviceParameters();'>\"+translateKey('footerBtnTransfer')+\"</div></td>\";"
        puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonOK' class='FooterButton' onclick='goBack=false; SaveDeviceParameters();'>\"+translateKey('footerBtnOk')+\"</div></td>\";"
        puts "  s += \"</tr>\";"
-@@ -1409,7 +1409,7 @@
+@@ -1504,7 +1504,7 @@
    
    puts "<TR>"
    puts "<td class=\"CLASS22012\" onclick=\"SaveDeviceParameters();\"><div class=\"CLASS21000\">OK</div></td>"
@@ -170,7 +170,7 @@
                  integer iStatusOnly = 1;
 --- a/www/webui/style.css
 +++ b/www/webui/style.css
-@@ -6845,6 +6845,7 @@
+@@ -6856,6 +6856,7 @@
  
  .CLASS05004 {
  	background-color:$_(white); /* white */
@@ -180,7 +180,7 @@
  .CLASS05005 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31375,7 +31375,7 @@
+@@ -31483,7 +31483,7 @@
      };
      new Ajax.Request(url,opts);
    },
@@ -189,7 +189,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31387,12 +31387,12 @@
+@@ -31495,12 +31495,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -204,7 +204,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31405,12 +31405,12 @@
+@@ -31513,12 +31513,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -219,7 +219,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31422,7 +31422,7 @@
+@@ -31530,7 +31530,7 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}

@@ -532,7 +532,7 @@
        "ENUM" {
 --- a/www/config/ic_deviceparameters.cgi
 +++ b/www/config/ic_deviceparameters.cgi
-@@ -406,7 +406,7 @@
+@@ -497,7 +497,7 @@
        set PROFILE_PNAME(DESCRIPTION) $param
        if {$param_descr(TYPE) != "ENUM" && $showOption == 0} {
          append s1 "<tr><td><span class=\"stringtable_value\">$dev_descr_sender(TYPE)|$PROFILE_PNAME(DESCRIPTION)</span></td>"
@@ -541,7 +541,7 @@
          append s1 "<td>$unit&nbsp;($min-$max)</td>"
          append s1 "<td><input type=\"text\"  value=\"$value_tmp\" id=\"separate_CHANNEL_$ch\_$i\" name='$param' style=\"display:none\";\"></td>"
        } elseif {$showOption == 1} { 
-@@ -440,7 +440,7 @@
+@@ -531,7 +531,7 @@
              append s1 "<option>\${stringTableEnterValue}</option>"
            append s1 "</select>"
            
@@ -552,7 +552,7 @@
            append s1 "</td>"
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -47608,50 +47608,65 @@
+@@ -47716,50 +47716,65 @@
      srcElm.value = value;
    }
  
@@ -632,7 +632,7 @@
      }
      srcElm.setAttribute("valvalid", "true");
    }
-@@ -47659,9 +47674,9 @@
+@@ -47767,9 +47782,9 @@
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";

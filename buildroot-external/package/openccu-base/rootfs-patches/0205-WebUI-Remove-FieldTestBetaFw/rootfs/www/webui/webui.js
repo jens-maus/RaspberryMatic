@@ -35060,11 +35060,15 @@ iseArraySwap = function(arr,entryA,entryB)
 
 iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
 {
-  conInfo("Sort multi array2.");
+  conInfo("Sort multi array.");
   const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-  /* arr.forEach( x => { if( typeof x[dsc] == "undefined" ) { x[dsc] = ""; } } ); */
-  arr.sort( (x, y) => { return collator.compare(x[dsc], y[dsc]); } );
-  if( dir === 1 ) { arr.reverse(); }
+  // a missing value sorts as an empty string; the stable sort keeps rows with equal values in order in both directions
+  var order = (dir === 1) ? -1 : 1;
+  arr.sort( (x, y) => {
+    var a = (typeof x[dsc] == "undefined") ? "" : String(x[dsc]);
+    var b = (typeof y[dsc] == "undefined") ? "" : String(y[dsc]);
+    return order * collator.compare(a, b);
+  } );
   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);
 };
 

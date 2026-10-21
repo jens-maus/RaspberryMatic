@@ -730,7 +730,7 @@
   "in_progress": {
     "base_merge_commit": "de4e9e8ffba1fbe5d3309ed198c2be401405f6c4",
     "base_pr": 230,
-    "cleanup_pr": null,
+    "cleanup_pr": 4497,
     "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

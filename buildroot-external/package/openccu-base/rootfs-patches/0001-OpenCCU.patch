@@ -1258,7 +1258,7 @@
    },
  
    /*evalVersionAGreaterThanB: function(a, b) {
-@@ -29390,7 +29390,7 @@
+@@ -29344,7 +29344,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
@@ -1267,7 +1267,7 @@
      this.m_URLServer = "https://"+this.preURL+"update.homematic.com";
      this.m_fieldTestURLServer = "https://fieldtest-ccu3-update.homematic.com";
  
-@@ -29401,7 +29401,7 @@
+@@ -29355,7 +29355,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -1276,7 +1276,7 @@
      $("body").appendChild(script);
    },
  
-@@ -34844,11 +34844,11 @@
+@@ -34798,11 +34798,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {

@@ -172,7 +172,7 @@
  
      if (this.prevDownloadURL != this.downloadURL) {
        this.devList = [];
-@@ -29881,7 +29875,6 @@
+@@ -29835,7 +29829,6 @@
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
      this.m_product = "HM-RASPBERRYMATIC";
      this.m_URLServer = "https://"+this.preURL+"update.homematic.com";
@@ -180,7 +180,7 @@
  
      this.serial = homematic("CCU.getSerial");
      this.serial = ((this.serial != "") && (typeof this.serial != "undefined") && (this.serial != null)) ? this.serial : "0";
-@@ -29949,19 +29942,13 @@
+@@ -29903,19 +29896,13 @@
    },
  
    getListOfAvailableFirmware: function(callback) {
@@ -201,7 +201,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -37199,22 +37186,6 @@
+@@ -37153,22 +37140,6 @@
    dlg.resetHeight();
  };
  

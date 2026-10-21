@@ -425,13 +425,13 @@
       "sha256": "20f701e74601950a17f57fb19c8ca46e0a5c1409e94f21a103c013a75b2bafad"
     },
     {
-      "added": 6,
+      "added": 9,
       "files": [
         "www/webui/webui.js"
       ],
       "patch": "0145-WebUI-NaturalSorting.patch",
-      "removed": 47,
-      "sha256": "1e6568f721fa429aeb82b2c2e722749d40724930abc380bfd5290a616ab4a943"
+      "removed": 46,
+      "sha256": "60e28f9ad9b1bd009e80657515f25e4a77e01f8d05b7502ba8909d6884b7a80c"
     },
     {
       "added": 45,
@@ -535,7 +535,7 @@
       ],
       "patch": "0170-WebUI-RegexSearchInDeviceLists.patch",
       "removed": 11,
-      "sha256": "e47c2522dc5d57c43343ecea770d8a23dfa75d85463dbddb78b47b905c1b5946"
+      "sha256": "9a09ae7b07198e4420c5a4e2bf223ef6c90a4a374ffb76171a4ad1f1b551015c"
     },
     {
       "added": 60,
@@ -560,7 +560,7 @@
       ],
       "patch": "0173-WebUI-SendPOSTRequest.patch",
       "removed": 19,
-      "sha256": "0e9df4871fa74afa23d363c9ca41daa8b76b2c08b222f04d631e13cbf65f3e2c"
+      "sha256": "0e8f54416cbae3362a3ec2bf215cf567721ed68aee8b928a66d0af2abc914138"
     },
     {
       "added": 120,
@@ -596,7 +596,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "2e8123ef7c410958896ba618985169511923c08420666e32b38d83966f36a46f"
+      "sha256": "d9221f67a9e8f666873d61303d59bf10e7ef5e74441fe0cffd861d9845db5015"
     }
   ],
   "schema": 1,

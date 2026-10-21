@@ -27838,7 +27838,8 @@ BidcosRfPage =
 		        lgw.setFWState("");
 		        if (lgwStatus && lgwStatus.serial == lgw.getAddress())
 		        {
-		          for (var loop = 0; loop < gatewayStatus.length; loop++) {
+		          // Duty cycle and firmware are only valid while the gateway is connected
+		          for (var loop = 0; lgwStatus.connstat == "NO_ERROR" && loop < gatewayStatus.length; loop++) {
 		            if (lgwStatus.serial == gatewayStatus[loop].address) {
 		              var dutyCycle = gatewayStatus[loop].dutyCycle;
 		              var textDC = (dutyCycle == null || dutyCycle === "") ? "" : dutyCycle + "%";

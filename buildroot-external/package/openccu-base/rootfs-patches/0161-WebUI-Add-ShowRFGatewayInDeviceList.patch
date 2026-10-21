@@ -11,7 +11,7 @@
    #cgi_debug -on
  
    puts "<div id=\"ic_deviceparameters\">"
-@@ -51,6 +51,93 @@
+@@ -51,6 +51,96 @@
        puts "<div class=\"subOffsetDivPopup CLASS22000\">"
        
        puts "<script type=\"text/javascript\">"
@@ -43,16 +43,15 @@
 +        puts "var bHasCustomName=false;"
 +        puts "var InterfaceCellContent = document.getElementById('InterfaceCellContent');"
 +        puts "var rfGateways = homematic('BidCoS_RF.getConfigurationRF');"
-+        puts "if (rfGateways) {"
++        puts "if (rfGateways && rfGateways.interfaces) {"
 +        puts "  for (var i = 0, len = rfGateways.interfaces.length; i < len; i++) {"
 +        puts "    var gateway = rfGateways.interfaces\[i\];"
 +        puts "    var name = (gateway.userName.length > 0) ? gateway.userName: gateway.serialNumber;"
 +        puts "    if (InterfaceCellContent) {"
 +        puts "      if (gateway.serialNumber === InterfaceCellContent.innerHTML) {"
 +        puts          "bHasCustomName=true;"
-+        puts          "InterfaceCellContent.innerHTML = name;"
++        puts          "InterfaceCellContent.innerHTML = name.escapeHTML();"
 +        puts "      }"
-+        puts "      if (this.roaming) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
 +        puts "    }"
 +        puts "    this.gateways.push({name: name, value: gateway});"
 +        puts "  }"
@@ -61,6 +60,7 @@
 +        puts "  if (InterfaceCell) InterfaceCell.innerHTML = '$HMRFIdentifier';"
 +        puts "}"
 +        puts "if (InterfaceCellContent && bHasCustomName === false) { InterfaceCellContent.innerHTML = '$HMRFIdentifier'; }"
++        puts "if (InterfaceCellContent && $dev_descr(ROAMING)) { InterfaceCellContent.innerHTML += '<br/>(ROAMING)'; }"
 +        puts "if (this.gateways) {"
 +        puts "  this.gateways.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));"
 +        puts "  for (var i = 0, len = this.gateways.length; i < len; i++) {"
@@ -69,7 +69,9 @@
 +        puts "}"
 +        
 +        puts "this.ok = function() { "
-+        puts "  var selectedGateway = this.gatewaysListbox.getSelectedItem().value;"
++        puts "  var selectedItem = this.gatewaysListbox.getSelectedItem();"
++        puts "  if (!selectedItem) { this.close(); return; }"
++        puts "  var selectedGateway = selectedItem.value;"
 +        puts "  var selectedGatewayName = (selectedGateway.userName.length > 0) ? selectedGateway.userName: selectedGateway.serialNumber;"
 +        puts "  homematic('Interface.setBidcosInterface', {"
 +        puts "   'interface': '$HMRFIdentifier',"
@@ -78,7 +80,7 @@
 +        puts "   'roaming': this.roamingCheckbox.isChecked()"
 +        puts "  });"
 +        puts "  if (InterfaceCellContent) {"
-+        puts "    InterfaceCellContent.innerHTML = selectedGatewayName ;"
++        puts "    InterfaceCellContent.innerHTML = selectedGatewayName.escapeHTML();"
 +        puts "     if (this.roamingCheckbox.isChecked()) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
 +        puts "  }"
 +        puts "  DeviceList.updateInterfaceDisplayName(this.addr, selectedGatewayName);"
@@ -90,6 +92,7 @@
 +        puts "setGW = function(addr,name,roaming) {"
 +        puts "  this.addr = addr;"
 +        puts "  this.roaming = roaming;"
++        puts "  this.roamingCheckbox.setIsChecked(roaming);"
 +        puts "  gwframe = new UI.Frame()"
 +        puts "    .setTitle(translateKey('dialogSettingsBidcosRFIFaceAssignmentTitle')+name)"
 +        puts "    .setContentSize(POPUP_WIDTH, POPUP_HEIGHT)"
@@ -105,7 +108,7 @@
        if {$redirect_url == "IC_SETPROFILES" || $redirect_url == "IC_LINKPEERLIST"} then { 
          #puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>Programme &amp; Verkn&uuml;pfungen</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>Direkte Verkn&uuml;pfungen</span> &gt; Ger&auml;te- / Kanalparameter einstellen\");"
          puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>\"+translateKey('menuProgramsLinksPage')+\"</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>\"+translateKey('submenuDirectLinks')+\"</span> &gt; \" + translateKey('setDeviceAndChannelParams'));"
-@@ -1213,13 +1300,17 @@
+@@ -1213,13 +1303,17 @@
    set SENTRY(IMAGE)       "&nbsp;"
    set SENTRY(DESCRIPTION) $dev_descr(TYPE)
    set SENTRY(ADDRESS)     $address
@@ -117,14 +120,14 @@
        append SENTRY(NAME) ".$address"
    }
 +  if {($iface_descr($iface) == $HMRFIdentifier)} then {
-+    set SENTRY(IFACE)       "<table id='InterfaceTable'><tr id='InterfaceTableRow'><td class='CLASS22012' style='border: none !important;' onclick=\"setGW('$address','$SENTRY(NAME)',$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCellContent'>$dev_descr(INTERFACE)</div></td></tr></table>"
++    set SENTRY(IFACE)       "<table id='InterfaceTable'><tr id='InterfaceTableRow'><td class='CLASS22012' style='border: none !important;' data-name=\"[cgi_quote_html $SENTRY(NAME)]\" onclick=\"setGW('$address',this.getAttribute('data-name'),$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCellContent'>[cgi_quote_html $dev_descr(INTERFACE)]</div></td></tr></table>"
 +  } else {
 +    set SENTRY(IFACE)       $iface_descr($iface)
 +  }
    # Interface.restoreConfigToDevice needs admin rights and is only
    # implemented by rfd (BidCos-RF), not by hs485d or the HmIP server
    global REGA_SESSION
-@@ -1371,12 +1462,12 @@
+@@ -1371,12 +1465,12 @@
    puts "<TBODY>"
        
    puts "<tr>"
@@ -149,7 +152,7 @@
            <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n
            <td class=\"DeviceListCell\" >${device.address}${device.rfAddress}<\/td>\n
 -          <td class=\"DeviceListCell\" >${device.interfaceName}<\/td>\n
-+          <td class=\"DeviceListCell\" id=\"DeviceInterfaceDisplayName${device.id}\" >${device.interfaceDisplayName}<\/td>\n
++          <td class=\"DeviceListCell\" id=\"DeviceInterfaceDisplayName${device.id}\" >${device.interfaceDisplayName|default:\'\'|h}<\/td>\n
            <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -169,7 +172,7 @@
 +    this.interfaceDisplayName = interfaceDisplayName;
 +    var devInterfaceDisplayNameCell = document.getElementById('DeviceInterfaceDisplayName' + this.id);
 +    if (devInterfaceDisplayNameCell !== null && typeof(devInterfaceDisplayNameCell) !== 'undefined') {
-+      devInterfaceDisplayNameCell.innerHTML = interfaceDisplayName;
++      devInterfaceDisplayNameCell.innerHTML = String(interfaceDisplayName).escapeHTML();
 +    }
 +  },
    /**
@@ -192,8 +195,8 @@
 +    this.BidCosGateways=[];	   
 +    this.allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
 +    var rfGateways = homematic("BidCoS_RF.getConfigurationRF");
-+    if (rfGateways) {
-+      for (i = 0, len = rfGateways.interfaces.length; i < len; i++) {
++    if (rfGateways && rfGateways.interfaces) {
++      for (var i = 0, len = rfGateways.interfaces.length; i < len; i++) {
 +        var gateway = rfGateways.interfaces[i];
 +        if (gateway.type === globalLGWTypes.HMLGW2) {
 +          this.BidCosGateways.push(
@@ -208,7 +211,7 @@
 +        }
 +      }
 +      this.BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
-+      for (i = 0, len = this.BidCosGateways.length; i < len; i++) {
++      for (var i = 0, len = this.BidCosGateways.length; i < len; i++) {
 +        DeviceListPage.INTERFACES.push({id:this.BidCosGateways[i].m_userName, name:this.BidCosGateways[i].m_userName});
 +      }
 +    }

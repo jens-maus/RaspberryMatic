@@ -79,16 +79,15 @@ proc put_page {} {
         puts "var bHasCustomName=false;"
         puts "var InterfaceCellContent = document.getElementById('InterfaceCellContent');"
         puts "var rfGateways = homematic('BidCoS_RF.getConfigurationRF');"
-        puts "if (rfGateways) {"
+        puts "if (rfGateways && rfGateways.interfaces) {"
         puts "  for (var i = 0, len = rfGateways.interfaces.length; i < len; i++) {"
         puts "    var gateway = rfGateways.interfaces\[i\];"
         puts "    var name = (gateway.userName.length > 0) ? gateway.userName: gateway.serialNumber;"
         puts "    if (InterfaceCellContent) {"
         puts "      if (gateway.serialNumber === InterfaceCellContent.innerHTML) {"
         puts          "bHasCustomName=true;"
-        puts          "InterfaceCellContent.innerHTML = name;"
+        puts          "InterfaceCellContent.innerHTML = name.escapeHTML();"
         puts "      }"
-        puts "      if (this.roaming) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
         puts "    }"
         puts "    this.gateways.push({name: name, value: gateway});"
         puts "  }"
@@ -97,6 +96,7 @@ proc put_page {} {
         puts "  if (InterfaceCell) InterfaceCell.innerHTML = '$HMRFIdentifier';"
         puts "}"
         puts "if (InterfaceCellContent && bHasCustomName === false) { InterfaceCellContent.innerHTML = '$HMRFIdentifier'; }"
+        puts "if (InterfaceCellContent && $dev_descr(ROAMING)) { InterfaceCellContent.innerHTML += '<br/>(ROAMING)'; }"
         puts "if (this.gateways) {"
         puts "  this.gateways.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));"
         puts "  for (var i = 0, len = this.gateways.length; i < len; i++) {"
@@ -105,7 +105,9 @@ proc put_page {} {
         puts "}"
         
         puts "this.ok = function() { "
-        puts "  var selectedGateway = this.gatewaysListbox.getSelectedItem().value;"
+        puts "  var selectedItem = this.gatewaysListbox.getSelectedItem();"
+        puts "  if (!selectedItem) { this.close(); return; }"
+        puts "  var selectedGateway = selectedItem.value;"
         puts "  var selectedGatewayName = (selectedGateway.userName.length > 0) ? selectedGateway.userName: selectedGateway.serialNumber;"
         puts "  homematic('Interface.setBidcosInterface', {"
         puts "   'interface': '$HMRFIdentifier',"
@@ -114,7 +116,7 @@ proc put_page {} {
         puts "   'roaming': this.roamingCheckbox.isChecked()"
         puts "  });"
         puts "  if (InterfaceCellContent) {"
-        puts "    InterfaceCellContent.innerHTML = selectedGatewayName ;"
+        puts "    InterfaceCellContent.innerHTML = selectedGatewayName.escapeHTML();"
         puts "     if (this.roamingCheckbox.isChecked()) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
         puts "  }"
         puts "  DeviceList.updateInterfaceDisplayName(this.addr, selectedGatewayName);"
@@ -126,6 +128,7 @@ proc put_page {} {
         puts "setGW = function(addr,name,roaming) {"
         puts "  this.addr = addr;"
         puts "  this.roaming = roaming;"
+        puts "  this.roamingCheckbox.setIsChecked(roaming);"
         puts "  gwframe = new UI.Frame()"
         puts "    .setTitle(translateKey('dialogSettingsBidcosRFIFaceAssignmentTitle')+name)"
         puts "    .setContentSize(POPUP_WIDTH, POPUP_HEIGHT)"
@@ -1307,7 +1310,7 @@ proc put_Header {} {
       append SENTRY(NAME) ".$address"
   }
   if {($iface_descr($iface) == $HMRFIdentifier)} then {
-    set SENTRY(IFACE)       "<table id='InterfaceTable'><tr id='InterfaceTableRow'><td class='CLASS22012' style='border: none !important;' onclick=\"setGW('$address','$SENTRY(NAME)',$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCellContent'>$dev_descr(INTERFACE)</div></td></tr></table>"
+    set SENTRY(IFACE)       "<table id='InterfaceTable'><tr id='InterfaceTableRow'><td class='CLASS22012' style='border: none !important;' data-name=\"[cgi_quote_html $SENTRY(NAME)]\" onclick=\"setGW('$address',this.getAttribute('data-name'),$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCellContent'>[cgi_quote_html $dev_descr(INTERFACE)]</div></td></tr></table>"
   } else {
     set SENTRY(IFACE)       $iface_descr($iface)
   }

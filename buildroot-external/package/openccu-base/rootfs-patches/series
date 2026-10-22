@@ -29,7 +29,6 @@
 0164-WebUI-Add-HMIPServerLogConfiguration.patch
 0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch
 0170-WebUI-RegexSearchInDeviceLists.patch
-0171-WebUI-Add-HmIPKeyTransceiverCentralLinkConfiguration.patch
 0173-WebUI-SendPOSTRequest.patch
 0183-WebUI-ImprovedFirmwareupdateDialog.patch
 0203-WebUI-NoExpectCGI.patch

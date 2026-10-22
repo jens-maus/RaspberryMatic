@@ -1,6 +1,6 @@
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -1446,12 +1446,12 @@
+@@ -1460,12 +1460,12 @@
  DEV_PATHS["HmIP-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
  DEV_PATHS["HmIP-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
  DEV_HIGHLIGHT["HmIP-WRC6"] = new Object();
@@ -19,7 +19,7 @@
  DEV_HIGHLIGHT["HmIP-WRC6"]["1+2"] = [5, '1', '2'];
  DEV_HIGHLIGHT["HmIP-WRC6"]["3+4"] = [5, '3', '4'];
  DEV_HIGHLIGHT["HmIP-WRC6"]["5+6"] = [5, '5', '6'];
-@@ -4550,14 +4550,14 @@
+@@ -4564,14 +4564,14 @@
  DEV_PATHS["HmIP-BSL"]["50"] = "/config/img/devices/50/173_hmip-bsl_thumb.png";
  DEV_PATHS["HmIP-BSL"]["250"] = "/config/img/devices/250/173_hmip-bsl.png";
  DEV_HIGHLIGHT["HmIP-BSL"] = new Object();
@@ -42,7 +42,7 @@
  DEV_LIST.push('HmIP-DBB');
  DEV_DESCRIPTION["HmIP-DBB"] = "HmIP-DBB";
  DEV_PATHS["HmIP-DBB"] = new Object();
-@@ -5234,6 +5234,8 @@
+@@ -5248,6 +5248,8 @@
  DEV_PATHS["HmIPW-DRAP"]["50"] = "/config/img/devices/50/162_hmipw-drap_thumb.png";
  DEV_PATHS["HmIPW-DRAP"]["250"] = "/config/img/devices/250/162_hmipw-drap.png";
  DEV_HIGHLIGHT["HmIPW-DRAP"] = new Object();
@@ -51,7 +51,7 @@
  DEV_LIST.push('HmIPW-DRBL4');
  DEV_DESCRIPTION["HmIPW-DRBL4"] = "HmIPW-DRBL4";
  DEV_PATHS["HmIPW-DRBL4"] = new Object();
-@@ -5258,12 +5260,60 @@
+@@ -5272,12 +5274,60 @@
  DEV_PATHS["HmIPW-DRS4"]["50"] = "/config/img/devices/50/160_hmipw-drs4_thumb.png";
  DEV_PATHS["HmIPW-DRS4"]["250"] = "/config/img/devices/250/160_hmipw-drs4.png";
  DEV_HIGHLIGHT["HmIPW-DRS4"] = new Object();
@@ -112,7 +112,7 @@
  DEV_LIST.push('HmIPW-FIO6');
  DEV_DESCRIPTION["HmIPW-FIO6"] = "HmIPW-FIO6";
  DEV_PATHS["HmIPW-FIO6"] = new Object();
-@@ -5530,18 +5580,18 @@
+@@ -5544,18 +5594,18 @@
  DEV_PATHS["HmIPW-WRC6"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
  DEV_PATHS["HmIPW-WRC6"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
  DEV_HIGHLIGHT["HmIPW-WRC6"] = new Object();

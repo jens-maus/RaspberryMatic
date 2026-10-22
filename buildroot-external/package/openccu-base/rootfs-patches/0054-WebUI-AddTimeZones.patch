@@ -885,7 +885,7 @@
                MessageBox.show(translateKey("Info"), translateKey("dialogSettingsTimePositionMessageSetPositionSucceed"));
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -36834,51 +36834,14 @@
+@@ -36910,51 +36910,14 @@
    }
  };
  
@@ -943,7 +943,7 @@
  
      jQuery.each(DeviceList.devices, function (index, device) {
        var iFace = device.interfaceName;
-@@ -36886,7 +36849,7 @@
+@@ -36962,7 +36925,7 @@
          // Check if the device has the channel *_WEEK_PROFILE
          jQuery.each(device.channels, function (index, channel) {
            if (channel.channelType.indexOf("_WEEK_PROFILE") != -1) {
@@ -952,7 +952,7 @@
  
              homematic("Interface.putParamset", {
                'interface': iFace,
-@@ -36903,7 +36866,7 @@
+@@ -36979,7 +36942,7 @@
                conInfo(result);
              });
            } else if (channel.channelType == "HEATING_CLIMATECONTROL_TRANSCEIVER") {
@@ -961,7 +961,7 @@
  
              homematic("Interface.putParamset", {
                'interface': iFace,
-@@ -36921,12 +36884,13 @@
+@@ -36997,12 +36960,13 @@
          });
        }
      });
@@ -976,7 +976,7 @@
        }
      }, 2500);
    }
-@@ -36936,9 +36900,8 @@
+@@ -37012,9 +36976,8 @@
    homematic("system.getPositionData", {}, function(posData) {
      var lon = posData[0].split(":")[1],
        lat = posData[1].split(":")[1],

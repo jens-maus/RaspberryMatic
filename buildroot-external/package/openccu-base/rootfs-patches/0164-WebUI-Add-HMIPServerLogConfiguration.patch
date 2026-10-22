@@ -194,7 +194,7 @@
      "BidCosRF" : "Homematic Funk",
      "BidCosWired" : "Homematic Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -495,6 +496,7 @@
+@@ -502,6 +503,7 @@
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
      "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
      "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
@@ -202,7 +202,7 @@
      "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
      "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
      "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
-@@ -526,6 +528,7 @@
+@@ -533,6 +535,7 @@
      "dialogSettingsCMLogLevel2" : "Nur Warnungen",
      "dialogSettingsCMLogLevel3" : "Nur Fehler",
      "dialogSettingsCMLogLevel4" : "Kein Logging",
@@ -231,7 +231,7 @@
      "BidCosRF" : "Homematic RF",
      "BidCosWired" : "BidCos-Wired",
      "BidCosRF-Filter" : "BidCos-RF",
-@@ -494,6 +495,7 @@
+@@ -501,6 +502,7 @@
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
      "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
      "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
@@ -239,7 +239,7 @@
      "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
      "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
      "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
-@@ -525,6 +527,7 @@
+@@ -532,6 +534,7 @@
      "dialogSettingsCMLogLevel2" : "Only alerts",
      "dialogSettingsCMLogLevel3" : "Only errors",
      "dialogSettingsCMLogLevel4" : "No logging",

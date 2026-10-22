@@ -743,18 +743,24 @@
       "base_pr": 237,
       "cleanup_pr": 4504,
       "patch": "0111-WebUI-Fix-Translation-Performance.patch"
+    },
+    {
+      "base_merge_commit": "e829f3e95ea5de0f12ff1d42e40fb7d7e75cbd8d",
+      "base_pr": 238,
+      "cleanup_pr": 4506,
+      "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "e829f3e95ea5de0f12ff1d42e40fb7d7e75cbd8d",
-    "base_pr": 238,
-    "cleanup_pr": 4506,
-    "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
+    "base_merge_commit": "1eebb6bd20bad386f603b745ace107e29862ea5c",
+    "base_pr": 240,
+    "cleanup_pr": null,
+    "patch": "0171-WebUI-Add-HmIPKeyTransceiverCentralLinkConfiguration.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "f5226361937ad50873aaa1883068a1fe2265f4bd",
-  "verified_base_pin": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
-  "verified_source_sha256": "84c6b89d12a781d2c15e52c8dd2aedf7e25647ade261b2d117d712c5e328925c"
+  "verified_at_openccu_commit": "681e85c062b8c4877c58faf3f1f453d2455f9ac2",
+  "verified_base_pin": "e829f3e95ea5de0f12ff1d42e40fb7d7e75cbd8d",
+  "verified_source_sha256": "df0a3376380a57786aa66b38f91439a00f5c97d3364ea3da57b8355af649c026"
 }

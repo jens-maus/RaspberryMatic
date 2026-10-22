@@ -103,7 +103,7 @@
      "indoorAirQualityModerate" : "Raumluftqualit%E4t: M%E4%DFig<br/><br/>Der Raum sollte dringend gel%FCftet werden.",
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -490,6 +490,8 @@
+@@ -497,6 +497,8 @@
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
@@ -127,7 +127,7 @@
      "indoorAirQualityModerate" : "Room air quality: Average<br/><br/>The room should be ventilated as soon as possible.",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -489,6 +489,8 @@
+@@ -496,6 +496,8 @@
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",

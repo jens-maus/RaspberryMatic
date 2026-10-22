@@ -26914,16 +26914,17 @@ if (PLATFORM == "Central") {
       setFooter(this.FLAT_FOOTER_HTML);
     }
 
-    jQuery(".j_chMode").each(function(){
-      var elm = jQuery(this);
-
-        switch (elm.text()) {
-          case "Gesichert":
-            elm.html(translateKey("lblSecured"));
-            break;
-          case "Standard":
-            elm.html(translateKey("lblStandard"));
-        }
+    var translatedSecure = translateKey("lblSecured");
+    var translatedStandard = translateKey("lblStandard");
+    jQuery(".j_chMode").each(function(i, e){
+      switch (e.textContent) {
+        case "Gesichert":
+          e.textContent = translatedSecure;
+          break;
+        case "Standard":
+          e.textContent = translatedStandard;
+          break;
+      }
     });
 
     translateJSTemplate("#DeviceListTable");

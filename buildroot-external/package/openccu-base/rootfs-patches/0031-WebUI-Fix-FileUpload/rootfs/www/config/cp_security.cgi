@@ -1517,7 +1517,7 @@ proc action_put_page {} {
         }
       };
     }
-    puts "translatePage();"
+    puts "translatePage('#messagebox');"
     puts "dlgPopup.readaptSize();"
   }
 }

@@ -731,18 +731,24 @@
       "base_pr": 230,
       "cleanup_pr": 4497,
       "patch": "0161-WebUI-Add-ShowRFGatewayInDeviceList.patch"
+    },
+    {
+      "base_merge_commit": "dba6d81bd30bf04b65642b45c3d967c4e74162af",
+      "base_pr": 234,
+      "cleanup_pr": 4500,
+      "patch": "0145-WebUI-NaturalSorting.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "dba6d81bd30bf04b65642b45c3d967c4e74162af",
-    "base_pr": 234,
-    "cleanup_pr": 4500,
-    "patch": "0145-WebUI-NaturalSorting.patch",
+    "base_merge_commit": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
+    "base_pr": 237,
+    "cleanup_pr": null,
+    "patch": "0111-WebUI-Fix-Translation-Performance.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "6db1b497859ffc366c70fde5a75d4e228de1fe40",
-  "verified_base_pin": "294861845830854365de6c56a039d1ab79226d2f",
-  "verified_source_sha256": "35caafab5ac7807f931d8c2c025d2cc05505363a47dff6342ef508ce5d8029e6"
+  "verified_at_openccu_commit": "f7b2d13c648b0ab097c83d4dc36316aca7a23552",
+  "verified_base_pin": "fae206f8a7cd502eabea60cb7b66aa9e4544e50b",
+  "verified_source_sha256": "9ae10f726b13dbac260fb1e4672a038abc3490b582401fb3278f3bde99939544"
 }

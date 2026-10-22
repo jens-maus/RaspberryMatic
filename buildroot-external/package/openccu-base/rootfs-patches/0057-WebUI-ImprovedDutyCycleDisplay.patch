@@ -295,7 +295,7 @@
  .CLASS01812 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -8856,8 +8856,6 @@
+@@ -8857,8 +8857,6 @@
        window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
        ConfigData.isPresent = true;
        if (ConfigData.showMessage) { this.hideMessage(); }
@@ -304,7 +304,7 @@
        if (ConfigData.callback) { ConfigData.callback(); }
      });
    },
-@@ -8996,7 +8994,6 @@
+@@ -8997,7 +8995,6 @@
      if(typeof dcTimeout == "undefined") {
        dcTimeout = window.setTimeout(function () {
          showDutyCycle();
@@ -312,7 +312,7 @@
          delete dcTimeout;
        }, 10);
      }
-@@ -9231,7 +9228,6 @@
+@@ -9232,7 +9229,6 @@
        // Check the dutyCycle and carrierSense periodically
        new PeriodicalExecuter(function () {
          showDutyCycle();
@@ -320,7 +320,7 @@
        }, checkDutyCycleInterval);
  
        if (getProduct() >= 3) {
-@@ -35634,74 +35630,101 @@
+@@ -35599,74 +35595,101 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},

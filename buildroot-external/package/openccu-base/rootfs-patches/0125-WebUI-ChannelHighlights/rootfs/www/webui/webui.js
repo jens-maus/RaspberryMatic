@@ -8303,8 +8303,9 @@ Array.prototype.ex_joinProperty = function(name, separator)
  **/
 Array.prototype.ex_sortBy = function(name, sortReverse)
 {
-  this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
-  if (sortReverse) { this.reverse(); }
+  // apply the direction in the comparison, so equal entries keep their order in both directions
+  var order = sortReverse ? -1 : 1;
+  this.sort(function(a,b) { return order * Object.ex_compare(a[name], b[name]); });
   
   return this;
 };
@@ -8316,8 +8317,9 @@ Array.prototype.ex_sortBy = function(name, sortReverse)
  **/
 Array.prototype.ex_sortByProperty = function(name, sortReverse)
 {
-  this.sort(function(a, b) { return Object.ex_compare(a[name](), b[name]()); });
-  if (sortReverse) { this.reverse(); }
+  // apply the direction in the comparison, so equal entries keep their order in both directions
+  var order = sortReverse ? -1 : 1;
+  this.sort(function(a, b) { return order * Object.ex_compare(a[name](), b[name]()); });
   
   return this;
 };
@@ -8350,8 +8352,7 @@ String.prototype.ex_compareTo = function(other)
     var strA = this.toLowerCase();
     var strB = other.toLowerCase();
   
-    if      (strA > strB) { return 1; }
-    else if (strA < strB) { return -1; }
+    return strA.localeCompare(strB, undefined, {numeric: true, sensitivity: 'base'});
   }
   
   return 0;
@@ -35118,51 +35119,15 @@ iseArraySwap = function(arr,entryA,entryB)
 iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
 {
   conInfo("Sort multi array.");
-  do
-  {
-    var n = arr.length - 1;
-    var bSwapped = false;
-    for(var i=0;i<n;i++)
-    {
-      if( typeof arr[i][dsc] == "undefined" )
-      {
-        arr[i][dsc] = "";
-      }
-      if( typeof arr[i+1][dsc] == "undefined" )
-      {
-        arr[i+1][dsc] = "";
-      }      
-      var item = arr[i][dsc].toLowerCase();
-      item = item.replace("ö", "o");
-      item = item.replace("ä", "a");
-      item = item.replace("ü", "u");
-      item = item.replace("ß", "ss");
-      var nextitem = arr[i+1][dsc].toLowerCase();
-      nextitem = nextitem.replace("ö", "o");
-      nextitem = nextitem.replace("ä", "a");
-      nextitem = nextitem.replace("ü", "u");
-      nextitem = nextitem.replace("ß", "ss");
-      if( dir === 0 )
-      {
-        if( item > nextitem )
-        {
-          iseArraySwap(arr,i,i+1);
-          bSwapped = true;
-        }
-      }
-      else
-      {
-        if( item < nextitem )
-        {
-          iseArraySwap(arr,i,i+1);
-          bSwapped = true;
-        }
-      }
-    }
-  } while( bSwapped );
-    
+  const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+  // a missing (undefined or null) value sorts as an empty string; the stable sort keeps rows with equal values in order in both directions
+  var order = (dir === 1) ? -1 : 1;
+  arr.sort( (x, y) => {
+    var a = (x[dsc] == null) ? "" : String(x[dsc]);
+    var b = (y[dsc] == null) ? "" : String(y[dsc]);
+    return order * collator.compare(a, b);
+  } );
   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);
-  
 };
 
 iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)

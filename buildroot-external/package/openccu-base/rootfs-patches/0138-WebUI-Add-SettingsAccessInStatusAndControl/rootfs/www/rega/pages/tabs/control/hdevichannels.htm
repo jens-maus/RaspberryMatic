@@ -28,7 +28,6 @@
           }
         }
       }
-      oUser.UserTempViewIDs().SortByName(soAsc,stNatural);
       firstSort = true;
     }
     system.SetSessionVar("sessionTAB1", system.GetVar("id") );
@@ -135,7 +134,6 @@
     object oUser = dom.GetObject( system.GetSessionVar('sessionUserID'));
     integer userID = oUser.ID();
     object user = dom.GetObject(userID);
-    integer virtChnCounter = 0;
 
     object device = dom.GetObject(system.GetVar("id"));
     if (device) {

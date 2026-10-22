@@ -152,7 +152,7 @@
      this.close();
    }
    
-@@ -26905,6 +26932,7 @@
+@@ -26906,6 +26933,7 @@
      jQuery("#DeviceListPage_FuncFilter").draggable();
  
      DeviceList.updateDeviceStatus();
@@ -160,7 +160,7 @@
    },
    
    onRemoveDevice: function(whatEver)
-@@ -32427,6 +32455,9 @@
+@@ -32428,6 +32456,9 @@
    },  
    ShowPopup: function() {
      this.show();
@@ -170,7 +170,7 @@
    },
    
    restorePrevious: function() {
-@@ -33332,11 +33363,31 @@
+@@ -33333,11 +33364,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -204,7 +204,7 @@
      }
      /* ELV --> */
      
-@@ -37268,6 +37319,28 @@
+@@ -37269,6 +37320,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -233,7 +233,7 @@
    },
    
  
-@@ -37639,6 +37712,15 @@
+@@ -37640,6 +37713,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -249,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -37748,6 +37830,12 @@
+@@ -37749,6 +37831,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -51335,6 +51423,9 @@
+@@ -51336,6 +51424,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -51466,6 +51557,9 @@
+@@ -51467,6 +51558,9 @@
    ShowPopup: function()
    {
      this.show();

@@ -1009,7 +1009,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -31977,6 +32078,9 @@
+@@ -31978,6 +32079,9 @@
    },
    initPopup: function(id)
    {
@@ -1019,7 +1019,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -32034,9 +32138,10 @@
+@@ -32035,9 +32139,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -1032,7 +1032,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -32144,7 +32249,9 @@
+@@ -32145,7 +32250,9 @@
      }
  
      if (this.draggable) {
@@ -1043,7 +1043,7 @@
      }
  
    },
-@@ -32304,7 +32411,12 @@
+@@ -32305,7 +32412,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

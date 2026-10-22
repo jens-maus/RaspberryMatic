@@ -171,7 +171,7 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
     {\/if}\n
     {if ChannelConfigDialog.getCentralLinkInterface(channel)}\n
       <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-      <div class=\"CLASS11003\"><span name=\"generalDeviceChannelConfigLblCentralLink\">Taster-/Schaltevent an Zentrale<\/span>&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
+      <div class=\"CLASS11003\"><span name=\"generalDeviceChannelConfigLblCentralLink\">Taster-\/Schaltevent an Zentrale<\/span>&nbsp;<img src=\"\/ise\/img\/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
       <hr \/>\n
        <div>\n
         <table border=\"0\" class=\"ChannelConfigDialogTable\" width=\"250px\">\n
@@ -180,8 +180,8 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
             <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"{if !channel.hasProgramIds()}StdButton{else}StdButtonInactive{\/if}\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"{if !channel.hasProgramIds()}ChannelConfigDialog.removeCentralLink();{\/if}\">Deaktivieren<\/div><\/td>\n
           <\/tr>\n
         <\/table>\n
-      </div>\n
-      </div>\n
+      <\/div>\n
+      <\/div>\n
     {\/if}\n
   <\/div>\n
 \n

@@ -209,6 +209,7 @@
   updateFuncTable = function()
   {
     var sFirstId = "";
+    var bSelectedShown = false;
     colorFilterBtns(fltFN);
     for (var i = 0; i < arItems.length; i++)
     {
@@ -223,9 +224,17 @@
         {
           sFirstId = arItems[i]['id'];
         }
+        if ($(arItems[i]['id'] + "name").hasClassName("ButtonStatusRoomsSelected"))
+        {
+          bSelectedShown = true;
+        }
       }
     }
-    if (sFirstId != "")
+    if (bSelectedShown)
+    {
+      // the selected entry is still shown: keep it and its channel list
+    }
+    else if (sFirstId != "")
     {
       loadChannels(sFirstId);
     }

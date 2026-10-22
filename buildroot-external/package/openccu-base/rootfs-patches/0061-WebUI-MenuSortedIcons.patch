@@ -658,7 +658,7 @@
      "lblSettingsSysVar1" : "%DCbersicht aller Systemvariablen",
      "lblSettingsSysVar2" : "Bestehende Systemvariablen bearbeiten",
      "lblSettingsSysVar3" : "Neue Systemvariablen anlegen",
-@@ -457,7 +458,7 @@
+@@ -464,7 +465,7 @@
      "lblMenuStatusControlFavorites1" : "%DCbersicht aller verf%FCgbaren Favoriten",
      "btnMenuStatusControlPrograms" : "Programme",
      "lblMenuStatusControlPrograms1" : "Direkter Zugriff auf alle Programme",
@@ -692,7 +692,7 @@
      "lblSettingsSysVar1" : "Overview of all system variables",
      "lblSettingsSysVar2" : "Edit existing system variables",
      "lblSettingsSysVar3" : "Create new system variables",
-@@ -456,7 +457,7 @@
+@@ -463,7 +464,7 @@
      "lblMenuStatusControlFavorites1" : "Overview of all functions available",
      "btnMenuStatusControlPrograms" : "Programs",
      "lblMenuStatusControlPrograms1" : "Direct access to all programs",
@@ -957,7 +957,7 @@
  .CLASS06200 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -25282,19 +25282,19 @@
+@@ -25358,19 +25358,19 @@
      var _submenuItem_ = submenuItem;
      var _menuItem_ = menuItem;
      
@@ -983,7 +983,7 @@
    },
    
    /**
-@@ -25330,12 +25330,11 @@
+@@ -25406,12 +25406,11 @@
        submenuElement.className = "MainMenuSubMenu";
        Element.setStyle(submenuElement, {display: "none"});
        

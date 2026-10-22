@@ -742,7 +742,7 @@
   "in_progress": {
     "base_merge_commit": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
     "base_pr": 237,
-    "cleanup_pr": null,
+    "cleanup_pr": 4504,
     "patch": "0111-WebUI-Fix-Translation-Performance.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },

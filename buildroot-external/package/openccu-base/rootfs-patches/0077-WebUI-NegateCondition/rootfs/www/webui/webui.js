@@ -8223,8 +8223,9 @@ Array.prototype.ex_joinProperty = function(name, separator)
  **/
 Array.prototype.ex_sortBy = function(name, sortReverse)
 {
-  this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
-  if (sortReverse) { this.reverse(); }
+  // apply the direction in the comparison, so equal entries keep their order in both directions
+  var order = sortReverse ? -1 : 1;
+  this.sort(function(a,b) { return order * Object.ex_compare(a[name], b[name]); });
   
   return this;
 };
@@ -8236,8 +8237,9 @@ Array.prototype.ex_sortBy = function(name, sortReverse)
  **/
 Array.prototype.ex_sortByProperty = function(name, sortReverse)
 {
-  this.sort(function(a, b) { return Object.ex_compare(a[name](), b[name]()); });
-  if (sortReverse) { this.reverse(); }
+  // apply the direction in the comparison, so equal entries keep their order in both directions
+  var order = sortReverse ? -1 : 1;
+  this.sort(function(a, b) { return order * Object.ex_compare(a[name](), b[name]()); });
   
   return this;
 };
@@ -34960,11 +34962,11 @@ iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
 {
   conInfo("Sort multi array.");
   const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-  // a missing value sorts as an empty string; the stable sort keeps rows with equal values in order in both directions
+  // a missing (undefined or null) value sorts as an empty string; the stable sort keeps rows with equal values in order in both directions
   var order = (dir === 1) ? -1 : 1;
   arr.sort( (x, y) => {
-    var a = (typeof x[dsc] == "undefined") ? "" : String(x[dsc]);
-    var b = (typeof y[dsc] == "undefined") ? "" : String(y[dsc]);
+    var a = (x[dsc] == null) ? "" : String(x[dsc]);
+    var b = (y[dsc] == null) ? "" : String(y[dsc]);
     return order * collator.compare(a, b);
   } );
   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);

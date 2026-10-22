@@ -84,7 +84,7 @@
                            Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
 --- a/www/rega/pages/tabs/control/hdevichannels.htm
 +++ b/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -198,7 +198,11 @@
+@@ -196,7 +196,11 @@
              string trId = device.ID()#tmp;
              boolean showExtDesc = false;
              Write("<tr id='"#trId#"'>");
@@ -180,7 +180,7 @@
  .CLASS05005 {
 --- a/www/webui/webui.js
 +++ b/www/webui/webui.js
-@@ -31482,7 +31482,7 @@
+@@ -31484,7 +31484,7 @@
      };
      new Ajax.Request(url,opts);
    },
@@ -189,7 +189,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31494,12 +31494,12 @@
+@@ -31496,12 +31496,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -204,7 +204,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31512,12 +31512,12 @@
+@@ -31514,12 +31514,12 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}
@@ -219,7 +219,7 @@
    {
      var url = "/esp/programs.htm?sid="+SessionId;
      var pb = '';
-@@ -31529,7 +31529,7 @@
+@@ -31531,7 +31531,7 @@
        onComplete:function(t)
        {
          if(dbg){alert( t.responseText );}

@@ -18,8 +18,8 @@
      "dialogEnterValue" : "Wert eingeben",
      "dialogEnterText" : "Text eingeben",
 +    "dialogQuestionAddLink" : "M%F6chten Sie die Verkn%FCpfung '%s' wirklich anlegen?",
-+    "dialogCentralLinkActivated" : "Die Taster-/Schaltevents des Kanals %s werden jetzt an die Zentrale gesendet.",
-+    "dialogCentralLinkDeactivated" : "Die Taster-/Schaltevents des Kanals %s werden nicht mehr an die Zentrale gesendet.",
++    "dialogCentralLinkActivated" : "Die Weiterleitung der Taster-/Schaltevents des Kanals %s an die Zentrale wurde angefordert. Sie wird wirksam, sobald das Ger%E4t die Konfiguration %FCbernommen hat (bei batteriebetriebenen Ger%E4ten z.B. nach einem Tastendruck).",
++    "dialogCentralLinkDeactivated" : "Das Beenden der Weiterleitung der Taster-/Schaltevents des Kanals %s an die Zentrale wurde angefordert. Es wird wirksam, sobald das Ger%E4t die Konfiguration %FCbernommen hat (bei batteriebetriebenen Ger%E4ten z.B. nach einem Tastendruck).",
 +    "dialogCentralLinkError" : "Die Einstellung des Kanals %s konnte nicht ge%E4ndert werden.",
 +    "generalDeviceChannelConfigLblCentralLink" : "Taster-/Schaltevent an Zentrale",
 +    "channelConfigBtnCreateCentralLink" : "Aktivieren",
@@ -47,8 +47,8 @@
      "dialogEnterValue" : "Enter value",
      "dialogEnterText" : "Enter text",
 +    "dialogQuestionAddLink" : "Do you really want to add the connection '%s'?",
-+    "dialogCentralLinkActivated" : "The pushbutton events of channel %s are now sent to the CCU.",
-+    "dialogCentralLinkDeactivated" : "The pushbutton events of channel %s are no longer sent to the CCU.",
++    "dialogCentralLinkActivated" : "Forwarding the pushbutton events of channel %s to the CCU has been requested. It takes effect once the device has received the configuration (for battery-powered devices, e.g. after a button press).",
++    "dialogCentralLinkDeactivated" : "Stopping the forwarding of the pushbutton events of channel %s to the CCU has been requested. It takes effect once the device has received the configuration (for battery-powered devices, e.g. after a button press).",
 +    "dialogCentralLinkError" : "The setting of channel %s could not be changed.",
 +    "generalDeviceChannelConfigLblCentralLink" : "Pushbutton event to CCU",
 +    "channelConfigBtnCreateCentralLink" : "Activate",
@@ -118,7 +118,7 @@
 +      if (error || !result) { failed = true; }
 +      pending--;
 +      if (pending === 0) {
-+        MessageBox.show(translateKey('dialogHint'), translateKey(failed ? 'dialogCentralLinkError' : successKey).replace('%s', addr), '', 400, 100);
++        MessageBox.show(translateKey('dialogHint'), translateKey(failed ? 'dialogCentralLinkError' : successKey).replace('%s', addr), '', 400, 160);
 +      }
 +    };
 +    jQuery.each(valueIds, function(i, valueId) {

@@ -15682,7 +15682,7 @@ ChannelConfigDialog = Singleton.create({
       if (error || !result) { failed = true; }
       pending--;
       if (pending === 0) {
-        MessageBox.show(translateKey('dialogHint'), translateKey(failed ? 'dialogCentralLinkError' : successKey).replace('%s', addr), '', 400, 100);
+        MessageBox.show(translateKey('dialogHint'), translateKey(failed ? 'dialogCentralLinkError' : successKey).replace('%s', addr), '', 400, 160);
       }
     };
     jQuery.each(valueIds, function(i, valueId) {

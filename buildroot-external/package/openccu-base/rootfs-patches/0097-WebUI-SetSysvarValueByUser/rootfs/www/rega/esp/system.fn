@@ -1289,7 +1289,13 @@ function ::writeProgCtrl()
   Write("<td>");
   string sClass = "ControlBtnOff";
   if( objProg.Active() ) { sClass = "ControlBtnOn"; }
-    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' >"); 
+  integer uid = system.GetSessionVar("sessionUserID");
+  object oUser = dom.GetObject(uid);
+  if(oUser.UserLevel() == iulAdmin) {
+    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' onclick='isePrograms.SetActive("#pid#",!" #objProg.Active() # ")'>");
+  } else {
+    Write("<table class='"#sClass#" CLASS02102' style='cursor: default; border-top: solid 1px black; border-right: solid 1px black;' id='"#pid#"Act' >");
+  }
     Write("<tr>");
     Write("<td  class='CLASS02103'>");
         Write("<div align='center'>");
@@ -1298,7 +1304,11 @@ function ::writeProgCtrl()
       Write("</td>");
     Write("</tr>");
     !Write("<tr><td>Aktiv</td></tr>");
-    Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
+    if( objProg.Active() ) {
+      Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
+    } else {
+      Write("<tr><td>${actionStatusControlLblNotActive}</td></tr>");
+    }
     Write("</table>");
   Write("</td>");
   if (system.GetVar("iStatusOnly") == 0)
@@ -1307,15 +1317,17 @@ function ::writeProgCtrl()
     !Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>Start</div>");
     Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
     Write("<script type='text/javascript'>");
-    Write("new iseButtonProg("#pid#", "#objProg.Active()#");");
+    Write("new iseButtonProg("#pid#", "#objProg.Active()#", false);");
     Write("</script>");
     Write("</td>");
+    Write("<td><div id='"#pid#"StartThenOnly' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStartThenOnly}</div>");
+    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
   }
   else
   {
-    Write("<td></td>");
+    Write("<td></td><td></td>");
   }
-  Write("<td></td><td></td><td></td>");
+  Write("<td></td><td></td>");
   
   Write("</tr>");
   Write("</table>");

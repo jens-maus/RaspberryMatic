@@ -262,7 +262,7 @@
  };
  
  // Integer-Filter (Modus, Iface)
-@@ -51336,6 +51424,9 @@
+@@ -51338,6 +51426,9 @@
    
    ShowPopup: function() {
      this.show();
@@ -272,7 +272,7 @@
    }
  };
  
-@@ -51467,6 +51558,9 @@
+@@ -51469,6 +51560,9 @@
    ShowPopup: function()
    {
      this.show();

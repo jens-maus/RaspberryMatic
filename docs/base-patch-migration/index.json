@@ -504,7 +504,7 @@
       "sha256": "c423fc653f9782492ddf3789ec560188b216ff3ecfd0d5fa0f5f3d5ba2d9ea0d"
     },
     {
-      "added": 60,
+      "added": 98,
       "files": [
         "www/webui/js/lang/de/translate.lang.help.js",
         "www/webui/js/lang/de/translate.lang.js",
@@ -514,7 +514,7 @@
       ],
       "patch": "0171-WebUI-Add-HmIPKeyTransceiverCentralLinkConfiguration.patch",
       "removed": 0,
-      "sha256": "c3a98ba2c3e9af909b6b0ee258cd5e723c5c37526fec23a22b09d9f275c5b508"
+      "sha256": "25918a8bb113a6888eb1648395d99e2e4558b0ef15556653c869c62bac02ae5d"
     },
     {
       "added": 43,
@@ -526,7 +526,7 @@
       ],
       "patch": "0173-WebUI-SendPOSTRequest.patch",
       "removed": 19,
-      "sha256": "c4a152de73ce3230cabea8d28e688a9677c2750328cb4c37f4f5312259adad85"
+      "sha256": "d658e58de033c77c044bf94a35cc91b786e415a81a4d841bf2954c34e9d7c7d8"
     },
     {
       "added": 120,
@@ -537,7 +537,7 @@
       ],
       "patch": "0183-WebUI-ImprovedFirmwareupdateDialog.patch",
       "removed": 19,
-      "sha256": "880e224b4786364f82ba8afaa9b42300b538c28d4e7bb34de609c8eae7fb4aec"
+      "sha256": "942494dc5599551ad85e1b58793cfe9be04d7f4e97e77c2f3317a7a547d38932"
     },
     {
       "added": 4,
@@ -562,7 +562,7 @@
       ],
       "patch": "0205-WebUI-Remove-FieldTestBetaFw.patch",
       "removed": 96,
-      "sha256": "e73ea82073711599656af371c89186a38a1bd3071ca36763c303cf856ba937a3"
+      "sha256": "d6de64ab8c44fa7235fd1330b330aab68d1a1aadc535de0ce38e7c7c78c885b4"
     }
   ],
   "schema": 1,

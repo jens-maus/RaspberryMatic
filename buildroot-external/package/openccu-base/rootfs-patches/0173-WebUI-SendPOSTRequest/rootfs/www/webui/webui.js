@@ -169,15 +169,15 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
       <\/div>\n
     <\/div>\n
     {\/if}\n
-    {if channel.channelType == \"KEY_TRANSCEIVER\" || channel.channelType == \"KEY\" || channel.channelType == \"MULTI_MODE_INPUT_TRANSMITTER\"}\n
+    {if ChannelConfigDialog.getCentralLinkInterface(channel)}\n
       <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Taster-/Schaltevent an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
+      <div class=\"CLASS11003\"><span name=\"generalDeviceChannelConfigLblCentralLink\">Taster-/Schaltevent an Zentrale<\/span>&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
       <hr \/>\n
        <div>\n
         <table border=\"0\" class=\"ChannelConfigDialogTable\" width=\"250px\">\n
           <tr>\n
-            <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink('${channel.channelType}');\">Aktivieren<\/div><\/td>\n
-            <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"{if !channel.hasProgramIds()}StdButton{else}StdButtonInactive{\/if}\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"{if !channel.hasProgramIds()}ChannelConfigDialog.removeCentralLink('${channel.channelType}');{\/if}\">Deaktivieren<\/div><\/td>\n
+            <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink();\">Aktivieren<\/div><\/td>\n
+            <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"{if !channel.hasProgramIds()}StdButton{else}StdButtonInactive{\/if}\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"{if !channel.hasProgramIds()}ChannelConfigDialog.removeCentralLink();{\/if}\">Deaktivieren<\/div><\/td>\n
           <\/tr>\n
         <\/table>\n
       </div>\n
@@ -15654,32 +15654,58 @@ ChannelConfigDialog = Singleton.create({
     MessageBox.show(title, content,'', 475, 450);
   },
 
-  createCentralLink: function(channeltype)
+  /**
+   * Returns the interface that reports the button events of the channel
+   * to the CCU (BidCos-RF for KEY, HmIP-RF for KEY_TRANSCEIVER and
+   * MULTI_MODE_INPUT_TRANSMITTER), or null if the channel has none.
+   **/
+  getCentralLinkInterface: function(channel)
   {
-    var addr=this.channel.address;
-    new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionAddLink').replace('%s', addr+' <> CCU'), function(result) {
+    var iface = channel.device ? channel.device.interfaceName : null;
+    if ((channel.channelType == "KEY_TRANSCEIVER" || channel.channelType == "MULTI_MODE_INPUT_TRANSMITTER") && iface == "HmIP-RF") { return iface; }
+    if (channel.channelType == "KEY" && iface == "BidCos-RF") { return iface; }
+    return null;
+  },
+
+  /**
+   * Sets the reference counter of the given values and reports the result
+   * once all requests have finished.
+   **/
+  setCentralLink: function(valueIds, refCounter, successKey)
+  {
+    var iface = this.getCentralLinkInterface(this.channel),
+      addr = this.channel.address,
+      pending = valueIds.length,
+      failed = false;
+    if (!iface) { return; }
+    var done = function(result, error) {
+      if (error || !result) { failed = true; }
+      pending--;
+      if (pending === 0) {
+        MessageBox.show(translateKey('dialogHint'), translateKey(failed ? 'dialogCentralLinkError' : successKey).replace('%s', addr), '', 400, 160);
+      }
+    };
+    jQuery.each(valueIds, function(i, valueId) {
+      homematic("Interface.reportValueUsage", {"interface": iface, "address": addr, "valueId": valueId, "refCounter": refCounter}, done);
+    });
+  },
+
+  createCentralLink: function()
+  {
+    var _this_ = this;
+    new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionAddLink').replace('%s', this.channel.address+' <> CCU'), function(result) {
       if (result == YesNoDialog.RESULT_YES) {
-        if (channeltype === "KEY_TRANSCEIVER" || channeltype === "MULTI_MODE_INPUT_TRANSMITTER") {
-          homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"1"});
-        } else if (channeltype === "KEY") {
-          homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"1"});
-        }
+        _this_.setCentralLink(["PRESS_SHORT"], "1", "dialogCentralLinkActivated");
       }
     }, "html");
   },
   
-  removeCentralLink: function(channeltype)
+  removeCentralLink: function()
   {
-    var addr=this.channel.address;
-    new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveLink').replace('%s', addr+' <> CCU'), function(result) {
+    var _this_ = this;
+    new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveLink').replace('%s', this.channel.address+' <> CCU'), function(result) {
       if (result == YesNoDialog.RESULT_YES) {
-        if (channeltype === "KEY_TRANSCEIVER" || channeltype === "MULTI_MODE_INPUT_TRANSMITTER") {
-          homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});
-          homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});
-        } else if (channeltype === "KEY") {
-          homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});
-          homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});
-        }
+        _this_.setCentralLink(["PRESS_SHORT", "PRESS_LONG"], "0", "dialogCentralLinkDeactivated");
       }
     }, "html");
   },

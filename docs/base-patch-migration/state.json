@@ -737,18 +737,24 @@
       "base_pr": 234,
       "cleanup_pr": 4500,
       "patch": "0145-WebUI-NaturalSorting.patch"
+    },
+    {
+      "base_merge_commit": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
+      "base_pr": 237,
+      "cleanup_pr": 4504,
+      "patch": "0111-WebUI-Fix-Translation-Performance.patch"
     }
   ],
   "in_progress": {
-    "base_merge_commit": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
-    "base_pr": 237,
-    "cleanup_pr": 4504,
-    "patch": "0111-WebUI-Fix-Translation-Performance.patch",
+    "base_merge_commit": "e829f3e95ea5de0f12ff1d42e40fb7d7e75cbd8d",
+    "base_pr": 238,
+    "cleanup_pr": 4506,
+    "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
     "phase": "cleanup-prepared; merge not yet verified"
   },
   "next_action": "Prepare the next selected patch migration after verifying the current repository state.",
   "schema": 1,
-  "verified_at_openccu_commit": "f7b2d13c648b0ab097c83d4dc36316aca7a23552",
-  "verified_base_pin": "fae206f8a7cd502eabea60cb7b66aa9e4544e50b",
-  "verified_source_sha256": "9ae10f726b13dbac260fb1e4672a038abc3490b582401fb3278f3bde99939544"
+  "verified_at_openccu_commit": "f5226361937ad50873aaa1883068a1fe2265f4bd",
+  "verified_base_pin": "45f2dcf12f27d4d2702fe79f81723afaab21c4e3",
+  "verified_source_sha256": "84c6b89d12a781d2c15e52c8dd2aedf7e25647ade261b2d117d712c5e328925c"
 }

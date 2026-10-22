@@ -34401,14 +34401,14 @@ convertDomTime = function(s) {
   return arTmp[0]+':'+arTmp[1];
 };
 
-ExecuteProgram = function(dpid)
+ExecuteProgram = function(dpid, thenOnly)
 {
   var url = "/esp/exec.htm?sid=" + SessionId;
   var pb = "";
   pb += "object o = dom.GetObject( "+dpid+" );";
   pb += "if( o )";
   pb += "{";
-  pb += "  o.ProgramExecute();";
+  pb += (thenOnly === true) ? "  o.ProgramExecute();" : "  o.State(1);";
   pb += "}";
   var opts = {postBody: ReGa.encode(pb)};
   if(dbg)alert(pb);
@@ -37787,12 +37787,14 @@ iseButtonsKey.prototype = {
  **/
 iseButtonProg = Class.create();
 iseButtonProg.prototype = {
-  initialize: function(id, progActive) {
+  initialize: function(id, progActive, thenOnly) {
     this.id = id;
     this.progActive = progActive;
     
-    this.startBtn = $(id + "Start");
+    this.startBtn = (thenOnly === true) ? $(id + "StartThenOnly") : $(id + "Start");
     this.actBtn = $(id + "Act");
+    
+    this.thenOnly = thenOnly;
     
     if ( progActive ) { ControlBtn.on(this.actBtn); }
     
@@ -37804,7 +37806,7 @@ iseButtonProg.prototype = {
   onClickStart: function() 
   {
     ControlBtn.pushed(this.startBtn);
-    ExecuteProgram(this.id);
+    ExecuteProgram(this.id, this.thenOnly);
     var t = this;
     new PeriodicalExecuter(function(pe)
     {

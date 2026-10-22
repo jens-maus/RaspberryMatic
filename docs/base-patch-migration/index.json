@@ -121,7 +121,7 @@
       ],
       "patch": "0039-WebUI-Fix-Style-Glitches.patch",
       "removed": 656,
-      "sha256": "44cbdfc4c43c8a36f5b91392593c8f1b3ae87494d8842091fd8176c189242178"
+      "sha256": "02b26c26aa8133f48ccfc5438e4dce24bcd8ef8bc8ce4b8954a5c24eead77ee5"
     },
     {
       "added": 138,
@@ -131,7 +131,7 @@
       ],
       "patch": "0042-WebUI-HeatingControl-HumidityBatteryValveState.patch",
       "removed": 19,
-      "sha256": "59da3d1f04ab97877481a2f959bf67251d757f990948c7cfc4fcddf69997b811"
+      "sha256": "02fc5a544f6a6c131ad56b327da976b08e38ff6add5d7ed3202717d54014e5f6"
     },
     {
       "added": 128,
@@ -160,7 +160,7 @@
       ],
       "patch": "0046-WebUI-ImprovedScriptEditor.patch",
       "removed": 138,
-      "sha256": "34dc255dfd280c9983f3e581a7741b2e69ffe838b10a48b559c23c42e3d7fa5e"
+      "sha256": "bd39c493e5649b1d208e75deb7307a097118f32a33450ea7ce25fcdc13b3b4f5"
     },
     {
       "added": 757,
@@ -182,7 +182,7 @@
       ],
       "patch": "0056-WebUI-Sticky-Filters.patch",
       "removed": 6,
-      "sha256": "5447f6ec052ec6f7a3ba9a1c6afa802758bb7d1020a3c846a7eda2438aab9ace"
+      "sha256": "a826969cba4db0ee0c891365d18709a78b4c1bee54f9214a66a2cf0d0f40de84"
     },
     {
       "added": 262,
@@ -214,7 +214,7 @@
       ],
       "patch": "0061-WebUI-MenuSortedIcons.patch",
       "removed": 327,
-      "sha256": "9359451c060653791d2aa0656633d702a9dd687bc09ad522ca48b7a254f4c459"
+      "sha256": "d86ccf9132cd144fc85618c4187c3e5d9018230ac7f2e66f53591d88b5c7e8fd"
     },
     {
       "added": 59,
@@ -229,7 +229,7 @@
       ],
       "patch": "0077-WebUI-NegateCondition.patch",
       "removed": 5,
-      "sha256": "b7dcf18691ef31c0c2bba7c88a5d9cf49bba0e7095a3a281fd49520505caeeb3"
+      "sha256": "8615d9d6e3256239ad4913eaf53ba5d44f894223aab66e60eda81cc7761639b3"
     },
     {
       "added": 74,
@@ -241,7 +241,7 @@
       ],
       "patch": "0095-WebUI-userSysVarTblMoveUpDown.patch",
       "removed": 1,
-      "sha256": "cbfd60aa6a0177e9f7cd4a0306ed8b8373769f804603e96bf7af59356cdcbbde"
+      "sha256": "ae1f9ba49747b6ce417eabf30fe5c1ce890abf305c13ec743c7db5e71966795b"
     },
     {
       "added": 213,
@@ -325,21 +325,7 @@
       ],
       "patch": "0119-WebUI-Fix-ProofAndSetValue.patch",
       "removed": 70,
-      "sha256": "cde196df11bd80b4651b4517e1ec1067e4d33015fa33426f8ce1af7936ae3669"
-    },
-    {
-      "added": 38,
-      "files": [
-        "www/rega/esp/system.fn",
-        "www/rega/pages/tabs/control/programs.htm",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.js",
-        "www/webui/style.css",
-        "www/webui/webui.js"
-      ],
-      "patch": "0122-WebUI-ProgramExecutionWithConditionCheck.patch",
-      "removed": 16,
-      "sha256": "bc7e2c2e798bb0ba315ac2fb2cd14103cbece50b661b2b6d5a82ca890aa14296"
+      "sha256": "6ef082f17b303c4ca4c3908b97bd27f24c1c0218feaac5d61ba603fe810c62ff"
     },
     {
       "added": 76,
@@ -580,5 +566,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "3022f8e113d4c20ec00ded396bcbf48e841cf7425aa6c87766761f203057390f"
+  "series_sha256": "97dbc93f1978f60f902c0daf564c0d91d2200ac271d942a444d96ec91bd0a9ce"
 }

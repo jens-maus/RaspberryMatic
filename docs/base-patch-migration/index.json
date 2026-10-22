@@ -305,7 +305,7 @@
       "sha256": "b43588d80b00a229ec995efa522b536d00e603c5d470ba4f7299a2fc02c30d6c"
     },
     {
-      "added": 56,
+      "added": 58,
       "files": [
         "www/config/cp_security.cgi",
         "www/webui/js/lang/translate.js",
@@ -313,7 +313,7 @@
       ],
       "patch": "0111-WebUI-Fix-Translation-Performance.patch",
       "removed": 24,
-      "sha256": "4cf56d359fd280fcfc314ed81891822cd3de478fddbfecdec6a8869f76d7cc0c"
+      "sha256": "6afc032213af78b9610bc501062fa85505e3cd63c9875a5d95cf66c06bf8b882"
     },
     {
       "added": 211,

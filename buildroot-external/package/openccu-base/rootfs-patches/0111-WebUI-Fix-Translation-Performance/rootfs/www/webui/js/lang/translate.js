@@ -88,16 +88,18 @@ function translateKey(key, lang) {
     return unescape(text);
   }
   
-  // Check if we already have an escaped variant of the ressource
-  if(EscapedLangDict[lang][key] !== undefined) {
-    return EscapedLangDict[lang][key];
-  }
-
-  // Get ressource, escape and cach it
+  // Use the cached unescaped text only while the text in langJSON is unchanged,
+  // because resources loaded later (e.g. by the easymodes) add or override keys
   var keyText = langJSON[lang][key];
   if(keyText === undefined) keyText = key;
+  var cached = EscapedLangDict[lang][key];
+  if(cached !== undefined && cached.text === keyText) {
+    return cached.result;
+  }
+
+  // Unescape the ressource and cache it
   var result = unescape(keyText);
-  EscapedLangDict[lang][key] = result;
+  EscapedLangDict[lang][key] = {text: keyText, result: result};
   return result;
 }
 
@@ -138,9 +140,9 @@ function translateJSTemplate(container) {
           break;
         default:
           // Replacing textContent with translation is faster
-          // but elements with html tags <..> have to be stored
-          // using innerHTML
-          if(translatedKey.indexOf("<") >= 0) {
+          // but elements with html tags <..> or entities &..; have
+          // to be stored using innerHTML
+          if(translatedKey.indexOf("<") >= 0 || translatedKey.indexOf("&") >= 0) {
             e.innerHTML = translatedKey;
           } else {
             e.textContent = translatedKey;

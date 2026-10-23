@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "5963533b3da8b2802bceceeb7784cd5459efc87fb51049d268ea804de9f3d0ba"
+      "sha256": "50ea6983b4e12d0caf22858a66e27d56627778fd59ab3297da35c5a1b38b6677"
     },
     {
       "added": 370,
@@ -463,7 +463,7 @@
       ],
       "patch": "0163-WebUI-ImprovedFileUploadButton.patch",
       "removed": 40,
-      "sha256": "e6ac3bd949df271c956f5c1cbc0a793574d3c2b7e5da08d4d85db4b7987c02b8"
+      "sha256": "d3f2f952296ab0ca91a661c187bdc88a1a29299afec97a8a521487282586ca8c"
     },
     {
       "added": 68,
@@ -482,7 +482,7 @@
       "sha256": "004cfa88be35dcbcd5e8b7413bd67c948ea48a3a6308b2748c0ca9adf5fea013"
     },
     {
-      "added": 62,
+      "added": 60,
       "files": [
         "www/config/cp_maintenance.cgi",
         "www/webui/js/lang/de/translate.lang.extension.js",
@@ -491,8 +491,8 @@
         "www/webui/js/lang/en/translate.lang.js"
       ],
       "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
-      "removed": 7,
-      "sha256": "64404a9c778991490fca6fac21a66244180686b0cf6761515e39e1a3c2b63503"
+      "removed": 5,
+      "sha256": "dbed5627822ccf6bd4575f8d4a04853c6eec527396c039fc982bcf4b86190962"
     },
     {
       "added": 86,

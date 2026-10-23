@@ -81,7 +81,7 @@
 -                        }
 -                      }
 -                    }
-+                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
++                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {id="btnSoftwareUpdateUpload"} {
 +                    puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
                    }
                  }

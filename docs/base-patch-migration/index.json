@@ -482,7 +482,7 @@
       "sha256": "004cfa88be35dcbcd5e8b7413bd67c948ea48a3a6308b2748c0ca9adf5fea013"
     },
     {
-      "added": 54,
+      "added": 74,
       "files": [
         "www/config/cp_maintenance.cgi",
         "www/webui/js/lang/de/translate.lang.extension.js",
@@ -492,7 +492,7 @@
       ],
       "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
       "removed": 7,
-      "sha256": "bc49a8c04ae0a63508ec3ca1fce285c2a8610e76a27199db813dfc39c73298ee"
+      "sha256": "c985efac75e0ca7e4a911dfba6be9b1d6647c52fae10433c4994b353e1b94154"
     },
     {
       "added": 86,

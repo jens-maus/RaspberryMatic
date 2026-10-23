@@ -366,10 +366,7 @@ proc action_put_page {} {
     } else {
       set USERFSFREE_GB "\${dialogSettingsCMLblFreeUserSpaceUnknown}"
     }
-    # free space recommended for a full update (image and update file)
     set USERFSFREE_MB_REQ 2867.2
-    # below this, the update file itself could fill the user partition
-    set USERFSFREE_MB_MIN 1024
     set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
   }
   
@@ -422,7 +419,7 @@ proc action_put_page {} {
             }
             table_row {
               table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
-                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i><span id=\"availableUserSpaceHint\"></span>"
+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
               }
             }
             table_row {
@@ -901,15 +898,10 @@ proc action_put_page {} {
     cgi_javascript {
        puts "var userFreeMB = $USERFSFREE_MB;"
        puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
-       puts "var userFreeMBMinimum = $USERFSFREE_MB_MIN;"
        puts {
-         // warn below the recommended space, the update checks the space it needs itself;
-         // block only if even the update file could fill the user partition
+         // block only if the free space is known to be too low
          if (userFreeMB >= 0 && userFreeMB < userFreeMBRequired) {
            jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
-           jQuery('#availableUserSpaceHint').html('<br/>' + translateKey((userFreeMB < userFreeMBMinimum) ? 'dialogSettingsCMLblFreeUserSpaceTooLow' : 'dialogSettingsCMLblFreeUserSpaceLow'));
-         }
-         if (userFreeMB >= 0 && userFreeMB < userFreeMBMinimum) {
            jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
            jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray', 'pointer-events': 'none', 'cursor': 'default', 'opacity': '0.5' });
            jQuery('#btnSoftwareUpdateUpload').attr('aria-disabled', 'true');

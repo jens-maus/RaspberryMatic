@@ -347,7 +347,7 @@ proc execCmd {varName cmd} {
   if {$rc == 0} {
     set variable $resVar
   } else {
-    set variable 0
+    set variable ""
   }
 }
 
@@ -357,10 +357,15 @@ proc action_put_page {} {
 
   if {[get_platform] != "oci" && [get_platform] != "lxc"} {
     execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
-    if { ! [string is double -strict $USERFSFREE_MB] } {
-      set USERFSFREE_MB 0
+    # -1 marks free space that could not be determined
+    if { ! [string is double -strict $USERFSFREE_MB] || $USERFSFREE_MB < 0 } {
+      set USERFSFREE_MB -1
     }
-    set USERFSFREE_GB [format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]]
+    if { $USERFSFREE_MB >= 0 } {
+      set USERFSFREE_GB "[format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]] GB"
+    } else {
+      set USERFSFREE_GB "\${dialogSettingsCMLblFreeUserSpaceUnknown}"
+    }
     set USERFSFREE_MB_REQ 2867.2
     set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
   }
@@ -414,7 +419,7 @@ proc action_put_page {} {
             }
             table_row {
               table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
-                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
               }
             }
             table_row {
@@ -894,7 +899,8 @@ proc action_put_page {} {
        puts "var userFreeMB = $USERFSFREE_MB;"
        puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
        puts {
-         if (userFreeMB < userFreeMBRequired) {
+         // block only if the free space is known to be too low
+         if (userFreeMB >= 0 && userFreeMB < userFreeMBRequired) {
            jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
            jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
            jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray', 'pointer-events': 'none', 'cursor': 'default', 'opacity': '0.5' });

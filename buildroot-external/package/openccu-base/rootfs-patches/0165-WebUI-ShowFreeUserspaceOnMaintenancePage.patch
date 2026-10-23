@@ -1,6 +1,6 @@
 --- a/www/config/cp_maintenance.cgi
 +++ b/www/config/cp_maintenance.cgi
-@@ -341,10 +341,30 @@
+@@ -341,10 +341,35 @@
    }
  }
  
@@ -10,7 +10,7 @@
 +  if {$rc == 0} {
 +    set variable $resVar
 +  } else {
-+    set variable 0
++    set variable ""
 +  }
 +}
 +
@@ -20,10 +20,15 @@
  
 +  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
 +    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
-+    if { ! [string is double -strict $USERFSFREE_MB] } {
-+      set USERFSFREE_MB 0
++    # -1 marks free space that could not be determined
++    if { ! [string is double -strict $USERFSFREE_MB] || $USERFSFREE_MB < 0 } {
++      set USERFSFREE_MB -1
 +    }
-+    set USERFSFREE_GB [format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]]
++    if { $USERFSFREE_MB >= 0 } {
++      set USERFSFREE_GB "[format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]] GB"
++    } else {
++      set USERFSFREE_GB "\${dialogSettingsCMLblFreeUserSpaceUnknown}"
++    }
 +    set USERFSFREE_MB_REQ 2867.2
 +    set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
 +  }
@@ -31,7 +36,7 @@
    division {class="popupTitle j_translate"} {
      puts "\${dialogSettingsCMTitle}"
      #puts [isOldCCU]
-@@ -389,7 +409,12 @@
+@@ -389,7 +414,12 @@
              table_row {
                table_data {align="left"} {colspan="3"} {
                  #puts "[bold "Software-Update durchf�hren"]"
@@ -41,11 +46,11 @@
 +            }
 +            table_row {
 +              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
-+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
++                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
                }
              }
              table_row {
-@@ -399,7 +424,7 @@
+@@ -399,7 +429,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
@@ -54,7 +59,7 @@
                        }
                      }
                    }
-@@ -452,7 +477,7 @@
+@@ -452,7 +482,7 @@
                td {width="20"} {}
                table_data {align="left"} {colspan="2"} {
                  division {class="popupControls CLASS20905"} {
@@ -63,7 +68,7 @@
                      puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
                    }
                  }
-@@ -863,6 +888,24 @@
+@@ -863,6 +893,25 @@
        }
      }
    }
@@ -73,7 +78,8 @@
 +       puts "var userFreeMB = $USERFSFREE_MB;"
 +       puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
 +       puts {
-+         if (userFreeMB < userFreeMBRequired) {
++         // block only if the free space is known to be too low
++         if (userFreeMB >= 0 && userFreeMB < userFreeMBRequired) {
 +           jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
 +           jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
 +           jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray', 'pointer-events': 'none', 'cursor': 'default', 'opacity': '0.5' });
@@ -103,12 +109,13 @@
      "indoorAirQualityModerate" : "Raumluftqualit%E4t: M%E4%DFig<br/><br/>Der Raum sollte dringend gel%FCftet werden.",
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -497,6 +497,8 @@
+@@ -497,6 +497,9 @@
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
 +    "dialogSettingsCMLblFreeUserSpace" : "Verf%FCgbarer Speicherplatz:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "erforderlich",
++    "dialogSettingsCMLblFreeUserSpaceUnknown" : "unbekannt",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
      "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der OpenCCU Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende OpenCCU Dokumentation.",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
@@ -127,12 +134,13 @@
      "indoorAirQualityModerate" : "Room air quality: Average<br/><br/>The room should be ventilated as soon as possible.",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -496,6 +496,8 @@
+@@ -496,6 +496,9 @@
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
 +    "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
++    "dialogSettingsCMLblFreeUserSpaceUnknown" : "unknown",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
      "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the OpenCCU version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding OpenCCU documentation.",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",

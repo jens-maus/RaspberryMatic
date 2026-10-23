@@ -498,6 +498,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
     "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
     "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
+    "dialogSettingsCMLblFreeUserSpaceUnknown" : "unknown",
     "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the OpenCCU version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding OpenCCU documentation.",
     "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",

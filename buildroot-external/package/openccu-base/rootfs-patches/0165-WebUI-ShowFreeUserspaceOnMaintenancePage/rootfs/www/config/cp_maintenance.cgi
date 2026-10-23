@@ -355,6 +355,11 @@ proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
+  division {class="popupTitle j_translate"} {
+    puts "\${dialogSettingsCMTitle}"
+    #puts [isOldCCU]
+  }
+
   if {[get_platform] != "oci" && [get_platform] != "lxc"} {
     execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
     # -1 marks free space that could not be determined
@@ -368,11 +373,6 @@ proc action_put_page {} {
     }
     set USERFSFREE_MB_REQ 2867.2
     set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
-  }
-  
-  division {class="popupTitle j_translate"} {
-    puts "\${dialogSettingsCMTitle}"
-    #puts [isOldCCU]
   }
   
   division {class="CLASS20918"}  {

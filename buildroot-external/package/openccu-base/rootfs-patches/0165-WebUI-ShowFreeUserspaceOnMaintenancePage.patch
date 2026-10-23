@@ -1,6 +1,6 @@
 --- a/www/config/cp_maintenance.cgi
 +++ b/www/config/cp_maintenance.cgi
-@@ -341,10 +341,35 @@
+@@ -341,6 +341,16 @@
    }
  }
  
@@ -17,7 +17,11 @@
  proc action_put_page {} {
    global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
    http_head
- 
+@@ -349,6 +359,21 @@
+     puts "\${dialogSettingsCMTitle}"
+     #puts [isOldCCU]
+   }
++
 +  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
 +    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
 +    # -1 marks free space that could not be determined
@@ -32,10 +36,9 @@
 +    set USERFSFREE_MB_REQ 2867.2
 +    set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
 +  }
-+  
-   division {class="popupTitle j_translate"} {
-     puts "\${dialogSettingsCMTitle}"
-     #puts [isOldCCU]
+   
+   division {class="CLASS20918"}  {
+ 
 @@ -389,7 +414,12 @@
              table_row {
                table_data {align="left"} {colspan="3"} {
@@ -50,24 +53,6 @@
                }
              }
              table_row {
-@@ -399,7 +429,7 @@
-                     table_row {
-                       table_data {
-                         division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
--                        division {class="CLASS20905"}  "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
-+                        division {class="CLASS20910"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
-                       }
-                     }
-                   }
-@@ -452,7 +482,7 @@
-               td {width="20"} {}
-               table_data {align="left"} {colspan="2"} {
-                 division {class="popupControls CLASS20905"} {
--                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
-+                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {id="btnSoftwareUpdateUpload"} {
-                     puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
-                   }
-                 }
 @@ -863,6 +893,25 @@
        }
      }
@@ -109,16 +94,16 @@
      "indoorAirQualityModerate" : "Raumluftqualit%E4t: M%E4%DFig<br/><br/>Der Raum sollte dringend gel%FCftet werden.",
 --- a/www/webui/js/lang/de/translate.lang.js
 +++ b/www/webui/js/lang/de/translate.lang.js
-@@ -497,6 +497,9 @@
+@@ -495,6 +495,9 @@
+     "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
+     "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>Modus",
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
-     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
 +    "dialogSettingsCMLblFreeUserSpace" : "Verf%FCgbarer Speicherplatz:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "erforderlich",
 +    "dialogSettingsCMLblFreeUserSpaceUnknown" : "unbekannt",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
-     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der OpenCCU Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende OpenCCU Dokumentation.",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
 --- a/www/webui/js/lang/en/translate.lang.extension.js
 +++ b/www/webui/js/lang/en/translate.lang.extension.js
 @@ -1015,8 +1015,8 @@
@@ -134,13 +119,13 @@
      "indoorAirQualityModerate" : "Room air quality: Average<br/><br/>The room should be ventilated as soon as possible.",
 --- a/www/webui/js/lang/en/translate.lang.js
 +++ b/www/webui/js/lang/en/translate.lang.js
-@@ -496,6 +496,9 @@
+@@ -494,6 +494,9 @@
+     "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
+     "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>mode",
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
-     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
 +    "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
 +    "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
 +    "dialogSettingsCMLblFreeUserSpaceUnknown" : "unknown",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
-     "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the OpenCCU version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding OpenCCU documentation.",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",

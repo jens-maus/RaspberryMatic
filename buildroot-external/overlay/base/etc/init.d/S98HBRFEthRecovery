@@ -1,0 +1,3 @@
+#!/bin/sh
+# Optional HB-RF-ETH recovery; enabled explicitly by the administrator.
+exec /bin/hb-rf-eth-recovery "$@"

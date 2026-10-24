@@ -1,0 +1,379 @@
+#!/bin/sh
+# Recover the dual-protocol RPI-RF-MOD stack after HB-RF-ETH interruptions.
+# shellcheck shell=dash source=/dev/null
+NAME=hb-rf-eth-recovery
+SCRIPT=/bin/hb-rf-eth-recovery
+PIDFILE=/var/run/hb-rf-eth-recovery.pid
+JOURNAL=/var/run/hb-rf-eth-recovery.monit
+LOCK=/var/run/hb-rf-eth-recovery.lock
+ENABLE=/etc/config/hb_rf_eth_recovery
+GATEWAY=/etc/config/hb_rf_eth
+LEGACY=/etc/config/rc.d/hb-rf-eth-recovery
+LINK=/sys/class/hb-rf-eth/hb-rf-eth/is_connected
+MODE=/var/hm_mode
+INTERFACES=/etc/config/InterfacesList.xml
+CACHE=/var/tmp/api_ipc.cache
+READY=/var/status/HMServerStarted
+POLL=2
+STABLE=30
+COOLDOWN=300
+WAIT=30
+# Include enabled predicates and dependent stale-device checks: otherwise
+# Monit can restart daemons while their device nodes are being recreated.
+SERVICES="multimacdEnabled rfdEnabled multimacd rfd HMIPServer ReGaHss rfdDevice HMIPServerDevice"
+LAST_ATTEMPT=-300
+
+log() {
+  logger -t "$NAME" -- "$*"
+}
+
+uptime_seconds() {
+  local seconds _ignored
+  read -r seconds _ignored </proc/uptime
+  printf '%s\n' "${seconds%%.*}"
+}
+
+enabled() {
+  [ -e "$ENABLE" ] && [ -s "$GATEWAY" ] && [ ! -e /usr/local/HMLGW ] &&
+    [ ! -e /etc/config/safemode ] && [ ! -x "$LEGACY" ]
+}
+
+link_up() {
+  [ -r "$LINK" ] && [ "$(cat "$LINK")" = 1 ]
+}
+
+load_mode() {
+  HM_MODE='' HM_HMRF_DEV='' HM_HMIP_DEV='' HM_HMRF_DEVNODE='' HM_HMIP_DEVNODE=''
+  HM_HMRF_DEVTYPE='' HM_HMIP_DEVTYPE=''
+  [ -r "$MODE" ] && . "$MODE"
+}
+
+supported() {
+  load_mode || return 1
+  [ "$HM_MODE" = NORMAL ] &&
+    [ "$HM_HMRF_DEV" = RPI-RF-MOD ] && [ "$HM_HMIP_DEV" = RPI-RF-MOD ] &&
+    [ "$HM_HMRF_DEVNODE" = /dev/raw-uart ] && [ "$HM_HMIP_DEVNODE" = /dev/raw-uart ] || return 1
+  case "$HM_HMRF_DEVTYPE:$HM_HMIP_DEVTYPE" in
+    HB-RF-ETH@*:HB-RF-ETH@*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+interfaces_ready() {
+  grep -q '<name>BidCos-RF</name>' "$INTERFACES" 2>/dev/null &&
+    grep -q '<name>HmIP-RF</name>' "$INTERFACES" 2>/dev/null || return 1
+  if [ -e "$CACHE" ]; then
+    grep -q 'BidCos-RF' "$CACHE" && grep -q 'HmIP-RF' "$CACHE" || return 1
+  fi
+}
+
+hardware_ready() {
+  supported && [ -c /dev/mmd_bidcos ] && [ -c /dev/mmd_hmip ] && interfaces_ready
+}
+
+# All external init scripts are bounded. Close the lock FD before launching
+# them so background RF daemons cannot inherit the monitor's lifetime lock.
+service_action() {
+  log "$1 $2"
+  timeout -k 10 360 "/etc/init.d/$1" "$2" 9>&-
+}
+
+monit_command() {
+  timeout -k 2 10 monit "$@" 9>&-
+}
+
+monit_state() {
+  monit_command status "$1" 2>/dev/null
+}
+
+is_monitored() {
+  printf '%s\n' "$1" | grep -q 'monitoring status[[:space:]]*Monitored'
+}
+
+wait_monitor() {
+  local service="$1" wanted="$2" attempt=0 state
+  while [ "$attempt" -lt "$WAIT" ]; do
+    state=$(monit_state "$service") || return 1
+    case "$wanted" in
+      paused) printf '%s\n' "$state" | grep -q 'monitoring status[[:space:]]*Not monitored' && return 0 ;;
+      active) is_monitored "$state" && return 0 ;;
+      healthy) is_monitored "$state" && printf '%s\n' "$state" | grep -Eq '^[[:space:]]*status[[:space:]]+OK[[:space:]]*$' && return 0 ;;
+    esac
+    attempt=$((attempt+1))
+    sleep 1
+  done
+  return 1
+}
+
+restore_monit() {
+  local service failed=0 remaining="${JOURNAL}.remaining"
+  [ -f "$JOURNAL" ] || return 0
+  : >"$remaining" || return 1
+  while IFS= read -r service; do
+    [ -n "$service" ] || continue
+    if ! monit_command monitor "$service" >/dev/null 2>&1 || ! wait_monitor "$service" active; then
+      printf '%s\n' "$service" >>"$remaining"
+      failed=1
+    fi
+  done <"$JOURNAL"
+  # Preserve failed entries for the next attempt, including after a crash.
+  if [ "$failed" = 0 ]; then
+    rm -f "$JOURNAL" "$remaining"
+  else
+    mv -f "$remaining" "$JOURNAL"
+    log "Monit restoration incomplete; retaining recovery journal"
+  fi
+  return "$failed"
+}
+
+pause_monit() {
+  local service state
+  # Never overwrite an interrupted transaction's journal.
+  restore_monit || return 1
+  : >"$JOURNAL" || return 1
+  # Snapshot all states first: unmonitoring a dependency can also change
+  # dependent checks. Recording states while pausing loses those originals.
+  for service in $SERVICES; do
+    state=$(monit_state "$service") || return 1
+    if is_monitored "$state"; then
+      printf '%s\n' "$service" >>"$JOURNAL" || return 1
+    elif ! printf '%s\n' "$state" | grep -q 'monitoring status[[:space:]]*Not monitored'; then
+      return 1
+    fi
+  done
+  while IFS= read -r service; do
+    monit_command unmonitor "$service" >/dev/null 2>&1 && wait_monitor "$service" paused || return 1
+  done <"$JOURNAL"
+
+}
+
+process_running() {
+  local pid
+  [ -r "/var/run/$1.pid" ] || return 1
+  pid=$(cat "/var/run/$1.pid")
+  case "$pid" in ''|*[!0-9]*|0|1) return 1 ;; esac
+  kill -0 "$pid" 2>/dev/null || return 1
+  case "$1" in
+    HMIPServer) tr '\000' '\n' <"/proc/$pid/cmdline" | grep -Fxq 'de.eq3.ccu.server.ip.HMIPServer' ;;
+    *) tr '\000' '\n' <"/proc/$pid/cmdline" | grep -Fxq "/bin/$1" ;;
+  esac
+}
+
+stop_process() {
+  local old_pid='' attempt=0 process="$2"
+  if [ -r "/var/run/$2.pid" ]; then old_pid=$(cat "/var/run/$2.pid"); fi
+  case "$old_pid" in *[!0-9]*|0|1) return 1 ;; esac
+  if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
+    process_running "$2" || return 1
+  elif [ -z "$old_pid" ]; then
+    [ "$process" != HMIPServer ] || process=java
+    # A missing PID file must not make us start a duplicate daemon.
+    if pidof "$process" >/dev/null 2>&1; then return 1; fi
+  fi
+  service_action "$1" stop || return 1
+  # Keep the PID from before stop: init scripts delete their PID file even
+  # if termination failed. Do not create a second daemon in that case.
+  if [ -n "$old_pid" ]; then
+    while kill -0 "$old_pid" 2>/dev/null; do
+      [ "$attempt" -lt "$WAIT" ] || return 1
+      sleep 1
+      attempt=$((attempt+1))
+    done
+  fi
+}
+
+stack_ready() {
+  link_up && hardware_ready && [ -e "$READY" ] &&
+    process_running multimacd && process_running rfd && process_running HMIPServer && process_running ReGaHss
+}
+
+verify_monit() {
+  local service
+  # Only verify entries that were active when this transaction began.
+  for service in $ACTIVE_SERVICES; do
+    wait_monitor "$service" healthy || return 1
+  done
+}
+
+clear_link_alarm() {
+  # Clear only the transport alarm owned by this recovery. Other watchdogs
+  # may describe unrelated failures and are intentionally retained.
+  timeout -k 2 10 /bin/tclsh 9>&- <<'TCL'
+load tclrega.so
+set script {
+  object alarm = dom.GetObject("WatchDog: hb-rf-eth-connection");
+  if (alarm != null) {
+    alarm.State(false);
+    dom.RTUpdate(1);
+  }
+}
+if {[catch {rega_script $script}]} { exit 1 }
+TCL
+}
+
+recover() {
+  local now reload=0 failed=0 step
+  now=$(uptime_seconds)
+  [ $((now-LAST_ATTEMPT)) -ge "$COOLDOWN" ] || return 1
+  LAST_ATTEMPT=$now
+  ACTIVE_SERVICES=
+  # Validate before any service changes. Unknown/mixed radios are excluded.
+  enabled && link_up && supported || return 1
+  for step in S47InitRFHardware S49InitInterfaces S60multimacd S61rfd S62HMServer S70ReGaHss; do
+    [ -x "/etc/init.d/$step" ] || return 1
+  done
+  log "Recovery started after a stable HB-RF-ETH connection"
+  if ! pause_monit; then
+    restore_monit || :
+    log "Recovery aborted: Monit could not be paused safely"
+    return 1
+  fi
+  ACTIVE_SERVICES=$(cat "$JOURNAL")
+  interfaces_ready || reload=1
+  # Check actual process termination: the init scripts can return success
+  # even when the old process is still alive.
+  stop_process S62HMServer HMIPServer || {
+    restore_monit || :
+    return 1
+  }
+  if ! stop_process S61rfd rfd; then
+    service_action S62HMServer start || :
+    restore_monit || :
+    return 1
+  fi
+  if ! stop_process S60multimacd multimacd; then
+    service_action S61rfd start || :
+    service_action S62HMServer start || :
+    restore_monit || :
+    return 1
+  fi
+  if [ "$failed" = 0 ] && link_up; then
+    service_action S47InitRFHardware start && supported && link_up &&
+      service_action S49InitInterfaces start &&
+      rm -f "$CACHE" && service_action S60multimacd start && hardware_ready || failed=1
+  else
+    failed=1
+  fi
+  # Attempt to bring services back even after an intermediate failure.
+  rm -f "$READY"
+  service_action S61rfd start || failed=1
+  service_action S62HMServer start || failed=1
+  if [ "$failed" = 0 ] && [ "$reload" = 1 ]; then
+    service_action S70ReGaHss restart || failed=1
+  fi
+  restore_monit || failed=1
+  if [ "$failed" = 0 ] && stack_ready && verify_monit && link_up; then
+    clear_link_alarm || log "Transport recovered; alarm reset failed"
+    log "Recovery completed; RF stack and previous Monit checks verified"
+    return 0
+  fi
+  log "Recovery incomplete; retaining alarms and retrying after cooldown"
+  return 1
+}
+
+monitor_step() {
+  local now
+  now=$(uptime_seconds)
+  if ! link_up; then
+    [ "$WAS_UP" = 0 ] || log "HB-RF-ETH connection lost"
+    WAS_UP=0
+    PENDING=1
+    UP_SINCE=$now
+    return
+  fi
+  if [ "$WAS_UP" = 0 ]; then
+    WAS_UP=1
+    UP_SINCE=$now
+    log "HB-RF-ETH connected; waiting for continuous stability"
+  fi
+  [ $((now-UP_SINCE)) -ge "$STABLE" ] || return 0
+  if [ "$PENDING" = 1 ]; then
+    # Retain pending state during cooldown and after failed attempts.
+    if recover; then PENDING=0; fi
+  fi
+}
+
+cleanup() {
+  restore_monit || log "Monit restoration pending in $JOURNAL"
+  rm -f "$PIDFILE"
+}
+
+run() {
+  # The kernel releases flock on exit, including SIGKILL. A PID file alone
+  # neither serializes concurrent starts nor protects against PID reuse.
+  exec 9>"$LOCK"
+  flock -n 9 || return 0
+  printf '%s\n' "$$" >"$PIDFILE" || return 1
+  trap 'exit 0' TERM INT HUP
+  trap cleanup EXIT
+  restore_monit || return 1
+  WAS_UP=0 PENDING=0 UP_SINCE=0
+  # Do not race the normal boot sequence, including add-on startup.
+  while [ ! -e /var/status/startupFinished ]; do
+    enabled || return 0
+    sleep "$POLL"
+  done
+  enabled || return 0
+  if ! supported; then
+    log "Unsupported or unidentified RF hardware; recovery monitor disabled"
+    return 0
+  fi
+  stack_ready || PENDING=1
+  log "Monitor started (poll=${POLL}s, stability=${STABLE}s, cooldown=${COOLDOWN}s)"
+  while enabled; do
+    monitor_step
+    sleep "$POLL"
+  done
+}
+
+worker_pid() {
+  local pid command
+  [ -r "$PIDFILE" ] || return 1
+  pid=$(cat "$PIDFILE")
+  case "$pid" in ''|*[!0-9]*|0|1) return 1 ;; esac
+  [ -r "/proc/$pid/cmdline" ] || return 1
+  command=$(tr '\000' ' ' <"/proc/$pid/cmdline")
+  [ "$command" = "/bin/sh $SCRIPT run " ] || return 1
+  printf '%s\n' "$pid"
+}
+
+start() {
+  local child attempt=0
+  enabled || return 0
+  worker_pid >/dev/null && return 0
+  /bin/sh "$SCRIPT" run </dev/null >/dev/null 2>&1 &
+  child=$!
+  # Publish a validated worker PID before start returns, so an immediate
+  # stop/restart cannot miss a worker that has not acquired its lock yet.
+  while [ "$attempt" -lt 5 ]; do
+    worker_pid >/dev/null && return 0
+    if ! kill -0 "$child" 2>/dev/null; then wait "$child"; return $?; fi
+    sleep 1
+    attempt=$((attempt+1))
+  done
+  kill "$child" 2>/dev/null || :
+  wait "$child"
+  return 1
+}
+
+stop() {
+  local pid attempt=0
+  pid=$(worker_pid) || return 0
+  kill "$pid" || return 1
+  # A TERM trap is handled after the current bounded init command returns.
+  # Wait before allowing a replacement worker or continuing OS shutdown.
+  while worker_pid >/dev/null; do
+    [ "$attempt" -lt 900 ] || return 1
+    sleep 1
+    attempt=$((attempt+1))
+  done
+}
+
+case "${1:-}" in
+  start) start ;;
+  stop) stop ;;
+  restart) stop && start ;;
+  run) run ;;
+  info) echo "Optional dual-protocol RPI-RF-MOD recovery; enable with $ENABLE" ;;
+  *) echo "Usage: $0 {start|stop|restart|info}"; exit 1 ;;
+esac

@@ -294,8 +294,10 @@ uptime_seconds() { echo 1000; }
 
     def test_stale_hmip_ready_marker_is_not_success(self):
         """Stale hmip ready marker is not success."""
-        self.transaction('touch "$READY"; service_action() { return 0; }',
-                         'if recover; then exit 1; fi; [ ! -e ./cleared ]')
+        self.transaction('touch "$READY"; service_action() { '
+                         'echo "$*" >>./actions; return 0; }',
+                         'if recover; then exit 1; fi; [ ! -e ./cleared ] && '
+                         '! grep -q S70ReGaHss ./actions')
 
     def test_unhealthy_hmip_monit_keeps_alarm(self):
         """Unhealthy hmip monit keeps alarm."""
@@ -322,9 +324,17 @@ uptime_seconds() { echo 1000; }
                          'recover && [ ! -e "$CACHE" ] && '
                          'grep -q "S70ReGaHss restart" ./actions')
 
-    def test_healthy_registry_avoids_rega_restart(self):
-        """Healthy registry avoids rega restart."""
-        self.transaction(tail='recover && ! grep -q S70ReGaHss ./actions')
+    def test_healthy_registry_still_renews_rega_callbacks(self):
+        """Renew ReGa subscriptions with an already complete registry."""
+        self.transaction(tail='recover && '
+                         'grep -q "^S70ReGaHss restart$" ./actions')
+
+    def test_failed_rega_restart_preserves_alarm_and_restores_monit(self):
+        """Keep failure state when ReGa cannot renew its subscriptions."""
+        self.transaction('service_action() { touch "$READY"; '
+                         '[ "$1" != S70ReGaHss ]; }',
+                         'if recover; then exit 1; fi; '
+                         '[ ! -e ./cleared ] && [ ! -e "$JOURNAL" ]')
 
     def test_deleted_pid_file_does_not_prove_termination(self):
         """Deleted pid file does not prove termination."""

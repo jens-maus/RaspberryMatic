@@ -7,9 +7,9 @@ background, rechecking eligibility every 30 seconds. It does not poll the RF
 link, query Monit or change RF services while in standby.
 
 When a supported gateway is detected, it activates monitoring and can recover
-the RF stack after a network interruption. Recovery permits RF daemon restarts
-and, when the interface registry needs repair, a ReGaHss restart. Such restarts
-interrupt RF communication and may interrupt running automations.
+the RF stack after a network interruption. Recovery restarts the RF daemons and
+ReGaHss to renew its event subscriptions. Such restarts interrupt RF
+communication and may interrupt running automations.
 
 ## Problem and scope
 
@@ -61,8 +61,10 @@ not diagnose or fix the underlying Ethernet interruption.
    an existing BidCos device node; this also guards partial-stop rollback paths.
    Start HMIPServer. Invalidate the HmIP readiness
    marker before starting HMIPServer, so stale readiness cannot count as success.
-7. Restart ReGaHss only when the old interface registry or API cache was
-   incomplete. Restore the original Monit checks and verify that previously
+7. Restart ReGaHss after the RF stack is ready, even when the interface registry
+   was already complete. A userspace RF restart can invalidate event
+   subscriptions while leaving the XML intact and WebUI datapoints stale.
+   Restore the original Monit checks and verify that previously
    monitored checks are `Monitored/OK`. Intentionally disabled checks remain
    outside the restoration journal.
 8. Check the link, hardware, interfaces, process PIDs and HmIP readiness again.
@@ -163,9 +165,9 @@ Real worker start/stop and signal cleanup are also exercised. They do not
 reset a radio or prove RF packet exchange. CI runs the regression
 suite alongside existing checks.
 
-Local validation passed: 44 recovery regression tests, eight existing
+Local validation passed: 45 recovery regression tests, eight existing
 runtime-path/recovery-service tests, ShellCheck, BusyBox ash syntax checks,
-YAML/Markdown/Python lint and whitespace checks. All 48 Python test/helper
+YAML/Markdown/Python lint and whitespace checks. All 49 Python test/helper
 functions have docstrings. Regression coverage includes delayed hardware,
 bounded timeout, missing nodes, another link loss during the wait, and guarded
 rfd startup in both the normal path and partial-stop rollback.
@@ -210,3 +212,20 @@ outage inside cooldown, a worker interruption and boot/shutdown on the target
 image. Discuss the approach as required by `CONTRIBUTING.md`. A full image build
 and local `make PRODUCT=rpi3 check` have not been run. Individual actuator
 operation and the physical missing-node failure case have not been tested.
+
+### ReGa datapoint verification
+
+A subsequent device-level check exposed a gap in the original validation:
+a temperature sensor's direct HmIP RPC value was 26.4 degrees C, but ReGa still
+held 21.5 degrees C with a timestamp of 01:15:32. Thus the WebUI was stale even
+though the adapter reported connected and Monit was healthy. This was not
+caught by an interface-file completeness check.
+
+On 2026-10-24, renewing ReGa alone from 15:32:41 to 15:32:55 Europe/Berlin restored
+the current value without restarting the RF daemons. A later spontaneous update
+to 24.9 degrees C was observed through both direct HmIP RPC and ReGa at 15:34:12.
+Home Assistant also received the renewed temperature readings. The recovery
+now renews ReGa after every successful RF reinitialization, with regression
+coverage for a complete registry and a failed ReGa restart. Adapter readiness
+must not be described as proof that all end devices have resumed reporting;
+configuration-pending devices require separate observation.

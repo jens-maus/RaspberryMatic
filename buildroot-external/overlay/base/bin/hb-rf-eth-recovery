@@ -260,7 +260,7 @@ interface_init_script() {
 }
 
 recover() {
-  local now reload=0 failed=0 step interface_init
+  local now failed=0 step interface_init
   now=$(uptime_seconds)
   [ $((now-LAST_ATTEMPT)) -ge "$COOLDOWN" ] || return 1
   LAST_ATTEMPT=$now
@@ -278,7 +278,6 @@ recover() {
     return 1
   fi
   ACTIVE_SERVICES=$(cat "$JOURNAL")
-  interfaces_ready || reload=1
   # Check actual process termination: the init scripts can return success
   # even when the old process is still alive.
   stop_process S62HMServer HMIPServer || {
@@ -307,8 +306,14 @@ recover() {
   rm -f "$READY"
   start_rfd_if_ready || failed=1
   service_action S62HMServer start || failed=1
-  if [ "$failed" = 0 ] && [ "$reload" = 1 ]; then
+  # A complete InterfacesList does not mean ReGa still receives events.
+  # Restarting HMIPServer can invalidate ReGa subscriptions; renew them
+  # after RF readiness even when the registry itself needed no repair.
+  if [ "$failed" = 0 ] && [ -e "$READY" ] && process_running HMIPServer &&
+     hardware_ready && link_up; then
     service_action S70ReGaHss restart || failed=1
+  else
+    failed=1
   fi
   restore_monit || failed=1
   if [ "$failed" = 0 ] && stack_ready && verify_monit && link_up; then

@@ -2,7 +2,7 @@
 # Recover the dual-protocol RPI-RF-MOD stack after HB-RF-ETH interruptions.
 # shellcheck shell=dash source=/dev/null
 NAME=hb-rf-eth-recovery
-SCRIPT=/bin/hb-rf-eth-recovery
+SCRIPT=$(readlink -f "$0")
 # Keep the worker PID separate from the legacy add-on, even in standby.
 PIDFILE=/var/run/hb-rf-eth-recovery-service.pid
 JOURNAL=/var/run/hb-rf-eth-recovery.monit
@@ -36,7 +36,9 @@ uptime_seconds() {
 
 enabled() {
   [ -s "$GATEWAY" ] && [ ! -e /usr/local/HMLGW ] &&
-    [ ! -e /etc/config/safemode ] && [ ! -x "$LEGACY" ]
+    [ ! -e /etc/config/safemode ] || return 1
+  # A persistent test installation can use this script itself as the hook.
+  [ ! -x "$LEGACY" ] || [ "$(readlink -f "$LEGACY")" = "$SCRIPT" ]
 }
 
 link_up() {
@@ -80,7 +82,7 @@ service_action() {
 }
 
 monit_command() {
-  timeout -k 2 10 monit "$@" 9>&-
+  LC_ALL=C timeout -k 2 10 monit "$@" 9>&-
 }
 
 monit_state() {
@@ -128,14 +130,24 @@ restore_monit() {
 }
 
 pause_monit() {
-  local service state
+  local service state reason
   # Never overwrite an interrupted transaction's journal.
   restore_monit || return 1
   : >"$JOURNAL" || return 1
   # Snapshot all states first: unmonitoring a dependency can also change
   # dependent checks. Recording states while pausing loses those originals.
   for service in $SERVICES; do
-    state=$(monit_state "$service") || return 1
+    if ! state=$(monit_state "$service"); then
+      case "$service" in
+        rfdDevice|HMIPServerDevice)
+          # Older images do not define these checks. Only an explicit
+          # not-found response is optional; connection/status errors abort.
+          reason=$(monit_command status "$service" 2>&1)
+          if [ "$reason" = "Service '$service' not found" ]; then continue; fi
+          ;;
+      esac
+      return 1
+    fi
     if is_monitored "$state"; then
       printf '%s\n' "$service" >>"$JOURNAL" || return 1
     elif ! printf '%s\n' "$state" | grep -q 'monitoring status[[:space:]]*Not monitored'; then
@@ -212,15 +224,28 @@ if {[catch {rega_script $script}]} { exit 1 }
 TCL
 }
 
+interface_init_script() {
+  if [ -x /etc/init.d/S49InitInterfaces ]; then
+    echo S49InitInterfaces
+  elif [ -x /etc/init.d/S49hs485d ] &&
+       grep -q 'InterfacesList.xml' /etc/init.d/S49hs485d; then
+    # Before interface initialization was split into its own init script.
+    echo S49hs485d
+  else
+    return 1
+  fi
+}
+
 recover() {
-  local now reload=0 failed=0 step
+  local now reload=0 failed=0 step interface_init
   now=$(uptime_seconds)
   [ $((now-LAST_ATTEMPT)) -ge "$COOLDOWN" ] || return 1
   LAST_ATTEMPT=$now
   ACTIVE_SERVICES=
   # Validate before any service changes. Unknown/mixed radios are excluded.
   enabled && link_up && supported || return 1
-  for step in S47InitRFHardware S49InitInterfaces S60multimacd S61rfd S62HMServer S70ReGaHss; do
+  interface_init=$(interface_init_script) || return 1
+  for step in "$interface_init" S47InitRFHardware S60multimacd S61rfd S62HMServer S70ReGaHss; do
     [ -x "/etc/init.d/$step" ] || return 1
   done
   log "Recovery started after a stable HB-RF-ETH connection"
@@ -250,7 +275,7 @@ recover() {
   fi
   if [ "$failed" = 0 ] && link_up; then
     service_action S47InitRFHardware start && supported && link_up &&
-      service_action S49InitInterfaces start &&
+      service_action "$interface_init" start &&
       rm -f "$CACHE" && service_action S60multimacd start && hardware_ready || failed=1
   else
     failed=1

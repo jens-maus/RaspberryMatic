@@ -10,6 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "buildroot-external/overlay/base/bin/hb-rf-eth-recovery"
 BUSYBOX = shutil.which("busybox")
+FLOCK = shutil.which("flock")
 
 
 @unittest.skipUnless(BUSYBOX, "BusyBox is required for target-shell tests")
@@ -321,17 +322,50 @@ stop_process() { [ "$2" != rfd ]; }
                          'grep -q "S62HMServer start" ./actions && '
                          '[ ! -e "$JOURNAL" ]')
 
+    def test_old_image_uses_original_interface_initializer(self):
+        (self.init / "S49InitInterfaces").unlink()
+        old = self.init / "S49hs485d"
+        old.write_text("#!/bin/sh\n# Writes InterfacesList.xml\n")
+        old.chmod(0o755)
+        self.shell('[ "$(interface_init_script)" = S49hs485d ]')
+        old.write_text("#!/bin/sh\n# Unrelated wired initialization\n")
+        self.shell('! interface_init_script')
+
+    def test_missing_optional_monit_checks_on_old_images(self):
+        self.shell("""
+SERVICES="HMIPServer rfdDevice HMIPServerDevice"
+monit_state() {
+  [ "$1" = HMIPServer ] || return 1
+  echo 'monitoring status Monitored'
+}
+monit_command() {
+  if [ "$1" = status ]; then
+    echo "Service '$2' not found"; return 1
+  fi
+}
+wait_monitor() { return 0; }
+pause_monit && [ "$(cat "$JOURNAL")" = HMIPServer ]
+""")
+
+    def test_optional_monit_connection_failure_still_aborts(self):
+        self.shell("""
+SERVICES="rfdDevice"
+monit_state() { return 1; }
+monit_command() { echo 'Cannot connect to Monit'; return 1; }
+! pause_monit
+""")
+
     def test_real_lock_rejects_concurrent_worker(self):
         lock = self.work / "real.lock"
         with lock.open("w") as handle:
-            # Verify actual BusyBox flock semantics independently of mocks.
+            # Verify the installed flock command independently of mocks.
             import fcntl
             fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            result = subprocess.run([BUSYBOX, "flock", "-n", str(lock),
+            result = subprocess.run([FLOCK, "-n", str(lock),
                                      BUSYBOX, "true"], capture_output=True)
             self.assertNotEqual(result.returncode, 0)
         result = subprocess.run(
-            [BUSYBOX, "flock", "-n", str(lock), BUSYBOX, "true"])
+            [FLOCK, "-n", str(lock), BUSYBOX, "true"])
         self.assertEqual(result.returncode, 0)
 
     def test_idle_worker_lifecycle_and_monitoring_cleanup(self):

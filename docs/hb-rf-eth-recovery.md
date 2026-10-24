@@ -28,10 +28,12 @@ A gateway that was never identified at boot, leaving no valid hardware identity
 in `/var/hm_mode`, is outside this proposal. Guessing which radio should be
 initialized would broaden the scope and risk resetting unrelated hardware.
 
-This requires a current OpenCCU image containing `S49InitInterfaces`, the RF
-services and their Monit checks. It is not a script-only update for older images:
-older releases generated the interface list in `S49hs485d`. Current Monit also
-has `rfdDevice` and `HMIPServerDevice`, which must be paused during recovery.
+Current images use `S49InitInterfaces` to rebuild the interface list. For
+persistent test installations on older images, the script also accepts
+`S49hs485d` when that script explicitly contains interface-list generation.
+Current Monit has `rfdDevice` and `HMIPServerDevice`, which must be paused during
+recovery. Older images can omit these two checks: only an explicit Monit
+not-found response is accepted; connection errors still abort the transaction.
 No kernel driver patch or gateway firmware change is included. Recovery does
 not diagnose or fix the underlying Ethernet interruption.
 
@@ -53,7 +55,7 @@ not diagnose or fix the underlying Ethernet interruption.
    termination, because init scripts may remove PID files before exit. If a stop
    fails, avoid starting a duplicate and restore monitoring.
 6. Run `S47InitRFHardware`, recheck the hardware identity, rebuild the registry
-   with `S49InitInterfaces`, invalidate `/var/tmp/api_ipc.cache` and recreate the
+   with the matching init script, invalidate `/var/tmp/api_ipc.cache` and recreate the
    multimacd endpoints. Start rfd and HMIPServer. Invalidate the HmIP readiness
    marker before starting HMIPServer, so stale readiness cannot count as success.
 7. Restart ReGaHss only when the old interface registry or API cache was
@@ -132,7 +134,7 @@ configuration or restarting services. Its shell syntax check passed.
 | Stop killed only the monitor, with no cleanup trap or wait | RF operations and monitoring restoration could race shutdown | Exit trap, bounded commands, awaited cleanup |
 | Init script success and a readiness marker were trusted | Failed starts or stale readiness could be reported as recovered | Check saved stop PIDs, fresh readiness, stack and Monit health |
 | Both link and HMIP restart alarms were cleared | Unrelated failure evidence could disappear | Clear only the verified transport alarm |
-| Interface rebuilding used `S49hs485d` | Current OpenCCU would not rebuild the registry | Use `S49InitInterfaces` |
+| Interface rebuilding used `S49hs485d` | Current OpenCCU would not rebuild the registry | Prefer `S49InitInterfaces`, with a checked fallback for older images |
 
 Field logs showed both successful recoveries and an outage whose recovery was
 suppressed by cooldown with no deferred attempt. These logs describe the
@@ -162,7 +164,7 @@ Before proposing a merge, discuss the approach in an upstream issue as required
 by `CONTRIBUTING.md`, build an image, and test a controlled link interruption on
 a non-critical installation. Include an outage inside cooldown, a failed
 recovery, a worker interruption, boot/shutdown, and an installation without HB-RF-ETH.
-Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 35 recovery regression tests,
+Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 38 recovery regression tests,
 eight existing runtime-path/recovery-service tests, ShellCheck, BusyBox ash
 syntax checks, YAML/Markdown/Python lint and whitespace checks. The revised
 service has not been deployed or physically fault-tested on the audited hub.

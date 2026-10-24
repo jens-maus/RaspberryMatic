@@ -118,7 +118,7 @@ activation leaves a healthy RF stack running while the link remains connected.
 The audited active source had SHA-256
 `6a3071b048a45329266be2d5991c772fda0d18f2d011999f82b9e8d88d178c39`.
 One active recovery hook and an older backup were found; the hook was launched
-by `S98StartAddons`. The running system was inspected without changing its
+by `S98StartAddons`. The original running system was inspected without changing its
 configuration or restarting services. Its shell syntax check passed.
 
 | Finding | Consequence | Proposal |
@@ -167,5 +167,8 @@ recovery, a worker interruption, boot/shutdown, and an installation without HB-R
 Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 38 recovery regression tests,
 eight existing runtime-path/recovery-service tests, ShellCheck, BusyBox ash
 syntax checks, YAML/Markdown/Python lint and whitespace checks. The revised
-service has not been deployed or physically fault-tested on the audited hub.
+service was subsequently deployed as a persistent hook on the audited older
+image. Read-only startup verification confirmed automatic HB-RF-ETH detection,
+one active worker, an unchanged RF process set and healthy Monit checks.
+Physical fault injection and RF packet-level verification remain outstanding.
 A full image build and `make PRODUCT=rpi3 check` have not been run.

@@ -27,7 +27,6 @@
 0154-WebUI-DynamicResizing.patch
 0163-WebUI-ImprovedFileUploadButton.patch
 0164-WebUI-Add-HMIPServerLogConfiguration.patch
-0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch
 0170-WebUI-RegexSearchInDeviceLists.patch
 0173-WebUI-SendPOSTRequest.patch
 0183-WebUI-ImprovedFirmwareupdateDialog.patch

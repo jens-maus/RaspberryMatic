@@ -29,7 +29,7 @@
       ],
       "patch": "0001-OpenCCU.patch",
       "removed": 253,
-      "sha256": "50ea6983b4e12d0caf22858a66e27d56627778fd59ab3297da35c5a1b38b6677"
+      "sha256": "90bdafa1888afddd9c626df897a84723341e71667c9de11a5bb8ac8d6481ed1e"
     },
     {
       "added": 370,
@@ -44,7 +44,7 @@
       ],
       "patch": "0031-WebUI-Fix-FileUpload.patch",
       "removed": 317,
-      "sha256": "ec642a124b52591a72f7d5c2f2507c879e4189e3898323a9adad5f9f1f5858ec"
+      "sha256": "ec46064d8fe3a9c173a53aefba6805b10ddf827d0d0d6d1bf7e5a6bf5a431c91"
     },
     {
       "added": 277,
@@ -229,7 +229,7 @@
       ],
       "patch": "0077-WebUI-NegateCondition.patch",
       "removed": 5,
-      "sha256": "1a5e4376b0f0037fa890e2ae847133a83da14850eb36764eae6c6e4bbf63b7a3"
+      "sha256": "1a317b91ad75ad087633d1b539b5a453a1e179d107e7b5ccc6db5561a0f7a338"
     },
     {
       "added": 74,
@@ -379,7 +379,7 @@
       ],
       "patch": "0136-WebUI-Add-Tailscale-VPN.patch",
       "removed": 8,
-      "sha256": "2da46e97099b38b6e01ff26d5d32e5b56ee91579c0de582a21dfceff9057909d"
+      "sha256": "9e739f25f67477acfece667dcdc0d86779b1fcbbefa50a37762de032149f9dde"
     },
     {
       "added": 46,
@@ -463,7 +463,7 @@
       ],
       "patch": "0163-WebUI-ImprovedFileUploadButton.patch",
       "removed": 40,
-      "sha256": "d3f2f952296ab0ca91a661c187bdc88a1a29299afec97a8a521487282586ca8c"
+      "sha256": "3b11f56accf2b4ac77a93babf8b4e02e92cdc68e5c028cbd70788bd15ba03ce1"
     },
     {
       "added": 68,
@@ -479,20 +479,7 @@
       ],
       "patch": "0164-WebUI-Add-HMIPServerLogConfiguration.patch",
       "removed": 18,
-      "sha256": "004cfa88be35dcbcd5e8b7413bd67c948ea48a3a6308b2748c0ca9adf5fea013"
-    },
-    {
-      "added": 60,
-      "files": [
-        "www/config/cp_maintenance.cgi",
-        "www/webui/js/lang/de/translate.lang.extension.js",
-        "www/webui/js/lang/de/translate.lang.js",
-        "www/webui/js/lang/en/translate.lang.extension.js",
-        "www/webui/js/lang/en/translate.lang.js"
-      ],
-      "patch": "0165-WebUI-ShowFreeUserspaceOnMaintenancePage.patch",
-      "removed": 5,
-      "sha256": "dbed5627822ccf6bd4575f8d4a04853c6eec527396c039fc982bcf4b86190962"
+      "sha256": "c09b82962025e1b895e6d791c629e51a5b08c1060d1415e8696d37d66b4ed37d"
     },
     {
       "added": 86,
@@ -553,5 +540,5 @@
     }
   ],
   "schema": 1,
-  "series_sha256": "496b0a492000555d3868a2c4351a7c5e4cb3e2415a40feacfa8569a1eb96fcc0"
+  "series_sha256": "8cb7348f278b409c9588d02176d5e49a946e7120bc59fc4387aa858c634bb9e3"
 }

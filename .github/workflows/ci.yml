@@ -114,6 +114,13 @@ jobs:
           python3 scripts/testcases/build/test_component_selection.py -v
           python3 scripts/testcases/build/test_rf_factory_reset.py -v
 
+      - name: Check HB-RF-ETH recovery
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y busybox-static
+          python3 scripts/testcases/runtime/test_hb_rf_eth_recovery.py -v
+          python3 scripts/testcases/runtime/test_rega_init.py -v
+
       - name: Check Package consistency
         run: |
           pip install flake8

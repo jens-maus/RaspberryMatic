@@ -1,0 +1,3 @@
+#!/bin/sh
+# Start the background service; it activates recovery only for HB-RF-ETH.
+exec /bin/hb-rf-eth-recovery "$@"

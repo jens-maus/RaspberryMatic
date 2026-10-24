@@ -67,8 +67,10 @@ waitStartupComplete() {
 		fi
 		if [[ ${i} -eq ${STEPS} ]]; then
 			echo "ERROR"
+			return 1
 		fi
 	done
+	return 0
 }
 
 waitTerminationComplete() {
@@ -82,8 +84,10 @@ waitTerminationComplete() {
 		fi
 		if [[ ${i} -eq ${STEPS} ]]; then
 			echo "ERROR"
+			return 1
 		fi
 	done
+	return 0
 }
 
 start() {
@@ -100,14 +104,14 @@ start() {
 
 	# start ReGaHss (normal or in debug mode)
 	if [[ "${REGA_BIN_VERSION}" == "DEBUG" ]]; then
-		start-stop-daemon -d / -S -q -b -m -p ${PIDFILE} --exec /usr/bin/script -- -q -c "/bin/${DAEMON} -f /etc/rega.conf -l 0 -c 2>&1" /usr/local/tmp/${DAEMON}-$$.log
+		start-stop-daemon -d / -S -q -b -m -p ${PIDFILE} --exec /usr/bin/script -- -q -c "/bin/${DAEMON} -f /etc/rega.conf -l 0 -c 2>&1" /usr/local/tmp/${DAEMON}-$$.log || return 1
 		echo -n "DEBUG (/usr/local/tmp/${DAEMON}-$$.log), "
 	else
-		start-stop-daemon -d / -S -q -b -m -p ${PIDFILE} --exec /bin/${DAEMON} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
+		start-stop-daemon -d / -S -q -b -m -p ${PIDFILE} --exec /bin/${DAEMON} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA} || return 1
 	fi
 
 	# wait until ReGaHss is started.
-	waitStartupComplete
+	waitStartupComplete || return 1
 
 	# make sure the PID file has world readable permissions
 	chmod 0644 ${PIDFILE}
@@ -128,7 +132,7 @@ stop() {
 		start-stop-daemon -K -q -p ${PIDFILE}
 
 		# wait for ReGaHss to terminate
-		waitTerminationComplete
+		waitTerminationComplete || return 1
 		rm -f ${PIDFILE}
 	else
 		echo "OK"
@@ -136,8 +140,7 @@ stop() {
 }
 
 restart() {
-	stop
-	start
+	stop && start
 }
 
 case "$1" in
@@ -155,4 +158,4 @@ case "$1" in
 		exit 1
 esac
 
-exit 0
+exit $?

@@ -64,6 +64,10 @@ not diagnose or fix the underlying Ethernet interruption.
 7. Restart ReGaHss after the RF stack is ready, even when the interface registry
    was already complete. A userspace RF restart can invalidate event
    subscriptions while leaving the XML intact and WebUI datapoints stale.
+   On older images, retain and check the old ReGa PID through a separate stop
+   before permitting start, because legacy init scripts can hide timeouts.
+   Updated `S70ReGaHss` returns startup/shutdown failures, retains its PID file
+   on a termination timeout, and aborts restart after a failed stop.
    Restore the original Monit checks and verify that previously
    monitored checks are `Monitored/OK`. Intentionally disabled checks remain
    outside the restoration journal.
@@ -152,6 +156,7 @@ Run the isolated BusyBox ash regression suite:
 
 ```sh
 python3 scripts/testcases/runtime/test_hb_rf_eth_recovery.py -v
+python3 scripts/testcases/runtime/test_rega_init.py -v
 shellcheck -e SC3010,SC3014,SC3057,SC3036,SC3028,SC3020 \
   buildroot-external/overlay/base/bin/hb-rf-eth-recovery \
   buildroot-external/overlay/base/etc/init.d/S98HBRFEthRecovery
@@ -165,9 +170,9 @@ Real worker start/stop and signal cleanup are also exercised. They do not
 reset a radio or prove RF packet exchange. CI runs the regression
 suite alongside existing checks.
 
-Local validation passed: 45 recovery regression tests, eight existing
+Local validation passed: 47 recovery regression tests plus seven ReGa init tests, eight existing
 runtime-path/recovery-service tests, ShellCheck, BusyBox ash syntax checks,
-YAML/Markdown/Python lint and whitespace checks. All 49 Python test/helper
+YAML/Markdown/Python lint and whitespace checks. All 59 Python test/helper
 functions have docstrings. Regression coverage includes delayed hardware,
 bounded timeout, missing nodes, another link loss during the wait, and guarded
 rfd startup in both the normal path and partial-stop rollback.
@@ -229,3 +234,31 @@ now renews ReGa after every successful RF reinitialization, with regression
 coverage for a complete registry and a failed ReGa restart. Adapter readiness
 must not be described as proof that all end devices have resumed reporting;
 configuration-pending devices require separate observation.
+
+### ReGa timeout and process-replacement follow-up
+
+The native `S70ReGaHss` tests execute the actual wait loops, stop/start functions
+and command dispatcher with isolated process fixtures. They cover both timeout
+paths, PID-file retention, launcher failures in normal/debug mode, and restart
+ordering. Recovery tests separately verify that a legacy init script deleting
+its PID file cannot hide a still-running original ReGa process.
+
+On 2026-10-24, seven isolated init scenarios and five isolated recovery scenarios
+passed in the CCU's own shell, without touching real device nodes or killing
+real daemons for failure injection. The real `rfd.conf` checksum stayed unchanged.
+The revised recovery worker was installed persistently with a backup.
+
+A full recovery using the deployed worker's functions and the older firmware's
+stock init scripts passed from 16:00:14 to 16:01:44 Europe/Berlin. The fixed
+native init script was additionally exercised live from staging from 16:02:02
+to 16:02:15: the old ReGa PID exited, a different PID started, and the RF daemon
+PIDs did not change during this init-only test. The firmware rootfs remains
+read-only and unchanged; the persistent worker's PID guard protects that older
+stock init. Future built images receive the fixed native init script.
+
+Direct HmIP RPC, ReGa and Home Assistant all reported 22.0 degrees C for the
+selected temperature sensor afterward. Monit was healthy, its journal was clear,
+and one background worker resumed. Additional power datapoints were still
+awaiting their first post-restart values at the initial checks; this test does
+not establish that every end device or actuator is fully verified. Three local
+OpenCCU-Base installation checks also passed.

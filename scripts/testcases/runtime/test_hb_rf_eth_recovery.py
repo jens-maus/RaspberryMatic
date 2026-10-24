@@ -322,12 +322,12 @@ uptime_seconds() { echo 1000; }
         """Interface repair reloads rega and invalidates cache."""
         self.transaction('printf VirtualDevices >"$CACHE"',
                          'recover && [ ! -e "$CACHE" ] && '
-                         'grep -q "S70ReGaHss restart" ./actions')
+                         'grep -q "S70ReGaHss start" ./actions')
 
     def test_healthy_registry_still_renews_rega_callbacks(self):
         """Renew ReGa subscriptions with an already complete registry."""
         self.transaction(tail='recover && '
-                         'grep -q "^S70ReGaHss restart$" ./actions')
+                         'grep -q "^S70ReGaHss start$" ./actions')
 
     def test_failed_rega_restart_preserves_alarm_and_restores_monit(self):
         """Keep failure state when ReGa cannot renew its subscriptions."""
@@ -335,6 +335,24 @@ uptime_seconds() { echo 1000; }
                          '[ "$1" != S70ReGaHss ]; }',
                          'if recover; then exit 1; fi; '
                          '[ ! -e ./cleared ] && [ ! -e "$JOURNAL" ]')
+
+    def test_failed_rega_stop_does_not_start_replacement(self):
+        """Retain failure and alarms when the old ReGa process survives."""
+        self.transaction('stop_process() { echo "$1 stop" >>./actions; '
+                         '[ "$2" != ReGaHss ]; }',
+                         'if recover; then exit 1; fi; '
+                         '! grep -q "^S70ReGaHss start$" ./actions && '
+                         '[ ! -e ./cleared ] && [ ! -e "$JOURNAL" ]')
+
+    def test_rega_pid_is_checked_even_if_old_init_deletes_pidfile(self):
+        """Reject an old ReGa process even if its PID file was deleted."""
+        self.shell("""
+printf '%s\\n' "$$" >./ReGaHss.pid
+process_running() { return 0; }
+service_action() { rm -f ./ReGaHss.pid; }
+if stop_process S70ReGaHss ReGaHss; then exit 1; fi
+[ ! -e ./ReGaHss.pid ]
+""")
 
     def test_deleted_pid_file_does_not_prove_termination(self):
         """Deleted pid file does not prove termination."""

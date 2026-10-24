@@ -311,7 +311,11 @@ recover() {
   # after RF readiness even when the registry itself needed no repair.
   if [ "$failed" = 0 ] && [ -e "$READY" ] && process_running HMIPServer &&
      hardware_ready && link_up; then
-    service_action S70ReGaHss restart || failed=1
+    # Older S70 scripts can report success despite a stop timeout. Keep
+    # the original PID and verify its exit before allowing a replacement.
+    if ! stop_process S70ReGaHss ReGaHss || ! service_action S70ReGaHss start; then
+      failed=1
+    fi
   else
     failed=1
   fi

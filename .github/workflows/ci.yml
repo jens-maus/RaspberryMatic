@@ -119,6 +119,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y busybox-static
           python3 scripts/testcases/runtime/test_hb_rf_eth_recovery.py -v
+          python3 scripts/testcases/runtime/test_rega_init.py -v
 
       - name: Check Package consistency
         run: |

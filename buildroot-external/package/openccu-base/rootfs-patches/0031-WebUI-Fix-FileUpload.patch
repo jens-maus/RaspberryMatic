@@ -51,7 +51,7 @@
  
    if {[getProduct] < 3} {
      catch {exec rm /var/new_firmware.tar.gz}
-@@ -424,9 +431,7 @@
+@@ -454,9 +461,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -62,7 +62,7 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -947,7 +952,7 @@
+@@ -996,7 +1001,7 @@
  
  proc action_firmware_upload {} {
  
@@ -71,7 +71,7 @@
  
    if { [catch { import directDownload } error] } {
      set directDownload false
-@@ -956,10 +961,7 @@
+@@ -1005,10 +1010,7 @@
    http_head
    
    if { $directDownload } {
@@ -83,7 +83,7 @@
    }
  
    if {[getProduct] < 3} {
-@@ -1074,10 +1076,14 @@
+@@ -1123,10 +1125,14 @@
  
    cgi_javascript {
      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
@@ -102,7 +102,7 @@
    }
  }
  
-@@ -1360,10 +1366,10 @@
+@@ -1409,10 +1415,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input

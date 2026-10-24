@@ -326,6 +326,16 @@ proc checkIfFwOnly {} {
   }
 }
 
+proc execCmd {varName cmd} {
+  upvar 1 $varName variable
+  set rc [catch {eval $cmd} resVar]
+  if {$rc == 0} {
+    set variable $resVar
+  } else {
+    set variable ""
+  }
+}
+
 proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
@@ -333,6 +343,21 @@ proc action_put_page {} {
   division {class="popupTitle j_translate"} {
     puts "\${dialogSettingsCMTitle}"
     #puts [isOldCCU]
+  }
+
+  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
+    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
+    # -1 marks free space that could not be determined
+    if { ! [string is double -strict $USERFSFREE_MB] || $USERFSFREE_MB < 0 } {
+      set USERFSFREE_MB -1
+    }
+    if { $USERFSFREE_MB >= 0 } {
+      set USERFSFREE_GB "[format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]] GB"
+    } else {
+      set USERFSFREE_GB "\${dialogSettingsCMLblFreeUserSpaceUnknown}"
+    }
+    set USERFSFREE_MB_REQ 2867.2
+    set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
   }
   
   division {class="CLASS20918"}  {
@@ -373,7 +398,12 @@ proc action_put_page {} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchf�hren"]"
-                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
+                puts "<br/><b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
+              }
+            }
+            table_row {
+              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
               }
             }
             table_row {
@@ -849,6 +879,25 @@ proc action_put_page {} {
           }
         });
       }
+    }
+  }
+  
+  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
+    cgi_javascript {
+       puts "var userFreeMB = $USERFSFREE_MB;"
+       puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
+       puts {
+         // block only if the free space is known to be too low
+         if (userFreeMB >= 0 && userFreeMB < userFreeMBRequired) {
+           jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
+           jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
+           jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray', 'pointer-events': 'none', 'cursor': 'default', 'opacity': '0.5' });
+           jQuery('#btnSoftwareUpdateUpload').attr('aria-disabled', 'true');
+           jQuery('#btnFwDirectDownload2').removeAttr('onclick');
+           jQuery('#btnFwDirectDownload2').css({ 'color': 'gray', 'pointer-events': 'none', 'cursor': 'default', 'opacity': '0.5' });
+           jQuery('#btnFwDirectDownload2').attr('aria-disabled', 'true');
+         }
+       }
     }
   }
 

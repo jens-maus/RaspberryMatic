@@ -3,10 +3,10 @@
 # shellcheck shell=dash source=/dev/null
 NAME=hb-rf-eth-recovery
 SCRIPT=/bin/hb-rf-eth-recovery
-PIDFILE=/var/run/hb-rf-eth-recovery.pid
+# Keep the worker PID separate from the legacy add-on, even in standby.
+PIDFILE=/var/run/hb-rf-eth-recovery-service.pid
 JOURNAL=/var/run/hb-rf-eth-recovery.monit
 LOCK=/var/run/hb-rf-eth-recovery.lock
-ENABLE=/etc/config/hb_rf_eth_recovery
 GATEWAY=/etc/config/hb_rf_eth
 LEGACY=/etc/config/rc.d/hb-rf-eth-recovery
 LINK=/sys/class/hb-rf-eth/hb-rf-eth/is_connected
@@ -15,6 +15,7 @@ INTERFACES=/etc/config/InterfacesList.xml
 CACHE=/var/tmp/api_ipc.cache
 READY=/var/status/HMServerStarted
 POLL=2
+IDLE_POLL=30
 STABLE=30
 COOLDOWN=300
 WAIT=30
@@ -34,7 +35,7 @@ uptime_seconds() {
 }
 
 enabled() {
-  [ -e "$ENABLE" ] && [ -s "$GATEWAY" ] && [ ! -e /usr/local/HMLGW ] &&
+  [ -s "$GATEWAY" ] && [ ! -e /usr/local/HMLGW ] &&
     [ ! -e /etc/config/safemode ] && [ ! -x "$LEGACY" ]
 }
 
@@ -294,8 +295,40 @@ monitor_step() {
 }
 
 cleanup() {
+  if [ -n "${SLEEP_PID:-}" ]; then
+    kill "$SLEEP_PID" 2>/dev/null || :
+    wait "$SLEEP_PID" 2>/dev/null || :
+  fi
   restore_monit || log "Monit restoration pending in $JOURNAL"
   rm -f "$PIDFILE"
+}
+
+idle_wait() {
+  # Waiting for a child lets TERM interrupt a long standby sleep promptly.
+  sleep "$IDLE_POLL" 9>&- &
+  SLEEP_PID=$!
+  wait "$SLEEP_PID"
+  SLEEP_PID=''
+}
+
+monitor_cycle() {
+  if ! enabled || ! supported; then
+    if [ "$ACTIVE" = 1 ]; then
+      log "HB-RF-ETH no longer eligible; entering standby"
+    fi
+    ACTIVE=0 WAS_UP=0 PENDING=0 UP_SINCE=0
+    # No sysfs polling, RF operations or Monit queries in standby.
+    # Recheck configuration so late detection needs no worker restart.
+    idle_wait
+    return 0
+  fi
+  if [ "$ACTIVE" = 0 ]; then
+    ACTIVE=1 WAS_UP=0 PENDING=0 UP_SINCE=0
+    stack_ready || PENDING=1
+    log "HB-RF-ETH detected; monitoring active (poll=${POLL}s, stability=${STABLE}s, cooldown=${COOLDOWN}s)"
+  fi
+  monitor_step
+  sleep "$POLL"
 }
 
 run() {
@@ -303,26 +336,26 @@ run() {
   # neither serializes concurrent starts nor protects against PID reuse.
   exec 9>"$LOCK"
   flock -n 9 || return 0
+  # Capture before publishing the PID: start must not return and let S99
+  # remove the safe-mode marker before this worker remembers it.
+  SAFE_BOOT=0
+  [ ! -e /etc/config/safemode ] || SAFE_BOOT=1
   printf '%s\n' "$$" >"$PIDFILE" || return 1
   trap 'exit 0' TERM INT HUP
   trap cleanup EXIT
   restore_monit || return 1
-  WAS_UP=0 PENDING=0 UP_SINCE=0
+  ACTIVE=0 WAS_UP=0 PENDING=0 UP_SINCE=0
   # Do not race the normal boot sequence, including add-on startup.
   while [ ! -e /var/status/startupFinished ]; do
-    enabled || return 0
     sleep "$POLL"
   done
-  enabled || return 0
-  if ! supported; then
-    log "Unsupported or unidentified RF hardware; recovery monitor disabled"
-    return 0
-  fi
-  stack_ready || PENDING=1
-  log "Monitor started (poll=${POLL}s, stability=${STABLE}s, cooldown=${COOLDOWN}s)"
-  while enabled; do
-    monitor_step
-    sleep "$POLL"
+  log "Background service started; waiting for supported HB-RF-ETH hardware"
+  while :; do
+    if [ "$SAFE_BOOT" = 1 ]; then
+      idle_wait
+    else
+      monitor_cycle
+    fi
   done
 }
 
@@ -339,7 +372,6 @@ worker_pid() {
 
 start() {
   local child attempt=0
-  enabled || return 0
   worker_pid >/dev/null && return 0
   /bin/sh "$SCRIPT" run </dev/null >/dev/null 2>&1 &
   child=$!
@@ -374,6 +406,6 @@ case "${1:-}" in
   stop) stop ;;
   restart) stop && start ;;
   run) run ;;
-  info) echo "Optional dual-protocol RPI-RF-MOD recovery; enable with $ENABLE" ;;
+  info) echo "Automatic HB-RF-ETH recovery; standby without supported hardware" ;;
   *) echo "Usage: $0 {start|stop|restart|info}"; exit 1 ;;
 esac

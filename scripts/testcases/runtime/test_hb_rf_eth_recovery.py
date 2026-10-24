@@ -30,6 +30,10 @@ class RecoveryTests(unittest.TestCase):
         source = SCRIPT.read_text().rsplit('\ncase "${1:-}" in', 1)[0]
         source = source.replace("/etc/init.d/", str(self.init) + "/")
         source = source.replace("/var/run/", str(self.work) + "/")
+        source = source.replace("/etc/config/safemode",
+                                str(self.work / "safemode"))
+        source = source.replace("/var/status/startupFinished",
+                                str(self.work / "startup"))
         source = source.replace("/dev/mmd_bidcos", "/dev/null")
         source = source.replace("/dev/mmd_hmip", "/dev/null")
         self.lib = self.work / "lib.sh"
@@ -37,12 +41,11 @@ class RecoveryTests(unittest.TestCase):
         self.setup = """
 . ./lib.sh
 exec 9>./lock
-ENABLE=./enabled GATEWAY=./gateway LEGACY=./legacy
+GATEWAY=./gateway LEGACY=./legacy
 MODE=./mode LINK=./link INTERFACES=./interfaces CACHE=./cache READY=./ready
 WAIT=1
 log() { printf '%s\\n' "$*" >>./events; }
 sleep() { :; }
-touch "$ENABLE"
 printf gateway >"$GATEWAY"
 printf 1 >"$LINK"
 """
@@ -64,9 +67,79 @@ printf 1 >"$LINK"
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         return result.stdout
 
-    def test_requires_explicit_opt_in_and_gateway(self):
-        self.shell('enabled || exit 1; rm "$ENABLE"; enabled && exit 2; '
-                   'touch "$ENABLE"; : >"$GATEWAY"; ! enabled')
+    def test_uses_existing_gateway_config_without_opt_in(self):
+        self.shell('enabled || exit 1; : >"$GATEWAY"; enabled && exit 2; '
+                   'rm "$GATEWAY"; ! enabled')
+
+    def test_no_gateway_sleeps_without_touching_rf_or_monit(self):
+        self.shell("""
+rm "$GATEWAY"
+ACTIVE=0
+supported() { touch ./unexpected; }
+monitor_step() { touch ./unexpected; }
+monit_command() { touch ./unexpected; }
+sleep() { echo "$1" >./delay; }
+monitor_cycle
+[ "$ACTIVE" = 0 ] && [ "$(cat ./delay)" = "$IDLE_POLL" ] &&
+  [ ! -e ./unexpected ]
+""")
+
+    def test_gateway_added_after_start_activates_without_restart(self):
+        self.shell("""
+rm "$GATEWAY"
+ACTIVE=0
+stack_ready() { return 0; }
+monitor_step() { touch ./active; }
+monitor_cycle
+[ ! -e ./active ] || exit 1
+printf gateway >"$GATEWAY"
+monitor_cycle
+[ "$ACTIVE" = 1 ] && [ -e ./active ]
+""")
+
+    def test_gateway_removal_returns_active_worker_to_standby(self):
+        self.shell("""
+ACTIVE=1 WAS_UP=1 PENDING=1
+rm "$GATEWAY"
+monitor_step() { touch ./unexpected; }
+monitor_cycle
+[ "$ACTIVE" = 0 ] && [ "$PENDING" = 0 ] && [ "$WAS_UP" = 0 ] &&
+  [ ! -e ./unexpected ]
+""")
+
+    def test_unsupported_hardware_stays_idle_until_detected(self):
+        self.shell("""
+ACTIVE=0
+cp "$MODE" ./saved_mode
+: >"$MODE"
+stack_ready() { return 0; }
+monitor_step() { touch ./active; }
+monitor_cycle
+[ "$ACTIVE" = 0 ] && [ ! -e ./active ] || exit 1
+mv ./saved_mode "$MODE"
+monitor_cycle
+[ "$ACTIVE" = 1 ] && [ -e ./active ]
+""")
+
+    def test_unhealthy_stack_is_pending_on_automatic_activation(self):
+        self.shell("""
+ACTIVE=0
+stack_ready() { return 1; }
+monitor_step() { [ "$PENDING" = 1 ] || exit 1; }
+monitor_cycle
+[ "$ACTIVE" = 1 ] && [ "$PENDING" = 1 ]
+""")
+
+    def test_safe_boot_stays_idle_after_boot_removes_marker(self):
+        self.shell("""
+touch ./safemode
+sleep() { rm -f ./safemode; touch ./startup; }
+monitor_cycle() { touch ./unexpected; exit 1; }
+idle_wait() { touch ./idle; exit 0; }
+run
+""")
+        self.assertTrue((self.work / "idle").exists())
+        self.assertFalse((self.work / "unexpected").exists())
 
     def test_refuses_parallel_legacy_addon(self):
         self.shell('touch "$LEGACY"; chmod +x "$LEGACY"; ! enabled')
@@ -261,15 +334,17 @@ stop_process() { [ "$2" != rfd ]; }
             [BUSYBOX, "flock", "-n", str(lock), BUSYBOX, "true"])
         self.assertEqual(result.returncode, 0)
 
-    def test_worker_lifecycle_restores_journal_and_excludes_duplicates(self):
+    def test_idle_worker_lifecycle_and_monitoring_cleanup(self):
         worker = self.work / "worker.sh"
-        pidfile = self.work / "hb-rf-eth-recovery.pid"
+        pidfile = self.work / "hb-rf-eth-recovery-service.pid"
+        legacy_pidfile = self.work / "hb-rf-eth-recovery.pid"
+        legacy_pidfile.write_text("legacy worker\n")
         journal = self.work / "hb-rf-eth-recovery.monit"
         # Exercise the production run/start/stop functions and real signals.
         # Replace only hardware/Monit operations, never lifecycle or locking.
         worker.write_text(self.lib.read_text() + f"""
 SCRIPT={worker}
-enabled() {{ return 0; }}
+enabled() {{ return 1; }}
 supported() {{ return 0; }}
 stack_ready() {{ return 0; }}
 monitor_step() {{ :; }}
@@ -304,6 +379,7 @@ esac
             self.assertEqual(result.returncode, 0)
             process.wait(timeout=3)
             self.assertFalse(pidfile.exists())
+            self.assertEqual(legacy_pidfile.read_text(), "legacy worker\n")
             self.assertFalse(journal.exists())
             self.assertEqual((self.work / "restored").read_text().strip(),
                              "monitor HMIPServer")

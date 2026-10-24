@@ -1,8 +1,13 @@
-# Optional HB-RF-ETH stack recovery
+# Automatic HB-RF-ETH stack recovery
 
-This opt-in service is a contribution proposal for recovering a previously
-initialized, dual-protocol RPI-RF-MOD connected through HB-RF-ETH after a network
-interruption. It is disabled by default. Enabling it permits RF daemon restarts
+The recovery service is installed through the common OpenCCU rootfs overlay and
+started automatically by `S98HBRFEthRecovery`. No add-on installation or enable
+marker is required. Without an eligible HB-RF-ETH configuration it sleeps in the
+background, rechecking eligibility every 30 seconds. It does not poll the RF
+link, query Monit or change RF services while in standby.
+
+When a supported gateway is detected, it activates monitoring and can recover
+the RF stack after a network interruption. Recovery permits RF daemon restarts
 and, when the interface registry needs repair, a ReGaHss restart. Such restarts
 interrupt RF communication and may interrupt running automations.
 
@@ -32,8 +37,11 @@ not diagnose or fix the underlying Ethernet interruption.
 
 ## Recovery transaction
 
-1. Wait until normal system startup has finished. Check the explicit enable
-   marker, gateway configuration and supported hardware identity.
+1. Wait until normal system startup has finished. Sleep in standby until the
+   existing `/etc/config/hb_rf_eth` configuration and supported hardware identity
+   are present. Recheck every 30 seconds, so late detection requires no restart.
+   Return to standby if eligibility is lost. A safe-mode boot stays in standby
+   for that worker's lifetime, even after OpenCCU removes its safe-mode marker.
 2. Observe the link every two seconds. After a disconnection, require 30 seconds
    of continuous connectivity. Check the existing stack once at monitor startup.
 3. Keep recovery pending across a five-minute cooldown and after failures.
@@ -70,32 +78,38 @@ power loss cannot execute traps; a subsequent worker restores the retained
 journal. Use syslog (`hb-rf-eth-recovery`) for diagnostics; no separate persistent
 flash log is written.
 
-## Enable, disable and migration
+## Automatic installation and migration
 
-Use only an image built with this change. Remove or disable any previous custom
-recovery hook first, while its recovery transaction is idle. This service refuses
-to start if `/etc/config/rc.d/hb-rf-eth-recovery` is still executable, preventing
-two recovery implementations from controlling the same RF stack.
+Use an OpenCCU image built with this change. The common `overlay/base` installs
+`/bin/hb-rf-eth-recovery` and its executable SysV init hook. The standard boot
+sequence launches one background worker on every normal image; no manual
+installation, gateway-specific image or extra activation file is needed.
 
-To enable:
+The worker reads OpenCCU's existing gateway configuration and detected hardware
+identity. It remains asleep if no HB-RF-ETH is configured, hardware identification
+is incomplete, or the radio combination is unsupported. Once eligibility is
+established it activates without a restart. Configuration removal or switching
+to another radio returns it to standby. Activation still requires 30 seconds of
+stable link state before any pending recovery transaction.
 
-```sh
-touch /etc/config/hb_rf_eth_recovery
-/etc/init.d/S98HBRFEthRecovery start
-```
+Remove or disable any previous custom recovery hook first, while its transaction
+is idle. An executable `/etc/config/rc.d/hb-rf-eth-recovery` keeps the built-in
+worker in standby, preventing two implementations from controlling the same
+RF stack. Removing that conflict is detected automatically on a later check.
+The built-in worker uses a separate PID file so standby cannot overwrite the
+legacy hook's worker identity.
 
-To stop and disable:
+For maintenance, stop the worker with:
 
 ```sh
 /etc/init.d/S98HBRFEthRecovery stop
-rm -f /etc/config/hb_rf_eth_recovery
 ```
 
-The enable marker persists across normal restarts. The worker exits if that
-marker or the gateway configuration is removed. It refuses to signal a stale
-PID unless `/proc/<pid>/cmdline` identifies its own worker. Concurrent starts
-are serialized by the kernel lock. A normal start does not alter healthy RF
-services while the link remains connected.
+The normal boot sequence starts it again on the next boot. Standby sleeps are
+interruptible so a stop request does not wait for the 30-second recheck period.
+The worker refuses to signal a stale PID unless `/proc/<pid>/cmdline` identifies
+its own worker. Concurrent starts are serialized by the kernel lock. An ordinary
+activation leaves a healthy RF stack running while the link remains connected.
 
 ## Review of the original field hook
 
@@ -147,8 +161,8 @@ suite alongside existing checks.
 Before proposing a merge, discuss the approach in an upstream issue as required
 by `CONTRIBUTING.md`, build an image, and test a controlled link interruption on
 a non-critical installation. Include an outage inside cooldown, a failed
-recovery, a worker interruption, boot/shutdown, and a disabled configuration.
-Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 29 recovery regression tests,
+recovery, a worker interruption, boot/shutdown, and an installation without HB-RF-ETH.
+Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 35 recovery regression tests,
 eight existing runtime-path/recovery-service tests, ShellCheck, BusyBox ash
 syntax checks, YAML/Markdown/Python lint and whitespace checks. The revised
 service has not been deployed or physically fault-tested on the audited hub.

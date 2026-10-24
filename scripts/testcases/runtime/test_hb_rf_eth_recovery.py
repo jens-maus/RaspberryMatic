@@ -15,7 +15,10 @@ FLOCK = shutil.which("flock")
 
 @unittest.skipUnless(BUSYBOX, "BusyBox is required for target-shell tests")
 class RecoveryTests(unittest.TestCase):
+    """Validate recovery policy, service ordering and worker lifecycle."""
+
     def setUp(self):
+        """Build isolated fixtures and load the target shell functions."""
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.work = Path(self.tmp.name)
@@ -55,6 +58,7 @@ printf 1 >"$LINK"
             "<name>BidCos-RF</name>\n<name>HmIP-RF</name>\n")
 
     def write_mode(self, radio="RPI-RF-MOD", transport="HB-RF-ETH@gateway"):
+        """Write a supported or deliberately excluded RF hardware identity."""
         (self.work / "mode").write_text(
             "HM_MODE=NORMAL\n"
             f"HM_HMRF_DEV={radio}\nHM_HMIP_DEV={radio}\n"
@@ -62,6 +66,7 @@ printf 1 >"$LINK"
             f"HM_HMRF_DEVTYPE={transport}\nHM_HMIP_DEVTYPE={transport}\n")
 
     def shell(self, body):
+        """Run an isolated scenario in BusyBox ash and require success."""
         result = subprocess.run([BUSYBOX, "ash", "-c", self.setup + body],
                                 cwd=self.work, capture_output=True, text=True,
                                 timeout=10)
@@ -69,10 +74,12 @@ printf 1 >"$LINK"
         return result.stdout
 
     def test_uses_existing_gateway_config_without_opt_in(self):
+        """Uses existing gateway config without opt in."""
         self.shell('enabled || exit 1; : >"$GATEWAY"; enabled && exit 2; '
                    'rm "$GATEWAY"; ! enabled')
 
     def test_no_gateway_sleeps_without_touching_rf_or_monit(self):
+        """No gateway sleeps without touching rf or monit."""
         self.shell("""
 rm "$GATEWAY"
 ACTIVE=0
@@ -86,6 +93,7 @@ monitor_cycle
 """)
 
     def test_gateway_added_after_start_activates_without_restart(self):
+        """Gateway added after start activates without restart."""
         self.shell("""
 rm "$GATEWAY"
 ACTIVE=0
@@ -99,6 +107,7 @@ monitor_cycle
 """)
 
     def test_gateway_removal_returns_active_worker_to_standby(self):
+        """Gateway removal returns active worker to standby."""
         self.shell("""
 ACTIVE=1 WAS_UP=1 PENDING=1
 rm "$GATEWAY"
@@ -109,6 +118,7 @@ monitor_cycle
 """)
 
     def test_unsupported_hardware_stays_idle_until_detected(self):
+        """Unsupported hardware stays idle until detected."""
         self.shell("""
 ACTIVE=0
 cp "$MODE" ./saved_mode
@@ -123,6 +133,7 @@ monitor_cycle
 """)
 
     def test_unhealthy_stack_is_pending_on_automatic_activation(self):
+        """Unhealthy stack is pending on automatic activation."""
         self.shell("""
 ACTIVE=0
 stack_ready() { return 1; }
@@ -132,6 +143,7 @@ monitor_cycle
 """)
 
     def test_safe_boot_stays_idle_after_boot_removes_marker(self):
+        """Safe boot stays idle after boot removes marker."""
         self.shell("""
 touch ./safemode
 sleep() { rm -f ./safemode; touch ./startup; }
@@ -143,23 +155,29 @@ run
         self.assertFalse((self.work / "unexpected").exists())
 
     def test_refuses_parallel_legacy_addon(self):
+        """Refuses parallel legacy addon."""
         self.shell('touch "$LEGACY"; chmod +x "$LEGACY"; ! enabled')
 
     def test_supported_radio(self):
+        """Supported radio."""
         self.shell("supported && hardware_ready")
 
     def test_other_radio_is_excluded(self):
+        """Other radio is excluded."""
         self.write_mode("HM-MOD-RPI-PCB")
         self.shell("! supported")
 
     def test_local_radio_is_excluded(self):
+        """Local radio is excluded."""
         self.write_mode(transport="GPIO")
         self.shell("! supported")
 
     def test_removed_mode_does_not_reuse_previous_values(self):
+        """Removed mode does not reuse previous values."""
         self.shell('supported || exit 1; : >"$MODE"; ! supported')
 
     def test_missing_interface_or_stale_cache_is_detected(self):
+        """Missing interface or stale cache is detected."""
         self.shell('hardware_ready || exit 1; '
                    'printf VirtualDevices >"$CACHE"; '
                    'hardware_ready && exit 2; rm "$CACHE"; '
@@ -167,9 +185,11 @@ run
                    '! hardware_ready')
 
     def test_link_requires_exact_connected_value(self):
+        """Link requires exact connected value."""
         self.shell('link_up || exit 1; printf 10 >"$LINK"; ! link_up')
 
     def test_cooldown_retains_pending_recovery(self):
+        """Cooldown retains pending recovery."""
         self.shell("""
 NOW=100 WAS_UP=1 PENDING=1 UP_SINCE=0 LAST_ATTEMPT=0
 uptime_seconds() { echo "$NOW"; }
@@ -185,6 +205,7 @@ monitor_step
 """)
 
     def test_failed_recovery_is_retried_without_new_transition(self):
+        """Failed recovery is retried without new transition."""
         self.shell("""
 NOW=100 WAS_UP=1 PENDING=1 UP_SINCE=0 COUNT=0
 uptime_seconds() { echo "$NOW"; }
@@ -196,6 +217,7 @@ monitor_step
 """)
 
     def test_flapping_link_restarts_stability_window(self):
+        """Flapping link restarts stability window."""
         self.shell("""
 NOW=100 WAS_UP=1 PENDING=0 UP_SINCE=0
 uptime_seconds() { echo "$NOW"; }
@@ -209,6 +231,7 @@ NOW=140; monitor_step
 """)
 
     def test_snapshot_precedes_dependency_changes(self):
+        """Snapshot precedes dependency changes."""
         self.shell("""
 SERVICES="parent child disabled"
 monit_state() {
@@ -222,6 +245,7 @@ pause_monit || exit 1
 """)
 
     def test_unavailable_monit_aborts_before_services_change(self):
+        """Unavailable monit aborts before services change."""
         self.shell("""
 monit_state() { return 1; }
 service_action() { touch ./unsafe; }
@@ -230,6 +254,7 @@ if recover; then exit 1; fi
 """)
 
     def test_failed_restore_retains_journal_and_preserves_disabled(self):
+        """Failed restore retains journal and preserves disabled."""
         self.shell("""
 printf 'parent\\nchild\\n' >"$JOURNAL"
 monit_command() { echo "$*" >>./actions; [ "$2" != child ]; }
@@ -242,6 +267,7 @@ restore_monit && [ ! -e "$JOURNAL" ]
 """)
 
     def transaction(self, failure="", tail=""):
+        """Run a recovery transaction with controllable service failures."""
         self.shell("""
 SERVICES="multimacdEnabled rfdEnabled multimacd rfd HMIPServer ReGaHss"
 SERVICES="$SERVICES rfdDevice HMIPServerDevice"
@@ -256,43 +282,52 @@ uptime_seconds() { echo 1000; }
 """ + failure + "\n" + tail)
 
     def test_success_clears_alarm_after_stack_verification(self):
+        """Success clears alarm after stack verification."""
         self.transaction(
             tail='recover && [ -e ./cleared ] && [ ! -e "$JOURNAL" ]')
 
     def test_lost_link_during_recovery_does_not_clear_alarm(self):
+        """Lost link during recovery does not clear alarm."""
         self.transaction('service_action() { touch "$READY"; '
                          'printf 0 >"$LINK"; }',
                          'if recover; then exit 1; fi; [ ! -e ./cleared ]')
 
     def test_stale_hmip_ready_marker_is_not_success(self):
+        """Stale hmip ready marker is not success."""
         self.transaction('touch "$READY"; service_action() { return 0; }',
                          'if recover; then exit 1; fi; [ ! -e ./cleared ]')
 
     def test_unhealthy_hmip_monit_keeps_alarm(self):
+        """Unhealthy hmip monit keeps alarm."""
         self.transaction('wait_monitor() { [ "$2" != healthy ] || '
                          '[ "$1" != HMIPServer ]; }',
                          'if recover; then exit 1; fi; [ ! -e ./cleared ]')
 
     def test_hardware_failure_restores_monit_without_reboot(self):
+        """Hardware failure restores monit without reboot."""
         self.transaction('service_action() { echo "$*" >>./actions; '
                          'touch "$READY"; [ "$1" != S47InitRFHardware ]; }',
                          'if recover; then exit 1; fi; '
                          '[ ! -e "$JOURNAL" ] && [ ! -e ./cleared ]')
 
     def test_cannot_stop_daemon_does_not_start_duplicate(self):
+        """Cannot stop daemon does not start duplicate."""
         self.transaction('stop_process() { return 1; }',
                          'if recover; then exit 1; fi; '
                          '[ ! -e ./actions ] && [ ! -e ./cleared ]')
 
     def test_interface_repair_reloads_rega_and_invalidates_cache(self):
+        """Interface repair reloads rega and invalidates cache."""
         self.transaction('printf VirtualDevices >"$CACHE"',
                          'recover && [ ! -e "$CACHE" ] && '
                          'grep -q "S70ReGaHss restart" ./actions')
 
     def test_healthy_registry_avoids_rega_restart(self):
+        """Healthy registry avoids rega restart."""
         self.transaction(tail='recover && ! grep -q S70ReGaHss ./actions')
 
     def test_deleted_pid_file_does_not_prove_termination(self):
+        """Deleted pid file does not prove termination."""
         self.shell("""
 printf '%s\\n' "$$" >./rfd.pid
 process_running() { return 0; }
@@ -302,6 +337,7 @@ if stop_process S61rfd rfd; then exit 1; fi
 """)
 
     def test_stop_rejects_pid_owned_by_another_process(self):
+        """Stop rejects pid owned by another process."""
         self.shell("""
 printf '%s\\n' "$$" >./rfd.pid
 service_action() { touch ./unsafe; }
@@ -310,12 +346,14 @@ if stop_process S61rfd rfd; then exit 1; fi
 """)
 
     def test_monit_status_failure_is_not_unmonitored_success(self):
+        """Monit status failure is not unmonitored success."""
         self.shell("""
 monit_state() { return 1; }
 ! wait_monitor HMIPServer paused
 """)
 
     def test_stop_failure_attempts_to_restore_previously_stopped_daemon(self):
+        """Stop failure attempts to restore previously stopped daemon."""
         self.transaction("""
 stop_process() { [ "$2" != rfd ]; }
 """, 'if recover; then exit 1; fi; '
@@ -323,6 +361,7 @@ stop_process() { [ "$2" != rfd ]; }
                          '[ ! -e "$JOURNAL" ]')
 
     def test_old_image_uses_original_interface_initializer(self):
+        """Old image uses original interface initializer."""
         (self.init / "S49InitInterfaces").unlink()
         old = self.init / "S49hs485d"
         old.write_text("#!/bin/sh\n# Writes InterfacesList.xml\n")
@@ -332,6 +371,7 @@ stop_process() { [ "$2" != rfd ]; }
         self.shell('! interface_init_script')
 
     def test_missing_optional_monit_checks_on_old_images(self):
+        """Missing optional monit checks on old images."""
         self.shell("""
 SERVICES="HMIPServer rfdDevice HMIPServerDevice"
 monit_state() {
@@ -348,6 +388,7 @@ pause_monit && [ "$(cat "$JOURNAL")" = HMIPServer ]
 """)
 
     def test_optional_monit_connection_failure_still_aborts(self):
+        """Optional monit connection failure still aborts."""
         self.shell("""
 SERVICES="rfdDevice"
 monit_state() { return 1; }
@@ -355,7 +396,61 @@ monit_command() { echo 'Cannot connect to Monit'; return 1; }
 ! pause_monit
 """)
 
+    def test_wait_hardware_accepts_delayed_device_nodes(self):
+        """Wait hardware accepts delayed device nodes."""
+        self.shell("""
+WAIT=3 ATTEMPT=0
+hardware_ready() { [ "$ATTEMPT" -ge 2 ]; }
+sleep() { ATTEMPT=$((ATTEMPT+1)); }
+wait_hardware && [ "$ATTEMPT" = 2 ]
+""")
+
+    def test_wait_hardware_times_out_without_unbounded_polling(self):
+        """Wait hardware times out without unbounded polling."""
+        self.shell("""
+WAIT=3 ATTEMPT=0
+hardware_ready() { return 1; }
+sleep() { ATTEMPT=$((ATTEMPT+1)); }
+if wait_hardware; then exit 1; fi
+[ "$ATTEMPT" = 3 ]
+""")
+
+    def test_wait_hardware_aborts_on_another_link_loss(self):
+        """Wait hardware aborts on another link loss."""
+        self.shell("""
+hardware_ready() { return 1; }
+sleep() { touch ./unexpected_sleep; }
+printf 0 >"$LINK"
+if wait_hardware; then exit 1; fi
+[ ! -e ./unexpected_sleep ]
+""")
+
+    def test_missing_nodes_do_not_start_rfd_or_clear_alarm(self):
+        """Missing nodes do not start rfd or clear alarm."""
+        self.lib.write_text(self.lib.read_text().replace(
+            '[ -c /dev/null ]', '[ -c ./missing_device ]'))
+        self.transaction(tail='if recover; then exit 1; fi; '
+                         '! grep -q "^S61rfd start$" ./actions && '
+                         '[ ! -e ./cleared ] && [ ! -e "$JOURNAL" ]')
+
+    def test_hardware_timeout_does_not_start_rfd_with_existing_node(self):
+        """Hardware timeout does not start rfd with existing node."""
+        self.transaction('hardware_ready() { return 1; }',
+                         'if recover; then exit 1; fi; '
+                         '! grep -q "^S61rfd start$" ./actions && '
+                         '[ ! -e ./cleared ] && [ ! -e "$JOURNAL" ]')
+
+    def test_partial_stop_rollback_guards_missing_rfd_device(self):
+        """Partial stop rollback guards missing rfd device."""
+        self.lib.write_text(self.lib.read_text().replace(
+            '[ -c /dev/null ]', '[ -c ./missing_device ]'))
+        self.transaction('stop_process() { [ "$2" != multimacd ]; }',
+                         'if recover; then exit 1; fi; '
+                         '! grep -q "^S61rfd start$" ./actions && '
+                         '[ ! -e ./cleared ]')
+
     def test_real_lock_rejects_concurrent_worker(self):
+        """Real lock rejects concurrent worker."""
         lock = self.work / "real.lock"
         with lock.open("w") as handle:
             # Verify the installed flock command independently of mocks.
@@ -369,6 +464,7 @@ monit_command() { echo 'Cannot connect to Monit'; return 1; }
         self.assertEqual(result.returncode, 0)
 
     def test_idle_worker_lifecycle_and_monitoring_cleanup(self):
+        """Idle worker lifecycle and monitoring cleanup."""
         worker = self.work / "worker.sh"
         pidfile = self.work / "hb-rf-eth-recovery-service.pid"
         legacy_pidfile = self.work / "hb-rf-eth-recovery.pid"
@@ -423,6 +519,7 @@ esac
                 process.wait(timeout=3)
 
     def test_stale_pid_cannot_signal_unrelated_process(self):
+        """Stale pid cannot signal unrelated process."""
         self.shell('printf "%s\\n" "$$" >"$PIDFILE"; ! worker_pid')
 
 

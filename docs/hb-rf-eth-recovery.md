@@ -56,7 +56,10 @@ not diagnose or fix the underlying Ethernet interruption.
    fails, avoid starting a duplicate and restore monitoring.
 6. Run `S47InitRFHardware`, recheck the hardware identity, rebuild the registry
    with the matching init script, invalidate `/var/tmp/api_ipc.cache` and recreate the
-   multimacd endpoints. Start rfd and HMIPServer. Invalidate the HmIP readiness
+   multimacd endpoints. Wait up to 30 additional seconds for hardware readiness,
+   aborting that wait if the link drops. Start rfd only with ready hardware and
+   an existing BidCos device node; this also guards partial-stop rollback paths.
+   Start HMIPServer. Invalidate the HmIP readiness
    marker before starting HMIPServer, so stale readiness cannot count as success.
 7. Restart ReGaHss only when the old interface registry or API cache was
    incomplete. Restore the original Monit checks and verify that previously
@@ -160,15 +163,50 @@ Real worker start/stop and signal cleanup are also exercised. They do not
 reset a radio or prove RF packet exchange. CI runs the regression
 suite alongside existing checks.
 
-Before proposing a merge, discuss the approach in an upstream issue as required
-by `CONTRIBUTING.md`, build an image, and test a controlled link interruption on
-a non-critical installation. Include an outage inside cooldown, a failed
-recovery, a worker interruption, boot/shutdown, and an installation without HB-RF-ETH.
-Verify BidCos and HmIP communication and the restored Monit states. Local validation of this preparation passed: 38 recovery regression tests,
-eight existing runtime-path/recovery-service tests, ShellCheck, BusyBox ash
-syntax checks, YAML/Markdown/Python lint and whitespace checks. The revised
-service was subsequently deployed as a persistent hook on the audited older
-image. Read-only startup verification confirmed automatic HB-RF-ETH detection,
-one active worker, an unchanged RF process set and healthy Monit checks.
-Physical fault injection and RF packet-level verification remain outstanding.
-A full image build and `make PRODUCT=rpi3 check` have not been run.
+Local validation passed: 44 recovery regression tests, eight existing
+runtime-path/recovery-service tests, ShellCheck, BusyBox ash syntax checks,
+YAML/Markdown/Python lint and whitespace checks. All 48 Python test/helper
+functions have docstrings. Regression coverage includes delayed hardware,
+bounded timeout, missing nodes, another link loss during the wait, and guarded
+rfd startup in both the normal path and partial-stop rollback.
+
+### Cable interruption test
+
+A physical cable interruption was performed on an RPI-RF-MOD / HB-RF-ETH OVA
+installation on 2026-10-24, before the readiness-guard follow-up. Times below
+are Europe/Berlin:
+
+| Event | Time |
+| --- | --- |
+| Driver detects the lost link | 14:53:06 |
+| Driver reconnects after the cable is restored | 14:53:53 |
+| Recovery begins after continuous link stability | 14:54:25 |
+| Recovery and Monit verification complete | 14:55:42 |
+
+The interruption lasted approximately 47 seconds. Recovery finished 109 seconds
+after reconnection, including the stability window. Read-only
+`listBidcosInterfaces` calls for BidCos and HmIP both reported `CONNECTED=1`,
+the transport watchdog was false, all restored Monit checks were OK, and the
+CCU did not reboot. No actuator command was issued.
+
+### Readiness-guard follow-up on the CCU
+
+The follow-up source was deployed persistently after isolated tests on the
+CCU's own shell. The tests simulated delayed and missing nodes without removing
+real device nodes or changing the real RF configuration. They verified that
+missing devices skip rfd startup and failed recovery retains its failure/alarm
+state while restoring Monit. The real `rfd.conf` checksum was unchanged across
+these isolated tests.
+
+A full controlled recovery with the revised code then ran from 15:07:02 to
+15:08:20 Europe/Berlin on the same date. It completed successfully, restored all
+previous Monit checks and restarted the normal background worker. Subsequent
+read-only RPC checks again reported both RF interfaces connected and the
+transport watchdog false. This exercises real RF-stack reinitialization;
+the missing-node scenarios remain isolated failure-injection tests.
+
+Before merging, validate an image build and remaining scenarios such as an
+outage inside cooldown, a worker interruption and boot/shutdown on the target
+image. Discuss the approach as required by `CONTRIBUTING.md`. A full image build
+and local `make PRODUCT=rpi3 check` have not been run. Individual actuator
+operation and the physical missing-node failure case have not been tested.

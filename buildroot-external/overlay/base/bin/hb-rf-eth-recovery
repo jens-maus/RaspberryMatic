@@ -74,6 +74,29 @@ hardware_ready() {
   supported && [ -c /dev/mmd_bidcos ] && [ -c /dev/mmd_hmip ] && interfaces_ready
 }
 
+wait_hardware() {
+  local attempt=0
+  # The init script can print ERROR yet return success. Allow delayed node
+  # creation, but never wait indefinitely or proceed after another link loss.
+  while ! hardware_ready; do
+    link_up || return 1
+    [ "$attempt" -lt "$WAIT" ] || return 1
+    sleep 1
+    attempt=$((attempt+1))
+  done
+}
+
+start_rfd_if_ready() {
+  # rfd's init script edits its persistent configuration when its device is
+  # absent. Guard every recovery path, including partial-stop rollback.
+  if link_up && hardware_ready && [ -c /dev/mmd_bidcos ]; then
+    service_action S61rfd start
+  else
+    log "RF hardware not ready; skipping rfd start to preserve its configuration"
+    return 1
+  fi
+}
+
 # All external init scripts are bounded. Close the lock FD before launching
 # them so background RF daemons cannot inherit the monitor's lifetime lock.
 service_action() {
@@ -268,7 +291,7 @@ recover() {
     return 1
   fi
   if ! stop_process S60multimacd multimacd; then
-    service_action S61rfd start || :
+    start_rfd_if_ready || :
     service_action S62HMServer start || :
     restore_monit || :
     return 1
@@ -276,13 +299,13 @@ recover() {
   if [ "$failed" = 0 ] && link_up; then
     service_action S47InitRFHardware start && supported && link_up &&
       service_action "$interface_init" start &&
-      rm -f "$CACHE" && service_action S60multimacd start && hardware_ready || failed=1
+      rm -f "$CACHE" && service_action S60multimacd start && wait_hardware || failed=1
   else
     failed=1
   fi
   # Attempt to bring services back even after an intermediate failure.
   rm -f "$READY"
-  service_action S61rfd start || failed=1
+  start_rfd_if_ready || failed=1
   service_action S62HMServer start || failed=1
   if [ "$failed" = 0 ] && [ "$reload" = 1 ]; then
     service_action S70ReGaHss restart || failed=1
